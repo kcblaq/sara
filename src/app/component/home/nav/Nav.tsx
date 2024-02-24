@@ -1,25 +1,209 @@
+'use client'
 import Link from "next/link";
 import Image from "next/image";
-import { IoIosArrowDown } from "react-icons/io";
+import { IoIosArrowDown, IoMdMenu } from "react-icons/io";
+import { IoClose } from "react-icons/io5";
+
+import { useEffect, useState } from "react";
+import FilledButton from "../../FilledButton";
+import PlainButton from "../../PlainButton";
+import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+
 
 
 export default function Nav() {
-  return (
-    <main className="w-full justify-between flex items-center h-[72px] bg-secondary p-2 ">
-      <div className=" items-center h-full gap-6 flex w-full">
-        <Link href={`/`}>
+  const [show, setShow] = useState(false)
+  const [resources, setResources] = useState(false)
+  const [features, setFeatures] = useState(false)
 
-          <Image src={`/logo 3.png`} alt="Webmaxi Logo" width={200} height={0} className="hidden lg:flex" />
-          <Image src={`/mobile-logo.png`} alt="Webmaxi Logo" width={20} height={0} className="flex lg:hidden" />
+  const router = useRouter()
+
+  // useEffect(()=> {
+  //   if(features) setFeatures(false)
+  //   if(resources) setFeatures(false)
+  // }, [features, resources])
+
+  const resource = [
+    { title: 'Blog', description: 'The latest industry news, updates and info.', file: '/blog.png', link: '/blog' },
+    { title: 'Documentation', description: 'All the boring stuff that you (hopefully won’t) need.', file: '/file.png', link: '/' },
+    { title: 'Help and support', description: 'Learn, fix a problem, and get answers to your questions.', file: '/help.png', link: '/help' }
+  ]
+
+  const feature = [
+    { title: 'Technical SEO audit', description: `Run an AI-driven audit to analyze and improve your website's SEO health.`, file: '/seo.png', link: '/seo-audit' },
+    { title: 'Rank tracker', description: `Discover strategic keywords for your industry and target audience.`, file: '/rank.png', link: '/rank' },
+    { title: 'Smart keyword explorer', description: `Discover strategic keywords for your industry and target audience.`, file: '/keyword.png', link: '/keyword' },
+    { title: 'Optimization recommendations', description: `Customized recommendations for your website based on your SEO audit.`, file: '/optimize.png', link: '/optimize' },
+    { title: 'Semantic content analysis', description: `Enhance your content's relevance with semantic analysis.`, file: '/content.png', link: '/keyword' },
+    { title: 'Competitor analysis', description: `Compare your SEO metrics with competitors and gain insights.`, file: '/competitor.png', link: '/keyword' },
+    { title: 'Link building', description: `Explore potential websites for building valuable backlinks.`, file: '/link.png', link: '/keyword' },
+
+  ]
+  return (
+    <main className="w-full justify-between flex items-center font-normal h-[72px] bg-secondary p-2 ">
+      <div className=" items-center h-full gap-8 flex w-full">
+        <Link href={`/`} className="flex items-center h-full ">
+
+          <Image src={`/logo.png`} alt="Webmaxi Logo" width={145} height={24} className="" />
         </Link>
-        <Link href="/" className="text-lg font-semibold"> Home</Link>
-        <span  className="text-lg cursor-pointer flex items-center font-semibold gap-1"> Features <IoIosArrowDown/> </span>
-        <span  className="text-lg cursor-pointer flex items-center font-semibold gap-1"> Resources <IoIosArrowDown/> </span>
-        <span  className="text-lg cursor-pointer flex items-center font-semibold gap-1"> Pricing </span>
+        <Link href="/" className="text-base font-semibold hidden lg:flex"> Home</Link>
+
+
+
+
+        <span className={`text-base cursor-pointer items-center font-semibold gap-1 hidden lg:flex`} onClick={() =>{
+          setFeatures(!features);
+          setResources(false);
+        } }> Features <IoIosArrowDown className={`${features && ' transform rotate-180'}`} />
+          <div className="relative">
+            {
+              features && <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: features ? 1 : 0 }}
+                transition={{ duration: 0.5 }}
+                className=" absolute top-8 -left-56 font-normal  grid grid-cols-2 gap-2  min-h-[400px] min-w-[700px] p-8 shadow-md rounded-md">
+                {
+                  feature.map((item) => {
+                    return (
+                      <div className="flex h-full text-base p-2 hover:bg-blue-200 hover:rounded-md items-start w-full gap-3" onClick={() => router.push(`${item.link}`)} >
+                        <Image src={item.file} alt={item.description} className="mt-1" height={24} width={24} />
+                        <div className=" flex flex-col w-full h-full overflow-auto">
+                          <p className=" font-semibold text-base">{item.title} </p>
+                          <small className=" text-sm">{item.description} </small>
+                        </div>
+                      </div>
+                    )
+                  })
+                }
+   
+              </motion.div>
+            }
+          </div>
+        </span>
+
+
+
+
+        <span className={`text-base cursor-pointer items-center font-semibold gap-1 hidden lg:flex`} onClick={() =>{
+          setResources(!resources);
+          setFeatures(false);
+        } }> Resources <IoIosArrowDown className={`${resources && ' transform rotate-180'}`} />
+          <div className="relative">
+            {
+              resources && <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: resources ? 1 : 0 }}
+                transition={{ duration: 0.5 }}
+                className=" absolute top-8  font-normal  flex flex-col gap-2 -right-28  min-w-[300px] p-6 shadow-md rounded-md">
+                {
+                  resource.map((item) => {
+                    return (
+                      <div className="flex h-full text-base p-2 items-start hover:bg-blue-200 hover:rounded-md  w-full gap-3" onClick={() => router.push(`${item.link}`)} >
+                        <Image src={item.file} alt={item.description} className="mt-1" height={24} width={24} />
+                        <div className=" flex flex-col w-full h-full overflow-auto">
+                          <p className=" font-semibold text-base">{item.title} </p>
+                          <small className=" text-sm">{item.description} </small>
+                        </div>
+                      </div>
+                    )
+                  })
+                }
+   
+              </motion.div>
+            }
+          </div>
+        </span>
+
+
+
+
+        <span className="text-base cursor-pointer items-center font-semibold gap-1 hidden lg:flex"> Pricing </span>
       </div>
-      <div className=" items-center justify-end h-full gap-6 flex w-full">
-      <Link href={`login`} className=" text-lg font-semibold"> Login </Link>
-      <Link href={`/signup`} className=" bg-primary font-semibold px-2 p-1 rounded-md text-white text-lg">Sign up </Link>
+      <div className=" items-center justify-end h-full gap-6 lg:flex w-full hidden ">
+        <Link href={`login`} className=" text-lg font-semibold"> Login </Link>
+        <Link href={`/signup`} className=" bg-primary font-semibold px-2 p-1 rounded-md text-white text-lg">Sign up </Link>
+      </div>
+      <div className="flex lg:hidden relative">
+        <IoMdMenu className="" onClick={() => setShow(true)} />
+        {
+          show &&
+          <section className="h-screen py-6 bg-white text-[#101828] overflow-auto w-screen max-w-[500px] absolute transition-transform duration-300 ease-in-out  right-0 -top-3 transform translate-x-0">
+            <span className=" font-semibold absolute text-2xl right-2 top-2 cursor-pointer hover:bg-primary hover:text-white p-1 rounded-full transition-all duration-300" onClick={() => setShow(false)}>
+              <IoClose />
+            </span>
+            <div className="flex flex-col justify-between h-full w-full overflow-auto">
+              <div className=" flex p-4 overflow-auto w-full flex-col mt-8 transition-all duration-300 ease-in-out">
+                <Link href="/" className="text-base font-semibold p-3 "> Home</Link>
+
+                <span className="text-base cursor-pointer overflow-scroll h-full items-center font-semibold p-3 flex gap-1 justify-between w-full " onClick={() => {
+                  setFeatures(!features);
+                  setResources(false)
+                }}>
+
+                  <span className="flex w-full justify-between items-center"> Features <IoIosArrowDown className={`${features && 'scale-y-[-1]'}`} /> </span>
+
+
+
+                </span>
+
+
+                <div className=" h-full">
+                  {
+                    features && <div className="p-2 mt-4 m-2 h-full transition-all duration-300 ease-linear border rounded-lg shadow-md w-full flex flex-col overflow-auto">
+                      {
+                        feature.map((item) => {
+                          return (
+                            <div className="flex h-full text-base p-2 items-start w-full gap-3" onClick={() => router.push(`${item.link}`)} >
+                              <Image src={item.file} alt={item.description} className="mt-1" height={24} width={24} />
+                              <div className=" flex flex-col w-full h-full overflow-auto">
+                                <p className=" font-semibold text-base">{item.title} </p>
+                                <p className=" text-sm">{item.description} </p>
+                              </div>
+                            </div>
+                          )
+                        })
+                      }
+                    </div>
+                  }
+
+                </div>
+
+                <span className="text-base overflow-auto h-full cursor-pointer items-center font-semibold p-3 gap-1 flex   justify-between w-full" onClick={() => {
+                  setResources(!resources);
+                  setFeatures(false)
+
+                }}> Resources
+                  <IoIosArrowDown className={`${resources && 'scale-y-[-1]'}`} />
+
+                </span>
+                {
+                  resources && <div className="p-2 mt-4 m-2 h-full  border rounded-lg shadow-md w-full flex flex-col">
+                    {
+                      resource.map((item) => {
+                        return (
+                          <div className="flex h-full text-base p-2 items-start w-full gap-3" onClick={() => router.push(`${item.link}`)} >
+                            <Image src={item.file} alt={item.description} className="mt-1" height={24} width={24} />
+                            <div className=" flex flex-col w-full">
+                              <p className=" font-semibold text-base">{item.title} </p>
+                              <p className=" text-sm">{item.description} </p>
+                            </div>
+                          </div>
+                        )
+                      })
+                    }
+                  </div>
+                }
+                <span className="text-base cursor-pointer items-center font-semibold p-3" onClick={() => router.push('/pricing')}> Pricing </span>
+              </div>
+
+              <div className="flex p-3 flex-col gap-3">
+                <FilledButton title="Sign up" handleClick={() => router.push('/signup')} />
+                <PlainButton title="Login" handleClick={() => router.push('/login')} />
+              </div>
+            </div>
+          </section>
+        }
       </div>
     </main>
   )

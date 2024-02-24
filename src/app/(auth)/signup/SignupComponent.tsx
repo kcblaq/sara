@@ -16,6 +16,24 @@ import axios from "axios";
 export const SignupComponent = () => {
     const [isPassword, setIsPassword] = useState('password')
 
+
+    const Register = async()=> {
+            try {
+                console.log('Submitting...')
+                await axios.post('https://api.webmaxi.net/api/auth/register', {
+                  name: formik.values.name,
+                  email: formik.values.email,
+                  password: formik.values.password
+                })
+            console.log('Submitted!')
+            }
+
+          catch(err){
+            console.log(err)
+          }
+     
+    }
+
     const formik = useFormik({
         initialValues: {
             name: '',
@@ -31,19 +49,10 @@ export const SignupComponent = () => {
                     'Password must contain a combination of capital and small letters, a digit, and a special character'
                 )
         }),
-        onSubmit: () => {
-          try {
-            axios.post('https://api.webmaxi.net/api/auth/register', {
-                name: formik.values.name,
-                email: formik.values.email,
-                password: formik.values.password
-            })
-          }
-          catch(err){
-            console.log(err)
-          }
-        }
+        onSubmit: Register
     })
+
+    
   
     const currentYear = () => {
         const currentDate = new Date();
@@ -54,9 +63,9 @@ export const SignupComponent = () => {
         <main className=" w-full h-full flex flex-col gap-10 lg:justify-between ">
 
             <Link href={`/`}>
-
-                <Image src={`/logo 3.png`} alt="Webmaxi Logo" width={200} height={0} className="hidden lg:flex" />
-                <Image src={`/mobile-logo.png`} alt="Webmaxi Logo" width={20} height={0} className="flex lg:hidden" />
+            <Image src={`/logo.png`} alt="Webmaxi Logo" width={145} height={24} className="" />
+                {/* <Image src={`/logo 3.png`} alt="Webmaxi Logo" width={200} height={0} className="hidden lg:flex" />
+                <Image src={`/mobile-logo.png`} alt="Webmaxi Logo" width={20} height={0} className="flex lg:hidden" /> */}
             </Link>
             <form onSubmit={formik.handleSubmit}>
                 <section className="lg:px-20 sm:px-32  w-full justify-between flex flex-col gap-2">
@@ -117,15 +126,15 @@ export const SignupComponent = () => {
                     </span>
                     <small className=" font-thin -mt-2 " > Must be at least 8 characters.</small>
                     <button
-                        className=" w-full p-2 font-bold bg-purple-700 text-white rounded-md"
+                        className=" w-full p-2 font-bold bg-primary text-white rounded-md"
                         type="submit"
                     >
                         Create
                         account
                     </button>
 
-                    <button className=" w-full p-2 font-bold rounded-md border flex items-center justify-center gap-2"><FcGoogle /> Signup with google </button>
-                    <Link href={`/login`}><small className=""> Already have an account? <span className=" text-purple-700 font-bold"> Log in</span></small> </Link>
+                    <span className=" cursor-pointer w-full p-2 font-bold rounded-md border flex items-center justify-center gap-2"><FcGoogle /> Signup with google </span>
+                    <Link href={`/login`}><small className=""> Already have an account? <span className=" text-primary font-bold"> Log in</span></small> </Link>
                 </section>
             </form>
             <footer className="lg:flex justify-between w-full items-center hidden ">

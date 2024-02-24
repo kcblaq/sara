@@ -14,7 +14,7 @@ export default function Signup() {
 
                 </main>
             </div>
-            <div className={`w-1/2 px-24 justify-center  flex-col items-start hidden lg:flex bg-[#7F56D9] rounded-tl-[80px] rounded-bl-[80px]`}
+            <div className={`w-1/2 px-24 justify-center  flex-col items-start hidden lg:flex bg-primary rounded-tl-[80px] rounded-bl-[80px]`}
                 style={{
                     backgroundImage: "url('/computer.png')",
                     backgroundSize: "cover",

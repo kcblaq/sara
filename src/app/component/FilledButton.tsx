@@ -6,7 +6,7 @@ handleClick?: ()=> void;
 }
 export default function FilledButton({title, handleClick}: ButtonProps) {
   return (
-    <button className='w-full rounded-md p-3 bg-primary text-white font-semibold' onClick={handleClick}>
+    <button className='w-full rounded-lg text-base p-3 bg-primary text-white font-semibold' onClick={handleClick}>
         {title}
     </button>
   )
