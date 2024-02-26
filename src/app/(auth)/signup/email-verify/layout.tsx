@@ -19,9 +19,9 @@ export default function ForgetPassword({ children }: PasswordProps) {
 
             <div className=" flex flex-col gap-14">
                 <Link href={`/`}>
-
-                    <Image src={`/logo 3.png`} alt="Webmaxi Logo" width={200} height={0} className="hidden lg:flex" />
-                    <Image src={`/mobile-logo.png`} alt="Webmaxi Logo" width={20} height={0} className="flex lg:hidden" />
+                <Image src={`/logo.png`} alt="Webmaxi Logo" width={145} height={24} className="" />
+                    {/* <Image src={`/logo 3.png`} alt="Webmaxi Logo" width={200} height={0} className="hidden lg:flex" />
+                    <Image src={`/mobile-logo.png`} alt="Webmaxi Logo" width={20} height={0} className="flex lg:hidden" /> */}
                 </Link>
                 <section className="w-full justify-between flex flex-col gap-2">
                     <div className=" h-full  flex flex-col justify-center items-center">

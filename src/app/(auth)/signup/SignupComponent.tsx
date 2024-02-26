@@ -8,28 +8,31 @@ import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-
-
-
+import { useRouter } from "next/navigation";
 
 
 export const SignupComponent = () => {
     const [isPassword, setIsPassword] = useState('password')
-
+    const router = useRouter()
 
     const Register = async()=> {
             try {
-                console.log('Submitting...')
                 await axios.post('https://api.webmaxi.net/api/auth/register', {
                   name: formik.values.name,
                   email: formik.values.email,
                   password: formik.values.password
                 })
-            console.log('Submitted!')
+                .then((res)=> {
+                    if(res.status == 201 ){
+                        localStorage.setItem("token",res.data.data)
+                        router.push('/signup/email-verify/otp')
+                    }
+                } )
+                .then(()=> localStorage.setItem("userEmail", formik.values.email))
             }
 
-          catch(err){
-            console.log(err)
+          catch(err: any){
+            console.log(err.message)
           }
      
     }
@@ -83,7 +86,7 @@ export const SignupComponent = () => {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         placeholder="Enter your name"
-                        className={`p-2 rounded-md border focus:outline-none ${formik.touched.name && formik.errors.name && 'border-red-400'} focus:shadow focus:shadow-purple-700  `} />
+                        className={`p-2 rounded-md border focus:outline-none ${formik.touched.name && formik.errors.name && 'border-red-400'} focus:shadow focus:shadow-primary  `} />
                     {formik.touched.name && formik.errors.name && (
                         <small className="text-red-500">{formik.errors.name}</small>
                     )}
@@ -98,7 +101,7 @@ export const SignupComponent = () => {
                         value={formik.values.email}
                         onBlur={formik.handleBlur}
                         onChange={formik.handleChange}
-                        className={`p-2 rounded-md border focus:outline-none ${formik.touched.email && formik.errors.email && 'border-red-400'} focus:shadow focus:shadow-purple-700  `}  />
+                        className={`p-2 rounded-md border focus:outline-none ${formik.touched.email && formik.errors.email && 'border-red-400'} focus:shadow focus:shadow-primary  `}  />
                     {formik.touched.email && formik.errors.email && (
                         <small className="text-red-500">{formik.errors.email}</small>
                     )}
@@ -115,7 +118,7 @@ export const SignupComponent = () => {
                             value={formik.values.password}
                             onBlur={formik.handleBlur}
                             onChange={formik.handleChange}
-                            className={`p-2 rounded-md border focus:outline-none ${formik.touched.password && formik.errors.password && 'border-red-400'} focus:shadow focus:shadow-purple-700  w-full `}  />
+                            className={`p-2 rounded-md border focus:outline-none ${formik.touched.password && formik.errors.password && 'border-red-400'} focus:shadow focus:shadow-primary  w-full `}  />
                         {formik.touched.password && formik.errors.password && (
                             <small className="text-red-500">{formik.errors.password}</small>
                         )}
