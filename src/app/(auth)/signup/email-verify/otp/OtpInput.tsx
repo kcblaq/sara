@@ -51,19 +51,22 @@ const OtpInput: React.FC = () => {
   };
 
   const token = localStorage.getItem('token');
-
+  let tok = JSON.stringify(token)
   
   
   const route = useRouter()
+  const payload = {
+    encryptedData: JSON.parse(tok),
+    otp: parseInt(otpValues.join(""),10)
+  }
+
+  console.log("PAYLOAD",payload)
   
  async function VerifyEmail(){
    console.log(JSON.stringify(token))
    try{
-    let tok = JSON.stringify(token)
-    await axios.post('https://api.webmaxi.net/api/auth/verify-otp', {
-      encryptedData: JSON.parse(tok),
-      otp: parseInt(otpValues.join(""),10)
-     })
+   
+    await axios.post('https://api.webmaxi.net/api/auth/verify-otp', payload)
      .then((res) => res.status == 200 && route.push('/dashboard'))
      .then(()=> console.log('Submitted!'))
    }
@@ -75,7 +78,7 @@ const OtpInput: React.FC = () => {
   return (
     <div className="flex space-x-2 flex-col gap-4 w-full">
       <div className='flex space-x-2 justify-center '>
-      {Array.from({ length: 6 }, (_, index) => (
+      {Array.from({ length: 4 }, (_, index) => (
         <input
           key={index}
           ref={inputRefs[index]}

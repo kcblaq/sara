@@ -11,6 +11,9 @@ const config: Config = {
       colors: {
         secondary:'#EFF8FF',
         primary: '#1570EF',
+        footerBlue: '#1849A9',
+        darkPrimary:'#175CD3',
+        lightBg: '#F9FAFB'
       },
     },
   },

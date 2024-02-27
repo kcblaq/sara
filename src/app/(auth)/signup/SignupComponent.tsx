@@ -18,7 +18,7 @@ export const SignupComponent = () => {
     const Register = async()=> {
             try {
                 await axios.post('https://api.webmaxi.net/api/auth/register', {
-                  name: formik.values.name,
+                  fullName: formik.values.name,
                   email: formik.values.email,
                   password: formik.values.password
                 })

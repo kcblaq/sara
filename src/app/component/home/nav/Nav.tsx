@@ -41,7 +41,7 @@ export default function Nav() {
 
   ]
   return (
-    <main className="w-full justify-between flex items-center font-normal h-[72px] bg-secondary p-2 ">
+    <main className="w-full z-50 justify-between flex items-center font-normal h-[72px] bg-secondary p-2 ">
       <div className=" items-center h-full gap-8 flex w-full">
         <Link href={`/`} className="flex items-center h-full ">
 
@@ -52,21 +52,21 @@ export default function Nav() {
 
 
 
-        <span className={`text-base cursor-pointer items-center font-semibold gap-1 hidden lg:flex`} onClick={() =>{
+        <span className={`text-base cursor-pointer items-center z-50 font-semibold gap-1 hidden lg:flex`} onClick={() =>{
           setFeatures(!features);
           setResources(false);
         } }> Features <IoIosArrowDown className={`${features && ' transform rotate-180'}`} />
-          <div className="relative">
+          <div className="relative bg-white z-50">
             {
               features && <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: features ? 1 : 0 }}
                 transition={{ duration: 0.5 }}
-                className=" absolute top-8 -left-56 font-normal  grid grid-cols-2 gap-2  min-h-[400px] min-w-[700px] p-8 shadow-md rounded-md">
+                className=" absolute top-8 z-50 bg-white -left-56 font-normal  grid grid-cols-2 gap-2  min-h-[400px] min-w-[700px] p-8 shadow-md rounded-md">
                 {
                   feature.map((item) => {
                     return (
-                      <div className="flex h-full text-base p-2 hover:bg-blue-200 hover:rounded-md items-start w-full gap-3" onClick={() => router.push(`${item.link}`)} >
+                      <div className="flex z-50 h-full text-base p-2 hover:bg-blue-200 hover:rounded-md items-start w-full gap-3" onClick={() => router.push(`${item.link}`)} >
                         <Image src={item.file} alt={item.description} className="mt-1" height={24} width={24} />
                         <div className=" flex flex-col w-full h-full overflow-auto">
                           <p className=" font-semibold text-base">{item.title} </p>
@@ -89,13 +89,13 @@ export default function Nav() {
           setResources(!resources);
           setFeatures(false);
         } }> Resources <IoIosArrowDown className={`${resources && ' transform rotate-180'}`} />
-          <div className="relative">
+          <div className="relative z-50 bg-white">
             {
               resources && <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: resources ? 1 : 0 }}
                 transition={{ duration: 0.5 }}
-                className=" absolute top-8  font-normal  flex flex-col gap-2 -right-28  min-w-[300px] p-6 shadow-md rounded-md">
+                className=" absolute top-8 bg-white font-normal  flex flex-col gap-2 -right-28  min-w-[300px] p-6 shadow-md rounded-md">
                 {
                   resource.map((item) => {
                     return (
