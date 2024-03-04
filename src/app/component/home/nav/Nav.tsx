@@ -122,7 +122,7 @@ export default function Nav() {
       </div>
       <div className=" items-center justify-end h-full gap-6 lg:flex w-full hidden ">
         <Link href={`login`} className=" text-lg font-semibold"> Login </Link>
-        <Link href={`/signup`} className=" bg-primary font-semibold px-2 p-1 rounded-md text-white text-lg">Sign up </Link>
+        <Link href={`/signup`} className=" bg-primary font-semibold px-4 py-3 shadow rounded-md text-white text-lg">Sign up </Link>
       </div>
       <div className="flex lg:hidden relative">
         <IoMdMenu className="" onClick={() => setShow(true)} />

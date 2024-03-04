@@ -44,7 +44,7 @@ export default function FAQComponent() {
   };
 
   return (
-    <div className="h-full w-full transition-[heigth] duration-300 ease-in justify-center gap-4 pt-14 flex flex-col max-w-[600px]">
+    <div className="h-full w-full transition-[heigth] duration-300 ease-in justify-center gap-8 pt-14 flex flex-col max-w-[600px]">
       {faqs.map((item) => (
         <div key={item.id} className="flex transition-all duration-700 ease-in-out flex-col gap-2 w-full">
           <div className="flex w-full gap-3 justify-between items-start">

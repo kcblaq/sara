@@ -46,7 +46,7 @@ export function FeatureCard({ title, icon, description }: FeaturecardProps) {
 
 export function WhyUseWemaxiCard({ icon, title, description, cat }: WhyCardProps) {
     return (
-        <section className=" h-96 w-72 bg-[#F9FAFB] p-6 flex flex-col rounded-lg justify-between">
+        <section className=" h-96 w-72 bg-[#F9FAFB] p-4 shadow lg:p-6 flex flex-col rounded-lg justify-between">
             <div className="flex flex-col h-full">
             <Image src={`${icon}`} alt="" height={88} width={88} />
             <p className="pt-10 text-start text-[#101828] text-xl font-medium ">

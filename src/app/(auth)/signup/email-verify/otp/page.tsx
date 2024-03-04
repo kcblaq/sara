@@ -1,18 +1,19 @@
 'use client'
-import BackToLogin from '@/app/(auth)/password/BackToLogin'
-import FilledButton from '@/app/component/FilledButton'
-import TitleAndDescription from '@/app/component/TitleAndDescription'
-import React from 'react'
-import OtpInput from './OtpInput'
+import dynamic from 'next/dynamic';
 
-export default function page() {
-  const email = localStorage.getItem("userEmail")
-  const desc =  <span> We sent an OTP code to <b>{email} </b> </span>
+const BackToLogin = dynamic(() => import('@/app/(auth)/password/BackToLogin'), { ssr: false });
+const TitleAndDescription = dynamic(() => import('@/app/component/TitleAndDescription'), { ssr: false });
+const OtpInput = dynamic(() => import('./OtpInput'), { ssr: false });
+
+export default function Page() {
+  const token = typeof window !== 'undefined' ? localStorage.getItem("token") : false;
+  const desc = <span> We sent an OTP code to <b>{token} </b> </span>;
+
   return (
     <main className="w-full flex flex-col justify-center items-center gap-4 ">
-        <TitleAndDescription title='Check your email' description={desc} />
-        <OtpInput/>
-        <BackToLogin />
+      <TitleAndDescription title='Check your email' description={desc} />
+      <OtpInput />
+      <BackToLogin />
     </main>
-  )
+  );
 }
