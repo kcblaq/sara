@@ -41,6 +41,8 @@ export default function Footer() {
                             <Link href={`#`} className='text-gray-300 hover:text-white'> Cookies</Link>
                          </div>
                    </div>
+                   <div>
+                   <hr className='pb-4' />
                     <div className={`flex flex-col-reverse gap-4 items-start lg:justify-between lg:flex-row w-full`}>
                          <p className={` text-[#F2F4F7] text-base w-full font-normal`}> &#169; {currentYear()} Webmaxi. All rights reserved. </p>
                          <div className={`flex items-center gap-6`}>
@@ -51,6 +53,7 @@ export default function Footer() {
                               <Link href={``}> <Image src={`/footer/youtube.png`} alt="Twitter image" width={24} height={24} /></Link>
                          </div>
                     </div>
+                   </div>
                    
      </section>
   )

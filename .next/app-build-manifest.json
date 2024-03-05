@@ -11,25 +11,15 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/(auth)/signup/layout": [
+    "/dashboard/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(auth)/signup/layout.js"
+      "static/chunks/app/dashboard/layout.js"
     ],
-    "/(auth)/signup/page": [
+    "/dashboard/technical-seo/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(auth)/signup/page.js"
-    ],
-    "/(auth)/signup/email-verify/layout": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(auth)/signup/email-verify/layout.js"
-    ],
-    "/(auth)/signup/email-verify/otp/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(auth)/signup/email-verify/otp/page.js"
+      "static/chunks/app/dashboard/technical-seo/page.js"
     ],
     "/dashboard/page": [
       "static/chunks/webpack.js",
