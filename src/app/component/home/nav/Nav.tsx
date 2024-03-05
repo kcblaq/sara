@@ -124,12 +124,12 @@ export default function Nav() {
         <Link href={`login`} className=" text-lg font-semibold"> Login </Link>
         <Link href={`/signup`} className=" bg-primary font-semibold px-4 py-3 shadow rounded-md text-white text-lg">Sign up </Link>
       </div>
-      <div className="flex lg:hidden relative">
+      <div className="flex items-center justify-end lg:hidden h-full w-full relative">
         <IoMdMenu className="" onClick={() => setShow(true)} />
         {
           show &&
           <section className="h-screen py-6 bg-white text-[#101828] overflow-auto w-screen max-w-[500px] absolute transition-transform duration-300 ease-in-out  right-0 -top-3 transform translate-x-0">
-            <span className=" font-semibold absolute text-2xl right-2 top-2 cursor-pointer hover:bg-primary hover:text-white p-1 rounded-full transition-all duration-300" onClick={() => setShow(false)}>
+            <span className=" font-semibold absolute text-2xl right-2 top-6 cursor-pointer hover:bg-primary hover:text-white p-1 rounded-full transition-all duration-300" onClick={() => setShow(false)}>
               <IoClose />
             </span>
             <div className="flex flex-col justify-between h-full w-full overflow-auto">
