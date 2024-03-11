@@ -1,6 +1,8 @@
+
 import React from 'react';
 import { FaArrowUp } from 'react-icons/fa';
 import { Line } from 'react-chartjs-2';
+import BarChart from '../component/charts/bars';
 
 interface Props {
   title: string;
@@ -8,9 +10,10 @@ interface Props {
   amount: string;
   style: string;
   percent: string;
+  chart: React.ReactNode
 }
 
-export default function Card({ title, date, style, amount, percent }: Props) {
+export default function Card({ title, date, style, amount, percent, chart }: Props) {
   const chartData = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
     datasets: [
@@ -47,8 +50,10 @@ export default function Card({ title, date, style, amount, percent }: Props) {
             </span>
             vs last month
           </p>
-          <p>
-            <Line data={chartData} options={options} />
+          <p className='p-2'>
+            {/* <Line data={chartData} options={options} /> */}
+            {/* <BarChart data1={0} data2={20} data3={60} /> */}
+            {chart}
           </p>
         </div>
       </div>

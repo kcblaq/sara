@@ -4,25 +4,25 @@ import Image from "next/image";
 import { IoIosArrowDown, IoMdMenu } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
 
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import FilledButton from "../../FilledButton";
 import PlainButton from "../../PlainButton";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { useDispatch, useSelector } from "react-redux";
+import { currentNav, setCurrentState } from "@/redux/features/navSlice";
+
 
 
 
 export default function Nav() {
   const [show, setShow] = useState(false)
-  const [resources, setResources] = useState(false)
-  const [features, setFeatures] = useState(false)
+  // const [resources, setResources] = useState(false)
+  // const [features, setFeatures] = useState(false)
 
   const router = useRouter()
-
-  // useEffect(()=> {
-  //   if(features) setFeatures(false)
-  //   if(resources) setFeatures(false)
-  // }, [features, resources])
+  const navstate = useSelector(currentNav);
+  const dispatch = useDispatch();
 
   const resource = [
     { title: 'Blog', description: 'The latest industry news, updates and info.', file: '/blog.png', link: '/blog' },
@@ -40,6 +40,9 @@ export default function Nav() {
     { title: 'Link building', description: `Explore potential websites for building valuable backlinks.`, file: '/link.png', link: '/keyword' },
 
   ]
+
+  
+
   return (
     <main className="w-full z-50 justify-between flex items-center font-normal h-[72px] bg-secondary p-2 ">
       <div className=" items-center h-full gap-8 flex w-full">
@@ -50,17 +53,16 @@ export default function Nav() {
         <Link href="/" className="text-base font-semibold hidden lg:flex"> Home</Link>
 
 
-
-
-        <span className={`text-base cursor-pointer items-center z-50 font-semibold gap-1 hidden lg:flex`} onClick={() =>{
-          setFeatures(!features);
-          setResources(false);
-        } }> Features <IoIosArrowDown className={`${features && ' transform rotate-180'}`} />
+        <span className={`text-base cursor-pointer items-center z-50 font-semibold gap-1 hidden lg:flex`} onClick={(e) =>{
+         e.stopPropagation()
+         dispatch(setCurrentState(`${navstate.current == 'features' ? "" : 'features'}`))
+       
+        } }> Features <IoIosArrowDown className={`${navstate.current === "features" && ' transform rotate-180'}`} />
           <div className="relative bg-white z-50">
             {
-              features && <motion.div
+              navstate.current == "features" && <motion.div
                 initial={{ opacity: 0 }}
-                animate={{ opacity: features ? 1 : 0 }}
+                animate={{ opacity: navstate.current === "features" ? 1 : 0 }}
                 transition={{ duration: 0.5 }}
                 className=" absolute top-8 z-50 bg-white -left-56 font-normal  grid grid-cols-2 gap-2  min-h-[400px] min-w-[700px] p-8 shadow-md rounded-md">
                 {
@@ -83,17 +85,16 @@ export default function Nav() {
         </span>
 
 
-
+     
 
         <span className={`text-base cursor-pointer items-center font-semibold gap-1 hidden lg:flex`} onClick={() =>{
-          setResources(!resources);
-          setFeatures(false);
-        } }> Resources <IoIosArrowDown className={`${resources && ' transform rotate-180'}`} />
+          navstate.current === 'resources' ? dispatch(setCurrentState('')) : dispatch(setCurrentState('resources'))
+        } }> Resources <IoIosArrowDown className={`${ navstate.current === 'resources' && ' transform rotate-180'}`} />
           <div className="relative z-50 bg-white">
             {
-              resources && <motion.div
+              navstate.current === 'resources' && <motion.div
                 initial={{ opacity: 0 }}
-                animate={{ opacity: resources ? 1 : 0 }}
+                animate={{ opacity: navstate.current == 'resources' ? 1 : 0 }}
                 transition={{ duration: 0.5 }}
                 className=" absolute top-8 bg-white font-normal  flex flex-col gap-2 -right-28  min-w-[300px] p-6 shadow-md rounded-md">
                 {
@@ -137,11 +138,11 @@ export default function Nav() {
                 <Link href="/" className="text-base font-semibold p-3 "> Home</Link>
 
                 <span className="text-base cursor-pointer overflow-scroll h-full items-center font-semibold p-3 flex gap-1 justify-between w-full " onClick={() => {
-                  setFeatures(!features);
-                  setResources(false)
+                   navstate.current === 'features' ? dispatch(setCurrentState('')) : dispatch(setCurrentState('features'))
+            
                 }}>
 
-                  <span className="flex w-full justify-between items-center"> Features <IoIosArrowDown className={`${features && 'scale-y-[-1]'}`} /> </span>
+                  <span className="flex w-full justify-between items-center"> Features <IoIosArrowDown className={`${navstate.current == 'features' && 'scale-y-[-1]'}`} /> </span>
 
 
 
@@ -150,7 +151,7 @@ export default function Nav() {
 
                 <div className=" h-full">
                   {
-                    features && <div className="p-2 mt-4 m-2 h-full transition-all duration-300 ease-linear border rounded-lg shadow-md w-full flex flex-col overflow-auto">
+                    navstate.current === 'features' && <div className="p-2 mt-4 m-2 h-full transition-all duration-300 ease-linear border rounded-lg shadow-md w-full flex flex-col overflow-auto">
                       {
                         feature.map((item) => {
                           return (
@@ -170,15 +171,15 @@ export default function Nav() {
                 </div>
 
                 <span className="text-base overflow-auto h-full cursor-pointer items-center font-semibold p-3 gap-1 flex   justify-between w-full" onClick={() => {
-                  setResources(!resources);
-                  setFeatures(false)
+                  navstate.current === 'resources' ? dispatch(setCurrentState('')) : dispatch(setCurrentState('resources'))
+                  
 
                 }}> Resources
-                  <IoIosArrowDown className={`${resources && 'scale-y-[-1]'}`} />
+                  <IoIosArrowDown className={`${ navstate.current === 'resources' && 'scale-y-[-1]'}`} />
 
                 </span>
                 {
-                  resources && <div className="p-2 mt-4 m-2 h-full  border rounded-lg shadow-md w-full flex flex-col">
+                  navstate.current === 'resources' && <div className="p-2 mt-4 m-2 h-full  border rounded-lg shadow-md w-full flex flex-col">
                     {
                       resource.map((item) => {
                         return (

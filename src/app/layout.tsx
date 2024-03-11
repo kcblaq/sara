@@ -1,7 +1,8 @@
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { usePathname } from "next/navigation";
+import APpProvider from "@/redux/features/provider";
 
 const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
@@ -17,7 +18,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       
-      <body className={`className.Inter`}>{children}</body>
+      <body className={`className.Inter`}>
+        <APpProvider>
+
+        {children}
+        </APpProvider>
+        </body>
     </html>
   );
 }

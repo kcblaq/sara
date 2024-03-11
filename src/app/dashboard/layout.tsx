@@ -54,11 +54,11 @@ export default function layout({ children }: Props) {
 
   const token = sessionStorage.getItem('token');
   const router = useRouter();
-  if(!token) router.push('/login')
+  if (!token) router.push('/login')
 
   return (
 
-    <main className={`h-screen w-full flex`}>
+    <main className={`h-screen w-full flex overflow-clip`}>
       {/* drawer... */}
       <section
         style={{ width: fullWidth ? "300px" : "60px" }}
@@ -98,7 +98,7 @@ export default function layout({ children }: Props) {
           <IoMdMenu className="text-3xl" />
         </div>
 
-        <div className="flex w-full gap-2 justify-between items-center">
+        <div className="flex w-full gap-2 justify-between items-center h-32">
           <div className="flex gap-2 items-center justify-between">
             <select className="p-3 px-6 min-w-[300px] rounded-md border">
               <option className=""> www.google.com </option>
@@ -129,7 +129,7 @@ export default function layout({ children }: Props) {
           </div>
         </div>
         <hr className="w-full mt-1" />
-        <div className=" w-full">
+        <div className=" w-full h-full overflow-auto">
           {children}
         </div>
 
