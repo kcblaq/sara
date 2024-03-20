@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 import navSlice from "../redux/features/navSlice";
+import modalstates from "@/redux/features/modalstates";
 
 export const store = configureStore({
     reducer: {
-        nav: navSlice
+        nav: navSlice,
+        currentModal: modalstates
     }
 })
 

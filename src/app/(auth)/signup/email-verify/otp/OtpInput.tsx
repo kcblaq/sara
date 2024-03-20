@@ -67,7 +67,11 @@ const OtpInput: React.FC = () => {
    try{
    
     await axios.post('https://api.webmaxi.net/api/auth/verify-otp', payload)
-     .then((res) => res.status == 200 && route.push('/dashboard'))
+     .then((res) => {
+      console.log(res)
+      // sessionStorage.setItem('user', res.data)
+      // res.status == 200 && route.push('/dashboard')
+     })
      .then(()=> console.log('Submitted!'))
    }
    catch(err){

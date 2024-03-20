@@ -39,9 +39,8 @@ export const LoginComponent = () => {
             email: userDetail.email,
             password: userDetail.password
           })
-          console.log('Check for response status')
           if(res.status == 200){
-            sessionStorage.setItem("token", res.data.token)
+            sessionStorage.setItem("user", res.data)
             router.push('/dashboard')
           }
       } catch (err: any) {

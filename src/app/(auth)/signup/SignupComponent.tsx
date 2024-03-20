@@ -24,7 +24,8 @@ export const SignupComponent = () => {
                 })
                 .then((res)=> {
                     if(res.status == 201 ){
-                        localStorage.setItem("token",res.data.data)
+                        sessionStorage.setItem("user",res.data)
+                        // console.log(res.data)
                         router.push('/signup/email-verify/otp')
                     }
                 } )
