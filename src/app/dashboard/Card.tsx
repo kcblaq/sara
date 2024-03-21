@@ -1,8 +1,6 @@
 
 import React from 'react';
 import { FaArrowUp } from 'react-icons/fa';
-import { Line } from 'react-chartjs-2';
-import BarChart from '../component/charts/bars';
 
 interface Props {
   title: string;

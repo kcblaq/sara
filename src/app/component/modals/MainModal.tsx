@@ -1,6 +1,6 @@
 import { Dialog, Transition } from '@headlessui/react'
-import React, { Fragment, useState } from 'react'
-import { IoIosCloseCircleOutline } from 'react-icons/io';
+import React, { Fragment } from 'react'
+// import { IoIosCloseCircleOutline } from 'react-icons/io';
 
 interface ModalType  {
   closeModal: ()=> void;

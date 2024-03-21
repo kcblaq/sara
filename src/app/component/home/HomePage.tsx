@@ -2,7 +2,7 @@ import Link from "next/link";
 import FilledButton from "../FilledButton";
 import Nav from "./nav/Nav";
 import Image from "next/image";
-import { FeatureCard, HeaderSection, WhyUseWemaxiCard } from "../landingpage/Homecomponents";
+import { FeatureCard,  WhyUseWemaxiCard } from "../landingpage/Homecomponents";
 import PlainButton from "../PlainButton";
 import FAQComponent from "./faq/FAQComponent";
 import { currentYear } from "@/app/utils/currenYear";
