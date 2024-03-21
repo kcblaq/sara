@@ -3,14 +3,11 @@ import React from 'react'
 import { CiShare2 } from 'react-icons/ci'
 import FilledButton from '../component/FilledButton'
 import Card from './Card';
-import { Line } from "react-chartjs-2";
 import ChangeLineChart from '../component/charts/bars';
 import TraficOverview from './components/graphs/TraficOverview';
 import { RxQuestionMarkCircled } from 'react-icons/rx';
-import { TrafficOverviewGraph } from './components/TrafficOverviewGraph';
 import { BacklinkGraph } from './components/graphs/BacklinkGraph';
 import KeywordTable from './components/tables/KeywordTable';
-import DropdownMenu from '../component/Dropdown';
 
 export default function Dashboard() {
   const data = [
@@ -19,10 +16,9 @@ export default function Dashboard() {
     { id: 3, keyword: 'Thumping your sales by doing the basics', rank: '3', change: 'Change' },
     { id: 4, keyword: 'Did the wallmart just shut down or about to shut down?', rank: '3', change: 'Change' },
   ]
-  const name = sessionStorage.getItem('user')
-  console.log("NAME...",name)
+  const name = sessionStorage.getItem('fullName')
   return (
-    <section className=' my-10 p-2 grid h-full overflow-auto '>
+    <section className=' mb-10 p-2 grid h-full overflow-auto '>
       <div className="flex w-full flex-col md:flex-row justify-between items-start flex-grow">
         <div className='flex flex-col'>
           <h1 className="text-2xl text-[#101828] font-semibold">Welcome back, {name} </h1>

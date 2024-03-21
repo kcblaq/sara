@@ -35,9 +35,16 @@ export const SignupComponent = () => {
           catch(err: any){
             console.log(err.message)
           }
+
+          const payload = {
+            fullName: formik.values.name,
+                      email: formik.values.email,
+                      password: formik.values.password
+        }
+    console.log(payload)
      
     }
-
+    
     const formik = useFormik({
         initialValues: {
             name: '',

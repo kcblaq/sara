@@ -7,7 +7,6 @@ import { useState } from "react";
 import { IoEyeOffOutline ,IoEyeOutline} from "react-icons/io5";
 import { currentYear } from "@/app/utils/currenYear";
 import { AxiosInstance } from "@/lib/axios";
-import Error from "next/error";
 import { useRouter } from "next/navigation";
 import Loader from "@/app/component/Loader";
 
@@ -34,19 +33,23 @@ export const LoginComponent = () => {
     }
     const router = useRouter()
     async function handleLogin(){
+        setIsLoading(true)
       try {
         const res = await  AxiosInstance.post('/auth/login', {
             email: userDetail.email,
             password: userDetail.password
           })
           if(res.status == 200){
-            sessionStorage.setItem("user", res.data)
+            // console.log("RES::",res.data)
+            sessionStorage.setItem("fullName", res.data.user.fullName);
+            sessionStorage.setItem("token", res.data.token)
             router.push('/dashboard')
           }
       } catch (err: any) {
         setError(err.message)
         console.log(err.message)
       }
+      setIsLoading(false)
     }
 
     return (
@@ -76,7 +79,7 @@ export const LoginComponent = () => {
                 <button 
                 className=" w-full p-2 font-bold bg-primary relative gap-2 text-white rounded-md " 
                 onClick={handleLogin}> Sign in 
-                {/* {isLoading && <span className="absolute max-h-[50px]"><Loader /></span>} */}
+                {isLoading && <span className="absolute max-h-[70px] top-3 right-2 "><Loader /></span>}
                 </button>
                 <button className=" w-full p-2 font-bold rounded-md border flex items-center justify-center gap-2"><FcGoogle /> Sign in with Google </button>
                 <Link href={`/signup`}><small className=""> Don't have an account? <span className=" text-primary right-0"> Sign up</span></small> </Link>

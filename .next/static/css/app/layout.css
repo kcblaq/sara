@@ -557,6 +557,9 @@ html {
 .top-8{
   top: 2rem;
 }
+.top-1{
+  top: 0.25rem;
+}
 .z-10{
   z-index: 10;
 }
@@ -609,6 +612,9 @@ html {
 }
 .mt-8{
   margin-top: 2rem;
+}
+.mb-10{
+  margin-bottom: 2.5rem;
 }
 .inline-block{
   display: inline-block;
@@ -669,6 +675,9 @@ html {
 }
 .max-h-\[50px\]{
   max-height: 50px;
+}
+.max-h-\[70px\]{
+  max-height: 70px;
 }
 .min-h-\[400px\]{
   min-height: 400px;
@@ -999,6 +1008,10 @@ html {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
+.bg-blue-500{
+  --tw-bg-opacity: 1;
+  background-color: rgb(59 130 246 / var(--tw-bg-opacity));
+}
 .p-1{
   padding: 0.25rem;
 }
@@ -1056,10 +1069,6 @@ html {
 .py-10{
   padding-top: 2.5rem;
   padding-bottom: 2.5rem;
-}
-.py-12{
-  padding-top: 3rem;
-  padding-bottom: 3rem;
 }
 .py-2{
   padding-top: 0.5rem;
@@ -1293,6 +1302,10 @@ html {
 .text-yellow-500{
   --tw-text-opacity: 1;
   color: rgb(234 179 8 / var(--tw-text-opacity));
+}
+.text-black{
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity));
 }
 .opacity-0{
   opacity: 0;

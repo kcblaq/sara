@@ -1,11 +1,9 @@
 'use client'
 import React, { useState } from 'react'
 import { BsLightningCharge } from 'react-icons/bs';
-import { CiSearch, CiSettings, CiShare2 } from 'react-icons/ci';
+import { CiSearch, CiSettings } from 'react-icons/ci';
 import { FaRegUserCircle } from 'react-icons/fa';
-import { FaAnglesLeft } from 'react-icons/fa6';
 import { IoMdMenu, IoMdNotificationsOutline } from 'react-icons/io';
-import FilledButton from '../component/FilledButton';
 import Image from 'next/image';
 import { RxDashboard, RxDoubleArrowLeft } from "react-icons/rx";
 import { BsActivity } from "react-icons/bs";
@@ -18,7 +16,7 @@ import { HiOutlineSupport } from "react-icons/hi";
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
-import { ModalStateType, setModal } from '@/redux/features/modalstates';
+import {  setModal } from '@/redux/features/modalstates';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import MainModal from '../component/modals/MainModal';
@@ -60,9 +58,9 @@ export default function layout({ children }: Props) {
     return pathname.startsWith(link);
   };
 
-  const user = sessionStorage.getItem('user');
+  const token = sessionStorage.getItem('token');
   const router = useRouter();
-  if (!user) router.push('/login')
+  if (!token) router.push('/login')
 
   const modalState = useSelector((state: RootState) => state.currentModal.currentModal)
   const dispatch = useDispatch();

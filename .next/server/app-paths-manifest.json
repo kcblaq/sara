@@ -1,9 +1,8 @@
 {
   "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/(auth)/signup/page": "app/(auth)/signup/page.js",
   "/dashboard/page": "app/dashboard/page.js",
+  "/(auth)/login/page": "app/(auth)/login/page.js",
   "/dashboard/technical-seo/page": "app/dashboard/technical-seo/page.js",
-  "/dashboard/rank-tracker/page": "app/dashboard/rank-tracker/page.js",
-  "/dashboard/link-building/page": "app/dashboard/link-building/page.js",
-  "/dashboard/optimization-plans/page": "app/dashboard/optimization-plans/page.js",
   "/(auth)/signup/email-verify/otp/page": "app/(auth)/signup/email-verify/otp/page.js"
 }

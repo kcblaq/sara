@@ -1,4 +1,5 @@
 import FilledButton from '@/app/component/FilledButton';
+import { AxiosInstance } from '@/lib/axios';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
@@ -55,8 +56,9 @@ const OtpInput: React.FC = () => {
   
   
   const route = useRouter()
+  const userEmail = localStorage.getItem("userEmail")
   const payload = {
-    encryptedData: JSON.parse(tok),
+    email: userEmail,
     otp: parseInt(otpValues.join(""),10)
   }
 
@@ -66,11 +68,12 @@ const OtpInput: React.FC = () => {
    console.log(JSON.stringify(token))
    try{
    
-    await axios.post('https://api.webmaxi.net/api/auth/verify-otp', payload)
+    await AxiosInstance.post('/auth/verify-otp', payload)
      .then((res) => {
       console.log(res)
-      // sessionStorage.setItem('user', res.data)
-      // res.status == 200 && route.push('/dashboard')
+      sessionStorage.setItem('user', res.data)
+      sessionStorage.setItem('fullName', JSON.stringify(res.data.user.fullName))
+      res.status == 200 && route.push('/dashboard')
      })
      .then(()=> console.log('Submitted!'))
    }
