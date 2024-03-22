@@ -1,5 +1,4 @@
 
-import React from 'react'
 import { RxQuestionMarkCircled } from "react-icons/rx";
 import ProgressiveCircle from '../progressCircle';
 import { TrafficOverviewGraph } from '../TrafficOverviewGraph';

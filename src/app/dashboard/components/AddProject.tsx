@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import Image from 'next/image';
 import PlainButton from '@/app/component/PlainButton';
 import { ButtonFilled } from '@/app/component/FilledButton';

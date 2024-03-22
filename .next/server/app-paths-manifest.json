@@ -1,8 +1,6 @@
 {
   "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/(auth)/signup/page": "app/(auth)/signup/page.js",
-  "/dashboard/page": "app/dashboard/page.js",
-  "/(auth)/login/page": "app/(auth)/login/page.js",
   "/dashboard/technical-seo/page": "app/dashboard/technical-seo/page.js",
-  "/(auth)/signup/email-verify/otp/page": "app/(auth)/signup/email-verify/otp/page.js"
+  "/(auth)/login/page": "app/(auth)/login/page.js",
+  "/dashboard/page": "app/dashboard/page.js"
 }

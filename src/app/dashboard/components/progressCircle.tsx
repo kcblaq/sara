@@ -1,4 +1,4 @@
-import React, { FC} from 'react';
+import { FC} from 'react';
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 const ProgressiveCircle: FC = () => {

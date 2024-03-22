@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import  { useState } from 'react'
 import { BsLightningCharge } from 'react-icons/bs';
 import { CiSearch, CiSettings } from 'react-icons/ci';
 import { FaRegUserCircle } from 'react-icons/fa';

@@ -57,7 +57,7 @@ export const LoginComponent = () => {
 
             <Link href={`/`}>
 
-                <Image src={`/logo 3.png`} alt="Webmaxi Logo" width={200} height={0} className="hidden lg:flex" />
+                <Image src={`/logo.png`} alt="Webmaxi Logo" width={200} height={0} className="hidden lg:flex" />
                 <Image src={`/mobile-logo.png`} alt="Webmaxi Logo" width={20} height={0} className="flex lg:hidden" />
             </Link>
             <section className="lg:px-20 sm:px-32  w-full justify-between flex flex-col gap-2">

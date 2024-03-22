@@ -1,5 +1,4 @@
 "use client"
-import React from 'react'
 import { CiShare2 } from 'react-icons/ci'
 import FilledButton from '../component/FilledButton'
 import Card from './Card';
