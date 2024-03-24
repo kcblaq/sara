@@ -1,9 +1,9 @@
 {
   "pages": {
-    "/dashboard/technical-seo/page": [
+    "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/technical-seo/page.js"
+      "static/chunks/app/page.js"
     ],
     "/layout": [
       "static/chunks/webpack.js",
@@ -16,21 +16,16 @@
       "static/chunks/main-app.js",
       "static/chunks/app/dashboard/layout.js"
     ],
-    "/(auth)/login/page": [
+    "/dashboard/technical-seo/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(auth)/login/page.js"
+      "static/chunks/app/dashboard/technical-seo/page.js"
     ],
-    "/(auth)/login/layout": [
+    "/dashboard/technical-seo/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(auth)/login/layout.js"
-    ],
-    "/dashboard/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/dashboard/page.css",
-      "static/chunks/app/dashboard/page.js"
+      "static/css/app/dashboard/technical-seo/layout.css",
+      "static/chunks/app/dashboard/technical-seo/layout.js"
     ]
   }
 }

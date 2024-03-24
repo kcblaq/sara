@@ -58,7 +58,7 @@ export default function layout({ children }: Props) {
     return pathname.startsWith(link);
   };
 
-  const token = sessionStorage.getItem('token');
+  const token = typeof window !== 'undefined' ? sessionStorage.getItem('token'): false;
   const router = useRouter();
   if (!token) router.push('/login')
 

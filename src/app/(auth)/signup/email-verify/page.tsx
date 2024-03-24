@@ -1,5 +1,4 @@
 'use client'
-import React from 'react'
 import TitleAndDescription from '../../../component/TitleAndDescription'
 import FilledButton from '@/app/component/FilledButton'
 import BackToLogin from '../../password/BackToLogin'
