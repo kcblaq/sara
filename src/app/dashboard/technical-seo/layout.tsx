@@ -20,8 +20,8 @@ export default function TechnicalSeoLayout({ children }: TechSeoProps) {
 
 
     const tabs = [
-        { title: "Overview", content: <Overview /> },
         { title: "Crawlability and indexability", content: <Crawlability /> },
+        { title: "Overview", content: <Overview /> },
         { title: "Site performance", content: <SitePerformance /> },
         { title: "Internal linking", content: <InternalLinking /> },
         { title: "Issues", content: <Issues /> },
@@ -52,19 +52,21 @@ export default function TechnicalSeoLayout({ children }: TechSeoProps) {
                     {
                         tabs.map((tab) => {
                             return (
-                                <Tab as={Fragment}>
-                                    {({ selected }) => (
-                                        /* Use the `selected` state to conditionally style the selected tab. */
+                                <div key={tab.title}>
+                                    <Tab as={Fragment}>
+                                        {({ selected }) => (
+                                            /* Use the `selected` state to conditionally style the selected tab. */
 
-                                        <p
-                                            className={
-                                                ` cursor-pointer p-2 active:outline-none text-sm font-semibold border-t-0 border-l-0 border-r-0 active:border-r-none ${selected ? 'text-primary border-b-2 border-primary' : ' text-[#667085] active:border-none'}`
-                                            }
-                                        >
-                                            {tab.title}
-                                        </p>
-                                    )}
-                                </Tab>
+                                            <p
+                                                className={
+                                                    ` cursor-pointer p-2 active:outline-none text-sm font-semibold border-t-0 border-l-0 border-r-0 active:border-r-none ${selected ? 'text-primary border-b-2 border-primary' : ' text-[#667085] active:border-none'}`
+                                                }
+                                            >
+                                                {tab.title}
+                                            </p>
+                                        )}
+                                    </Tab>
+                                </div>
                             )
                         })
                     }
@@ -89,10 +91,12 @@ export default function TechnicalSeoLayout({ children }: TechSeoProps) {
                         {
                             tabs.map((tab) => {
                                 return (
-                                    <Tab.Panel>
+                                    <div key={tab.title}>
+                                        <Tab.Panel>
 
-                                        {tab.content}
-                                    </Tab.Panel>
+                                            {tab.content}
+                                        </Tab.Panel>
+                                    </div>
                                 )
                             })
                         }

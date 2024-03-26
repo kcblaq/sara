@@ -89,7 +89,7 @@ export default function layout({ children }: Props) {
             <div className="grid gap-2 mt-10">
               {menus.map((menu) => {
                 return (
-                  <Link href={`${menu.link}`} className={` ${isActive(menu.link) ? ' text-white bg-[#1570EF]' : ''}  hover:text-white hover:scale-105 transition-all duration-300 ease-in-out p-2 rounded-md flex  text-[#84CAFF] items-center gap-2`}>
+                  <Link key={menu.link} href={`${menu.link}`} className={` ${isActive(menu.link) ? ' text-white bg-[#1570EF]' : ''}  hover:text-white hover:scale-105 transition-all duration-300 ease-in-out p-2 rounded-md flex  text-[#84CAFF] items-center gap-2`}>
                     {menu.icon}
                     {fullWidth && menu.title}
                   </Link>
@@ -100,7 +100,7 @@ export default function layout({ children }: Props) {
           <div className="grid gap-4">
             {othermenu.map((menu) => {
               return (
-                <Link href={`${menu.link}`} className={`flex  ${isActive(menu.link) ? ' text-white bg-[#1570EF]' : ''} hover:text-white hover:scale-105 transition-all duration-300 ease-in-out text-[#84CAFF] items-center gap-2`}>
+                <Link key={menu.link} href={`${menu.link}`} className={`flex  ${isActive(menu.link) ? ' text-white bg-[#1570EF]' : ''} hover:text-white hover:scale-105 transition-all duration-300 ease-in-out text-[#84CAFF] items-center gap-2`}>
                   {menu.icon}
                   {fullWidth && menu.title}
                 </Link>
