@@ -867,6 +867,9 @@ html {
 .justify-items-start{
   justify-items: start;
 }
+.justify-items-center{
+  justify-items: center;
+}
 .justify-items-stretch{
   justify-items: stretch;
 }
