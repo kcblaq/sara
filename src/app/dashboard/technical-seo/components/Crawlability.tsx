@@ -57,11 +57,8 @@ export default function Crawlability() {
 
           <Title title="Indexability" />
           <div className="grid w-full  ">
-            <DualProgressBar leftPercentage={20} />
-            <div className="flex h-full flex-col justify-end">
-              <p className=' flex items-center text-xs text-[#475467]'> <span className="text-green-300"><GoDotFill />  </span> Crwaled(20,220) </p>
-              <p className=' flex items-center text-xs text-[#475467]'> <span className="text-green-100"><GoDotFill /></span> Uncrawled(4,000) </p>
-            </div>
+            <DualProgressBar leftPercentage={'90%'} />
+           
           </div>
         </div>
 
