@@ -20,11 +20,11 @@ export default function TechnicalSeoLayout({ children }: TechSeoProps) {
 
 
     const tabs = [
+        { title: "Issues", content: <Issues /> },
         { title: "Overview", content: <Overview /> },
         { title: "Crawlability and indexability", content: <Crawlability /> },
         { title: "Site performance", content: <SitePerformance /> },
         { title: "Internal linking", content: <InternalLinking /> },
-        { title: "Issues", content: <Issues /> },
         { title: "Crawl comparisons", content: <CrawlComparison /> },
         { title: "Audit history", content: <AuditHistory /> },
     ]

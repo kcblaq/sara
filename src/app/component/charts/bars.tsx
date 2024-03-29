@@ -14,9 +14,9 @@ import React from 'react';
 import { Line } from 'react-chartjs-2';
 interface Props {
   data1: number,
-  data2: number,
-  data3: number,
-  data4: number
+  data2?: number,
+  data3?: number,
+  data4?: number
 }
 const ChangeLineChart = ({ data1, data2, data3, data4 }: Props) => {
   ChartJS.register(
@@ -36,11 +36,16 @@ const ChangeLineChart = ({ data1, data2, data3, data4 }: Props) => {
       {
         data: [data1, data2, data3, data4],
         fill: 'start',
-        borderColor: data4 > data1 ? 'green' : 'red',
+        borderColor: 
+        data4 && data4 > data1 ? 'green' :
+        data3 && data3 > data1 ? 'green' :
+        data2 && data2 > data1 ? 'green' :
+        'red'
+      ,
         borderWidth: 1,
         pointRadius: 0,
-        pointBackgroundColor: data4 > data1 ? 'green' : 'red',
-        backgroundColor: data4 > data1 ? '#EEFDF5' : "#FEF3F2",
+        pointBackgroundColor: data4 && data4 > data1 ? 'green' : 'red',
+        backgroundColor: data4 && data4 > data1 ? '#EEFDF5' : "#FEF3F2",
       },
     ],
   };

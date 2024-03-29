@@ -6,6 +6,7 @@ import storage from "redux-persist/lib/storage";
 import storageSession from "redux-persist/lib/storage/session";
 import persistStore from "redux-persist/es/persistStore";
 import userSlice from "@/redux/features/userSlice";
+import { configureApiCall } from "./utils/apicalls/axiosInterceptor";
 
 const userPersistConfig = {
     key: 'user', // Specify a unique key for userSlice
@@ -26,6 +27,8 @@ const persistedReducer = persistReducer(
 export const store = configureStore({
     reducer: persistedReducer
 });
+
+configureApiCall(store)
 
 export const persistor = persistStore(store);
 

@@ -1,12 +1,11 @@
 import { CircularProgressbarWithChildren } from "react-circular-progressbar";
-import { ReusableProgressiveCircle } from "./(technicalseo)/ReusableProgressiveCircle";
-import SubHead from "./(technicalseo)/SubHead";
 import { GoDotFill } from "react-icons/go";
 import { RxQuestionMarkCircled } from "react-icons/rx";
 import { Title } from "./Overview";
 import DualProgressBar from "./(technicalseo)/DualProgressBar";
 import BarChartSingle from "./(technicalseo)/BarChartSingle";
 import { AnotherDoughnutChart } from "./(technicalseo)/DoughnutChart";
+import { Suspense } from "react";
 
 export default function Crawlability() {
 
@@ -51,7 +50,9 @@ const indexibilityLabel = ["X-Robots tags", "'non-index' metatag", "Robots.txt",
             <hr className='mt-2 w-full' />
           </div>
           <div className=" h-full w-full ">
-            <BarChartSingle labels={labels} data={mockData} backgroundColor="#53B1FD" />
+           <Suspense fallback={<h3> Loading...</h3>}>
+           <BarChartSingle labels={labels} data={mockData} backgroundColor="#53B1FD" />
+           </Suspense>
 
           </div>
         </section>

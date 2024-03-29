@@ -9,23 +9,36 @@ import KeywordTable from './components/tables/KeywordTable';
 import { useSelector } from 'react-redux';
 import { UserType } from '@/types/userType';
 import ChangeLineChart from '../component/charts/Bars';
+import { useEffect, useState } from 'react';
+import ApiCall from '../utils/apicalls/axiosInterceptor';
 
 export default function Dashboard() {
 
-  const User = useSelector((state: UserType)=> state);
+  const [loaded, setLoaded] = useState(false)
+  const User = useSelector((state: any)=> state);
+
+  useEffect(()=>{
+  setLoaded(true)
+  },[loaded])
+
   const data = [
     { id: 1, keyword: 'The beginning of the new eorld order', rank: '3', change: 'Change' },
     { id: 2, keyword: 'Managing business for the future', rank: '4', change: 'Change' },
     { id: 3, keyword: 'Thumping your sales by doing the basics', rank: '3', change: 'Change' },
     { id: 4, keyword: 'Did the wallmart just shut down or about to shut down?', rank: '3', change: 'Change' },
   ]
-  // const name = sessionStorage.getItem('fullName')
-  // console.log("USER",User.user.fullName)
+
+  const performanceMetric = ()=> {
+      ApiCall.get('/crawl/performance-metrics', {
+        params: ''
+      })
+  }
+
   return (
     <section className=' mb-10 p-2 grid h-full overflow-auto '>
       <div className="flex w-full flex-col md:flex-row justify-between items-start flex-grow">
         <div className='flex flex-col'>
-          <h1 className="text-2xl text-[#101828] font-semibold">Welcome back, { User.user.fullName} </h1>
+          <h1 className="text-2xl text-[#101828] font-semibold">Welcome back, { User.user.user.fullName} </h1>
           <p>Track, manage and boost your site’s SEO.</p>
         </div>
         <div className="flex items-center gap-2">
@@ -39,14 +52,16 @@ export default function Dashboard() {
           </span>
         </div>
       </div>
+  
 
 
-
-      <section className="grid items-center grid-cols-1 md:grid-cols-3 pt-8 gap-2 justify-between">
-        <Card title='Organic traffic' date='Jan, 24' amount='2.5M' style='text-red-500' percent='10%' chart={<ChangeLineChart data1={0} data2={10} data3={50} data4={4} />} />
+      {loaded && 
+        <section className="grid items-center grid-cols-1 md:grid-cols-3 pt-8 gap-2 justify-between">
+        <Card title='Organic traffic' date='Jan, 24' amount='2.5M' style='text-red-500' percent='10%' chart={<ChangeLineChart data1={0} data2={10}  />} />
         <Card title='Organic Keywords' date='Jan, 24' amount='1.5M' style='text-green-500' percent='40%' chart={<ChangeLineChart data1={100} data2={10} data3={0} data4={41} />} />
         <Card title='Average time on site' date='Jan, 24' amount='500K' style='text-green-500' percent='25%' chart={<ChangeLineChart data1={0} data2={0} data3={0} data4={400} />} />
       </section>
+      }
       <section className='py-10 my-10' >
         <TraficOverview />
       </section>

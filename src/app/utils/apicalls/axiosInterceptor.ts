@@ -7,25 +7,30 @@ const ApiCall = axios.create({
     timeout: 10000
 });
 
-const getToken = () => {
-    const token = useSelector((state: RootState) => state.user.token);
+// Function to get token from Redux store
+const getToken = (store: any) => {
+    const token = store.getState().user.token;
     return token;
 };
 
-ApiCall.interceptors.request.use(
-    (config) => {
-        const token = getToken();
-        if (token) {
-            config.headers['Authorization'] = token;
+// Function to set authorization header based on token
+export const configureApiCall = (store:any) => {
+    ApiCall.interceptors.request.use(
+        (config) => {
+            const token = getToken(store);
+            if (token) {
+                config.headers['Authorization'] = token;
+            }
+            return config;
+        },
+        (error) => {
+            return Promise.reject(error);
         }
-        return config;
-    },
-    (error) => {
-        return Promise.reject(error);
-    }
-);
+    );
+};
 
 export default ApiCall;
+
 
 
 

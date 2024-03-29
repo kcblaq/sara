@@ -11,19 +11,22 @@ interface Props {
   chart: React.ReactNode
 }
 
+
 export default function Card({ title, date, style, amount, percent, chart }: Props) {
-  const chartData = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-    datasets: [
-      {
-        label: 'Monthly Sales',
-        data: [65, 59, 80, 81, 56, 55],
-        fill: false,
-        borderColor: 'rgb(75, 192, 192)',
-        tension: 0.1,
-      },
-    ],
-  };
+
+
+  // const chartData = {
+  //   labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+  //   datasets: [
+  //     {
+  //       label: 'Monthly Sales',
+  //       data: [65, 59, 80, 81, 56, 55],
+  //       fill: false,
+  //       borderColor: 'rgb(75, 192, 192)',
+  //       tension: 0.1,
+  //     },
+  //   ],
+  // };
 
   const options = {
     scales: {

@@ -1,5 +1,5 @@
 'use client'
-import  { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { BsLightningCharge } from 'react-icons/bs';
 import { CiSearch, CiSettings } from 'react-icons/ci';
 import { FaRegUserCircle } from 'react-icons/fa';
@@ -16,12 +16,16 @@ import { HiOutlineSupport } from "react-icons/hi";
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
-import {  setModal } from '@/redux/features/modalstates';
+import { setModal } from '@/redux/features/modalstates';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import MainModal from '../component/modals/MainModal';
 import AddProject from './components/AddProject';
 import ApiCall from '../utils/apicalls/axiosInterceptor';
+import { PropertyType } from '@/types/PropertyType';
+// import DashboardOverviewPlaceholder from './components/DashboardOverviewPlaceholder';
+import { LoadingState } from '../component/Loader';
+import { CgOpenCollective } from 'react-icons/cg';
 
 
 interface Props {
@@ -29,7 +33,8 @@ interface Props {
 }
 export default function Layout({ children }: Props) {
   const [fullWidth, setFullWidth] = useState(false);
-  const [project, setProject] = useState([])
+  const [property, setProperty] = useState<PropertyType[]>([]);
+  const [currentProperty, setCurrentProperty] = useState(property.length > 0 ? JSON.parse(property[0].website_url) : "");
 
 
   const menus = [
@@ -66,25 +71,63 @@ export default function Layout({ children }: Props) {
   useEffect(() => {
     if (!token.user.token) {
       router.push('/login');
-      
+
     }
   }, [token, router]);
-  // if (!token) router.push('/login')
 
   const modalState = useSelector((state: RootState) => state.currentModal.currentModal)
   const dispatch = useDispatch();
 
-  
-  const getProjects = async()=> {
-    // const res = await axios.get('https://api.webmaxi.net/api/crawl/property')
-   const res = await ApiCall.get('/crawl/property')
-   return res
-  }
 
-  useEffect(()=> {
-    const result = getProjects();
-    console.log(result)
-  }, [])
+  const getProjects = async () => {
+    try {
+      const res = await ApiCall.get('/crawl/property');
+      return res.data;
+    } catch (error) {
+      console.error('Error fetching projects:', error);
+      return [];
+    }
+  };
+
+  const getPerformanceMetrics = async (url: string) => {
+    try {
+      const res = await ApiCall.get('/crawl/performance-metrics', {
+        params: {
+          url: url
+        }
+      });
+      console.log('Performance metrics:', res.data);
+    } catch (error) {
+      console.error('Error fetching performance metrics:', error);
+    }
+  }; 
+  
+  
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      const result = await getProjects();
+      setProperty(result);
+      // setCurrentProperty(result[0].website_url)
+    };
+    
+
+    fetchProjects();
+    
+  }, []);
+
+
+  useEffect(() => {
+
+    if (property.length > 0) {
+      // console.log("PROPERTY",typeof currentProperty, currentProperty)
+      getPerformanceMetrics(currentProperty)
+        .then(() => console.log("MET", currentProperty))
+        .catch((error) => console.error("Error fetching performance metrics:", error));
+    }
+  }, [property, currentProperty]);
+
+  const curPro = property.length > 0 ? currentProperty : ''
 
   return (
     <>
@@ -136,10 +179,10 @@ export default function Layout({ children }: Props) {
 
           <div className="flex w-full gap-2 p-2  md:px-8 justify-between items-center h-16">
             <div className="flex gap-2  w-full items-center ">
-              <select className="p-3  min-w-[300px] rounded-md border">
-                <option className=""> www.google.com </option>
-                <option className=""> www.freefoods.com </option>
-                <option className=""> www.ecommerce.com </option>
+              <select className="p-3  min-w-[300px] rounded-md border" value={currentProperty.length > 0 ? currentProperty : ''} onChange={(e)=> setCurrentProperty(e.target.value)} >
+                {
+                  property.map((item)=> <option key={item.website_url} className='' value={JSON.parse(item.website_url)}> {JSON.parse(item.website_url) } </option> )
+                }
               </select>
               <div>
                 <div className="w-full">
@@ -166,7 +209,9 @@ export default function Layout({ children }: Props) {
           </div>
           <hr className="w-full mt-1 hidden md:flex " />
           <div className=" w-full h-full overflow-auto p-2 md:p-8">
-            {children}
+            {
+              property.length < 1 ? <LoadingState/> : children
+            }
           </div>
         </section>
       </main>
