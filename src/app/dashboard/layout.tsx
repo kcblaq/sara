@@ -1,5 +1,5 @@
 'use client'
-import  { useState } from 'react'
+import  { useEffect, useState } from 'react'
 import { BsLightningCharge } from 'react-icons/bs';
 import { CiSearch, CiSettings } from 'react-icons/ci';
 import { FaRegUserCircle } from 'react-icons/fa';
@@ -21,13 +21,17 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import MainModal from '../component/modals/MainModal';
 import AddProject from './components/AddProject';
+import ApiCall from '../utils/apicalls/axiosInterceptor';
 
 
 interface Props {
   children: React.ReactNode
 }
-export default function layout({ children }: Props) {
+export default function Layout({ children }: Props) {
   const [fullWidth, setFullWidth] = useState(false);
+  const [project, setProject] = useState([])
+
+
   const menus = [
     { title: "Dashboard", icon: <RxDashboard />, link: '/dashboard' },
     { title: "Technical SEO", icon: <BsActivity />, link: '/dashboard/technical-seo' },
@@ -47,25 +51,40 @@ export default function layout({ children }: Props) {
 
   const pathname = usePathname();
 
-  // const isActive = (link: string) => link === pathname;
-  // const isActive = (link: string) => pathname.startsWith(link);
-
   const isActive = (link: string) => {
-    const currentPath = pathname.split('/')[1];
+    // const currentPath = pathname.split('/')[1];
     if (link === '/dashboard') {
       return pathname === '/dashboard';
     }
     return pathname.startsWith(link);
   };
 
-  const token = typeof window !== 'undefined' ? sessionStorage.getItem('token'): false;
+  // const token = typeof window !== 'undefined' ? sessionStorage.getItem('token'): false;
+  const token = useSelector((state: RootState) => state)
   const router = useRouter();
-  if (!token) router.push('/login')
+
+  useEffect(() => {
+    if (!token.user.token) {
+      router.push('/login');
+      
+    }
+  }, [token, router]);
+  // if (!token) router.push('/login')
 
   const modalState = useSelector((state: RootState) => state.currentModal.currentModal)
   const dispatch = useDispatch();
 
   
+  const getProjects = async()=> {
+    // const res = await axios.get('https://api.webmaxi.net/api/crawl/property')
+   const res = await ApiCall.get('/crawl/property')
+   return res
+  }
+
+  useEffect(()=> {
+    const result = getProjects();
+    console.log(result)
+  }, [])
 
   return (
     <>

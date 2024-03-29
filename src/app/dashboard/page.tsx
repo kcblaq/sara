@@ -2,25 +2,30 @@
 import { CiShare2 } from 'react-icons/ci'
 import FilledButton from '../component/FilledButton'
 import Card from './Card';
-import ChangeLineChart from '../component/charts/bars';
 import TraficOverview from './components/graphs/TraficOverview';
 import { RxQuestionMarkCircled } from 'react-icons/rx';
 import { BacklinkGraph } from './components/graphs/BacklinkGraph';
 import KeywordTable from './components/tables/KeywordTable';
+import { useSelector } from 'react-redux';
+import { UserType } from '@/types/userType';
+import ChangeLineChart from '../component/charts/Bars';
 
 export default function Dashboard() {
+
+  const User = useSelector((state: UserType)=> state);
   const data = [
     { id: 1, keyword: 'The beginning of the new eorld order', rank: '3', change: 'Change' },
     { id: 2, keyword: 'Managing business for the future', rank: '4', change: 'Change' },
     { id: 3, keyword: 'Thumping your sales by doing the basics', rank: '3', change: 'Change' },
     { id: 4, keyword: 'Did the wallmart just shut down or about to shut down?', rank: '3', change: 'Change' },
   ]
-  const name = sessionStorage.getItem('fullName')
+  // const name = sessionStorage.getItem('fullName')
+  // console.log("USER",User.user.fullName)
   return (
     <section className=' mb-10 p-2 grid h-full overflow-auto '>
       <div className="flex w-full flex-col md:flex-row justify-between items-start flex-grow">
         <div className='flex flex-col'>
-          <h1 className="text-2xl text-[#101828] font-semibold">Welcome back, {name} </h1>
+          <h1 className="text-2xl text-[#101828] font-semibold">Welcome back, { User.user.fullName} </h1>
           <p>Track, manage and boost your site’s SEO.</p>
         </div>
         <div className="flex items-center gap-2">

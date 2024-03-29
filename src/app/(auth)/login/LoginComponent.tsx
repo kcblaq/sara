@@ -9,6 +9,10 @@ import { currentYear } from "@/app/utils/currenYear";
 import { AxiosInstance } from "@/lib/axios";
 import { useRouter } from "next/navigation";
 import Loader from "@/app/component/Loader";
+import { useDispatch } from "react-redux";
+import { setToken, setUser } from "@/redux/features/userSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/store";
 
 
 
@@ -19,7 +23,10 @@ export const LoginComponent = () => {
         password: '',
         email: ''
     })
-    const [error, setError] = useState('')
+    const [error, setError] = useState({
+        state: false,
+        message: ''
+    })
     const [isLoading, setIsLoading] = useState(false)
 
     const handleChange = (e: { preventDefault: () => void; target: { name: any; value: any; }; }) => {
@@ -32,6 +39,8 @@ export const LoginComponent = () => {
 
     }
     const router = useRouter()
+    const dispatch = useDispatch();
+    const User = useSelector((state: RootState)=> state.user)
     async function handleLogin(){
         setIsLoading(true)
       try {
@@ -40,18 +49,28 @@ export const LoginComponent = () => {
             password: userDetail.password
           })
           if(res.status == 200){
-            // console.log("RES::",res.data)
-            sessionStorage.setItem("fullName", res.data.user.fullName);
-            sessionStorage.setItem("token", res.data.token)
-            router.push('/dashboard')
+            console.log("RES::",res.data.token)
+            dispatch(setUser(res.data.user))
+            dispatch(setToken(res.data.token))
+            // sessionStorage.setItem("fullName", res.data.user.fullName);
+            // sessionStorage.setItem("token", res.data.token)
+            
+                router.push('/dashboard')
+            
           }
       } catch (err: any) {
-        setError(err.message)
-        console.log(err.message)
+        console.log(err)
+        setError({
+            state:true, message : err.response.data.message
+        })
+        setTimeout(()=>{
+            setError({state:false, message:''})
+        }, 5000)
       }
       setIsLoading(false)
     }
 
+    // console.log("TOKEN",User.token)
     return (
         <main className=" w-full h-full flex flex-col gap-10 lg:justify-between ">
 
@@ -63,7 +82,7 @@ export const LoginComponent = () => {
             <section className="lg:px-20 sm:px-32  w-full justify-between flex flex-col gap-2">
                 <p className=" font-bold lg:text-lg">Login  </p>
                 <small className="font-thin text-xs lg:text-base"> Welcome back, please enter your</small>
-                <label className="font-bold text-sm lg:text-base"> Email*</label>
+                <label className="font-bold text-sm lg:text-base"> Email*  {error && <small className="text-red-500">{error.message}</small>} </label>
                 <input type="email" placeholder="Enter your email" name="email" value={userDetail.email} onChange={handleChange} className="p-2 rounded-md  focus:outline-none border focus:shadow focus:shadow-primary" />
                 <label className="font-bold text-sm lg:text-b"> Password*</label>
                 <span className="relative w-full">

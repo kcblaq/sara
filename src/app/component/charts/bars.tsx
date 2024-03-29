@@ -1,8 +1,25 @@
-"use client"
-
 
 import {
-    Chart as ChartJS,
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  Filler,
+} from 'chart.js';
+import React from 'react';
+import { Line } from 'react-chartjs-2';
+interface Props {
+  data1: number,
+  data2: number,
+  data3: number,
+  data4: number
+}
+const ChangeLineChart = ({ data1, data2, data3, data4 }: Props) => {
+  ChartJS.register(
     CategoryScale,
     LinearScale,
     PointElement,
@@ -10,27 +27,8 @@ import {
     Title,
     Tooltip,
     Legend,
-    Filler,
-  } from 'chart.js';
-  import React from 'react';
-import { Line } from 'react-chartjs-2';
-interface Props {
-    data1: number,
-    data2: number,
-    data3: number,
-    data4: number
-}
-const ChangeLineChart = ({ data1, data2, data3, data4 }: Props) => {
-    ChartJS.register(
-        CategoryScale,
-        LinearScale,
-        PointElement,
-        LineElement,
-        Title,
-        Tooltip,
-        Legend,
-        Filler
-      );
+    Filler
+  );
 
   const data = {
     labels: ['data1', 'data2', 'data3', 'data4'],
@@ -79,9 +77,11 @@ const ChangeLineChart = ({ data1, data2, data3, data4 }: Props) => {
     maintainAspectRatio: false,
   };
 
-  return <div className="w-20 h-10">
-    <Line data={data} options={options} />
-  </div>;
+  return (
+    <div className="w-20 h-10">
+      <Line data={data} options={options} />
+    </div>
+  )
 };
 
 export default ChangeLineChart;
