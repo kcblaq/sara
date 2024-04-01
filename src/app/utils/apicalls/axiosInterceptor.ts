@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 
 const ApiCall = axios.create({
     baseURL: "https://api.webmaxi.net/api",
-    timeout: 10000
+    // timeout: 10000
 });
 
 // Function to get token from Redux store

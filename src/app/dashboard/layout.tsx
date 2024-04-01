@@ -25,7 +25,9 @@ import ApiCall from '../utils/apicalls/axiosInterceptor';
 import { PropertyType } from '@/types/PropertyType';
 // import DashboardOverviewPlaceholder from './components/DashboardOverviewPlaceholder';
 import { LoadingState } from '../component/Loader';
-import { CgOpenCollective } from 'react-icons/cg';
+// import { CgOpenCollective } from 'react-icons/cg';
+import { PerformanceMetrics } from '@/types/DashboardOverview';
+import { fetchPerformanceFailure, fetchPerformanceStart, fetchPerformanceSuccess } from '@/redux/features/performanceMetric slice';
 
 
 interface Props {
@@ -35,6 +37,7 @@ export default function Layout({ children }: Props) {
   const [fullWidth, setFullWidth] = useState(false);
   const [property, setProperty] = useState<PropertyType[]>([]);
   const [currentProperty, setCurrentProperty] = useState(property.length > 0 ? JSON.parse(property[0].website_url) : "");
+  // const [performanceMetric, setPerformanceMetric] = useState<PerformanceMetrics>()
 
 
   const menus = [
@@ -88,46 +91,48 @@ export default function Layout({ children }: Props) {
       return [];
     }
   };
+   
+  useEffect(() => {
+    const fetchProjects = async () => {
+      const result = await getProjects();
+      setProperty(result);
+      setCurrentProperty(JSON.parse(result[0]?.website_url))
+    };
+    
+
+    fetchProjects();
+    
+    // console.log(" PROPERTY", property)
+    
+  }, []);
+  
 
   const getPerformanceMetrics = async (url: string) => {
+    dispatch(fetchPerformanceStart())
     try {
       const res = await ApiCall.get('/crawl/performance-metrics', {
         params: {
           url: url
         }
       });
-      console.log('Performance metrics:', res.data);
+      // setPerformanceMetric(res.data)
+      dispatch(fetchPerformanceSuccess(res?.data))
+      // console.log('Performance metrics:', res.data);
     } catch (error) {
+      dispatch(fetchPerformanceFailure(`Failed to fetch performance metric, Error: ${error}`))
       console.error('Error fetching performance metrics:', error);
     }
   }; 
-  
-  
-
-  useEffect(() => {
-    const fetchProjects = async () => {
-      const result = await getProjects();
-      setProperty(result);
-      // setCurrentProperty(result[0].website_url)
-    };
-    
-
-    fetchProjects();
-    
-  }, []);
-
 
   useEffect(() => {
 
     if (property.length > 0) {
-      // console.log("PROPERTY",typeof currentProperty, currentProperty)
       getPerformanceMetrics(currentProperty)
-        .then(() => console.log("MET", currentProperty))
+        // .then(() => console.log("MET", currentProperty))
         .catch((error) => console.error("Error fetching performance metrics:", error));
     }
   }, [property, currentProperty]);
 
-  const curPro = property.length > 0 ? currentProperty : ''
 
   return (
     <>

@@ -1,19 +1,33 @@
 
-
 import { FaArrowUp } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
+import { formatDate } from '@/lib/DateFormater';
 
 interface Props {
   title: string;
-  date: string;
-  amount: string;
+  amount: number | undefined;
   style: string;
-  percent: string;
+  percent: number | undefined;
+  arrowPosition?: string;
   chart: React.ReactNode
 }
 
 
-export default function Card({ title, date, style, amount, percent, chart }: Props) {
+export default function Card({ title,  style, amount, percent, chart, arrowPosition }: Props) {
+  
+  const {metrics, loading, error} = useSelector((state: RootState)=> state.performance)
+  const temp = metrics && metrics.history.scores ;
+  const lastScore = temp && temp.length > 0 ? temp[temp.length - 1] : null;
+  let lastUpdated: string | undefined;
+  if (lastScore?.createdAt) {
+    lastUpdated = formatDate({ inputDate: lastScore.createdAt });
+} else {
+    ''
+}
+ 
 
+  // const latestDate = formatDate()
 
   // const chartData = {
   //   labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
@@ -40,18 +54,18 @@ export default function Card({ title, date, style, amount, percent, chart }: Pro
     <div className="flex flex-col gap-6 w-full max-w-[390px] h-[176px] rounded-md p-6 border ">
       <div className="flex w-full justify-between items-center">
         <h5 className=" font-semibold text-base">{title}</h5>
-        <p className=" text-sm font-normal">{date} </p>
+        <p className=" text-sm font-normal">{lastUpdated} </p>
       </div>
       <div className="grid">
         <h1 className=" self-start font-semibold text-4xl"> {amount} </h1>
         <div className="flex items-center justify-between w-full">
           <p className="flex items-center gap-2 text-sm">
             <span className={style} style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <FaArrowUp /> {percent}
+              <FaArrowUp className={arrowPosition}/> {percent}%
             </span>
-            vs last month
+            vs last update
           </p>
-          <p className='p-2'>
+          <p className='p-2 float-end'>
             {/* <Line data={chartData} options={options} /> */}
             {/* <BarChart data1={0} data2={20} data3={60} /> */}
             {chart}
@@ -61,3 +75,4 @@ export default function Card({ title, date, style, amount, percent, chart }: Pro
     </div>
   );
 }
+

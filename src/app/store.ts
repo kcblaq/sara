@@ -7,20 +7,27 @@ import storageSession from "redux-persist/lib/storage/session";
 import persistStore from "redux-persist/es/persistStore";
 import userSlice from "@/redux/features/userSlice";
 import { configureApiCall } from "./utils/apicalls/axiosInterceptor";
+import performanceMetricSlice from "@/redux/features/performanceMetric slice";
 
 const userPersistConfig = {
-    key: 'user', // Specify a unique key for userSlice
+    key: 'user',  // Specify a unique key for userSlice
     storage: storageSession,
 };
 
+const performancePersistConfig = {
+    key: 'performance',
+    storage: storageSession,
+}
+
 const rootReducer = combineReducers({
     nav: navSlice,
+    performance: persistReducer(performancePersistConfig, performanceMetricSlice),
     user: persistReducer(userPersistConfig, userSlice), // Persist userSlice
     currentModal: modalstates
 });
 
 const persistedReducer = persistReducer(
-    { key: 'root', storage }, // Specify the root persist key
+    { key: 'root', storage }, 
     rootReducer
 );
 

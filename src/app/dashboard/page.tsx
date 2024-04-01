@@ -11,6 +11,12 @@ import { UserType } from '@/types/userType';
 import ChangeLineChart from '../component/charts/Bars';
 import { useEffect, useState } from 'react';
 import ApiCall from '../utils/apicalls/axiosInterceptor';
+import { RootState } from '../store';
+import { calculatePercentage, millisecondsToSeconds } from '@/lib/DateFormater';
+import { current } from '@reduxjs/toolkit';
+import OrganicTrafficCard from './technical-seo/components/OrganicTrafficCard';
+import OrganicKeywords from './technical-seo/components/OrganicKeywords';
+import AverageTimeOnsite from './technical-seo/components/AverageTimeOnsite';
 
 export default function Dashboard() {
 
@@ -27,12 +33,6 @@ export default function Dashboard() {
     { id: 3, keyword: 'Thumping your sales by doing the basics', rank: '3', change: 'Change' },
     { id: 4, keyword: 'Did the wallmart just shut down or about to shut down?', rank: '3', change: 'Change' },
   ]
-
-  const performanceMetric = ()=> {
-      ApiCall.get('/crawl/performance-metrics', {
-        params: ''
-      })
-  }
 
   return (
     <section className=' mb-10 p-2 grid h-full overflow-auto '>
@@ -57,9 +57,9 @@ export default function Dashboard() {
 
       {loaded && 
         <section className="grid items-center grid-cols-1 md:grid-cols-3 pt-8 gap-2 justify-between">
-        <Card title='Organic traffic' date='Jan, 24' amount='2.5M' style='text-red-500' percent='10%' chart={<ChangeLineChart data1={0} data2={10}  />} />
-        <Card title='Organic Keywords' date='Jan, 24' amount='1.5M' style='text-green-500' percent='40%' chart={<ChangeLineChart data1={100} data2={10} data3={0} data4={41} />} />
-        <Card title='Average time on site' date='Jan, 24' amount='500K' style='text-green-500' percent='25%' chart={<ChangeLineChart data1={0} data2={0} data3={0} data4={400} />} />
+        <OrganicTrafficCard />
+        <OrganicKeywords />
+        <AverageTimeOnsite />
       </section>
       }
       <section className='py-10 my-10' >
