@@ -9,13 +9,18 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import FilledButton from "@/app/component/FilledButton";
+import { BiLoader } from "react-icons/bi";
 
 
 export const SignupComponent = () => {
     const [isPassword, setIsPassword] = useState('password')
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState({status: false, msg:''})
     const router = useRouter()
 
     const Register = async()=> {
+        setLoading(true)
             try {
                 await axios.post('https://api.webmaxi.net/api/auth/register', {
                   fullName: formik.values.name,
@@ -27,13 +32,16 @@ export const SignupComponent = () => {
                         sessionStorage.setItem("user",res.data)
                         // console.log(res.data)
                         router.push('/signup/email-verify/otp')
+                    } else {
+                        console.log("RES", res)
+                        // setError({status:true, msg: res.data})
                     }
                 } )
                 .then(()=> localStorage.setItem("userEmail", formik.values.email))
             }
 
           catch(err: any){
-            console.log(err.message)
+            setError({status: true, msg:err.response.data.message})
           }
 
           const payload = {
@@ -41,7 +49,7 @@ export const SignupComponent = () => {
                       email: formik.values.email,
                       password: formik.values.password
         }
-    console.log(payload)
+    setLoading(false)
      
     }
     
@@ -84,7 +92,7 @@ export const SignupComponent = () => {
                     <p className=" font-bold text-lg lg:text-2xl">Signup  </p>
                     <small className="font-thin "> Start your free trial today</small>
                     </div>
-
+                    <small className="text-red-500">{error.status && error.msg} </small>
                     <label className="font-bold text-sm lg:text-base"> Name*</label>
                     <input
                         type="text"
@@ -137,12 +145,13 @@ export const SignupComponent = () => {
                     </span>
                     <small className=" font-thin -mt-2 " > Must be at least 8 characters.</small>
                     <button
-                        className=" w-full p-2 font-bold bg-primary text-white rounded-md"
+                        className=" w-full p-2 flex items-center justify-center gap-2 font-bold bg-primary text-white rounded-md"
                         type="submit"
                     >
                         Create
-                        account
+                        account   {loading && <span> <BiLoader className="w-full  animate-spin text-white" /> </span> }
                     </button>
+                    {/* <FilledButton title="Create Account" loading={loading} /> */}
 
                     <span className=" cursor-pointer w-full p-2 font-bold rounded-md border flex items-center justify-center gap-2"><FcGoogle /> Signup with google </span>
                     <Link href={`/login`}><small className=""> Already have an account? <span className=" text-primary font-bold"> Log in</span></small> </Link>

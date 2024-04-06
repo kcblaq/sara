@@ -12,6 +12,11 @@ export default function OrganicTrafficCard() {
     const previosUpdate = metrics?.history.scores[scores && scores.length > 0 ? scores.length - 2 : 0];
     const actual = metrics?.history.scores[scores && scores.length > 0 ? scores?.length - 1 : 0];
     const actualOrganicTraffic = actual?.organic_traffic ?? 0;
+    const style = scores?.length === 1 ? "text-gray-500"
+                    : scores && scores.length >= 2 && scores[scores.length - 2]?.organic_traffic < scores[scores.length - 1]?.organic_traffic ? "text-green-500"
+                    : scores && scores.length >= 2 && scores[scores.length - 2]?.organic_traffic === scores[scores.length - 1]?.organic_traffic ? "text-gray-500"
+                    : "text-red-500"
+
 
     const trafficIncrease = previosUpdate?.organic_traffic !== undefined && previosUpdate?.organic_traffic < actualOrganicTraffic ? "true"
         : previosUpdate?.organic_traffic !== undefined && previosUpdate?.organic_traffic == actualOrganicTraffic ? "nil" : "false";
@@ -55,7 +60,7 @@ export default function OrganicTrafficCard() {
         <Card
             title={"Organic Traffic"}
             amount={actualOrganicTraffic}
-            style={checkPercentage > 0 ? "text-green-500" : "text-red-500"}
+            style={style}
             percent={checkPercentage}
             chart={<ChangeLineChart data1={extractFields()[0]} data2={extractFields()[1]} data3={extractFields()[2]} data4={extractFields()[3]} />}
             arrowPosition={checkPercentage == 0 ? "rotate-90" : checkPercentage < 0 ? "rotate-180" : ""}

@@ -8,6 +8,7 @@ import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 const OtpInput: React.FC = () => {
   const inputRefs = Array.from({ length: 6 }, () => useRef<HTMLInputElement>(null));
   const [otpValues, setOtpValues] = useState<string[]>(Array(6).fill(''));
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     // Set initial focus on the first input field when the component mounts
@@ -62,10 +63,11 @@ const OtpInput: React.FC = () => {
     otp: parseInt(otpValues.join(""),10)
   }
 
-  console.log("PAYLOAD",payload)
+ 
   
  async function VerifyEmail(){
    console.log(JSON.stringify(token))
+   setLoading(true)
    try{
    
     await AxiosInstance.post('/auth/verify-otp', payload)
@@ -73,13 +75,14 @@ const OtpInput: React.FC = () => {
       console.log(res)
       sessionStorage.setItem('user', res.data)
       sessionStorage.setItem('fullName', JSON.stringify(res.data.user.fullName))
-      res.status == 200 && route.push('/dashboard')
+      route.push('/dashboard')
      })
      .then(()=> console.log('Submitted!'))
    }
    catch(err){
     console.log(err)
    }
+   setLoading(false)
   }
  
   return (
@@ -99,7 +102,7 @@ const OtpInput: React.FC = () => {
         />
       ))}
       </div>
-      <FilledButton title='Verify email' handleClick={VerifyEmail} />
+      <FilledButton loading={loading} title='Verify email' handleClick={VerifyEmail} />
     </div>
   );
 };

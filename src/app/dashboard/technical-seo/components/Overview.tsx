@@ -3,10 +3,9 @@ import { ReusableProgressiveCircle } from "./(technicalseo)/ReusableProgressiveC
 import SubHead from "./(technicalseo)/SubHead"
 import PieChart from "./(technicalseo)/PieChart";
 import { FaCircle } from "react-icons/fa6";
-import DoughnutChart, { AnotherDoughnutChart, TripleProgressBar } from "./(technicalseo)/DoughnutChart";
+import  { AnotherDoughnutChart } from "./(technicalseo)/DoughnutChart";
 import { CircularProgressbarWithChildren } from "react-circular-progressbar";
 import { GoDotFill } from "react-icons/go";
-import TripleCircleProgressBar from "./(technicalseo)/TrippleCircle";
 import PlainButton from "@/app/component/PlainButton";
 import FilledButton, { ButtonFilled } from "@/app/component/FilledButton";
 import { FiDownloadCloud } from "react-icons/fi";
@@ -44,12 +43,12 @@ const options = {
   },
 };
 
-export const Title = ({ title }: { title: string }) => {
+export const Title = ({ title, info }: { title: string, info: string }) => {
   return (
     <div className="flex flex-col w-full">
       <h1 className={`text-[#101828] gap-3 flex items-center font-semibold text-xl`}>
         {title}
-        <RxQuestionMarkCircled />
+       <button title={info}>  <RxQuestionMarkCircled /></button>
       </h1>
       <hr className='mt-2 w-full' />
     </div>
@@ -86,13 +85,13 @@ function Overview() {
 
  
   return (
-    <main className="pb-14 grid w-full gap-8">
+    <main className="pb-14 grid w-full gap-8 z-0">
       <section className={`grid grid-cols-1 md:grid-cols-4 gap-4`}>
         <div className=" w-full col-span-1 h-full md:h-[464px]  border rounded-md p-6">
-          <ReusableProgressiveCircle title="Site health" val={30} pageTitle={"Site health"} />
+          <ReusableProgressiveCircle title="Site health" info="The overall site health rating" val={30} pageTitle={"Site health"} />
         </div>
         <section className="w-full col-span-3 h-full md:h-[464px] border rounded-md p-6">
-          <SubHead title="Core web vitals" />
+          <SubHead title="Core web vitals" info="These are a set of specific factors that Google considers important in assessing the user experience of a web page" />
           <div className="grid w-full items-center justify-between grid-col-1 md:grid-cols-3 py-6">
             <EachItem title="Largest Contentful Paint (LCP)" />
             <EachItem title="Total Blocking Time (TBT)" />
@@ -104,7 +103,7 @@ function Overview() {
       <section className="grid gap-4 justify-items-stretch  w-full grid-cols-1 md:grid-cols-3">
         <div className="grid p-2 md:p-4 col-span-1 h-[308px] justify-items-start  rounded-md w-full border ">
 
-          <Title title={"Crawl status"} />
+          <Title title={"Crawl status"} info="The status of the crawl result" />
           <div className="p-4 flex w-full">
             <CircularProgressbarWithChildren value={79} className='h-48' styles={{
               path: { stroke: `green` }
@@ -121,7 +120,7 @@ function Overview() {
           </div>
         </div>
         <div className="grid p-2 md:p-4 col-span-1 h-[308px] justify-items-start  rounded-md w-full border ">
-          <Title title="HTTP status codes" />
+          <Title title="HTTP status codes" info="The returned code status that indicate what the response is" />
           <div className="p-4 flex gap-2 h-48">
             <AnotherDoughnutChart />
             <div className="flex flex-col justify-end">
@@ -134,7 +133,7 @@ function Overview() {
           </div>
         </div>
         <div className="grid p-2 md:p-4 col-span-1 h-[308px] justify-items-start rounded-md w-full border ">
-          <Title title="Site issues" />
+          <Title title="Site issues" info="All issues associated with thw website" />
           <div className="p-4 flex gap-2 h-48">
             <AnotherDoughnutChart />
             <div className="flex flex-col justify-end">

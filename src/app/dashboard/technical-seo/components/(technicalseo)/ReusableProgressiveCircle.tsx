@@ -7,15 +7,18 @@ interface ProgressiveCircleProps {
     val: number;
     title: string;
     pageTitle: string;
+    info?: string;
 }
 
-export const ReusableProgressiveCircle = ({ val, title, pageTitle }: ProgressiveCircleProps) => {
+export const ReusableProgressiveCircle = ({ val, title, pageTitle, info }: ProgressiveCircleProps) => {
     return (
         <section className='grid gap-8'>
             <div className="grid">
                 <h1 className={`text-[#101828] flex items-center font-semibold text-xl gap-4`}>
                     {pageTitle}
-                    <RxQuestionMarkCircled />
+                   <button title={info}>
+                   <RxQuestionMarkCircled />
+                   </button>
                 </h1>
                 <hr className='mt-2' />
             </div>

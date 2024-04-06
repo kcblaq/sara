@@ -10,18 +10,25 @@ import InternalLinking from './components/InternalLinking'
 import Issues from './components/Issues'
 import CrawlComparison from './components/CrawlComparison'
 import AuditHistory from './components/AuditHistory'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/app/store'
+import moment from 'moment'
 
-type TechSeoProps = {
-    children: React.Component
-}
+// type TechSeoProps = {
+//     children: React.Component
+// }
 
-export default function TechnicalSeoLayout({ children }: TechSeoProps) {
+export default function TechnicalSeoLayout() {
     const [mobile, setMobile] = useState(true)
 
+    const techSeo = useSelector((state: RootState)=> state.performance.metrics?.history.scores)
+
+    const lastUpdated = techSeo && moment(techSeo[techSeo.length - 1].createdAt).format("DD, MMMM, YY")
+    
 
     const tabs = [
-        { title: "Issues", content: <Issues /> },
         { title: "Overview", content: <Overview /> },
+        { title: "Issues", content: <Issues /> },
         { title: "Crawlability and indexability", content: <Crawlability /> },
         { title: "Site performance", content: <SitePerformance /> },
         { title: "Internal linking", content: <InternalLinking /> },
@@ -82,7 +89,7 @@ export default function TechnicalSeoLayout({ children }: TechSeoProps) {
                     </div>
                     <div className="flex items-center gap-2">
                         <p className=" font-semibold"> Last Update:</p>
-                        <p className=""> 9th Mar, 2024</p>
+                        <p className="">{lastUpdated} </p>
 
                     </div>
                 </div>

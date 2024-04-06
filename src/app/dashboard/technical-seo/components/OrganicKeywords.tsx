@@ -10,7 +10,11 @@ export default function OrganicKeywords() {
     const previosUpdate = metrics?.history.scores[scores && scores.length > 0 ? scores.length - 2 : 0];
     const actual = metrics?.history.scores[scores && scores.length > 0 ? scores?.length - 1 : 0];
     const actualOrganicKeyword = actual?.organic_traffic ?? 0;
+    const style = scores?.length === 1 ? "text-gray-500"
+    : scores && scores.length >= 2 && Number(scores[scores.length - 2]?.organic_keywords) < Number(scores[scores.length - 1]?.organic_keywords) ?
+    "text-green-500" : "text-red-500";
 
+                    
 
     // Check if both previosUpdate and actual are defined
     const TrafficIncreasePercentage = (previousTraffic: number | undefined, currentTraffic: number | undefined) => {
@@ -51,7 +55,7 @@ export default function OrganicKeywords() {
         <Card 
         title={"Organic Keyword"} 
         amount={actualOrganicKeyword} 
-        style={checkPercentage > 0 ? "text-green-500" : "text-red-500"} 
+        style={style} 
         percent={checkPercentage} 
         chart={<ChangeLineChart data1={extractFields()[0]} data2={extractFields()[1]} data3={extractFields()[2]} data4={extractFields()[3]} />}
         arrowPosition={checkPercentage == 0 ? "rotate-90" : checkPercentage < 0 ? "rotate-180" : ""} 

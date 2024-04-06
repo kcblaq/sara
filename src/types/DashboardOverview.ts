@@ -28,24 +28,21 @@ export interface Scores {
     average_time_on_site: number | undefined;
     organic_keywords: number | undefined;
     overall_seo: number | undefined;
+    lcp: number | undefined,
+    tbt: number | undefined,
+    cls: number | undefined,
+    siteIssue: number | undefined,
+    crawlStatus: string | undefined,
+    httpStatus: string,
     accessibility_score: number | undefined;
     performance: number | undefined;
     best_practice_score: number | undefined;
     user_id: number | undefined;
     date: string | undefined;
+    url: string | undefined;
     website: string | undefined;
     createdAt: string | undefined;
     updatedAt: string | undefined;
-}
-
-interface PerformanceData {
-    performanceScore: number;
-    firstContentfulPaint: number;
-    largestContentfulPaint: number;
-    cumulativeLayoutShift: number;
-    totalBlockingTime: number;
-    speedIndex: number;
-    timeToInteractive: number;
 }
 
 
@@ -70,6 +67,9 @@ interface KeywordPosition {
     totalResults: number;
 }
 
+interface Traffic {
+    traffic: [];
+}
 type CurrentKeywords = Record<string, KeywordPosition>;
 
 
@@ -79,17 +79,13 @@ interface KeywordResponse {
 }
 
 
-interface History { }
-
 export interface PerformanceMetrics {
     url: string;
-    current: {
-        performance: PerformanceData
-    };
     history: {
         scores: Scores[];
         backlinks: Backlink[],
         keyword: KeywordResponse,
-        previous: []
+        previous: [],
+        traffic: []
     }
 }

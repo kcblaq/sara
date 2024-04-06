@@ -1,6 +1,4 @@
 import axios from "axios"
-import { headers } from "next/headers"
-
 
 export const BASE_URL = 'https://api.webmaxi.net/api'
 

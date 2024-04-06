@@ -1,25 +1,31 @@
 "use client"
-import { CiShare2 } from 'react-icons/ci'
+
 import FilledButton from '../component/FilledButton'
-import Card from './Card';
 import TraficOverview from './components/graphs/TraficOverview';
 import { RxQuestionMarkCircled } from 'react-icons/rx';
 import { BacklinkGraph } from './components/graphs/BacklinkGraph';
 import KeywordTable from './components/tables/KeywordTable';
 import { useSelector } from 'react-redux';
-import { UserType } from '@/types/userType';
-import ChangeLineChart from '../component/charts/Bars';
 import { useEffect, useState } from 'react';
-import ApiCall from '../utils/apicalls/axiosInterceptor';
-import { RootState } from '../store';
-import { calculatePercentage, millisecondsToSeconds } from '@/lib/DateFormater';
-import { current } from '@reduxjs/toolkit';
 import OrganicTrafficCard from './technical-seo/components/OrganicTrafficCard';
 import OrganicKeywords from './technical-seo/components/OrganicKeywords';
 import AverageTimeOnsite from './technical-seo/components/AverageTimeOnsite';
+import PlainButton from '../component/PlainButton';
+import { useRouter } from 'next/navigation';
 
 export default function Dashboard() {
 
+  const exportIcon = <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g clip-path="url(#clip0_7818_2872)">
+  <path d="M13.3334 13.3332L10 9.9999M10 9.9999L6.66669 13.3332M10 9.9999V17.4999M16.9917 15.3249C17.8045 14.8818 18.4466 14.1806 18.8166 13.3321C19.1866 12.4835 19.2635 11.5359 19.0352 10.6388C18.8069 9.7417 18.2863 8.94616 17.5556 8.37778C16.8249 7.80939 15.9257 7.50052 15 7.4999H13.95C13.6978 6.52427 13.2277 5.61852 12.575 4.85073C11.9223 4.08295 11.1041 3.47311 10.1818 3.06708C9.25949 2.66104 8.25715 2.46937 7.25013 2.50647C6.2431 2.54358 5.25758 2.80849 4.36768 3.28129C3.47777 3.7541 2.70662 4.42249 2.11221 5.23622C1.5178 6.04996 1.1156 6.98785 0.935844 7.9794C0.756086 8.97095 0.803449 9.99035 1.07437 10.961C1.3453 11.9316 1.83273 12.8281 2.50003 13.5832" stroke="#344054" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <defs>
+  <clipPath id="clip0_7818_2872">
+  <rect width="20" height="20" fill="white"/>
+  </clipPath>
+  </defs>
+  </svg>
+  
   const [loaded, setLoaded] = useState(false)
   const User = useSelector((state: any)=> state);
 
@@ -34,6 +40,7 @@ export default function Dashboard() {
     { id: 4, keyword: 'Did the wallmart just shut down or about to shut down?', rank: '3', change: 'Change' },
   ]
 
+  const router = useRouter()
   return (
     <section className=' mb-10 p-2 grid h-full overflow-auto '>
       <div className="flex w-full flex-col md:flex-row justify-between items-start flex-grow">
@@ -43,12 +50,10 @@ export default function Dashboard() {
         </div>
         <div className="flex items-center gap-2">
           <span>
-            <button className='w-full gap-2 border rounded-lg text-base p-3 flex items-center text-[#344054] font-semibold'>
-              <CiShare2 /> Share
-            </button>
+            <PlainButton title="Export" icon={exportIcon} />
           </span>
           <span>
-            <FilledButton title="View recommendations" />
+            <FilledButton title="View recommendations"  handleClick={()=> router.push('/dashboard/optimization-plans')} />
           </span>
         </div>
       </div>
@@ -62,16 +67,16 @@ export default function Dashboard() {
         <AverageTimeOnsite />
       </section>
       }
-      <section className='py-10 my-10' >
+      <section className='' >
         <TraficOverview />
       </section>
-      <div className="grid shadow-md border font-bold text-xl items-start h-[426px] mb-20 rounded-md p-2 md:p-6 w-full ">
+      <div className="grid shadow-md border font-bold text-xl items-start h-[426px] mb-10 rounded-md p-2 md:p-6 w-full ">
         <div className="">
           <div className="flex w-full h-full items-start justify-between">
-            <h1 className={`text-[#101828] flex items-center gap-4`}>
+            <span className={`text-[#101828] flex items-center gap-4`}>
               Backlink status
-              <RxQuestionMarkCircled />
-            </h1>
+              <button title='The links associated with your website either leading out or directing into your website'><RxQuestionMarkCircled /></button>
+            </span>
             <select className={`border rounded-md p-2 text-[#344054] text-sm font-normal`}>
               <option className={``}>
                 Last 12 months
@@ -91,26 +96,20 @@ export default function Dashboard() {
         </div>
 
       </div>
-      <section className='w-full mb-20 py-10 border rounded-md p-2 md:p-6 max-w-[654px] '>
+      <section className='w-full border rounded-md p-2 md:p-6 '>
         <div className="">
           <div className="flex font-bold w-full h-full items-start justify-between">
-            <h1 className={`text-[#101828] flex items-center gap-4`}>
+            <span className={`text-[#101828] flex items-center gap-4`}>
               Keyword ranking summary
-              <RxQuestionMarkCircled />
-            </h1>
+             <button className='' title='Here is the summary of each of your keyword ranking'> <RxQuestionMarkCircled /></button>
+            </span>
           </div>
           <hr className='w-full mt-4' />
         </div>
         <div className=" h-full w-full ">
           <KeywordTable data={data} />
-
-       
         </div>
-
-
       </section>
     </section>
-
-
   )
 }

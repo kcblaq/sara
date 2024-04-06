@@ -13,8 +13,10 @@ export default function TraficOverview() {
     <section className={`main h-[580px] w-full gap-4 py-8 justify-between`}>
       <div className="grid shadow-md border font-bold text-xl items-start h-full rounded-md p-2 md:p-6 w-full ">
         <h1 className={`text-[#101828] flex items-center gap-4`}>
-          Overall SEO
+        Site health score
+          <button title="This is the overall site health based on general best practice">
           <RxQuestionMarkCircled />
+          </button>
         </h1>
         <div className={``}>
           <ProgressiveCircle />
@@ -41,7 +43,9 @@ export default function TraficOverview() {
           <div className="flex w-full h-full items-start justify-between">
             <h1 className={`text-[#101828] flex items-center gap-4`}>
               Traffic overview
-              <RxQuestionMarkCircled />
+              <button title="Here is the summary of your website visitors">
+          <RxQuestionMarkCircled />
+          </button>
             </h1>
             <select className={`border rounded-md p-2 text-[#344054] text-sm font-normal`}>
               <option className={``}>

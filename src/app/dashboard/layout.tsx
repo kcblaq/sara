@@ -28,6 +28,10 @@ import { LoadingState } from '../component/Loader';
 // import { CgOpenCollective } from 'react-icons/cg';
 import { PerformanceMetrics } from '@/types/DashboardOverview';
 import { fetchPerformanceFailure, fetchPerformanceStart, fetchPerformanceSuccess } from '@/redux/features/performanceMetric slice';
+import { setActiveProperty, setAllProperty } from '@/redux/features/propertySlice';
+import DashboardOverviewPlaceholder from './components/DashboardOverviewPlaceholder';
+import DropdownMenu from '../component/Dropdown';
+import UserProfile from './components/UserProfile';
 
 
 interface Props {
@@ -36,9 +40,9 @@ interface Props {
 export default function Layout({ children }: Props) {
   const [fullWidth, setFullWidth] = useState(false);
   const [property, setProperty] = useState<PropertyType[]>([]);
-  const [currentProperty, setCurrentProperty] = useState(property.length > 0 ? JSON.parse(property[0].website_url) : "");
+  const [currentProperty, setCurrentProperty] = useState(property.length > 0 ? property[0].website_url : "");
   // const [performanceMetric, setPerformanceMetric] = useState<PerformanceMetrics>()
-
+  // const [showProfile, setShowProfile] = useState(false);
 
   const menus = [
     { title: "Dashboard", icon: <RxDashboard />, link: '/dashboard' },
@@ -48,7 +52,7 @@ export default function Layout({ children }: Props) {
     { title: "Content analysis", icon: <FaRegFileAlt />, link: '/dashboard/content-analysis' },
     { title: "Competitor analysis", icon: <FiUsers />, link: '/dashboard/competitor-analysis' },
     { title: "Link building", icon: <IoIosLink />, link: '/dashboard/link-building' },
-    { title: "Optimization plans", icon: <FiCheckSquare />, link: '/dashboard/optimization-plans' },
+    { title: "Recomemndation plans", icon: <FiCheckSquare />, link: '/dashboard/optimization-plans' },
   ]
 
   const othermenu = [
@@ -69,6 +73,7 @@ export default function Layout({ children }: Props) {
 
   // const token = typeof window !== 'undefined' ? sessionStorage.getItem('token'): false;
   const token = useSelector((state: RootState) => state)
+//  const err = token.property.activeProperty
   const router = useRouter();
 
   useEffect(() => {
@@ -79,15 +84,26 @@ export default function Layout({ children }: Props) {
   }, [token, router]);
 
   const modalState = useSelector((state: RootState) => state.currentModal.currentModal)
+  const activeProperty = useSelector((state: RootState) => state.property.activeProperty)
   const dispatch = useDispatch();
 
 
   const getProjects = async () => {
     try {
       const res = await ApiCall.get('/crawl/property');
-      return res.data;
-    } catch (error) {
-      console.error('Error fetching projects:', error);
+      if(res.status === 401){
+        router.push('/login');
+        return
+      }
+      if(res.status === 200){
+        // console.log(res.data)
+        return res.data;
+      }
+    } catch (err: any) {
+      console.error('Error fetching projects:', err.response.status);
+      if(err.response.status === 401){
+        router.push('/login')
+      }
       return [];
     }
   };
@@ -96,31 +112,36 @@ export default function Layout({ children }: Props) {
     const fetchProjects = async () => {
       const result = await getProjects();
       setProperty(result);
-      setCurrentProperty(JSON.parse(result[0]?.website_url))
+      // setCurrentProperty(result[0]?.website_url)
+      dispatch(setAllProperty(result))
+      dispatch(setActiveProperty(result[0]?.website_url))
     };
     
 
     fetchProjects();
     
-    // console.log(" PROPERTY", property)
-    
   }, []);
   
+  // console.log("PROPERTY",property)
 
   const getPerformanceMetrics = async (url: string) => {
-    dispatch(fetchPerformanceStart())
-    try {
-      const res = await ApiCall.get('/crawl/performance-metrics', {
-        params: {
-          url: url
-        }
-      });
-      // setPerformanceMetric(res.data)
-      dispatch(fetchPerformanceSuccess(res?.data))
-      // console.log('Performance metrics:', res.data);
-    } catch (error) {
-      dispatch(fetchPerformanceFailure(`Failed to fetch performance metric, Error: ${error}`))
-      console.error('Error fetching performance metrics:', error);
+    if(activeProperty.length > 0){
+      dispatch(fetchPerformanceStart())
+      try {
+        const res = await ApiCall.get('/crawl/overall', {
+          params: {
+            url: activeProperty,
+            type: 'passive',
+            limit: 10
+          }
+        });
+        // setPerformanceMetric(res.data)
+        dispatch(fetchPerformanceSuccess(res?.data))
+        // console.log('Performance metrics:', res.data);
+      } catch (error) {
+        dispatch(fetchPerformanceFailure(`Failed to fetch performance metric, Error: ${error}`))
+        console.error('Error fetching performance metrics:', error);
+      }
     }
   }; 
 
@@ -131,22 +152,22 @@ export default function Layout({ children }: Props) {
         // .then(() => console.log("MET", currentProperty))
         .catch((error) => console.error("Error fetching performance metrics:", error));
     }
-  }, [property, currentProperty]);
+  }, [property, activeProperty]);
 
 
   return (
     <>
       {modalState === 'addProject' && <MainModal closeModal={() => dispatch(setModal(''))} ModalBody={AddProject} />}
 
-      <main className={`h-screen w-full flex overflow-clip`}>
+      <main className={`h-screen w-full flex overflow-clip z-0`}>
 
         {/* drawer... */}
         <section
           style={{ width: fullWidth ? "300px" : "60px" }}
-          className={`bg-darkPrimary hidden p-4 h-screen overflow-clip lg:flex flex-col justify-between  relative transition-all duration-300 ease-in-out`}
+          className={`bg-darkPrimary z-50 hidden p-4 h-screen overflow-clip lg:flex flex-col justify-between  relative transition-all duration-300 ease-in-out`}
         >
-          <div className="absolute -right-3  top-14 p-1 border z-10 bg-white shadow-md rounded-lg cursor-pointer" onClick={() => setFullWidth(!fullWidth)}>
-            <RxDoubleArrowLeft className={`${!fullWidth && 'scale-x-[-1]'} duration-300 transition-all ease-out`} />
+          <div className="absolute -right-0  top-14 p-1 bg-white shadow-md rounded-md cursor-pointer" onClick={() => setFullWidth(!fullWidth)}>
+            <RxDoubleArrowLeft className={`${!fullWidth && 'scale-x-[-1]'} z-50 duration-300 transition-all ease-out`} />
           </div>
           <div className="grid ">
             <Link href={`/`}>
@@ -182,13 +203,14 @@ export default function Layout({ children }: Props) {
           </div>
           <hr className="w-full mt-1 flex md:hidden" />
 
-          <div className="flex w-full gap-2 p-2  md:px-8 justify-between items-center h-16">
+          <div className="flex z-0 w-full gap-2 p-2  md:px-8 justify-between items-center h-16">
             <div className="flex gap-2  w-full items-center ">
-              <select className="p-3  min-w-[300px] rounded-md border" value={currentProperty.length > 0 ? currentProperty : ''} onChange={(e)=> setCurrentProperty(e.target.value)} >
+              {/* <select className="p-3  min-w-[300px] rounded-md border" value={currentProperty && currentProperty.length > 0 ? currentProperty : ''} onChange={(e)=> setCurrentProperty(e.target.value)} >
                 {
                   property.map((item)=> <option key={item.website_url} className='' value={JSON.parse(item.website_url)}> {JSON.parse(item.website_url) } </option> )
                 }
-              </select>
+              </select> */}
+              <DropdownMenu />
               <div>
                 <div className="w-full">
                   <button className='w-full rounded-lg flex items-center px-3 text-base py-3 bg-primary text-white font-semibold' onClick={() => dispatch(setModal('addProject'))}>
@@ -206,18 +228,20 @@ export default function Layout({ children }: Props) {
                   <CiSearch />
                   <IoMdNotificationsOutline />
                 </div>
-                <div className="">
+                {/* <div className="">
                   <FaRegUserCircle className="rounded-full text-3xl" />
-                </div>
+                </div> */}
+                <UserProfile />
               </div>
             </div>
           </div>
           <hr className="w-full mt-1 hidden md:flex " />
-          <div className=" w-full h-full overflow-auto p-2 md:p-8">
-            {
-              property.length < 1 ? <LoadingState/> : children
-            }
+          {
+            property.length < 1 ? <DashboardOverviewPlaceholder /> : <div className=" w-full h-full overflow-auto p-2 md:p-8">
+            
+            {children}
           </div>
+          }
         </section>
       </main>
     </>

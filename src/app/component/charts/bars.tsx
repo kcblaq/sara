@@ -37,14 +37,15 @@ const ChangeLineChart = ({ data1, data2, data3, data4 }: Props) => {
         data: [data1, data2, data3, data4],
         fill: 'start',
         borderColor: 
-        data4 && data4 > data1 ? 'green' :
-        data3 && data3 > data1 ? 'green' :
+        data4 &&  data3 && data4 > data3 ? 'green' :
+        data3 &&  data2 && data3 > data2 ? 'green' :
         data2 && data2 > data1 ? 'green' :
         'red'
       ,
         borderWidth: 1,
         pointRadius: 0,
-        pointBackgroundColor: data4 && data4 > data1 ? 'green' : 'red',
+        pointBackgroundColor: data4 && data4 > data1 ? 'green' : data3 && data3 > data1 ? "green":
+        data2 && data2 > data1 ? "green" : data1 ? "green" : 'red',
         backgroundColor: data4 && data4 > data1 ? '#EEFDF5' : "#FEF3F2",
       },
     ],
