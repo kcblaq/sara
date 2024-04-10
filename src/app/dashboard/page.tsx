@@ -58,8 +58,6 @@ export default function Dashboard() {
         </div>
       </div>
   
-
-
       {loaded && 
         <section className="grid items-center grid-cols-1 md:grid-cols-3 pt-8 gap-2 justify-between">
         <OrganicTrafficCard />
@@ -106,9 +104,9 @@ export default function Dashboard() {
           </div>
           <hr className='w-full mt-4' />
         </div>
-        <div className=" h-full w-full ">
+        {/* <div className=" h-full w-full ">
           <KeywordTable data={data} />
-        </div>
+        </div> */}
       </section>
     </section>
   )

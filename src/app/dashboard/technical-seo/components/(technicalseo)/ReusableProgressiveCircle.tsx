@@ -24,9 +24,11 @@ export const ReusableProgressiveCircle = ({ val, title, pageTitle, info }: Progr
             </div>
 
             <div style={{ width: '100%', height: '100%' }}>
-                <CircularProgressbarWithChildren value={val} className='' styles={{
-                    path: { stroke: 'red' }
-                }} >
+                <CircularProgressbarWithChildren value={val} className='' 
+                styles={{
+                    path: { stroke: val < 40 ? '#D92D20' : val < 70 ? '#FDB022' : '#039855' }
+                }} 
+                >
                     <div className="flex flex-col">
                         <p className='text-gray-600 text-center text-sm'> {title} </p>
                         <p className='text-gray-900 text-center text-5xl'> {val}% </p>

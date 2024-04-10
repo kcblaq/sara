@@ -1,4 +1,3 @@
-
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -12,13 +11,12 @@ import {
 } from 'chart.js';
 import React from 'react';
 import { Line } from 'react-chartjs-2';
+
 interface Props {
-  data1: number,
-  data2?: number,
-  data3?: number,
-  data4?: number
+  pageData: number[];
 }
-const ChangeLineChart = ({ data1, data2, data3, data4 }: Props) => {
+
+const ChangeLineChart = ({ pageData }: Props) => {
   ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -30,23 +28,22 @@ const ChangeLineChart = ({ data1, data2, data3, data4 }: Props) => {
     Filler
   );
 
+  const borderColor = pageData && pageData.length > 0 ? (pageData[0] > pageData[pageData.length - 1] ? '#ECFDF3' 
+  : pageData[0] === pageData[pageData.length - 1] ? 'gray' : '#FEF3F2') : 'gray';
+
+
   const data = {
-    labels: ['data1', 'data2', 'data3', 'data4'],
+    labels: pageData?.slice(0, 4),
     datasets: [
       {
-        data: [data1, data2, data3, data4],
+        data: pageData?.slice(0, 4).reverse(),
         fill: 'start',
-        borderColor: 
-        data4 &&  data3 && data4 > data3 ? 'green' :
-        data3 &&  data2 && data3 > data2 ? 'green' :
-        data2 && data2 > data1 ? 'green' :
-        'red'
-      ,
-        borderWidth: 1,
+        borderColor: pageData && pageData.length > 0 ? (pageData[0] > pageData[pageData.length - 1] ? 'green' 
+        : pageData[0] === pageData[pageData.length - 1] ? 'gray' : 'red') : 'gray',
+        borderWidth: 2,
         pointRadius: 0,
-        pointBackgroundColor: data4 && data4 > data1 ? 'green' : data3 && data3 > data1 ? "green":
-        data2 && data2 > data1 ? "green" : data1 ? "green" : 'red',
-        backgroundColor: data4 && data4 > data1 ? '#EEFDF5' : "#FEF3F2",
+        pointBackgroundColor: borderColor,
+        backgroundColor: borderColor,
       },
     ],
   };
@@ -67,7 +64,11 @@ const ChangeLineChart = ({ data1, data2, data3, data4 }: Props) => {
     },
     elements: {
       line: {
-        tension: 0.4,
+        tension: 0.6,
+      //   borderWidth: 2, 
+      // borderDash: [5, 5],
+      // borderColor:'green',
+
       },
       cubicInterpolationMode: 'monotone',
     },
@@ -87,14 +88,7 @@ const ChangeLineChart = ({ data1, data2, data3, data4 }: Props) => {
     <div className="w-20 h-10">
       <Line data={data} options={options} />
     </div>
-  )
+  );
 };
 
 export default ChangeLineChart;
-
-
-
-
-
-
-

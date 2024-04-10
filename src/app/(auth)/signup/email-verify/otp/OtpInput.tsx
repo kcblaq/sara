@@ -1,8 +1,9 @@
 import FilledButton from '@/app/component/FilledButton';
 import { AxiosInstance } from '@/lib/axios';
-import axios from 'axios';
+import { setToken, setUser } from '@/redux/features/userSlice';
 import { useRouter } from 'next/navigation';
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 
 const OtpInput: React.FC = () => {
@@ -42,7 +43,7 @@ const OtpInput: React.FC = () => {
     }
     setOtpValues(newOtpValues);
   };
-
+const dispatch = useDispatch()
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     e.preventDefault();
     const pastedData = e.clipboardData.getData('text/plain').slice(0, 6);
@@ -53,7 +54,7 @@ const OtpInput: React.FC = () => {
   };
 
   const token = localStorage.getItem('token');
-  let tok = JSON.stringify(token)
+  const router = useRouter()
   
   
   const route = useRouter()
@@ -72,10 +73,12 @@ const OtpInput: React.FC = () => {
    
     await AxiosInstance.post('/auth/verify-otp', payload)
      .then((res) => {
-      console.log(res)
-      sessionStorage.setItem('user', res.data)
-      sessionStorage.setItem('fullName', JSON.stringify(res.data.user.fullName))
-      route.push('/dashboard')
+      if(res.status == 200){
+        console.log("RES::",res.data.token)
+        dispatch(setUser(res.data.user))
+        dispatch(setToken(res.data.token))
+            router.push('/dashboard')
+      }
      })
      .then(()=> console.log('Submitted!'))
    }

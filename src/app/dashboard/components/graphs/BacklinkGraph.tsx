@@ -33,6 +33,7 @@ export const options = {
   },
   responsive: true,
   align:'end',
+  barThickness: 30,
   scales: {
     x: {
       stacked: true,
@@ -53,8 +54,8 @@ export const options = {
 export function BacklinkGraph() {
 
   const backlinkData = useSelector((state: RootState) => state.performance.metrics?.history.backlinks);
+
   const formattedDate = moment("2024-04-05T13:11:00.000Z").format("DD, MMMM, 'YY");
-  // const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
   const labels = backlinkData?.map((item)=> moment(item.createdAt).format("DD, MMMM, YY"));
 
 const data = {
@@ -73,6 +74,5 @@ const data = {
     }
   ],
 };
-  console.log("BACK",backlinkData)
   return <Bar options={options} data={data} />;
 }

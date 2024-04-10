@@ -49,12 +49,9 @@ export const LoginComponent = () => {
             password: userDetail.password
           })
           if(res.status == 200){
-            console.log("RES::",res.data.token)
+            // console.log("RES::",res.data.token)
             dispatch(setUser(res.data.user))
             dispatch(setToken(res.data.token))
-            // sessionStorage.setItem("fullName", res.data.user.fullName);
-            // sessionStorage.setItem("token", res.data.token)
-            
                 router.push('/dashboard')
             
           }

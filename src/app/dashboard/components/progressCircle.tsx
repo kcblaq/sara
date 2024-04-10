@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 const ProgressiveCircle: FC = () => {
 
   const metrics = useSelector((state: RootState) => state.performance);
-  const scores = metrics?.metrics?.history?.scores[0]?.overall_seo ?? null;
+  const scores = metrics?.metrics?.history?.scores[0]?.performance ?? null;
   
  
   

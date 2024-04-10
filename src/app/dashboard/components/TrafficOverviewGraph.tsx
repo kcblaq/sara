@@ -8,6 +8,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  elements,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 // import faker from 'faker';
@@ -37,17 +38,19 @@ export const options = {
       }
     }
   },
+  elements: {
+point: {
+  radius:0
+}
+  },
   plugins: {
     legend: {
       position: 'top' as const,
+      align:'end' as const,
       labels: {
         usePointStyle: true, // Use point style (circle) for legend labels
       },
     },
-    // title: {
-    //   display: true,
-    //   text: 'Chart.js Line Chart',
-    // },
   },
 };
 
@@ -59,16 +62,19 @@ export const data = {
   datasets: [
     {
       label: 'Organic',
-      data: [65, 59, 80, 81, 56, 55,24],
+      data: [65, 59, 35, 40, 56, 55,97],
       borderColor: 'gray',
       backgroundColor: 'gray',
-      tension: 0.4
+      borderWidth: 1,
+      tension: 0.4,
+      
     },
     {
       label: 'Referal',
       data: [35, 39, 43, 43, 46, 55,70],
       borderColor: 'red',
       backgroundColor: 'red',
+      borderWidth: 1,
       tension: 0.4
     },
     {
@@ -76,6 +82,7 @@ export const data = {
       data: [15, 19, 10, 11, 16, 15, 60],
       borderColor: 'blue',
       backgroundColor: 'blue',
+      borderWidth: 1,
       tension: 0.4
     },
     {
@@ -83,6 +90,7 @@ export const data = {
       data: [25, 29, 20, 21, 26, 25, 56],
       borderColor: 'orange',
       backgroundColor: 'orange',
+      borderWidth: 1,
       tension: 0.4
     },
     {
@@ -90,6 +98,7 @@ export const data = {
       data: [95, 99, 90, 91, 96, 95, 97],
       borderColor: 'green',
       backgroundColor: 'green',
+      borderWidth: 1,
       tension: 0.4
     },
     
@@ -97,7 +106,7 @@ export const data = {
 };
 
 export function TrafficOverviewGraph() {
-  return <div className="w-full h-full ">
-    <Line options={options} data={data} className='h-full w-full' />
+  return <div className=" h-full " style={{width:'130%'}}>
+    <Line options={options} data={data}   />
   </div> ;
 }

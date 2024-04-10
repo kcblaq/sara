@@ -40,7 +40,7 @@ interface Props {
 export default function Layout({ children }: Props) {
   const [fullWidth, setFullWidth] = useState(false);
   const [property, setProperty] = useState<PropertyType[]>([]);
-  const [currentProperty, setCurrentProperty] = useState(property.length > 0 ? property[0].website_url : "");
+  // const [currentProperty, setCurrentProperty] = useState(property.length > 0 ? property[0].website_url : "");
   // const [performanceMetric, setPerformanceMetric] = useState<PerformanceMetrics>()
   // const [showProfile, setShowProfile] = useState(false);
 
@@ -52,7 +52,7 @@ export default function Layout({ children }: Props) {
     { title: "Content analysis", icon: <FaRegFileAlt />, link: '/dashboard/content-analysis' },
     { title: "Competitor analysis", icon: <FiUsers />, link: '/dashboard/competitor-analysis' },
     { title: "Link building", icon: <IoIosLink />, link: '/dashboard/link-building' },
-    { title: "Recomemndation plans", icon: <FiCheckSquare />, link: '/dashboard/optimization-plans' },
+    { title: "Optimization plans", icon: <FiCheckSquare />, link: '/dashboard/optimization-plans' },
   ]
 
   const othermenu = [
@@ -122,7 +122,7 @@ export default function Layout({ children }: Props) {
     
   }, []);
   
-  // console.log("PROPERTY",property)
+  // console.log("PROPERTY",activeProperty)
 
   const getPerformanceMetrics = async (url: string) => {
     if(activeProperty.length > 0){
@@ -148,7 +148,7 @@ export default function Layout({ children }: Props) {
   useEffect(() => {
 
     if (property.length > 0) {
-      getPerformanceMetrics(currentProperty)
+      getPerformanceMetrics(activeProperty)
         // .then(() => console.log("MET", currentProperty))
         .catch((error) => console.error("Error fetching performance metrics:", error));
     }

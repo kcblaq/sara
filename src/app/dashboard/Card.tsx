@@ -3,12 +3,13 @@ import { FaArrowUp } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { formatDate } from '@/lib/DateFormater';
+import { ShortenNumber } from '../utils/ShortenedNumber';
 
 interface Props {
   title: string;
-  amount: number | undefined;
+  amount: number | undefined | string;
   style: string;
-  percent: number | undefined;
+  percent: number | undefined | string;
   arrowPosition?: string;
   chart: React.ReactNode
 }
@@ -18,7 +19,7 @@ export default function Card({ title,  style, amount, percent, chart, arrowPosit
   
   const {metrics, loading, error} = useSelector((state: RootState)=> state.performance)
   const temp = metrics && metrics.history.scores ;
-  const lastScore = temp && temp.length > 0 ? temp[temp.length - 1] : null;
+  const lastScore = temp &&  temp[0] ;
   let lastUpdated: string | undefined;
   if (lastScore?.createdAt) {
     lastUpdated = formatDate({ inputDate: lastScore.createdAt });
@@ -60,9 +61,12 @@ export default function Card({ title,  style, amount, percent, chart, arrowPosit
         <h1 className=" self-start font-semibold text-4xl"> {amount} </h1>
         <div className="flex items-center justify-between w-full">
           <p className="flex items-center gap-2 text-sm">
+            {/* <span className={style} style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <FaArrowUp className={arrowPosition}/> {percent && percent?.toFixed(1)}%
+            </span> */}
             <span className={style} style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <FaArrowUp className={arrowPosition}/> {percent}%
-            </span>
+  <FaArrowUp className={arrowPosition}/> {typeof percent === 'number' ? percent.toFixed(1) : percent}%
+</span>
             vs last update
           </p>
           <p className='p-2 float-end'>

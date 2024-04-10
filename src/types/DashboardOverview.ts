@@ -24,7 +24,7 @@ interface Current {
 
 export interface Scores {
     id: number | undefined;
-    organic_traffic: number;
+    organic_traffic: number | undefined;
     average_time_on_site: number | undefined;
     organic_keywords: number | undefined;
     overall_seo: number | undefined;

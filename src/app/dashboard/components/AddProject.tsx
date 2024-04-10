@@ -10,6 +10,7 @@ import { setActiveProperty } from '@/redux/features/propertySlice';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/app/store';
 import { fetchPerformanceFailure, fetchPerformanceStart, fetchPerformanceSuccess } from '@/redux/features/performanceMetric slice';
+import { GetPassiveAndDeepFetch } from '@/app/utils/apicalls/fetches/GetPassiveAndDeepFetchData';
 
 
 export const getPerformanceMetrics = async () => {
@@ -33,8 +34,10 @@ export const getPerformanceMetrics = async () => {
       console.error('Error fetching performance metrics:', error);
     }
   }
-  console.log("ACTIVE PROP", activeProperty)
+  // console.log("ACTIVE PROP", activeProperty)
 };
+
+
 export default function AddProject() {
   const [err, setErr] = useState({ status: false, msg: '' });
   const [loading, setLoading] = useState(false)
@@ -45,29 +48,45 @@ export default function AddProject() {
 
   const activeProperty = useSelector((state: RootState) => state.property.activeProperty)
 
-  const getPerformanceMetrics = async () => {
-    const dispatch = useDispatch();
-    if (activeProperty.length > 0) {
+  async function PassiveFetch(){
+    try {
       dispatch(fetchPerformanceStart())
-      try {
-        const res = await ApiCall.get('/crawl/overall', {
-          params: {
-            url: activeProperty,
-            type: 'passive',
-            limit: 10
-          }
-        });
-        // setPerformanceMetric(res.data)
-        dispatch(fetchPerformanceSuccess(res?.data))
-        // console.log('Performance metrics:', res.data);
-      } catch (error) {
-        dispatch(fetchPerformanceFailure(`Failed to fetch performance metric, Error: ${error}`))
-        console.error('Error fetching performance metrics:', error);
-      }
+     await ApiCall.get('/crawl/webcrawler', {
+        params: {
+          url: inputUrl,
+          type: 'passive',
+        }
+      }).then((res)=> dispatch(fetchPerformanceSuccess(res.data)))
     }
-    console.log("ACTIVE PROP", activeProperty)
-  };
+    catch (error:any) {
+      console.log('Error fetching passive', error)
+      dispatch(fetchPerformanceFailure(error.message))
+    }
+  }
 
+
+
+  // const getPerformanceMetrics = async () => {
+  //   const dispatch = useDispatch();
+  //   if (activeProperty.length > 0) {
+  //     dispatch(fetchPerformanceStart())
+  //     try {
+  //       const res = await ApiCall.get('/crawl/overall', {
+  //         params: {
+  //           url: activeProperty,
+  //           type: 'passive',
+  //           limit: 10
+  //         }
+  //       });
+  //       dispatch(fetchPerformanceSuccess(res?.data))
+  //     } catch (error) {
+  //       dispatch(fetchPerformanceFailure(`Failed to fetch performance metric, Error: ${error}`))
+  //       console.error('Error fetching performance metrics:', error);
+  //     }
+  //   }
+  //   console.log("ACTIVE PROP", activeProperty)
+  // };
+  
 
   async function handleSubmitUrl() {
     const urlPattern = /^(ftp|http[s]?):\/\/[^ "]+(\.[^ "]+)+$/
@@ -83,17 +102,27 @@ export default function AddProject() {
     try {
       setLoading(true)
 
-      const addPropert = await ApiCall.get(`crawl/add-property?url=${inputUrl}`)
+      ///passive fetch
+      console.log('submitting...')
+      // GetPassiveAndDeepFetch(inputUrl,'passive')
+      PassiveFetch()
+
+       await ApiCall.get(`crawl/add-property?url=${inputUrl}`)
         .then(() => dispatch(setModal('')))
         .then(() => dispatch(setActiveProperty(inputUrl)))
         .then(() => setLoading(false))
-      const crawlUrl = await ApiCall.get('/crawl/overall', {
-        params: {
-          url: activeProperty,
-          type: 'passive',
-          limit: 10
-        }
-      })
+        .then(()=> {
+          console.log('Crawling...')
+          ApiCall.get('/crawl/overall', {
+            params: {
+              url: inputUrl,
+              type: 'passive',
+              limit: 10
+            }
+          })
+        })
+        console.log('Crawling...')
+        // GetPassiveAndDeepFetch(inputUrl,'deep')
     } catch (error: any) {
       console.log("ERR", error)
       setErr({ status: true, msg: error.response.data.message });
