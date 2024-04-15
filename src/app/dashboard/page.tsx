@@ -12,6 +12,7 @@ import OrganicKeywords from './technical-seo/components/OrganicKeywords';
 import AverageTimeOnsite from './technical-seo/components/AverageTimeOnsite';
 import PlainButton from '../component/PlainButton';
 import { useRouter } from 'next/navigation';
+import { StackedBarChart } from './components/graphs/StackedBarChart';
 
 export default function Dashboard() {
 
@@ -90,7 +91,8 @@ export default function Dashboard() {
           <hr className='w-full mt-4' />
         </div>
         <div className=" h-full w-full max-w-[600px]">
-          <BacklinkGraph />
+          {/* <BacklinkGraph /> */}
+          <StackedBarChart />
         </div>
 
       </div>

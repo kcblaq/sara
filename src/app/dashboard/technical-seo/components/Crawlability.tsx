@@ -13,6 +13,7 @@ import { useDispatch } from "react-redux";
 import { TechnicalSeoType } from "@/types/TechnicalSeoType";
 import { calculatePercentage } from "@/lib/DateFormater";
 import HTTPStatusCode from "./HTTPStatusCode";
+import { completeArray } from "../../components/graphs/StackedBarChart";
 
 export default function Crawlability() {
   const [crawlabilityData, setCrawlabilityData] = useState([])
@@ -46,14 +47,17 @@ export default function Crawlability() {
     fetchCrawlability()
   }, [])
 
-  const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September'];
-  const mockData = [100, 300, 100, 200, 500, 900, 100, 200, 800, 900];
+  const labels1 = ['January', 'February'];
+  const labels = completeArray(labels1);
+  const mockData = [100, 300];
 
-  const crawldepthlabels = ['1', '2', '3', '4+'];
+  const crawldepthlabels1 = ['1', '2', '3', '4+'];
+  const crawldepthlabels = completeArray(crawldepthlabels1);
   const crawldepthLabelData = [100, 300, 100, 800,];
 
   const indexibilitData = [600, 300, 200, 900, 700]
-  const indexibilityLabel = ["X-Robots tags", "'non-index' metatag", "Robots.txt", "Non canonical pages", "Non 200 status"]
+  const indexibilityLabel1 = ["X-Robots tags", "'non-index' metatag", "Robots.txt", "Non canonical pages", "Non 200 status"]
+  const indexibilityLabel = completeArray(indexibilityLabel1)
   return (
     <main className="pb-14 grid w-full gap-8">
 

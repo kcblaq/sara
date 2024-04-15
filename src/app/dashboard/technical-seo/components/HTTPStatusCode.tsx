@@ -19,6 +19,7 @@ export default function HTTPStatusCode() {
             },
         },
         cutoutPercentage: 90, 
+        aspectRation: 1
     };
 
     const data = {
@@ -44,7 +45,7 @@ export default function HTTPStatusCode() {
 
     return (
         <div>
-            <Doughnut data={data} options={options} />
+            <Doughnut data={data} options={options}  />
         </div>
     )
 }

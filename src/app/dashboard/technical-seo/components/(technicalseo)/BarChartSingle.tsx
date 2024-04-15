@@ -31,6 +31,7 @@ interface Props {
 const BarChartSingle: React.FC<Props> = ({ labels, data, title = 'Chart.js Bar Chart', xAxisLabel = 'Crawl date', yAxisLabel = 'Number of pages', backgroundColor }) => {
     const options = {
         responsive: true,
+        barThickness: 30,
         scales: {
             x: {
                 barPercentage: 0.01,

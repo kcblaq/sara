@@ -53,11 +53,11 @@ useEffect(()=> {
     fetchData()
     
 }, [activeProperty])
-    const tabs = [
+const tabs = [
+    { title: "Issues", content: <Issues /> },
+    { title: "Site performance", content: <SitePerformance /> },
         { title: "Overview", content: <Overview /> },
         { title: "Crawlability and indexability", content: <Crawlability /> },
-        { title: "Issues", content: <Issues /> },
-        { title: "Site performance", content: <SitePerformance /> },
         // { title: "Internal linking", content: <InternalLinking /> },
         // { title: "Crawl comparisons", content: <CrawlComparison /> },
         // { title: "Audit history", content: <AuditHistory /> },
