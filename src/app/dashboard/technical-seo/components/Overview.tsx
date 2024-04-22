@@ -56,6 +56,25 @@ export const Title = ({ title, info }: { title: string, info: string }) => {
     </div>
   )
 }
+export const TitleWithoutUnderline = ({ title, info }: { title: string, info: string }) => {
+  return (
+    <div className="flex flex-col w-full">
+      <h1 className={`text-[#101828] gap-3 flex items-center font-semibold text-xl`}>
+        {title}
+        <button title={info}>  <RxQuestionMarkCircled /></button>
+      </h1>
+    </div>
+  )
+}
+export const ButtonWithTitle = ({  info }: {  info: string }) => {
+  return (
+    <div className="flex flex-col w-full">
+      <h1 className={`text-[#101828] gap-3 flex items-center font-semibold text-xl`}>
+        <button title={info}>  <RxQuestionMarkCircled /></button>
+      </h1>
+    </div>
+  )
+}
 function Overview() {
   const technicalSeoData: TechnicalSeoType = useSelector((state: RootState) => state.technicalSeo);
   const statusCodeData = technicalSeoData.httpStatusCode[0]

@@ -1,6 +1,6 @@
 import { FaCircle } from "react-icons/fa6";
 import { RxQuestionMarkCircled } from "react-icons/rx";
-import ProgressiveCircle from "./progressCircle";
+import ProgressiveCircle from "./SeoprogressCircle";
 
 export default function SiteHealthScore() {
   return (

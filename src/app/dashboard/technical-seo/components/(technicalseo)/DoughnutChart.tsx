@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, ChartData, ChartOptions } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -66,6 +66,7 @@ export const AnotherDoughnutChart = () => {
     plugins: {
       legend: {
         display: false,
+        textInside: true
       },
     },
     cutoutPercentage: 80,
@@ -75,33 +76,4 @@ export const AnotherDoughnutChart = () => {
 
   return <Doughnut data={anotherdata} options={anotherOptions} />
 }
-
-
-
-export const TripleProgressBar = () => {
-  const data = {
-    labels: ['Progress 1', 'Progress 2', 'Progress 3'],
-    datasets: [
-      {
-        label: 'Progress 1',
-        data: [40, 30, 30], // Adjust values to represent progress percentages
-        backgroundColor: ['#ff6384', '#36a2eb', '#ffce56'], // Colors for each segment
-        hoverBackgroundColor: ['#ff6384', '#36a2eb', '#ffce56'], // Colors for hover effect
-      },
-    ],
-  };
-
-  const options = {
-    cutoutPercentage: 80, // Adjust to control the thickness of the progress bar
-    rotation: 1 * Math.PI,
-    circumference: 1 * Math.PI,
-    animation: {
-      animateRotate: true,
-      animateScale: false,
-    },
-  };
-
-  return <Doughnut data={data} options={options} />;
-};
-
 

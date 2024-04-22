@@ -1,6 +1,6 @@
 
 import { RxQuestionMarkCircled } from "react-icons/rx";
-import ProgressiveCircle from '../progressCircle';
+import ProgressiveCircle from '../SeoprogressCircle';
 import { TrafficOverviewGraph } from '../TrafficOverviewGraph';
 import { FaCircle } from "react-icons/fa";
 

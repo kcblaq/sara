@@ -4,7 +4,7 @@ import { FC } from 'react';
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { useSelector } from 'react-redux';
-const ProgressiveCircle: FC = () => {
+const SEOProgressiveCircle: FC = () => {
 
   const metrics = useSelector((state: RootState) => state.performance);
   const scores = metrics?.metrics?.history?.scores[0]?.performance ?? null;
@@ -30,5 +30,5 @@ const ProgressiveCircle: FC = () => {
   );
 };
 
-export default ProgressiveCircle;
+export default SEOProgressiveCircle;
 

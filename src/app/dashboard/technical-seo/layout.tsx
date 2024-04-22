@@ -62,7 +62,7 @@ const tabs = [
         // { title: "Crawl comparisons", content: <CrawlComparison /> },
         // { title: "Audit history", content: <AuditHistory /> },
     ]
-    console.log("LOADING",loading)
+    // console.log("LOADING",loading)
 // const FetchBoth = async()=> {
 // try {
 //     setLoading(true)
@@ -98,7 +98,7 @@ const FetchPassive = async (type: string) => {
 
 
     return (
-        <section className={`flex w-full h-full justify-start flex-col gap-2 overflow-y-clip`}>
+        <section className={`flex w-full h-full justify-start flex-col gap-2 overflow-y-clip `}>
             <div className="flex w-full justify-between items-center">
                 <div className="w-full">
                     <h2 className=" font-semibold text-[#101828] text-3xl"> Technical SEO</h2>
@@ -129,11 +129,11 @@ const FetchPassive = async (type: string) => {
                     </div>
                 </div>
             <Tab.Group>
-                <Tab.List className="flex gap-4 w-full " >
+                <Tab.List className="flex gap-4 w-full" >
                     {
                         tabs.map((tab) => {
                             return (
-                                <div key={tab.title}>
+                                <div key={tab.title} >
                                     <Tab as={Fragment}>
                                         {({ selected }) => (
                                             /* Use the `selected` state to conditionally style the selected tab. */
@@ -157,12 +157,12 @@ const FetchPassive = async (type: string) => {
                 </Tab.List>
                 {/* <p> Here goes the rest</p> */}
                 
-                <div className={` h-full overflow-y-auto w-full`}>
+                <div className={` h-full w-full overflow-auto  `}>
                     <Tab.Panels>
                         {
                             tabs.map((tab) => {
                                 return (
-                                    <div key={tab.title}>
+                                    <div key={tab.title} className='h-full '>
                                         <Tab.Panel>
 
                                             {tab.content}

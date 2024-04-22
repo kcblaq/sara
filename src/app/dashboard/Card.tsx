@@ -18,7 +18,7 @@ interface Props {
 export default function Card({ title,  style, amount, percent, chart, arrowPosition }: Props) {
   
   const {metrics, loading, error} = useSelector((state: RootState)=> state.performance)
-  const temp = metrics && metrics.history.scores ;
+  const temp = metrics && metrics?.history.scores  ;
   const lastScore = temp &&  temp[0] ;
   let lastUpdated: string | undefined;
   if (lastScore?.createdAt) {

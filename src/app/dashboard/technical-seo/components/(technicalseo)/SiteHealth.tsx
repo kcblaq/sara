@@ -4,7 +4,7 @@ import { RxQuestionMarkCircled } from "react-icons/rx";
 import { FaCircle } from "react-icons/fa";
 
 import './style.css'
-import ProgressiveCircle from "@/app/dashboard/components/progressCircle";
+import ProgressiveCircle from "@/app/dashboard/components/SeoprogressCircle";
 import { TrafficOverviewGraph } from "@/app/dashboard/components/TrafficOverviewGraph";
 
 
