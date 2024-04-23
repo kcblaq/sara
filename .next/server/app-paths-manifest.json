@@ -1,7 +1,7 @@
 {
+  "/dashboard/link-building/page": "app/dashboard/link-building/page.js",
+  "/dashboard/rank-tracker/page": "app/dashboard/rank-tracker/page.js",
   "/dashboard/page": "app/dashboard/page.js",
   "/dashboard/keyword-explorer/page": "app/dashboard/keyword-explorer/page.js",
-  "/dashboard/content-analysis/page": "app/dashboard/content-analysis/page.js",
-  "/dashboard/competitor-analysis/page": "app/dashboard/competitor-analysis/page.js",
-  "/dashboard/link-building/page": "app/dashboard/link-building/page.js"
+  "/dashboard/technical-seo/page": "app/dashboard/technical-seo/page.js"
 }

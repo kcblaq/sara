@@ -3,8 +3,8 @@ import PlainButton from "@/app/component/PlainButton";
 import { CiSettings } from "react-icons/ci";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { CountryPickAllLocationDefault } from "../rank-tracker/components/CountryPick";
-import LinkBuildingOverview from "./component/LinkBuildingOverview";
-import BacllinkPages from "./component/BacllinkPages";
+import LinkBuildingOverview from "./component/overview/LinkBuildingOverview";
+import BacllinkPages from "./component/backlinkPages/BacllinkPages";
 import ReferingDomains from "./component/ReferingDomains";
 import LinkBuildingOpportunities from "./component/LinkBuildingOpportunities";
 import { Tab } from "@headlessui/react";
@@ -13,14 +13,14 @@ import { Fragment } from "react";
 
 export default function LinkBuilding() {
   const tabs = [
-    { title: "Backlink overview", content: <LinkBuildingOverview /> },
     { title: "Backlink pages", content: <BacllinkPages /> },
+    { title: "Backlink overview", content: <LinkBuildingOverview /> },
     { title: "Reffering domains", content: <ReferingDomains /> },
     { title: "Linking building opportunities", content: <LinkBuildingOpportunities /> },
   ]
   return (
-    <main className='grid w-full h-full items-start content-start gap-6 my-10 mb-20 overflow-auto'>
-      <section className={`flex justify-between w-full items-center gap-4 text-[#101828] `}>
+    <main className='grid w-full h-full items-start content-start gap-6 my-10 mb-20'>
+      <section className={`flex h-14 justify-between w-full items-center gap-4 text-[#101828] `}>
         <h1 className={`font-semibold text-4xl 2xl:text-5xl`}>Link building </h1>
         <div className="flex w-full md:w-1/2 items-center justify-end gap-2 md:gap-4">
           <span className="">
@@ -42,7 +42,7 @@ export default function LinkBuilding() {
         </span>
         <CountryPickAllLocationDefault title="All location" />
       </section>
-      <section className="">
+      <section className=" h-full overflow-auto">
       <Tab.Group>
             <Tab.List className="flex gap-4 w-full" >
               {

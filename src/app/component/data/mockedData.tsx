@@ -6,6 +6,8 @@ export const mockedData = [
     {keyword: 'Ude ndi oja', gv:900, tf:211, cpc:1000, position:10, increase:true, volume:90, serp:['link','image','shop','video'], kd:20, traffic:35,url:'www.ogene.com'},
   ]
 
+
+
   export const PiechartMockedData = {
     labels: [23,45,2],
     datasets: [
@@ -26,6 +28,9 @@ export const mockedData = [
       },
     ],
   }
+
+
+
 
 
   const chartData = {
