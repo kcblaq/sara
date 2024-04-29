@@ -1,11 +1,10 @@
 import FilledButton from '@/app/component/FilledButton'
 import React from 'react'
 import { AiOutlineFileAdd } from 'react-icons/ai'
-import CountryPick from '../../rank-tracker/components/CountryPick'
 import SearchBox from '@/app/component/SearchBox';
 import {  SelectorDropdownMenu } from '@/app/component/SelectDropdownMenu';
 import { mockedData } from '@/app/component/data/mockedData';
-import { FaArrowUp, FaInstagram, FaLinkedin, FaPlus, FaXTwitter } from 'react-icons/fa6';
+import { FaInstagram, FaLinkedin, FaPlus, FaXTwitter } from 'react-icons/fa6';
 import { GoQuestion } from 'react-icons/go';
 import PlainButton from '@/app/component/PlainButton';
 import { MdFacebook } from 'react-icons/md';

@@ -58,7 +58,7 @@ export default function KeywordAnalysis() {
                         <div className={`flex w-full gap-3 `}>
 
                             <div className=" w-2/3">
-                                <AnotherDoughnutChart  />
+                                <AnotherDoughnutChart />
                             </div>
 
 

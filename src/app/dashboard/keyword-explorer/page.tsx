@@ -1,7 +1,7 @@
 "use client"
 import { AiOutlineFileAdd } from "react-icons/ai";
 import CountryPick from "../rank-tracker/components/CountryPick";
-import { CiShare2, CiSettings } from "react-icons/ci";
+import {  CiSettings } from "react-icons/ci";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import ToggleMobile from "../components/ToggleMobile";
 import { useState } from "react";
@@ -12,7 +12,6 @@ import PlainButton from "@/app/component/PlainButton";
 import FilledButton from "@/app/component/FilledButton";
 import KeywordAnalysis from "./component/KeywordAnalysis";
 import SmartKeywordFinder from "./component/SmartKeywordFinder";
-import KeywordList from "./component/KeywordList";
 
 
 

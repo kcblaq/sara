@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import { BsLightningCharge } from 'react-icons/bs';
 import { CiSearch, CiSettings } from 'react-icons/ci';
-import { FaRegUserCircle } from 'react-icons/fa';
+// import { FaRegUserCircle } from 'react-icons/fa';
 import { IoMdMenu, IoMdNotificationsOutline } from 'react-icons/io';
 import Image from 'next/image';
 import { RxDashboard, RxDoubleArrowLeft } from "react-icons/rx";
@@ -24,9 +24,8 @@ import AddProject from './components/AddProject';
 import ApiCall from '../utils/apicalls/axiosInterceptor';
 import { PropertyType } from '@/types/PropertyType';
 // import DashboardOverviewPlaceholder from './components/DashboardOverviewPlaceholder';
-import { LoadingState } from '../component/Loader';
+// import { LoadingState } from '../component/Loader';
 // import { CgOpenCollective } from 'react-icons/cg';
-import { PerformanceMetrics } from '@/types/DashboardOverview';
 import { fetchPerformanceFailure, fetchPerformanceStart, fetchPerformanceSuccess } from '@/redux/features/performanceMetric slice';
 import { setActiveProperty, setAllProperty } from '@/redux/features/propertySlice';
 import DashboardOverviewPlaceholder from './components/DashboardOverviewPlaceholder';

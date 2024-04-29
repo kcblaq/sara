@@ -11,13 +11,13 @@ import OrganicPick from './components/OrganicPick'
 import { Tab } from '@headlessui/react'
 import RankOverview from './components/RankOverview'
 import Rankings from './components/Rankings'
-import PageDistributions from './components/PageDistributions'
+// import PageDistributions from './components/PageDistributions'
 
 
 const tabs = [
   { title: "Overview", content: <RankOverview /> },
   { title: "Rankings", content: <Rankings /> },
-  { title: "Page distributions", content: <PageDistributions /> }
+  // { title: "Page distributions", content: <PageDistributions /> }
 ]
 export default function page() {
   const [mobile, setMobile] = useState(false)

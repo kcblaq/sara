@@ -2,7 +2,6 @@
 import SearchBox from '@/app/component/SearchBox'
 import { mockedData } from '@/app/component/data/mockedData'
 import React from 'react'
-import { CiSearch } from 'react-icons/ci'
 import { FaArrowUp } from 'react-icons/fa6'
 import { GoQuestion } from 'react-icons/go'
 

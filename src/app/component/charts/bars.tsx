@@ -51,7 +51,10 @@ const ChangeLineChart = ({ pageData }: Props) => {
   const options = {
     scales: {
       x: {
-        display: false,
+        display: true,
+        grid: {
+          display: false
+        }
       },
       y: {
         display: false,
