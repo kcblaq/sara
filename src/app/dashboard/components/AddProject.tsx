@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/app/store';
 import { fetchPerformanceFailure, fetchPerformanceStart, fetchPerformanceSuccess } from '@/redux/features/performanceMetric slice';
 import { GetPassiveAndDeepFetch } from '@/app/utils/apicalls/fetches/GetPassiveAndDeepFetchData';
+import { FetchTechnicalSeo } from '../technical-seo/components/FetchTechnicalSeo';
 
 
 export const getPerformanceMetrics = async () => {
@@ -19,19 +20,21 @@ export const getPerformanceMetrics = async () => {
   if (activeProperty.length > 0) {
     dispatch(fetchPerformanceStart())
     try {
-      const res = await ApiCall.get('/crawl/overall', {
+      const res = await ApiCall.get('/crawl/technical-seo', {
         params: {
           url: activeProperty,
-          type: 'passive',
-          limit: 10
+          limit: 100,
+          platform: 'desktop'
         }
       });
       // setPerformanceMetric(res.data)
       dispatch(fetchPerformanceSuccess(res?.data))
-      // console.log('Performance metrics:', res.data);
+      
     } catch (error) {
       dispatch(fetchPerformanceFailure(`Failed to fetch performance metric, Error: ${error}`))
       console.error('Error fetching performance metrics:', error);
+    } finally {
+      FetchTechnicalSeo()
     }
   }
   // console.log("ACTIVE PROP", activeProperty)

@@ -52,7 +52,7 @@ export const LoginComponent = () => {
             // console.log("RES::",res.data.token)
             dispatch(setUser(res.data.user))
             dispatch(setToken(res.data.token))
-                router.push('/dashboard')
+                router.push('/dashboard/technical-seo')
             
           }
       } catch (err: any) {

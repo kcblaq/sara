@@ -11,12 +11,12 @@ import FilledButton from "@/app/component/FilledButton";
 
 export default function page() {
   const [mobile, setMobile] = useState(true);
-  const [stage, setStage] = useState(0);
-
 
   const handleToggleMobile = () => {
     setMobile(!mobile);
   };
+
+  let stage = 0
 
   const tabs = [
     { title: "Keyword gap", content: <KeywordGap /> },

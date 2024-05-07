@@ -1,48 +1,40 @@
 import { TechnicalSeoType } from "@/types/TechnicalSeoType";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { PersistPartial } from "redux-persist/es/persistReducer";
 
-const initialState: TechnicalSeoType = {
-    data: [],
-    lcp: {
-        poor: 0,
-        needsImprovement: 0,
-        good: 0
-    },
-    tbt: {
-        poor: 0,
-        needsImprovement: 0,
-        good: 0
-    },
-    cls: {
-        poor: 0,
-        needsImprovement: 0,
-        good: 0
-    },
-    crawled: {
-        total: "",
-        crawled: 0,
-        uncrawled: 0
-    },
-    httpStatusCode:  {},
-    siteIssue: {
-        error: 0,
-        warning: 0,
-        notices: 0,
-        issues: []
-    }
+interface SeoData {
+    metrics: TechnicalSeoType | null,
+    loading: boolean;
+    error: string | null;
+    _persist?: PersistPartial; // Add this if you're using redux-persist
+}
+
+
+const initialState: SeoData = {
+   metrics: null,
+   loading: false,
+   error: null,
 }
 
 const technicalSeoData = createSlice({
     name: 'technicalSeo',
     initialState,
     reducers: {
-        setTechnicalSeo: (state, action: PayloadAction<TechnicalSeoType>)=> {
-            return action.payload;
-        }
-    }
+        fetchTechnicalSEOStart(state) {
+            state.loading = true;
+            state.error = null;
+          },
+        setTechnicalSeo: (state, action: PayloadAction<TechnicalSeoType>) => {
+            state.metrics = action.payload;
+        },
+        fetchTechnicalSEOFailure(state, action: PayloadAction<string>) {
+            state.loading = false;
+            state.error = action.payload;
+          },
 
+    }
 })
 
-export const {setTechnicalSeo} = technicalSeoData.actions;
+export const { setTechnicalSeo, fetchTechnicalSEOFailure, fetchTechnicalSEOStart} = technicalSeoData.actions;
 
 export default technicalSeoData.reducer;

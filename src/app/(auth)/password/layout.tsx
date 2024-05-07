@@ -27,7 +27,7 @@ export default function ForgetPassword({ children }: PasswordProps) {
                 </Link>
                 <section className="w-full justify-between flex flex-col gap-2">
                     <div className=" h-full  flex flex-col justify-center items-center">
-                        <div className="flex flex-col justify-center items-center gap-4 max-w-[300px]">
+                        <div className="flex flex-col justify-center items-center gap-4 max-w-[400px]">
                             <div className="flex items-center justify-center">
                                 <Image src={`/key.png`} alt="Webmaxi password key" width={56} height={56} />
                             </div>

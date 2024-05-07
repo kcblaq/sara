@@ -46,7 +46,10 @@ const persistedReducer = persistReducer(
 );
 
 export const store = configureStore({
-    reducer: persistedReducer
+    reducer: persistedReducer,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+        serializableCheck: false,
+      }),
 });
 
 configureApiCall(store)

@@ -1,7 +1,6 @@
 {
-  "/(auth)/login/page": "app/(auth)/login/page.js",
+  "/page": "app/page.js",
   "/dashboard/page": "app/dashboard/page.js",
-  "/dashboard/content-analysis/page": "app/dashboard/content-analysis/page.js",
-  "/dashboard/competitor-analysis/page": "app/dashboard/competitor-analysis/page.js",
-  "/dashboard/keyword-explorer/page": "app/dashboard/keyword-explorer/page.js"
+  "/(auth)/password/set-password/page": "app/(auth)/password/set-password/page.js",
+  "/(auth)/login/page": "app/(auth)/login/page.js"
 }

@@ -4,7 +4,7 @@ import { Doughnut } from "react-chartjs-2";
 import { useSelector } from "react-redux";
 
 export default function HTTPStatusCode() {
-    const techSeoData: TechnicalSeoType = useSelector((state: RootState) => state.technicalSeo);
+    const techSeoData: TechnicalSeoType | null = useSelector((state: RootState) => state.technicalSeo.metrics);
     const statusCodeData = techSeoData?.httpStatusCode[0]; // Add a conditional check using the optional chaining operator (?.)
 
     // Check if statusCodeData is defined before using it

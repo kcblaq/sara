@@ -6,8 +6,9 @@ import 'react-circular-progressbar/dist/styles.css';
 import { useSelector } from 'react-redux';
 const SEOProgressiveCircle: FC = () => {
 
-  const metrics = useSelector((state: RootState) => state.performance);
-  const scores = metrics?.metrics?.history?.scores[0]?.performance ?? null;
+  const {metrics} = useSelector((state: RootState) => state.technicalSeo);
+  // const scores = metrics?.metrics?.data[0].performance ?? null;
+  const scores = metrics?.data[0].performance || null;
   
  
   

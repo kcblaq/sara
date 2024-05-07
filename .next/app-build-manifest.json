@@ -17,43 +17,30 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/dashboard/technical-seo/page": [
+    "/(auth)/password/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/technical-seo/page.js"
+      "static/chunks/app/(auth)/password/layout.js"
     ],
-    "/dashboard/technical-seo/layout": [
+    "/(auth)/password/set-password/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/dashboard/technical-seo/layout.css",
-      "static/chunks/app/dashboard/technical-seo/layout.js"
+      "static/chunks/app/(auth)/password/set-password/page.js"
     ],
-    "/(auth)/login/layout": [
+    "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(auth)/login/layout.js"
+      "static/chunks/app/page.js"
     ],
     "/(auth)/login/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/(auth)/login/page.js"
     ],
-    "/dashboard/content-analysis/page": [
+    "/(auth)/login/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/dashboard/content-analysis/page.css",
-      "static/chunks/app/dashboard/content-analysis/page.js"
-    ],
-    "/dashboard/competitor-analysis/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/competitor-analysis/page.js"
-    ],
-    "/dashboard/keyword-explorer/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/dashboard/keyword-explorer/page.css",
-      "static/chunks/app/dashboard/keyword-explorer/page.js"
+      "static/chunks/app/(auth)/login/layout.js"
     ]
   }
 }

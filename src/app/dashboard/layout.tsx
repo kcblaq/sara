@@ -123,35 +123,32 @@ export default function Layout({ children }: Props) {
   
   // console.log("PROPERTY",activeProperty)
 
-  const getPerformanceMetrics = async (url: string) => {
-    if(activeProperty.length > 0){
-      dispatch(fetchPerformanceStart())
-      try {
-        const res = await ApiCall.get('/crawl/overall', {
-          params: {
-            url: activeProperty,
-            type: 'passive',
-            limit: 10
-          }
-        });
-        // setPerformanceMetric(res.data)
-        dispatch(fetchPerformanceSuccess(res?.data))
-        // console.log('Performance metrics:', res.data);
-      } catch (error) {
-        dispatch(fetchPerformanceFailure(`Failed to fetch performance metric, Error: ${error}`))
-        console.error('Error fetching performance metrics:', error);
-      }
-    }
-  }; 
+  // const getPerformanceMetrics = async (url: string) => {
+  //   if(activeProperty.length > 0){
+  //     dispatch(fetchPerformanceStart())
+  //     try {
+  //       const res = await ApiCall.get('/crawl/overall', {
+  //         params: {
+  //           url: activeProperty,
+  //           type: 'passive',
+  //           limit: 10
+  //         }
+  //       });
+  //       dispatch(fetchPerformanceSuccess(res?.data))
+  //     } catch (error) {
+  //       dispatch(fetchPerformanceFailure(`Failed to fetch performance metric, Error: ${error}`))
+  //       console.error('Error fetching performance metrics:', error);
+  //     }
+  //   }
+  // }; 
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    if (property.length > 0) {
-      getPerformanceMetrics(activeProperty)
-        // .then(() => console.log("MET", currentProperty))
-        .catch((error) => console.error("Error fetching performance metrics:", error));
-    }
-  }, [property, activeProperty]);
+  //   if (property.length > 0) {
+  //     getPerformanceMetrics(activeProperty)
+  //       .catch((error) => console.error("Error fetching performance metrics:", error));
+  //   }
+  // }, [property, activeProperty]);
 
 
   return (

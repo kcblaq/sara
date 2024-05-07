@@ -1,5 +1,5 @@
 import { UserType } from "@/types/userType";
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 const initialState : UserType = {
     user: {
@@ -18,8 +18,8 @@ const userDetail = createSlice({
     name:'user',
     initialState,
     reducers:{
-        setUser: (state, action) => {
-            state.user = action.payload
+        setUser: (state, action: PayloadAction<Partial<UserType['user']>> ) => {
+            state.user = {...state.user,...action.payload}
         },
         setToken: (state, action) => {
             state.token = action.payload

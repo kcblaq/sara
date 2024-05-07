@@ -1,9 +1,8 @@
 import { RxQuestionMarkCircled } from "react-icons/rx"
-import { ReusableProgressiveCircle } from "./(technicalseo)/ReusableProgressiveCircle"
+// import { ReusableProgressiveCircle } from "./(technicalseo)/ReusableProgressiveCircle"
 import SubHead from "./(technicalseo)/SubHead"
 import PieChart from "./(technicalseo)/PieChart";
 import { FaCircle } from "react-icons/fa6";
-import { AnotherDoughnutChart } from "./(technicalseo)/DoughnutChart";
 import { CircularProgressbarWithChildren } from "react-circular-progressbar";
 import { GoDotFill } from "react-icons/go";
 import PlainButton from "@/app/component/PlainButton";
@@ -13,12 +12,20 @@ import TableItems from "./(technicalseo)/TableItems";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/store";
 import { calculatePercentage } from "@/app/utils/PercentageCalculate";
-import ActivityGuage, { sampleACtivityGuage } from "./(technicalseo)/ActivityGuage";
+import ActivityGuage from "./(technicalseo)/ActivityGuage";
 import HTTPStatusCode from "./HTTPStatusCode";
-import { TechnicalSeoType } from "@/types/TechnicalSeoType";
+// import { TechnicalSeoType } from "@/types/TechnicalSeoType";
 import SiteHealthScore from "../../components/SiteHealthScore";
+import { TechnicalSeoType } from "@/types/TechnicalSeoType";
+import { useEffect } from "react";
+import { removeTrailingSlash } from "@/app/utils/RemoveSlash";
+import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
+import { setLoading } from "@/redux/features/loaderSlice";
+import { setTechnicalSeo, fetchTechnicalSEOFailure } from "@/redux/features/technicalSeoSlice";
+import { useDispatch } from "react-redux";
+import { FetchTechnicalSeo } from "./FetchTechnicalSeo";
 
-
+ 
 
 interface ChartData {
   labels: string[];
@@ -76,73 +83,79 @@ export const ButtonWithTitle = ({  info }: {  info: string }) => {
   )
 }
 function Overview() {
-  const technicalSeoData: TechnicalSeoType = useSelector((state: RootState) => state.technicalSeo);
-  const statusCodeData = technicalSeoData.httpStatusCode[0]
-  const issues = technicalSeoData.siteIssue.issues.slice(0,5)
+  
+  const technicalSeoData: any = useSelector((state: RootState) => state.technicalSeo);
+  const activeProperty = useSelector((state: RootState) => state.property.activeProperty)
+  const statusCodeData = technicalSeoData?.metrics?.httpStatusCode[0] ?? null
+  const issues = technicalSeoData?.metrics?.siteIssue.issues
+// console.log("ISSUES", issues)
 
-  const LCPdata: ItemProps['data'] = {
-    labels: Object.keys(technicalSeoData.lcp),
-    datasets: [
-      {
-        label: 'Total',
-        data: Object.values(technicalSeoData.lcp),
-        backgroundColor: [
-          '#F04438',
-          '#FDB022',
-          '#12B76A'
-        ],
-        borderColor: [
-          '#F04438',
-          '#FDB022',
-          '#12B76A'
-        ],
-        borderWidth: 1,
-      },
-    ],
-  }
+  // const dispatch = useDispatch()
+
+//   const FetchTechnicalSeo = async () => {
+//     try {
+//         setLoading(true); 
+//         await ApiCall.get('/crawl/technical-seo', {
+//             params: {
+//                 limit: 100,
+//                 platform:'desktop',
+//                 url: removeTrailingSlash(activeProperty),
+//             }
+//         }).then((res) => dispatch(setTechnicalSeo(res.data)));
+//     } catch (error:any) {
+//         dispatch(fetchTechnicalSEOFailure(error.message));
+//     } finally {
+//         setLoading(false);
+//     }
+// };
+
+  const LCPdata: ItemProps['data'] = technicalSeoData
+  ? {
+      labels: Object.keys(technicalSeoData.metrics?.lcp ?? {}),
+      datasets: [
+        {
+          label: 'Total',
+          data: Object.values(technicalSeoData.metrics?.lcp ?? {}),
+          backgroundColor: ['#F04438', '#FDB022', '#12B76A'],
+          borderColor: ['#F04438', '#FDB022', '#12B76A'],
+          borderWidth: 1,
+        },
+      ],
+    }
+  : { labels: [], datasets: [] };
 
 
-  const CLSdata: ItemProps['data'] = {
-    labels: Object.keys(technicalSeoData.cls),
-    datasets: [
-      {
-        label: 'Total',
-        data: Object.values(technicalSeoData.cls),
-        backgroundColor: [
-          '#F04438',
-          '#FDB022',
-          '#12B76A'
+  const CLSdata: ItemProps['data'] = technicalSeoData
+    ? {
+        labels: Object.keys(technicalSeoData.metrics?.cls ?? {}),
+        datasets: [
+          {
+            label: 'Total',
+            data: Object.values(technicalSeoData.metrics?.cls ?? {}),
+            backgroundColor: ['#F04438', '#FDB022', '#12B76A'],
+            borderColor: ['#F04438', '#FDB022', '#12B76A'],
+            borderWidth: 1,
+          },
         ],
-        borderColor: [
-          '#F04438',
-          '#FDB022',
-          '#12B76A'
-        ],
-        borderWidth: 1,
-      },
-    ],
-  }
+      }
+    : { labels: [], datasets: [] };
 
-  const TBTdata: ItemProps['data'] = {
-    labels: Object.keys(technicalSeoData.tbt),
-    datasets: [
-      {
-        label: 'Total',
-        data: Object.values(technicalSeoData.tbt),
-        backgroundColor: [
-          '#F04438',
-          '#FDB022',
-          '#12B76A'
+  
+    const TBTdata: ItemProps['data'] = technicalSeoData && technicalSeoData.metrics && technicalSeoData.metrics.tbt
+    ? {
+        labels: Object.keys(technicalSeoData.metrics.tbt),
+        datasets: [
+          {
+            label: 'Total',
+            data: Object.values(technicalSeoData.metrics.tbt),
+            backgroundColor: ['#F04438', '#FDB022', '#12B76A'],
+            borderColor: ['#F04438', '#FDB022', '#12B76A'],
+            borderWidth: 1,
+          },
         ],
-        borderColor: [
-          '#F04438',
-          '#FDB022',
-          '#12B76A'
-        ],
-        borderWidth: 1,
-      },
-    ],
-  }
+      }
+    : {labels: [], datasets:[]}
+  
 
   // const options = {
   //   plugins: {
@@ -183,9 +196,10 @@ function Overview() {
   }
 
   // console.log("SEOT",technicalSeoData)
-  const value = technicalSeoData.crawled.crawled;
-  const total = technicalSeoData.crawled.total;
-  const crawledvalue = calculatePercentage(value, Number(total))
+  const value = technicalSeoData.metrics?.crawled;
+  const total = technicalSeoData.metrics?.crawled.total;
+  const crawledvalue = calculatePercentage(value ? Number(value) : 0, Number(total))
+
 
   return (
     <main className="pb-14 grid w-full gap-8 z-0">
@@ -197,9 +211,10 @@ function Overview() {
         <section className="w-full col-span-3 h-full md:h-[464px] border rounded-md p-6">
           <SubHead title="Core web vitals" info="These are a set of specific factors that Google considers important in assessing the user experience of a web page" />
           <div className="grid w-full items-center justify-between grid-col-1 md:grid-cols-3 py-6">
-            <EachItem title="Largest Contentful Paint (LCP)" data={LCPdata} poorPages={technicalSeoData.lcp.poor} needsImprovementPages={technicalSeoData.lcp.needsImprovement} goodPages={technicalSeoData.lcp.good} info={"Largest Contentful Paint (LCP) is a user-centric performance metric that measures the perceived loading speed of a web page. It specifically focuses on the time it takes for the largest content element, such as an image or a block of text, to render on the user's screen"} />
-            <EachItem title="Total Blocking Time (TBT)" data={TBTdata} poorPages={technicalSeoData.tbt.poor} needsImprovementPages={technicalSeoData.tbt.needsImprovement} goodPages={technicalSeoData.tbt.good} info={"This is a user-centric performance metric used to evaluate the responsiveness and interactivity of a web page"} />
-            <EachItem title="Cumulative Layout Shift (CLS)" data={CLSdata} poorPages={technicalSeoData.cls.poor} needsImprovementPages={technicalSeoData.cls.needsImprovement} goodPages={technicalSeoData.cls.good} info={"This is a user-centric performance metric that quantifies the visual stability of a web page as it loads and interacts with the user"} />
+            {/* <EachItem title="Largest Contentful Paint (LCP)" data={LCPdata} poorPages={technicalSeoData.metrics.lcp.poor} needsImprovementPages={technicalSeoData.lcp.needsImprovement} goodPages={technicalSeoData.lcp.good} info={"Largest Contentful Paint (LCP) is a user-centric performance metric that measures the perceived loading speed of a web page. It specifically focuses on the time it takes for the largest content element, such as an image or a block of text, to render on the user's screen"} /> */}
+            <EachItem title="Largest Contentful Paint (LCP)" data={LCPdata} poorPages={technicalSeoData?.metrics?.lcp.poor || 0} needsImprovementPages={technicalSeoData.metrics?.lcp?.needsImprovement || 0} goodPages={technicalSeoData.metrics?.lcp?.good || 0} info={"Largest Contentful Paint (LCP) is a user-centric performance metric that measures the perceived loading speed of a web page. It specifically focuses on the time it takes for the largest content element, such as an image or a block of text, to render on the user's screen"} />
+            <EachItem title="Total Blocking Time (TBT)" data={TBTdata} poorPages={technicalSeoData?.metrics?.tbt?.poor || 0} needsImprovementPages={technicalSeoData?.metrics?.tbt.needsImprovement || 0} goodPages={technicalSeoData?.metrics?.tbt?.good || 0} info={"This is a user-centric performance metric used to evaluate the responsiveness and interactivity of a web page"} />
+            <EachItem title="Cumulative Layout Shift (CLS)" data={CLSdata} poorPages={technicalSeoData?.metrics?.cls?.poor || 0} needsImprovementPages={technicalSeoData?.metrics?.cls?.needsImprovement || 0} goodPages={technicalSeoData?.metrics?.cls?.good || 0} info={"This is a user-centric performance metric that quantifies the visual stability of a web page as it loads and interacts with the user"} />
           </div>
         </section>
       </section>
@@ -213,13 +228,13 @@ function Overview() {
             }} >
               <div className="flex flex-col">
                 <p className='text-gray-600 text-center text-sm'> Total links found </p>
-                <p className='text-gray-900 text-center text-5xl'> {Number(technicalSeoData.crawled.total).toLocaleString()} </p>
+                <p className='text-gray-900 text-center text-5xl'> {Number(technicalSeoData.metrics?.crawled?.total).toLocaleString()} </p>
               </div>
             </CircularProgressbarWithChildren>
 
             <div className="flex h-full flex-col justify-end">
-              <p className=' flex items-center text-xs text-[#475467]'> <span className="text-green-300"><GoDotFill />  </span> {`Crwaled(${technicalSeoData.crawled.crawled.toLocaleString()})`} </p>
-              <p className=' flex items-center text-xs text-[#475467]'> <span className="text-green-100"><GoDotFill /></span> {`Uncrawled(${technicalSeoData.crawled.uncrawled.toLocaleString()})`} </p>
+              <p className=' flex items-center text-xs text-[#475467]'> <span className="text-green-300"><GoDotFill />  </span> {`Crwaled(${technicalSeoData.metrics?.crawled.crawled.toLocaleString()})`} </p>
+              <p className=' flex items-center text-xs text-[#475467]'> <span className="text-green-100"><GoDotFill /></span> {`Uncrawled(${technicalSeoData?.metrics?.crawled?.uncrawled.toLocaleString()})`} </p>
             </div>
           </div>
         </div>
@@ -230,10 +245,10 @@ function Overview() {
             <HTTPStatusCode />
             <div className="flex flex-col justify-end">
               <p className=" text-xs flex items-center text-[#475467]">  <span className='text-green-400'><GoDotFill /> </span>{`Info - 1xx (${statusCodeData?.info}) `} </p>
-              <p className=" text-xs flex items-center text-[#475467]">  <span className='text-green-600'><GoDotFill /> </span> {`Success - 1xx (${statusCodeData?.success}) `}  </p>
-              <p className=" text-xs flex items-center text-[#475467]">  <span className='text-orange-400'><GoDotFill /> </span>{`Redirect - 1xx (${statusCodeData?.redirect}) `} </p>
-              <p className=" text-xs flex items-center text-[#475467]">  <span className='text-red-400'><GoDotFill /> </span> {`Client error - 1xx (${statusCodeData?.client_error})`} </p>
-              <p className=" text-xs flex items-center text-[#475467]">  <span className='text-red-200'><GoDotFill /> </span> {`Server error - 1xx (${statusCodeData?.server_error})`} </p>
+              <p className=" text-xs flex items-center text-[#475467]">  <span className='text-green-600'><GoDotFill /> </span> {`Success - 2xx (${statusCodeData?.success}) `}  </p>
+              <p className=" text-xs flex items-center text-[#475467]">  <span className='text-orange-400'><GoDotFill /> </span>{`Redirect - 3xx (${statusCodeData?.redirect}) `} </p>
+              <p className=" text-xs flex items-center text-[#475467]">  <span className='text-red-400'><GoDotFill /> </span> {`Client error - 4xx (${statusCodeData?.client_error})`} </p>
+              <p className=" text-xs flex items-center text-[#475467]">  <span className='text-red-200'><GoDotFill /> </span> {`Server error - 5xx (${statusCodeData?.server_error})`} </p>
             </div>
           </div>
         </div>
@@ -242,9 +257,9 @@ function Overview() {
           <div className="p-4 flex gap-2 h-48">
             <ActivityGuage />
             <div className="flex flex-col justify-end">
-              <p className=" text-xs flex items-center text-[#475467]">  <span className='text-[#F04438]'><GoDotFill /> </span> {`Errors(${technicalSeoData.siteIssue.error ?? 0} )`} </p>
-              <p className=" text-xs flex items-center text-[#475467]">  <span className='text-[#FDB022]'><GoDotFill /> </span> {`Warnings(${technicalSeoData.siteIssue.warning ?? 0})`}  </p>
-              <p className=" text-xs flex items-center text-[#475467]">  <span className='text-[#175CD3]'><GoDotFill /> </span> {`Notices(${technicalSeoData.siteIssue.notices ?? 0})`} </p>
+              <p className=" text-xs flex items-center text-[#475467]">  <span className='text-[#F04438]'><GoDotFill /> </span> {`Errors(${technicalSeoData.metrics?.siteIssue?.error || 0} )`} </p>
+              <p className=" text-xs flex items-center text-[#475467]">  <span className='text-[#FDB022]'><GoDotFill /> </span> {`Warnings(${technicalSeoData.metrics?.siteIssue?.warning || 0})`}  </p>
+              <p className=" text-xs flex items-center text-[#475467]">  <span className='text-[#175CD3]'><GoDotFill /> </span> {`Notices(${technicalSeoData.metrics?.siteIssue?.notices || 0})`} </p>
             </div>
           </div>
         </div>
@@ -260,7 +275,7 @@ function Overview() {
             <div className="flex items-center gap-2 md:gap-4">
 
               <div className="flex">
-                <PlainButton title="View all issues" />
+                <PlainButton title="View all issues"/>
               </div>
               <div className="flex">
                 <FilledButton icon={<FiDownloadCloud />
@@ -274,6 +289,7 @@ function Overview() {
           <hr />
         </div>
         <div className="overflow-x-auto ">
+          
           <table className="table-auto w-full border-collapse">
             <thead className="p-4">
               <tr className="bg-[#EAECF0] p-4 font-medium text-start">
@@ -285,7 +301,7 @@ function Overview() {
             </thead>
             <tbody>
               {
-                issues.map((issue) => {
+                issues && issues.slice(0,7).map((issue:any) => {
                   return (
                 <tr className=" p-2 font-medium" key={issue.title}>
                 <td className="border text-xs text-[#475467] p-2 border-[#c0c2c5]" >

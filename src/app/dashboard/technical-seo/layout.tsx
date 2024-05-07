@@ -6,94 +6,78 @@ import { CiSettings, CiShare2 } from "react-icons/ci"
 import Overview from './components/Overview'
 import Crawlability from './components/Crawlability'
 import SitePerformance from './components/SitePerformance'
-import InternalLinking from './components/InternalLinking'
 import Issues from './components/Issues'
-import CrawlComparison from './components/CrawlComparison'
-import AuditHistory from './components/AuditHistory'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/app/store'
 import moment from 'moment'
 import ApiCall from '@/app/utils/apicalls/axiosInterceptor'
 import { useDispatch } from 'react-redux'
-import { setTechnicalSeo } from '@/redux/features/technicalSeoSlice'
-import { GetPassiveAndDeepFetch } from '@/app/utils/apicalls/fetches/GetPassiveAndDeepFetchData';
-import { setLoading } from '@/redux/features/loaderSlice'
+import { fetchTechnicalSEOFailure, setTechnicalSeo } from '@/redux/features/technicalSeoSlice'
 import { fetchPerformanceFailure, fetchPerformanceSuccess } from '@/redux/features/performanceMetric slice'
+import { removeTrailingSlash } from '@/app/utils/RemoveSlash'
+
+
 
 export default function TechnicalSeoLayout() {
     const [mobile, setMobile] = useState(true)
-
-    const techSeo = useSelector((state: RootState)=> state.performance.metrics?.history?.scores)
-
-    const activeProperty = useSelector((state: RootState)=> state.property.activeProperty);
-    // const loading = useSelector((state: RootState)=> state.loading.loading);
     const [loading, setLoading] = useState(false)
+
+    
+    const techSeo = useSelector((state: RootState)=> state.technicalSeo.metrics)
+    const activeProperty = useSelector((state: RootState)=> state.property.activeProperty);
     const dispatch = useDispatch();
 
-    const lastUpdated = techSeo && techSeo.length > 0
-    ? moment(techSeo[techSeo.length - 1].createdAt).format("DD, MMMM, YY")
-    : null;
 
-    const fetchData = async ()=> {
-       try {
-       const techseodata =  await ApiCall.get("/crawl/technical-seo", {
-            params:{
-            url: activeProperty,
-            limit: 100
-            }
-        })
-        dispatch(setTechnicalSeo(techseodata.data))
 
-        
-       } catch (error) {
-        console.log("TECH SEO ERR", error)
-       }
-    }
+    const FetchTechnicalSeo = async (page?: string) => {
+        try {
+            // setLoading(true); 
+            await ApiCall.get('/crawl/technical-seo', {
+                params: {
+                    limit: 100,
+                    platform:'desktop',
+                    url: removeTrailingSlash(activeProperty),
+                    page: page
+                }
+            }).then((res) => dispatch(setTechnicalSeo(res.data)));
+        } catch (error:any) {
+            dispatch(fetchTechnicalSEOFailure(error.message));
+        } finally {
+            // setLoading(false);
+        }
+    };
+
 useEffect(()=> {
-    fetchData()
+    FetchTechnicalSeo()
+} ,[activeProperty, techSeo])
     
-}, [activeProperty])
+
+
+
 const tabs = [
-    { title: "Issues", content: <Issues /> },
+    { title: "Overview", content: <Overview /> },
+    { title: "Crawlability and indexability", content: <Crawlability /> },
     { title: "Site performance", content: <SitePerformance /> },
-        { title: "Overview", content: <Overview /> },
-        { title: "Crawlability and indexability", content: <Crawlability /> },
+    { title: "Issues", content: <Issues /> },
         // { title: "Internal linking", content: <InternalLinking /> },
         // { title: "Crawl comparisons", content: <CrawlComparison /> },
         // { title: "Audit history", content: <AuditHistory /> },
     ]
-    // console.log("LOADING",loading)
-// const FetchBoth = async()=> {
-// try {
-//     setLoading(true)
-    
-//     await GetPassiveAndDeepFetch(activeProperty, 'passive');
-//     // GetPassiveAndDeepFetch(activeProperty, 'deep');
-//     setLoading(false)
-// } catch (error) {
-//     console.log('Error...', error)
-//     setLoading(false)
-// } 
-
-// }
-
-
-
-const FetchPassive = async (type: string) => {
+const CrawlTechnicalSeo = async ()=> {
     try {
-        setLoading(true); 
-        await ApiCall.get('/crawl/webcrawler', {
+        setLoading(true)
+        await ApiCall.get('/crawl/technical/mini-crawler', {
             params: {
                 url: activeProperty,
-                type: type
-            }
-        }).then((res) => dispatch(fetchPerformanceSuccess(res.data)));
-    } catch (error:any) {
-        dispatch(fetchPerformanceFailure(error.message));
+                timeout: 5
+            }})
+    } catch (error) {
+        console.log(error)
     } finally {
-        setLoading(false); // Setting loading to false here
+       
     }
-};
+}
+
 
 
 
@@ -105,9 +89,7 @@ const FetchPassive = async (type: string) => {
                 </div>
                 <div className="flex w-full md:w-1/2 items-center justify-end gap-2 md:gap-4">
                     <span className="">
-                        <button className='rounded-lg text-base p-2 bg-primary text-white font-semibold hover:bg-blue-500' onClick={()=>{
-                            FetchPassive('passive')
-                        }} >
+                        <button className='rounded-lg text-base p-2 bg-primary text-white font-semibold hover:bg-blue-500' onClick={()=> CrawlTechnicalSeo()} >
                             { loading ? 'Loading...' :     ' Re-run audit'  }
                         </button>
                     </span>
@@ -124,7 +106,7 @@ const FetchPassive = async (type: string) => {
                     </div>
                     <div className="flex items-center gap-2">
                         <p className=" font-semibold"> Last Update:</p>
-                        <p className="">{lastUpdated} </p>
+                        <p className=""> 20th April, 2024 </p>
 
                     </div>
                 </div>

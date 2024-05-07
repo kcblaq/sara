@@ -6,9 +6,54 @@ import { Title } from "./Overview";
 import { HorizontalStackedChart } from "@/app/component/charts/HorizontalStackedChart";
 import DualProgressBar, { QuadProgressBar } from "./(technicalseo)/DualProgressBar";
 import { GoDotFill } from "react-icons/go";
+import { useEffect, useState } from "react";
+import { removeTrailingSlash } from "@/app/utils/RemoveSlash";
+import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
+
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/store";
 
 export default function SitePerformance() {
+  
+  const [performanceData, setPerformanceData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [Err, setErr] = useState({
+    status: false,
+    message: ''
+  });
+  const { metrics } = useSelector((state: RootState) => state.technicalSeo);
+  const activeProperty = useSelector((state: RootState) => state.property.activeProperty);
+
   const arr = ['0-10', '11-20', '21-30', '31-40', '41-50']
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const response = await ApiCall.get('/crawl/technical-seo', {
+          params: {
+            limit: 100,
+            platform: 'desktop',
+            url: removeTrailingSlash(activeProperty),
+            page: 'site-performance'
+          }
+        });
+        setPerformanceData(response.data);
+        console.log(response.data);
+      } catch (error: any) {
+        setErr({
+          status: true,
+          message: error.message
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+
+  }, [activeProperty]);
 
   const CardClone =
     <div className="grid gap-4 w-full max-w-[390px] h-[226px] rounded-md p-6 pb-2 border ">
