@@ -1,7 +1,8 @@
 import Card from "../../Card";
 import { RootState } from "@/app/store";
 import { calculatePercentage } from "@/lib/DateFormater";
-import ChangeLineChart from "@/app/component/charts/Bars";
+// import ChangeLineChart from "@/app/component/charts/Bars";
+import ChangeLineChart from "../../../component/charts/Bars"
 import { useSelector } from "react-redux";
 import { ShortenNumber } from "@/app/utils/ShortenedNumber";
 
