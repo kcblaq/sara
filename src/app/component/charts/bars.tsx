@@ -40,7 +40,7 @@ const ChangeLineChart = ({ pageData }: Props) => {
         fill: 'start',
         borderColor: pageData && pageData.length > 0 ? (pageData[0] > pageData[pageData.length - 1] ? 'green' 
         : pageData[0] === pageData[pageData.length - 1] ? 'gray' : 'red') : 'gray',
-        borderWidth: 2,
+        borderWidth: 1,
         pointRadius: 0,
         pointBackgroundColor: borderColor,
         backgroundColor: borderColor,
@@ -51,7 +51,7 @@ const ChangeLineChart = ({ pageData }: Props) => {
   const options = {
     scales: {
       x: {
-        display: true,
+        display: false,
         grid: {
           display: false
         }
@@ -88,8 +88,8 @@ const ChangeLineChart = ({ pageData }: Props) => {
   };
 
   return (
-    <div className="w-20 h-10">
-      <Line data={data} options={options} />
+    <div className=" h-10 w-24">
+      <Line data={data} options={options}  />
     </div>
   );
 };

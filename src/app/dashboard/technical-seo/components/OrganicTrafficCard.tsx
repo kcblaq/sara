@@ -11,12 +11,12 @@ import { ShortenNumber } from "@/app/utils/ShortenedNumber";
 
 export default function OrganicTrafficCard() {
     const { loading, error, metrics } = useSelector((state: RootState) => state.performance);
-    const scores = metrics?.history.scores;
+    const scores = metrics?.history?.scores ;
 
 let actual: Scores | undefined;
 let previosUpdate: Scores | undefined;
 
-const actualOrganicTraffic = metrics?.history.scores[0]?.organic_traffic ?? 0;
+const actualOrganicTraffic = metrics?.history?.scores[0]?.organic_traffic ?? 0;
 if (scores && scores.length >= 2) {
     actual = scores[0];
     previosUpdate = scores[1];

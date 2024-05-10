@@ -2,7 +2,7 @@ import Link from "next/link";
 import FilledButton from "../FilledButton";
 import Nav from "./nav/Nav";
 import Image from "next/image";
-import { FeatureCard,  WhyUseWemaxiCard } from "../landingpage/Homecomponents";
+import { FeatureCard, WhyUseWemaxiCard } from "../landingpage/Homecomponents";
 import PlainButton from "../PlainButton";
 import FAQComponent from "./faq/FAQComponent";
 import { currentYear } from "@/app/utils/currenYear";
@@ -18,12 +18,12 @@ export default function HomePage() {
                <section className="h-full snap-start py-28 flex flex-col w-full items-center justify-start bg-secondary"
 
                >
-                    <div className="flex flex-col w-full h-full gap-6 justify-center items-center ">
-                         <div className=" flex flex-col px-4 gap-6 h-full ">
-                              <h1 className=" lg:text-6xl text-center text-3xl font-semibold ">
+                    <div className="flex gap-[48px] lg:max-w-[1100px] flex-col w-full h-full mt-4 lg:mt-[70px] 2lg:mt-[96px] justify-center items-center ">
+                         <div className=" flex space-y-1 flex-col items-center px-4 gap-6 h-full ">
+                              <h1 className=" lg:text-6xl text-center text-[#101828] leading-loose text-3xl font-semibold ">
                                    Unlock your website's full potential with intelligent SEO solutions
                               </h1>
-                              <p className="text-center font-normal text-lg lg:text-xl">
+                              <p className="text-center font-normal max-w-[800px] text-lg lg:text-xl">
                                    Transform your online presence, boost traffic, and outrank competitors with our advanced SEO services.
                               </p>
                          </div>
@@ -57,15 +57,30 @@ export default function HomePage() {
 
 
                <section className=" snap-start h-full w-full p-4 flex flex-col items-center py-24 justify-center bg-lightBg"> <h1 className=" text-darkPrimary text-base font-semibold">Features </h1> <h1 className="pt-3 text-3xl lg:text-4xl font-semibold text-center"> Unleash the power of Webmaxi: Elevate your SEO game</h1> <p className='text-xl pt-5'> Discover a suite of intelligent features designed to propel your website to new heights.</p>
-                    
+
                     {/* <div className='flex flex-col justify-center 2xl:pt-16 pt-10 gap-8 2xl:gap-12'> */}
-                         <div className='grid w-full grid-cols-1 md:grid-cols-2 justify-center lg:grid-cols-3 2xl:grid-cols-5 gap-10  md:gap-14 lg:gap-20 2lg:gap-32'>
-                              <FeatureCard title="AI-Powered Audits for Precise Insights and Prioritized Actions" description="Our AI algorithms analyze every aspect of your website, providing deep insights into technical issues, content relevance, and user experience." icon="/feature-graph.png" />
-                              <FeatureCard title="Smart Keyword Research for Targeted Strategies" description="Uncover hidden gems with our AI-driven keyword research tool, ensuring your content targets the most lucrative and relevant terms." icon="/feature-key.png" /> <FeatureCard title="Competitor Analysis to Stay Ahead in Your Niche" description="Understand the strategies that are working for your competitors and gain actionable insights to stay ahead in your niche" icon="/feature-user.png" /> 
-                              <FeatureCard title="Track Rankings and Measure Progress in Real-Time" description="Track your website's performance in real-time for targeted keywords, enabling you to respond swiftly to changes and capitalize on opportunities." icon="/feature-barchart.png" />
-                              <FeatureCard title="Actionable Recommendations for Optimal Performance" description="Get personalized recommendations based on your website's unique needs, allowing for a customized and efficient optimization journey." icon="/feature-marked.png" /> </div>  
-                              {/* </div> */}
-                         
+                    <div className=' w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 gap-10 justify-items-end md:gap-14 lg:gap-20 2lg:gap-32'>
+                         <FeatureCard title="AI-Powered Audits for Precise Insights and Prioritized Actions" description="Our AI algorithms analyze every aspect of your website, providing deep insights into technical issues, content relevance, and user experience." icon="/feature-graph.png" />
+                         <FeatureCard title="Smart Keyword Research for Targeted Strategies" description="Uncover hidden gems with our AI-driven keyword research tool, ensuring your content targets the most lucrative and relevant terms." icon="/feature-key.png" />
+                         <FeatureCard title="Competitor Analysis to Stay Ahead in Your Niche" description="Understand the strategies that are working for your competitors and gain actionable insights to stay ahead in your niche" icon="/feature-user.png" />
+                         <FeatureCard title="Track Rankings and Measure Progress in Real-Time" description="Track your website's performance in real-time for targeted keywords, enabling you to respond swiftly to changes and capitalize on opportunities." icon="/feature-barchart.png" />
+                         <FeatureCard title="Actionable Recommendations for Optimal Performance" description="Get personalized recommendations based on your website's unique needs, allowing for a customized and efficient optimization journey." icon="/feature-marked.png" />
+                    </div>
+                    
+                    
+                    
+                    
+                    {/* <div className="grid grid-cols-1 md:grid-cols-3 items-center justify-items-center gap-8">
+
+                         <div className="h-40 w-80 bg-green-400">Hi</div>
+                         <div className="h-40 w-80 bg-green-400">Hi</div>
+                         <div className="h-40 w-80 bg-green-400">Hi</div>
+                         <div className="h-40 w-80 bg-green-400">Hi</div>
+                         <div className="h-40 w-80 bg-green-400">Hi</div>
+                    </div> */}
+
+                    {/* </div> */}
+
                     <div className=' pt-16'>
                          <FilledButton title="Learn more" />
                     </div>

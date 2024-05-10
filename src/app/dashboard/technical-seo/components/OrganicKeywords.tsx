@@ -1,14 +1,13 @@
 import Card from "../../Card";
 import { RootState } from "@/app/store";
-import { calculatePercentage, millisecondsToSeconds } from "@/lib/DateFormater";
+import { calculatePercentage } from "@/lib/DateFormater";
 import ChangeLineChart from "@/app/component/charts/Bars";
 import { useSelector } from "react-redux";
 import { ShortenNumber } from "@/app/utils/ShortenedNumber";
 
 export default function OrganicKeywords() {
-    const { loading, error, metrics } = useSelector((state: RootState) => state.performance);
-    const scores = metrics?.history.scores;
-    
+    const {  metrics } = useSelector((state: RootState) => state.performance);
+    const scores = metrics?.history?.scores;
     let actual: any;
     let previosUpdate: any;
     
@@ -22,9 +21,9 @@ export default function OrganicKeywords() {
     const style =
       scores?.length === 1
         ? "text-gray-500"
-        : scores && scores.length >= 2 && scores[0] && scores[1] && scores[1].organic_keywords && scores[0].organic_traffic && scores[1].organic_keywords < scores[0].organic_traffic
+        : scores && scores.length >= 2 && scores[0] && scores[1] && scores[1]?.organic_keywords && scores[0].organic_traffic && scores[1].organic_keywords < scores[0].organic_traffic
         ? "text-green-500"
-        : scores && scores.length >= 2 && scores[0] && scores[1] && scores[1].organic_traffic && scores[0].organic_traffic && scores[1]?.organic_traffic === scores[0]?.organic_traffic
+        : scores && scores.length >= 2 && scores[0] && scores[1] && scores[1]?.organic_traffic && scores[0].organic_traffic && scores[1]?.organic_traffic === scores[0]?.organic_traffic
         ? "text-gray-500"
         : "text-red-500";
     

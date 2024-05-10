@@ -16,7 +16,8 @@ const dispatch = useDispatch();
       <Menu as="div" className=" min-w-[300px]  relative inline-block text-left">
       
           <Menu.Button className="inline-flex w-full justify-between rounded-lg text-black p-3 text-sm font-medium border focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75">
-            { property && property.activeProperty?.length < 1 ? "Domain name" : property.activeProperty}
+        
+            { property && property.activeProperty?.length < 3 ? "Domain name" : property.activeProperty}
             {/* { property && property.activeProperty?.length < 1 ? "Domain name" : property.activeProperty} */}
 
             <IoChevronDownOutline

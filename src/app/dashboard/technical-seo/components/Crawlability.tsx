@@ -80,7 +80,7 @@ export default function Crawlability() {
   const indexibilityLabel1 = ["X-Robots tags", "'non-index' metatag", "Robots.txt", "Non canonical pages", "Non 200 status"]
   const indexibilityLabel = completeArray(indexibilityLabel1)
   return (
-    <main className="pb-14 grid w-full gap-8">
+    <main className="pb-14 mt-10 grid w-full gap-8">
 
       <section className={`grid grid-cols-1 md:grid-cols-3 gap-4`}>
         <div className="grid p-2 md:p-4 col-span-1 h-[348px] justify-items-start  rounded-md w-full border ">
@@ -186,11 +186,11 @@ export default function Crawlability() {
             <div className="p-4 flex gap-2 h-48">
               <HTTPStatusCode />
               <div className="flex flex-col justify-end">
-                <p className=" text-xs flex items-center text-[#475467]">  <span className='text-green-400'><GoDotFill /> </span>{`Info - 1xx (${statusCodeData.info}) `} </p>
-                <p className=" text-xs flex items-center text-[#475467]">  <span className='text-green-600'><GoDotFill /> </span> {`Success - 1xx (${statusCodeData.success}) `}  </p>
-                <p className=" text-xs flex items-center text-[#475467]">  <span className='text-orange-400'><GoDotFill /> </span>{`Redirect - 1xx (${statusCodeData.redirect}) `} </p>
-                <p className=" text-xs flex items-center text-[#475467]">  <span className='text-red-400'><GoDotFill /> </span> {`Client error - 1xx (${statusCodeData.client_error})`} </p>
-                <p className=" text-xs flex items-center text-[#475467]">  <span className='text-red-200'><GoDotFill /> </span> {`Server error - 1xx (${statusCodeData.server_error})`} </p>
+                <p className=" text-xs flex items-center text-[#475467]">  <span className='text-green-400'><GoDotFill /> </span>{`Info - 1xx (${statusCodeData?.info}) `} </p>
+                <p className=" text-xs flex items-center text-[#475467]">  <span className='text-green-600'><GoDotFill /> </span> {`Success - 1xx (${statusCodeData?.success}) `}  </p>
+                <p className=" text-xs flex items-center text-[#475467]">  <span className='text-orange-400'><GoDotFill /> </span>{`Redirect - 1xx (${statusCodeData?.redirect}) `} </p>
+                <p className=" text-xs flex items-center text-[#475467]">  <span className='text-red-400'><GoDotFill /> </span> {`Client error - 1xx (${statusCodeData?.client_error})`} </p>
+                <p className=" text-xs flex items-center text-[#475467]">  <span className='text-red-200'><GoDotFill /> </span> {`Server error - 1xx (${statusCodeData?.server_error})`} </p>
               </div>
             </div>
           </div>

@@ -8,10 +8,10 @@ import { ConvertToMilliuseconds } from "@/app/utils/ConvertToMilliseconds";
 export default function AverageTimeOnsite() {
     const { loading, error, metrics } = useSelector((state: RootState) => state.performance);
     
-    const scores = metrics && metrics?.history.scores;
-    const previosUpdate = metrics?.history.scores[scores && scores.length > 0 ? scores.length - 2 : 0];
-    const lastThreepreviosUpdate = metrics?.history.scores[scores && scores.length > 0 ? scores.length - 3 : 0];
-    const actual = metrics?.history.scores[0];
+    const scores = metrics && metrics?.history?.scores;
+    const previosUpdate = metrics?.history?.scores[scores && scores.length > 0 ? scores.length - 2 : 0];
+    const lastThreepreviosUpdate = metrics?.history?.scores[scores && scores.length > 0 ? scores.length - 3 : 0];
+    const actual = metrics?.history?.scores[0];
     const averageTimeOnsite = actual?.average_time_on_site ?? 0;
 
     const TrafficIncreasePercentage = (previousTraffic: number | undefined, currentTraffic: number | undefined):number => {

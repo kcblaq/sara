@@ -1,25 +1,21 @@
 import { RootState } from '@/app/store';
-// import { PerformanceMetrics } from '@/types/DashboardOverview';
 import { FC } from 'react';
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { useSelector } from 'react-redux';
 const SEOProgressiveCircle: FC = () => {
 
-  const {metrics} = useSelector((state: RootState) => state.technicalSeo);
-  // const scores = metrics?.metrics?.data[0].performance ?? null;
-  const scores = metrics?.data[0].performance || null;
+  const metrics = useSelector((state: RootState) => state.performance.metrics);
+  const scores = metrics?.history?.scores[0]?.performance || null;
   
  
   
   const averageSeo  = scores && scores * 100
-  
-
 
 
   return (
    <div className="z-0">
-     <CircularProgressbarWithChildren value={averageSeo ??0} className='' styles={{
+     <CircularProgressbarWithChildren value={averageSeo ?? 0} className='' styles={{
       path: { stroke: averageSeo && averageSeo < 40 ? "#D92D20" : averageSeo && averageSeo > 40 && averageSeo < 70 ? "#FDB022" : "#039855" }
     }} >
       <div className="flex flex-col">

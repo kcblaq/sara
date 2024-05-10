@@ -13,11 +13,11 @@ export const metadata: Metadata = {
     return (
       <html lang="en">
        
-        <body className={``}>
+        <div className={``}>
           <div>
           {children}
           </div>
-          </body>
+          </div>
       </html>
     );
   }

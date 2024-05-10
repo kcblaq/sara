@@ -71,18 +71,24 @@ const CrawlTechnicalSeo = async ()=> {
                 url: activeProperty,
                 timeout: 5
             }})
+            await Promise.all([
+                setLoading(true),
+                ApiCall.get('/crawl/overall', {
+                    params: {
+                        url: activeProperty,
+                        type: 'passive',
+                        limit: 10
+                    }
+                })
+            ]);
     } catch (error) {
         console.log(error)
     } finally {
-       
+       setLoading(false)
     }
 }
-
-
-
-
     return (
-        <section className={`flex w-full h-full justify-start flex-col gap-2 overflow-y-clip `}>
+        <section className={`flex w-full h-full justify-start flex-col gap-2 `}>
             <div className="flex w-full justify-between items-center">
                 <div className="w-full">
                     <h2 className=" font-semibold text-[#101828] text-3xl"> Technical SEO</h2>
@@ -144,7 +150,7 @@ const CrawlTechnicalSeo = async ()=> {
                         {
                             tabs.map((tab) => {
                                 return (
-                                    <div key={tab.title} className='h-full '>
+                                    <div key={tab.title} className='h-full overflow-auto'>
                                         <Tab.Panel>
 
                                             {tab.content}

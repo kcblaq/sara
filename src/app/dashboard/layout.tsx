@@ -70,20 +70,23 @@ export default function Layout({ children }: Props) {
     return pathname.startsWith(link);
   };
 
-  // const token = typeof window !== 'undefined' ? sessionStorage.getItem('token'): false;
-  const token = useSelector((state: RootState) => state)
-//  const err = token.property.activeProperty
+ 
+  const token = useSelector((state: RootState) => state.user.token)
+
   const router = useRouter();
 
   useEffect(() => {
-    if (!token.user.token) {
+    if (!token) {
       router.push('/login');
 
     }
   }, [token, router]);
 
+
+
   const modalState = useSelector((state: RootState) => state.currentModal.currentModal)
-  const activeProperty = useSelector((state: RootState) => state.property.activeProperty)
+  const activeProperty = useSelector((state: RootState) => state.property.activeProperty);
+  const user = useSelector((state: RootState)=> state.user.user)
   const dispatch = useDispatch();
 
 
@@ -106,7 +109,8 @@ export default function Layout({ children }: Props) {
       return [];
     }
   };
-   
+ 
+  
   useEffect(() => {
     const fetchProjects = async () => {
       const result = await getProjects();
@@ -115,13 +119,29 @@ export default function Layout({ children }: Props) {
       dispatch(setAllProperty(result))
       dispatch(setActiveProperty(result[0]?.website_url))
     };
-    
-
     fetchProjects();
     
   }, []);
   
-  // console.log("PROPERTY",activeProperty)
+  useEffect(()=> {
+   
+    async function Overviewdata(){
+      try {
+        const result = await ApiCall.get('/crawl/overall', {
+          params: {
+            url: activeProperty,
+            limit: 100
+          }
+        })
+        dispatch(fetchPerformanceSuccess(result?.data))
+        console.log("RES",result)
+      } catch (error:any) {
+        console.log(error.message)
+      }
+    }
+    Overviewdata()
+  }, [activeProperty])
+  // console.log("PROPERTY:",activeProperty)
 
   // const getPerformanceMetrics = async (url: string) => {
   //   if(activeProperty.length > 0){
@@ -150,27 +170,27 @@ export default function Layout({ children }: Props) {
   //   }
   // }, [property, activeProperty]);
 
-
   return (
     <>
       {modalState === 'addProject' && <MainModal closeModal={() => dispatch(setModal(''))} ModalBody={AddProject} />}
 
-      <main className={`h-screen w-full flex overflow-clip z-0`}>
+      <main className={`h-screen w-full flex overflow-clip `}>
 
         {/* drawer... */}
         <section
           style={{ width: fullWidth ? "300px" : "60px" }}
-          className={`bg-darkPrimary z-50 hidden p-4 h-screen overflow-clip lg:flex flex-col justify-between  relative transition-all duration-300 ease-in-out`}
+          className={`bg-darkPrimary hidden p-4 h-screen overflow-clip z-40 lg:flex flex-col justify-between  relative transition-all duration-300 ease-in-out`}
         >
-          <div className="absolute -right-0  top-14 p-1 bg-white shadow-md rounded-md cursor-pointer" onClick={() => setFullWidth(!fullWidth)}>
-            <RxDoubleArrowLeft className={`${!fullWidth && 'scale-x-[-1]'} z-50 duration-300 transition-all ease-out`} />
+          <div className="absolute right-0 z-50 top-12 p-1.5 bg-white border shadow-md rounded-md cursor-pointer" onClick={() => setFullWidth(!fullWidth)}>
+            <RxDoubleArrowLeft className={`${!fullWidth && 'scale-x-[-1]'} duration-300 transition-all ease-out`} />
           </div>
+         
           <div className="grid ">
             <Link href={`/`}>
               <Image src={`${fullWidth ? "/home/white-logo.png" : "/home/mobile-logo.png"}`} className=" pt-2" alt="Webmaxi Logo" height={24} width={124} />
             </Link>
 
-            <div className="grid gap-2 mt-10">
+            <div className="grid gap-2 mt-12">
               {menus.map((menu) => {
                 return (
                   <Link key={menu.link} href={`${menu.link}`} className={` ${isActive(menu.link) ? ' text-white bg-[#1570EF]' : ''}  hover:text-white hover:scale-105 transition-all duration-300 ease-in-out p-2 rounded-md flex  text-[#84CAFF] items-center gap-2`}>
@@ -201,11 +221,6 @@ export default function Layout({ children }: Props) {
 
           <div className="flex z-0 w-full gap-2 p-2  md:px-8 justify-between items-center h-16">
             <div className="flex gap-2  w-full items-center ">
-              {/* <select className="p-3  min-w-[300px] rounded-md border" value={currentProperty && currentProperty.length > 0 ? currentProperty : ''} onChange={(e)=> setCurrentProperty(e.target.value)} >
-                {
-                  property.map((item)=> <option key={item.website_url} className='' value={JSON.parse(item.website_url)}> {JSON.parse(item.website_url) } </option> )
-                }
-              </select> */}
               <DropdownMenu />
               <div>
                 <div className="w-full">
@@ -217,21 +232,25 @@ export default function Layout({ children }: Props) {
             </div>
             <div className="lg:flex  w-full justify-end hidden">
               <div className="flex items-center justify-end w-full gap-4">
-                <button className=' gap-2 border rounded-lg text-base p-3 flex items-center text-[#344054] font-semibold'>
-                  <BsLightningCharge /> Upgrade now
-                </button>
-                <div className=" flex items-center gap-2">
-                  <CiSearch />
-                  <IoMdNotificationsOutline />
+                <Link href={'/pricing'}  className=' cursor-pointer gap-2 border rounded-lg border-[#D0D5DD] text-base p-3 flex items-center text-[#344054] font-semibold'>
+                  <BsLightningCharge /> Upgrade now 
+                </Link>
+                <div className=" flex p-2.5 items-center gap-2">
+                  <CiSearch className='text-[#667085] text-2xl' />
                 </div>
-                {/* <div className="">
-                  <FaRegUserCircle className="rounded-full text-3xl" />
-                </div> */}
-                <UserProfile />
+                <div className=" flex p-2.5 items-center gap-2">
+                  
+                  <IoMdNotificationsOutline className='text-[#667085] text-2xl' />
+                </div>
+                <div className='h-[40px] w-[40px] rounded-full border flex items-center justify-center '>
+                  {user && user?.fullName?.split(' ')[0]?.slice(0,1).toUpperCase()  }
+                  {user && user?.fullName?.split(' ')[1]?.slice(0,1).toUpperCase()  }
+                </div>
+                {/* <UserProfile /> */}
               </div>
             </div>
           </div>
-          <hr className="w-full mt-1 hidden md:flex " />
+          <hr className="w-full  hidden md:flex " />
           {
             property.length < 1 ? <DashboardOverviewPlaceholder /> : <div className=" w-full h-full overflow-auto p-2 md:p-8">
             

@@ -106,7 +106,7 @@ export const data = {
 };
 
 export function TrafficOverviewGraph() {
-  return <div className=" h-full " style={{width:'130%'}}>
+  return <div className=" h-full w-full " >
     <Line options={options} data={data}   />
   </div> ;
 }

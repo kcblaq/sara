@@ -46,7 +46,7 @@ export default function AddProject() {
   const [loading, setLoading] = useState(false)
   const [inputUrl, setInputUrl] = useState('')
   const dispatch = useDispatch();
-  const inputRef = useRef<HTMLInputElement>(null)
+  // const inputRef = useRef<HTMLInputElement>(null)
   const router = useRouter()
 
   const activeProperty = useSelector((state: RootState) => state.property.activeProperty)
@@ -110,22 +110,27 @@ export default function AddProject() {
       // GetPassiveAndDeepFetch(inputUrl,'passive')
       PassiveFetch()
 
-       await ApiCall.get(`crawl/add-property?url=${inputUrl}`)
-        .then(() => dispatch(setModal('')))
-        .then(() => dispatch(setActiveProperty(inputUrl)))
-        .then(() => setLoading(false))
-        .then(()=> {
-          console.log('Crawling...')
-          ApiCall.get('/crawl/overall', {
-            params: {
+      const response =  await ApiCall.get(`crawl/add-property?url=${inputUrl}`);
+      dispatch(setActiveProperty(inputUrl));
+      dispatch(setModal('crawling'));
+      setLoading(false);
+      await Promise.all([
+        ApiCall.get('/crawl/overall', {
+          params: {
+            url: inputUrl,
+            type: 'passive',
+            limit: 10
+          }
+        }),
+        ApiCall.get('/crawl/technical/mini-crawler', {
+          params: {
               url: inputUrl,
-              type: 'passive',
-              limit: 10
-            }
-          })
-        })
-        console.log('Crawling...')
-        // GetPassiveAndDeepFetch(inputUrl,'deep')
+              timeout: 5
+          }
+      })
+      ])
+        
+      dispatch(setModal(''))
     } catch (error: any) {
       console.log("ERR", error)
       setErr({ status: true, msg: error.response.data.message });

@@ -77,7 +77,7 @@ export default function SitePerformance() {
     </div>
 
   return (
-    <main className="grid gap-6">
+    <main className="grid gap-6 mt-10">
       <section className=" grid w-full grid-cols-1 md:grid-cols-3 gap-6 2xl:gap-8 py-4 ">
         <div className="grid col-span-1 gap-7 ">
           <Card title={"Average page load speed"} amount={'0.43 sec'} style={""} percent={1} chart={undefined} />

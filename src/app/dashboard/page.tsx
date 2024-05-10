@@ -3,8 +3,8 @@
 import FilledButton from '../component/FilledButton'
 import TraficOverview from './components/graphs/TraficOverview';
 import { RxQuestionMarkCircled } from 'react-icons/rx';
-import { BacklinkGraph } from './components/graphs/BacklinkGraph';
-import KeywordTable from './components/tables/KeywordTable';
+// import { BacklinkGraph } from './components/graphs/BacklinkGraph';
+// import KeywordTable from './components/tables/KeywordTable';
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import OrganicTrafficCard from './technical-seo/components/OrganicTrafficCard';
@@ -13,6 +13,7 @@ import AverageTimeOnsite from './technical-seo/components/AverageTimeOnsite';
 import PlainButton from '../component/PlainButton';
 import { useRouter } from 'next/navigation';
 import { StackedBarChart } from './components/graphs/StackedBarChart';
+import { RootState } from '../store';
 
 export default function Dashboard() {
 
@@ -27,26 +28,28 @@ export default function Dashboard() {
     </defs>
   </svg>
 
-  const [loaded, setLoaded] = useState(false)
-  const User = useSelector((state: any) => state);
+  const [loaded, setLoaded] = useState(false);
+  const User = useSelector((state: RootState) => state.user.user );
+
 
   useEffect(() => {
     setLoaded(true)
   }, [loaded])
 
-  const data = [
-    { id: 1, keyword: 'The beginning of the new eorld order', rank: '3', change: 'Change' },
-    { id: 2, keyword: 'Managing business for the future', rank: '4', change: 'Change' },
-    { id: 3, keyword: 'Thumping your sales by doing the basics', rank: '3', change: 'Change' },
-    { id: 4, keyword: 'Did the wallmart just shut down or about to shut down?', rank: '3', change: 'Change' },
-  ]
+  // const data = [
+  //   { id: 1, keyword: 'The beginning of the new eorld order', rank: '3', change: 'Change' },
+  //   { id: 2, keyword: 'Managing business for the future', rank: '4', change: 'Change' },
+  //   { id: 3, keyword: 'Thumping your sales by doing the basics', rank: '3', change: 'Change' },
+  //   { id: 4, keyword: 'Did the wallmart just shut down or about to shut down?', rank: '3', change: 'Change' },
+  // ]
 
   const router = useRouter()
+
   return (
     <section className=' mb-10 p-2 grid h-full overflow-auto '>
       <div className="flex w-full flex-col md:flex-row justify-between items-start flex-grow">
         <div className='flex flex-col'>
-          <h1 className="text-2xl text-[#101828] font-semibold">Welcome back, {User.user.user.fullName} </h1>
+          <h1 className="text-2xl text-[#101828] font-semibold">Welcome back, {User.fullName} </h1>
           <p>Track, manage and boost your site’s SEO.</p>
         </div>
         <div className="flex items-center gap-2">
@@ -60,7 +63,7 @@ export default function Dashboard() {
       </div>
 
       {loaded &&
-        <section className="grid items-center grid-cols-1 md:grid-cols-3 pt-8 gap-2 justify-between">
+        <section className="grid items-center grid-cols-1 md:grid-cols-3 pt-8 gap-6 justify-between">
           <OrganicTrafficCard />
           <OrganicKeywords />
           <AverageTimeOnsite />
