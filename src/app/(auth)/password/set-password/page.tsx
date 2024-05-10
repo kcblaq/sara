@@ -1,18 +1,17 @@
 "use client"
 import PasswordInputComponent from "@/app/component/PasswordInputComponent";
 import TitleAndDescription from "../../../component/TitleAndDescription";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import FilledButton from "@/app/component/FilledButton";
 import BackToLogin from "../BackToLogin";
 import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
-import { AxiosInstance } from "@/lib/axios";
 
 export default function SetPassword() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [loading, setLoading] = useState(false);
-    const [success, setSuccess] = useState(false);
+    const [success, _setSuccess] = useState(false);
     const [error, setError] = useState({message:'', status:false});
 
 
@@ -71,7 +70,8 @@ export default function SetPassword() {
     }, []); 
 
     return (
-        <main className="w-full flex flex-col justify-center items-center gap-4 ">
+       <Suspense fallback={<div> Loading...</div>}>
+         <main className="w-full flex flex-col justify-center items-center gap-4 ">
             { error.status && <div className="text-red-500"> {error.message} </div>}
             { !error.status && <TitleAndDescription title="Set new password" description="Your new password must be different from previously used password" /> }
             {
@@ -91,5 +91,6 @@ export default function SetPassword() {
                 <BackToLogin />
             </main>
         </main>
+       </Suspense>
     );
 }

@@ -1,32 +1,31 @@
-import { calculatePercentage, millisecondsToSeconds } from "@/lib/DateFormater";
+import { calculatePercentage } from "@/lib/DateFormater";
 import Card from "../../Card";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/store";
 import ChangeLineChart from "@/app/component/charts/Bars";
-import { ConvertToMilliuseconds } from "@/app/utils/ConvertToMilliseconds";
 
 export default function AverageTimeOnsite() {
-    const { loading, error, metrics } = useSelector((state: RootState) => state.performance);
+    const {  metrics } = useSelector((state: RootState) => state.performance);
     
     const scores = metrics && metrics?.history?.scores;
     const previosUpdate = metrics?.history?.scores[scores && scores.length > 0 ? scores.length - 2 : 0];
-    const lastThreepreviosUpdate = metrics?.history?.scores[scores && scores.length > 0 ? scores.length - 3 : 0];
+    // const lastThreepreviosUpdate = metrics?.history?.scores[scores && scores.length > 0 ? scores.length - 3 : 0];
     const actual = metrics?.history?.scores[0];
     const averageTimeOnsite = actual?.average_time_on_site ?? 0;
 
-    const TrafficIncreasePercentage = (previousTraffic: number | undefined, currentTraffic: number | undefined):number => {
-        if (previosUpdate && actual) {
-            if (previousTraffic !== undefined && currentTraffic !== undefined) {
-                const trafficIncrease = currentTraffic - previousTraffic;
-                const AverageTimeonsitePercentage = calculatePercentage(trafficIncrease, previousTraffic);
-                return AverageTimeonsitePercentage
-            } else {
-                return 0
-            }
-        } else {
-            return 0
-        }
-    }
+    // const TrafficIncreasePercentage = (previousTraffic: number | undefined, currentTraffic: number | undefined):number => {
+    //     if (previosUpdate && actual) {
+    //         if (previousTraffic !== undefined && currentTraffic !== undefined) {
+    //             const trafficIncrease = currentTraffic - previousTraffic;
+    //             const AverageTimeonsitePercentage = calculatePercentage(trafficIncrease, previousTraffic);
+    //             return AverageTimeonsitePercentage
+    //         } else {
+    //             return 0
+    //         }
+    //     } else {
+    //         return 0
+    //     }
+    // }
     const pageData = (scores ?? []).map((item) => item.average_time_on_site).filter((value) => value !== undefined) as number[];
 
     // console.log("PAGED", pageData)

@@ -1,6 +1,0 @@
-{
-  "/(auth)/login/page": "app/(auth)/login/page.js",
-  "/dashboard/page": "app/dashboard/page.js",
-  "/dashboard/keyword-explorer/page": "app/dashboard/keyword-explorer/page.js",
-  "/dashboard/technical-seo/page": "app/dashboard/technical-seo/page.js"
-}

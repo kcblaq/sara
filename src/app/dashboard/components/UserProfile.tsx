@@ -40,7 +40,12 @@ export default function UserProfile() {
                     } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                     onClick={()=>{
                         sessionStorage.removeItem('user')
-                        dispatch(setUser({user:{}, token: '',id:''}))
+                        dispatch(setUser({id: 0,
+                          email: "",
+                          fullName: "",
+                          account_type: "",
+                          createdAt: "",
+                          updatedAt: ""}))
                         router.push('/login')
                     } }
                   >
