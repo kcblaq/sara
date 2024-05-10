@@ -60,6 +60,21 @@ interface BacklinksResponse {
     backlinks: Backlink[];
 }
 
+interface Traffic {
+    id: number;
+    bounceRate: number;
+    total: number;
+    social: number;
+    paid: number;
+    mail: number;
+    referrals: number; // Corrected spelling from "refferrals" to "referrals"
+    search: number;
+    organic: number;
+    website: string;
+    createdAt: string;
+    updatedAt: string;
+  }
+  
 
 
 interface KeywordPosition {
@@ -73,19 +88,28 @@ interface Traffic {
 type CurrentKeywords = Record<string, KeywordPosition>;
 
 
-interface KeywordResponse {
-    current: CurrentKeywords;
-    previous: string[];
-}
+// interface KeywordResponse {
+//     current: CurrentKeywords;
+//     previous: string[];
+// }
 
+export interface KeywordData {
+    [key: string]: Array<{
+      position: number;
+      previousPosition: number;
+      totalResults: number;
+      createdAt: string;
+    }>;
+  }
+  
 
 export interface PerformanceMetrics {
     url: string;
     history: {
         scores: Scores[];
         backlinks: Backlink[],
-        keyword: KeywordResponse,
+        keyword: KeywordData,
         previous: [],
-        traffic: []
+        traffic: Traffic[]
     }
 }

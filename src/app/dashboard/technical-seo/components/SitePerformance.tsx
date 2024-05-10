@@ -2,10 +2,10 @@ import { RxQuestionMarkCircled } from "react-icons/rx";
 import Card from "../../Card";
 import { completeArray } from "../../components/graphs/StackedBarChart";
 import BarChartSingle from "./(technicalseo)/BarChartSingle";
-import { Title } from "./Overview";
-import { HorizontalStackedChart } from "@/app/component/charts/HorizontalStackedChart";
-import DualProgressBar, { QuadProgressBar } from "./(technicalseo)/DualProgressBar";
-import { GoDotFill } from "react-icons/go";
+// import { Title } from "./Overview";
+// import { HorizontalStackedChart } from "@/app/component/charts/HorizontalStackedChart";
+import  { QuadProgressBar } from "./(technicalseo)/DualProgressBar";
+// import { GoDotFill } from "react-icons/go";
 import { useEffect, useState } from "react";
 import { removeTrailingSlash } from "@/app/utils/RemoveSlash";
 import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
@@ -15,9 +15,9 @@ import { RootState } from "@/app/store";
 
 export default function SitePerformance() {
   
-  const [performanceData, setPerformanceData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [Err, setErr] = useState({
+  const [_performanceData, setPerformanceData] = useState([]);
+  const [_loading, setLoading] = useState(false);
+  const [_Err, setErr] = useState({
     status: false,
     message: ''
   });

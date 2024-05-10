@@ -56,7 +56,7 @@ export default function AverageTimeOnsite() {
    <Card 
    title={"Average time on site"} 
 //    amount={ConvertToMilliuseconds(averageTimeOnsite)} 
-   amount={time} 
+   amount={`${time}s`} 
    style={pageData[0] > pageData[pageData.length -1] ? 'text-green-500': pageData[0] === pageData[pageData.length -1] ? 'text-gray-500':'text-red-500' } 
    arrowPosition={arrowPosition}
    percent={Number(per/600) } 

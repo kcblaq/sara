@@ -16,14 +16,14 @@ import ActivityGuage from "./(technicalseo)/ActivityGuage";
 import HTTPStatusCode from "./HTTPStatusCode";
 // import { TechnicalSeoType } from "@/types/TechnicalSeoType";
 import SiteHealthScore from "../../components/SiteHealthScore";
-import { TechnicalSeoType } from "@/types/TechnicalSeoType";
-import { useEffect } from "react";
-import { removeTrailingSlash } from "@/app/utils/RemoveSlash";
-import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
-import { setLoading } from "@/redux/features/loaderSlice";
-import { setTechnicalSeo, fetchTechnicalSEOFailure } from "@/redux/features/technicalSeoSlice";
-import { useDispatch } from "react-redux";
-import { FetchTechnicalSeo } from "./FetchTechnicalSeo";
+// import { TechnicalSeoType } from "@/types/TechnicalSeoType";
+// import { useEffect } from "react";
+// import { removeTrailingSlash } from "@/app/utils/RemoveSlash";
+// import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
+// import { setLoading } from "@/redux/features/loaderSlice";
+// import { setTechnicalSeo, fetchTechnicalSEOFailure } from "@/redux/features/technicalSeoSlice";
+// import { useDispatch } from "react-redux";
+// import { FetchTechnicalSeo } from "./FetchTechnicalSeo";
 
  
 

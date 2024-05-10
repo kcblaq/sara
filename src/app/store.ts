@@ -2,7 +2,6 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import navSlice from "../redux/features/navSlice";
 import modalstates from "@/redux/features/modalstates";
 import { persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage";
 import storageSession from "redux-persist/lib/storage/session";
 import persistStore from "redux-persist/es/persistStore";
 import userSlice from "@/redux/features/userSlice";
@@ -11,23 +10,24 @@ import performanceMetricSlice from "@/redux/features/performanceMetric slice";
 import propertySlice from "@/redux/features/propertySlice";
 import technicalSeoSlice from "@/redux/features/technicalSeoSlice";
 import loaderSlice from "@/redux/features/loaderSlice";
+import storage from "@/redux/storage";
 
 const userPersistConfig = {
     key: 'user',  // Specify a unique key for userSlice
-    storage: storageSession,
+    storage 
 };
 
 const performancePersistConfig = {
     key: 'performance',
-    storage: storageSession,
+    storage 
 }
 const propertyPersistConfig = {
     key: 'property',
-    storage: storageSession,
+    storage
 }
 const technicalSeoConfig ={
     key: 'technicalSeo',
-    storage: storageSession
+    storage
 }
 
 const rootReducer = combineReducers({

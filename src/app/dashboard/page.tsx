@@ -14,6 +14,7 @@ import PlainButton from '../component/PlainButton';
 import { useRouter } from 'next/navigation';
 import { StackedBarChart } from './components/graphs/StackedBarChart';
 import { RootState } from '../store';
+import KeywordTable from './components/tables/KeywordTable';
 
 export default function Dashboard() {
 
@@ -99,19 +100,20 @@ export default function Dashboard() {
         </div>
 
       </div>
-      <section className='w-full border rounded-md p-2 md:p-6 '>
-        <div className="">
+      <section className='border w-2/3 rounded-md p-2 md:p-6 '>
+        <div className="grid">
           <div className="flex font-bold w-full h-full items-start justify-between">
             <span className={`text-[#101828] flex items-center gap-4`}>
               Keyword ranking summary
               <button className='' title='Here is the summary of each of your keyword ranking'> <RxQuestionMarkCircled /></button>
             </span>
           </div>
-          <hr className='w-full mt-4' />
+          {/* <hr className='w-full mt-4' /> */}
         </div>
-        {/* <div className=" h-full w-full ">
-          <KeywordTable data={data} />
-        </div> */}
+        
+        <div className=" h-full w-full ">
+          <KeywordTable />
+        </div>
       </section>
     </section>
   )

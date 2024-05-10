@@ -31,6 +31,7 @@ import { setActiveProperty, setAllProperty } from '@/redux/features/propertySlic
 import DashboardOverviewPlaceholder from './components/DashboardOverviewPlaceholder';
 import DropdownMenu from '../component/Dropdown';
 import UserProfile from './components/UserProfile';
+import { removeTrailingSlash } from '../utils/RemoveSlash';
 
 
 interface Props {
@@ -129,7 +130,7 @@ export default function Layout({ children }: Props) {
       try {
         const result = await ApiCall.get('/crawl/overall', {
           params: {
-            url: activeProperty,
+            url: removeTrailingSlash(activeProperty),
             limit: 100
           }
         })

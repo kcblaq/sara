@@ -12,6 +12,7 @@ import { RootState } from '@/app/store';
 import { fetchPerformanceFailure, fetchPerformanceStart, fetchPerformanceSuccess } from '@/redux/features/performanceMetric slice';
 import { GetPassiveAndDeepFetch } from '@/app/utils/apicalls/fetches/GetPassiveAndDeepFetchData';
 import { FetchTechnicalSeo } from '../technical-seo/components/FetchTechnicalSeo';
+import { removeTrailingSlash } from '@/app/utils/RemoveSlash';
 
 
 export const getPerformanceMetrics = async () => {
@@ -56,7 +57,7 @@ export default function AddProject() {
       dispatch(fetchPerformanceStart())
      await ApiCall.get('/crawl/webcrawler', {
         params: {
-          url: inputUrl,
+          url: removeTrailingSlash(inputUrl),
           type: 'passive',
         }
       }).then((res)=> dispatch(fetchPerformanceSuccess(res.data)))

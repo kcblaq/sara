@@ -1,8 +1,9 @@
 "use client"
 import FilledButton from '@/app/component/FilledButton'
+import { removeTrailingSlash } from '@/app/utils/RemoveSlash';
 import ApiCall from '@/app/utils/apicalls/axiosInterceptor';
 import { setModal } from '@/redux/features/modalstates';
-import { fetchPerformanceSuccess } from '@/redux/features/performanceMetric slice';
+// import { fetchPerformanceSuccess } from '@/redux/features/performanceMetric slice';
 import { setActiveProperty } from '@/redux/features/propertySlice';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
@@ -36,7 +37,7 @@ export default function DashboardOverviewPlaceholder() {
             setLoading(true),
             ApiCall.get('/crawl/overall', {
                 params: {
-                    url: inputUrl,
+                    url: removeTrailingSlash(inputUrl),
                     type: 'passive',
                     limit: 10
                 }

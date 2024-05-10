@@ -55,7 +55,6 @@ export function BacklinkGraph() {
 
   const backlinkData = useSelector((state: RootState) => state.performance.metrics?.history.backlinks);
 
-  const formattedDate = moment("2024-04-05T13:11:00.000Z").format("DD, MMMM, 'YY");
   const labels = backlinkData?.map((item)=> moment(item.createdAt).format("DD, MMMM, YY"));
 
 const data = {
