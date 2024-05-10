@@ -1,3 +1,4 @@
+"use client"
 import FilledButton from '@/app/component/FilledButton';
 import TitleAndDescription from '@/app/component/TitleAndDescription';
 import { useEffect, useState } from 'react';

@@ -16,7 +16,7 @@ export default function SetPassword() {
 
 
     const router = useRouter();
-    const params = useSearchParams()
+    const params = new URLSearchParams()
 
     const link = params.get('link');
     const email = params.get('email');
