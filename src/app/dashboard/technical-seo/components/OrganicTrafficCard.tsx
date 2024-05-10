@@ -2,9 +2,9 @@ import { useSelector } from "react-redux";
 import Card from "../../Card";
 import { RootState } from "@/app/store";
 import { calculatePercentage, millisecondsToSeconds } from "@/lib/DateFormater";
-import ChangeLineChart from "../../../component/charts/Bars";
 import { Scores } from "@/types/DashboardOverview";
 import { ShortenNumber } from "@/app/utils/ShortenedNumber";
+import ChangeLineChart from "@/app/component/charts/Bars";
 
 
 
