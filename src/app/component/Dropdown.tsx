@@ -10,6 +10,7 @@ import { setActiveProperty } from '@/redux/features/propertySlice';
 
 export default function DropdownMenu() {
   const property = useSelector((state: RootState) => state.property)
+  // console.log("PROP", property.activeProperty)
 const dispatch = useDispatch();
   return (
     <div className="  text-right">
@@ -17,8 +18,12 @@ const dispatch = useDispatch();
       
           <Menu.Button className="inline-flex w-full justify-between rounded-lg text-black p-3 text-sm font-medium border focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75">
         
-            { property && property.activeProperty?.length < 3 ? "Domain name" : property.activeProperty}
             {/* { property && property.activeProperty?.length < 1 ? "Domain name" : property.activeProperty} */}
+            {property && property.activeProperty ? (
+    property.activeProperty
+  ) : (
+    "Domain name" // Set your default value here
+  )}
 
             <IoChevronDownOutline
               className="-mr-1 ml-2 h-5 w-5 text-black"

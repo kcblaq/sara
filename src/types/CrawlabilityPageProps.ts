@@ -18,13 +18,13 @@ interface Page {
   }
   
   interface CrawledPages {
+    date: string;
     count: number;
-    rows: Page[];
   }
   
   interface Crawlablity {
     crawled: CrawledPagesData;
-    pages: CrawledPages;
+    pages: CrawledPages[];
   }
   
   interface CountIndexable {
@@ -47,11 +47,23 @@ interface Page {
     gteFour: number;
   }
   
+  interface Indexability {
+    percentageIndexable: number;
+    percentageUnindexable: number;
+    crawledTotal: number;
+    unindexableReasons: UnindexableReasons;
+}
+
+interface UnindexableReasons {
+    "Non-200 status code": number;
+    "X-Robots-Tag directive: noindex": number;
+    "robots meta tag: noindex": number;
+    "Canonical tag present": number;
+}
+
   export interface CrawlabilityType {
     crawlability: Crawlablity;
-    indexability: {
-      countIndexable: CountIndexable;
-    };
+    indexability: Indexability;
     httpStatusCode: HttpStatusCode[];
     countDepth: CountDepth[];
   }

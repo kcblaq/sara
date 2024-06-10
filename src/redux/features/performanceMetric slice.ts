@@ -31,6 +31,9 @@ const performanceSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       },
+      resetPerformanceState(state) {
+        return initialState
+      }
     },
   });
 
@@ -38,6 +41,7 @@ const performanceSlice = createSlice({
     fetchPerformanceStart,
     fetchPerformanceSuccess,
     fetchPerformanceFailure,
+    resetPerformanceState
   } = performanceSlice.actions;
   
   

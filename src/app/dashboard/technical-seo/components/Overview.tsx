@@ -16,6 +16,8 @@ import ActivityGuage from "./(technicalseo)/ActivityGuage";
 import HTTPStatusCode from "./HTTPStatusCode";
 // import { TechnicalSeoType } from "@/types/TechnicalSeoType";
 import SiteHealthScore from "../../components/SiteHealthScore";
+import { DoughnutSample } from "../../components/DoiughnutSample";
+import { CrawledPages } from "../../components/SeoprogressCircle";
 // import { TechnicalSeoType } from "@/types/TechnicalSeoType";
 // import { useEffect } from "react";
 // import { removeTrailingSlash } from "@/app/utils/RemoveSlash";
@@ -207,6 +209,7 @@ function Overview() {
         {/* <div className=" w-full col-span-1 h-full md:h-[464px]  border rounded-md p-6"> */}
         {/* <ReusableProgressiveCircle title="Site health" info="The overall site health rating" val={(technicalSeoData.data[0].site_health * 100).toFixed(0)} pageTitle={"Site health"} /> */}
         <SiteHealthScore />
+      
         {/* </div> */}
         <section className="w-full col-span-3 h-full md:h-[464px] border rounded-md p-6">
           <SubHead title="Core web vitals" info="These are a set of specific factors that Google considers important in assessing the user experience of a web page" />
@@ -223,15 +226,16 @@ function Overview() {
 
           <Title title={"Crawl status"} info="The status of the crawl result" />
           <div className="p-2 flex w-full">
-            <CircularProgressbarWithChildren value={crawledvalue} className='h-48' styles={{
+            {/* <CircularProgressbarWithChildren value={crawledvalue} className='h-48' styles={{
               path: { stroke: crawledvalue < 40 ? '#D92D20' : crawledvalue > 40 && crawledvalue < 71 ? '#FDB022' : '#039855' }
             }} >
               <div className="flex flex-col">
                 <p className='text-gray-600 text-center text-sm'> Total links found </p>
                 <p className='text-gray-900 text-center text-5xl'> {Number(technicalSeoData.metrics?.crawled?.total).toLocaleString()} </p>
               </div>
-            </CircularProgressbarWithChildren>
-
+            </CircularProgressbarWithChildren> */}
+            
+            <CrawledPages />
             <div className="flex h-full flex-col justify-end">
               <p className=' flex items-center text-xs text-[#475467]'> <span className="text-green-300"><GoDotFill />  </span> {`Crwaled(${technicalSeoData.metrics?.crawled.crawled.toLocaleString()})`} </p>
               <p className=' flex items-center text-xs text-[#475467]'> <span className="text-green-100"><GoDotFill /></span> {`Uncrawled(${technicalSeoData?.metrics?.crawled?.uncrawled.toLocaleString()})`} </p>

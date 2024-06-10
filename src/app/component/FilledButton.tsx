@@ -30,3 +30,10 @@ export  function ButtonFilled({title, handleClick, loading}: ButtonFilledProps) 
     </button>
   )
 }
+export  function ButtonOutlined({title, handleClick, loading}: ButtonFilledProps) {
+  return (
+    <button disabled={loading} className={`w-full flex border items-center gap-2 justify-center rounded-lg text-base px-5 p-2 text-primary font-semibold hover:bg-blue-100`} onClick={handleClick}>
+        {title} {loading && <span> <BiLoader className="w-full  animate-spin text-white" /> </span> }
+    </button>
+  )
+}

@@ -14,7 +14,7 @@ export default function MainModal({ closeModal, ModalBody}: ModalType) {
     <>
      <Transition appear show={true} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
-          <Transition.Child
+          <Transition
             as={Fragment}
             enter="ease-out duration-300"
             enterFrom="opacity-0"
@@ -24,11 +24,11 @@ export default function MainModal({ closeModal, ModalBody}: ModalType) {
             leaveTo="opacity-0"
           >
             <div className="fixed inset-0 bg-black/25" />
-          </Transition.Child>
+          </Transition>
 
           <div className="fixed inset-0 overflow-y-auto">
             <div className="flex min-h-full items-center justify-center p-4 text-center">
-              <Transition.Child
+              <Transition
                 as={Fragment}
                 enter="ease-out duration-300"
                 enterFrom="opacity-0 scale-95"
@@ -64,7 +64,7 @@ export default function MainModal({ closeModal, ModalBody}: ModalType) {
                   </div> */}
 
                 </Dialog.Panel>
-              </Transition.Child>
+              </Transition>
             </div>
           </div>
         </Dialog>

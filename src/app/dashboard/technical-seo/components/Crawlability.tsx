@@ -1,10 +1,10 @@
-import { CircularProgressbarWithChildren } from "react-circular-progressbar";
+// import { CircularProgressbarWithChildren } from "react-circular-progressbar";
 import { GoDotFill } from "react-icons/go";
 import { RxQuestionMarkCircled } from "react-icons/rx";
 import { Title } from "./Overview";
 import DualProgressBar from "./(technicalseo)/DualProgressBar";
 import BarChartSingle from "./(technicalseo)/BarChartSingle";
-import { Suspense, useEffect, useState } from "react";
+import {useEffect, useState } from "react";
 import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/store";
@@ -13,6 +13,9 @@ import HTTPStatusCode from "./HTTPStatusCode";
 import { completeArray } from "../../components/graphs/StackedBarChart";
 import { removeTrailingSlash } from "@/app/utils/RemoveSlash";
 import { CrawlabilityType } from "@/types/CrawlabilityPageProps";
+import { CrawledPagesComplete } from "../../components/SeoprogressCircle";
+import moment from "moment";
+import Loader from "@/app/component/Loader";
 
 export default function Crawlability() {
   const [crawlabilityData, setCrawlabilityData] = useState<CrawlabilityType | null>(null);
@@ -65,25 +68,31 @@ export default function Crawlability() {
 
 
 
-  // console.log("TSEO", metrics)
-  console.log("CRAWLABILITY", crawlabilityData)
+
+  // console.log("CRAWLABILITY", crawlabilityData)
 
   const labels1 = ['January', 'February'];
-  const labels = completeArray(labels1);
-  const mockData = [100, 300];
+  const labels = crawlabilityData?.crawlability?.pages?.map((item)=> moment(item.date).format("DD MMM YY")) || [];
+  const mockData = crawlabilityData?.crawlability?.pages?.map((item)=> item.count) || [];
 
   const crawldepthlabels1 = ['1', '2', '3', '4+'];
   const crawldepthlabels = completeArray(crawldepthlabels1);
   const crawldepthLabelData = crawlabilityData?.countDepth.flatMap((obj) => Object.values(obj)) || [];
 
-  const indexibilitData = [600, 300, 200, 900, 700]
-  const indexibilityLabel1 = ["X-Robots tags", "'non-index' metatag", "Robots.txt", "Non canonical pages", "Non 200 status"]
-  const indexibilityLabel = completeArray(indexibilityLabel1)
+  const indexibilitData1 = crawlabilityData?.indexability?.unindexableReasons;
+  const categories = Object.keys( indexibilitData1 || []);
+  const categoriesNumber = Object.values( indexibilitData1 || []);
+  console.log("TSEO", categories, categoriesNumber)
+  
+  // const indexibilitData = [600, 300, 200, 900, 700]
+  // const indexibilityLabel = ["X-Robots tags", "'non-index' metatag", "Robots.txt", "Non canonical pages", "Non 200 status"]
+  // const indexibilityLabel = completeArray(indexibilityLabel1)
   return (
+    loading ? <div className=" w-full h-20 flex items-center justify-center mt-10"> <Loader /> </div> :
     <main className="pb-14 mt-10 grid w-full gap-8">
 
       <section className={`grid grid-cols-1 md:grid-cols-3 gap-4`}>
-        <div className="grid p-2 md:p-4 col-span-1 h-[348px] justify-items-start  rounded-md w-full border ">
+        {/* <div className="grid p-2 md:p-4 col-span-1 h-[348px] justify-items-start  rounded-md w-full border ">
 
           <Title title={"Crawl status"} info="The status of the crawl result" />
           <div className="p-2 flex w-full ">
@@ -121,7 +130,8 @@ export default function Crawlability() {
               <p className=' flex items-center text-xs text-[#475467]'> <span className="text-green-100"><GoDotFill /></span> {`Uncrawled(${uncrawled})`} </p>
             </div>
           </div>
-        </div>
+        </div> */}
+        <CrawledPagesComplete />
 
         <section className="w-full grid col-span-2 h-full  md:h-[348px] border rounded-md p-6">
           <div className="flex flex-col w-full">
@@ -152,15 +162,16 @@ export default function Crawlability() {
           <div className="grid w-full gap-4 justify-items-center  ">
             <p className="text-center font-semibold">Crawled pages: {crawlabilityData?.crawlability.crawled.crawled} </p>
             <div className="flex flex-col w-full gap-2">
-              <DualProgressBar leftPercentage={'90%'} />
+              <DualProgressBar leftPercentage={`${calculatePercentage(crawled, total)}px`} />
+              {/* <DualProgressBar leftPercentage={`10px`} /> */}
               <div className="flex justify-between w-full items-center">
-                <p className=""> 40%</p>
-                <p className=""> 60%</p>
+                <p className=""> { calculatePercentage(crawled, total).toFixed(2) }% </p>
+                <p className=""> {calculatePercentage(uncrawled, total).toFixed(2)}% </p>
               </div>
             </div>
             <div className="flex flex-col justify-center items-center">
-              <p className=" text-xs flex items-center text-[#475467]">  <span className='text-green-400'><GoDotFill /> </span> Indexable (5932) </p>
-              <p className=" text-xs flex items-center text-[#475467]">  <span className='text-orange-400'><GoDotFill /> </span> Non indexable (59) </p>
+              <p className=" text-xs flex items-center text-[#475467]">  <span className='text-green-400'><GoDotFill /> </span> Indexable ({}) </p>
+              <p className=" text-xs flex items-center text-[#475467]">  <span className='text-orange-400'><GoDotFill /> </span> Non indexable ({}) </p>
 
             </div>
           </div>
@@ -171,7 +182,7 @@ export default function Crawlability() {
         <section className="w-full grid col-span-2 h-full  md:h-[348px] border rounded-md p-6">
           <Title title="Pages not indexed by search engines" info={"These are pages for one reason or the other that google cannot search at the moment"} />
           <div className=" h-full w-full ">
-            <BarChartSingle labels={indexibilityLabel} data={indexibilitData} backgroundColor="red" xAxisLabel="Blocked by" />
+            <BarChartSingle labels={categories} data={categoriesNumber} backgroundColor="red" xAxisLabel="Blocked by" />
 
           </div>
         </section>

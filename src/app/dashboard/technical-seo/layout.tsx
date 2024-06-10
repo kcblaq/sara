@@ -1,5 +1,5 @@
 "use client"
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, Suspense, useEffect, useState } from 'react'
 import { Tab } from '@headlessui/react'
 import PlainButton from "@/app/component/PlainButton"
 import { CiSettings, CiShare2 } from "react-icons/ci"
@@ -22,9 +22,10 @@ export default function TechnicalSeoLayout() {
     const [mobile, setMobile] = useState(true)
     const [loading, setLoading] = useState(false)
 
-    
-    const techSeo = useSelector((state: RootState)=> state.technicalSeo.metrics)
-    const activeProperty = useSelector((state: RootState)=> state.property.activeProperty);
+
+    const techSeo = useSelector((state: RootState) => state.technicalSeo.metrics)
+    const lastUpdated = useSelector((state: RootState) => state.performance.metrics?.history?.scores[0]?.createdAt)
+    const activeProperty = useSelector((state: RootState) => state.property.activeProperty);
     const dispatch = useDispatch();
 
 
@@ -35,58 +36,59 @@ export default function TechnicalSeoLayout() {
             await ApiCall.get('/crawl/technical-seo', {
                 params: {
                     limit: 100,
-                    platform:'desktop',
+                    platform: 'desktop',
                     url: removeTrailingSlash(activeProperty),
                     page: page
                 }
             }).then((res) => dispatch(setTechnicalSeo(res.data)));
-        } catch (error:any) {
+        } catch (error: any) {
             dispatch(fetchTechnicalSEOFailure(error.message));
         } finally {
             // setLoading(false);
         }
     };
 
-useEffect(()=> {
-    FetchTechnicalSeo()
-} ,[activeProperty, techSeo])
-    
+    useEffect(() => {
+        FetchTechnicalSeo()
+    }, [activeProperty, ])
 
 
 
-const tabs = [
-    { title: "Overview", content: <Overview /> },
-    { title: "Crawlability and indexability", content: <Crawlability /> },
-    { title: "Site performance", content: <SitePerformance /> },
-    { title: "Issues", content: <Issues /> },
+
+    const tabs = [
+        { title: "Overview", content: <Overview /> },
+        { title: "Crawlability and indexability", content: <Crawlability /> },
+        { title: "Site performance", content: <SitePerformance /> },
+        { title: "Issues", content: <Issues /> },
         // { title: "Internal linking", content: <InternalLinking /> },
         // { title: "Crawl comparisons", content: <CrawlComparison /> },
         // { title: "Audit history", content: <AuditHistory /> },
     ]
-const CrawlTechnicalSeo = async ()=> {
-    try {
-        setLoading(true)
-        await ApiCall.get('/crawl/technical/mini-crawler', {
-            params: {
-                url: activeProperty,
-                timeout: 5
-            }})
+    const CrawlTechnicalSeo = async () => {
+        try {
+            setLoading(true)
+
             await Promise.all([
-                setLoading(true),
-                ApiCall.get('/crawl/overall', {
+                ApiCall.get('/crawl/webcrawler', {
                     params: {
-                        url: activeProperty,
+                        url: removeTrailingSlash(activeProperty),
                         type: 'passive',
-                        limit: 10
                     }
-                })
+                }),
+                ApiCall.get('/crawl/technical/mini-crawler', {
+                    params: {
+                        url: removeTrailingSlash(activeProperty),
+                        timeout: 5
+                    }
+                }),
+
             ]);
-    } catch (error) {
-        console.log(error)
-    } finally {
-       setLoading(false)
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setLoading(false)
+        }
     }
-}
     return (
         <section className={`flex w-full h-full justify-start flex-col gap-2 `}>
             <div className="flex w-full justify-between items-center">
@@ -95,8 +97,8 @@ const CrawlTechnicalSeo = async ()=> {
                 </div>
                 <div className="flex w-full md:w-1/2 items-center justify-end gap-2 md:gap-4">
                     <span className="">
-                        <button className='rounded-lg text-base p-2 bg-primary text-white font-semibold hover:bg-blue-500' onClick={()=> CrawlTechnicalSeo()} >
-                            { loading ? 'Loading...' :     ' Re-run audit'  }
+                        <button className='rounded-lg text-base p-2 bg-primary text-white font-semibold hover:bg-blue-500' onClick={() => CrawlTechnicalSeo()} >
+                            {loading ? 'Crawling...' : ' Re-run audit'}
                         </button>
                     </span>
                     <span className=''>
@@ -106,16 +108,16 @@ const CrawlTechnicalSeo = async ()=> {
                 </div>
             </div>
             <div className='flex items-center gap-4 my-2'>
-                    <div className="flex items-center gap-2 bg-[#D0D5DD] rounded-md p-1">
-                        <span className={`cursor-pointer p-2 text-white ${mobile ? 'text-white' : "bg-[#1570EF] rounded-lg"}`} onClick={() => setMobile(false)}> Desktop</span>
-                        <span className={` cursor-pointer p-2 text-white font-semibold ${!mobile ? 'text-white' : "bg-[#1570EF] rounded-lg"}`} onClick={() => setMobile(true)}> Mobile</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <p className=" font-semibold"> Last Update:</p>
-                        <p className=""> 20th April, 2024 </p>
-
-                    </div>
+                <div className="flex items-center gap-2 bg-[#D0D5DD] rounded-md p-1">
+                    <span className={`cursor-pointer p-2 text-white ${mobile ? 'text-white' : "bg-[#1570EF] rounded-lg"}`} onClick={() => setMobile(false)}> Desktop</span>
+                    <span className={` cursor-pointer p-2 text-white font-semibold ${!mobile ? 'text-white' : "bg-[#1570EF] rounded-lg"}`} onClick={() => setMobile(true)}> Mobile</span>
                 </div>
+                <div className="flex items-center gap-2">
+                    <p className=" font-semibold"> Last Update:</p>
+                    <p className=""> {moment(lastUpdated).format("DD MMM YY")} </p>
+
+                </div>
+            </div>
             <Tab.Group>
                 <Tab.List className="flex gap-4 w-full" >
                     {
@@ -144,17 +146,19 @@ const CrawlTechnicalSeo = async ()=> {
 
                 </Tab.List>
                 {/* <p> Here goes the rest</p> */}
-                
+
                 <div className={` h-full w-full overflow-auto  `}>
                     <Tab.Panels>
                         {
                             tabs.map((tab) => {
                                 return (
                                     <div key={tab.title} className='h-full overflow-auto'>
+                                        {/* <Suspense fallback={<div className=''> Loading... </div>}> */}
                                         <Tab.Panel>
 
                                             {tab.content}
                                         </Tab.Panel>
+                                        {/* </Suspense> */}
                                     </div>
                                 )
                             })

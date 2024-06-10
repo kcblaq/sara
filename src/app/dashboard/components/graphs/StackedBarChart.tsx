@@ -9,6 +9,9 @@ import {
   Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/app/store';
+import moment from 'moment';
 
 ChartJS.register(
   CategoryScale,
@@ -81,30 +84,31 @@ export function completeArray(arr: string[]) {
   return arr;
 }
 
-const detail = ['January', 'February']
-const labels = completeArray(detail);
+export function StackedBarChart() {
+  const backlinkData = useSelector((state: RootState)=> state.performance.metrics?.history?.backlinks)
+  const labels = backlinkData?.map((item)=> moment(item.createdAt).format("DD MMM YY")) ?? []
+  const newLinks = backlinkData?.map((item)=> item.new)
+  const lostLinks = backlinkData?.map((item)=> item.lost)
 
 
 
-
-
-export const data = {
+ const data = {
   labels,
   datasets: [
     {
       label: 'Lost',
-      data: [25, 43],
+      data: lostLinks,
       backgroundColor: '#F97066',
     },
     {
       label: 'New',
-      data: [2, 19],
+      data: newLinks,
       backgroundColor: '#32D583',
     }
   ],
 };
 
-export function StackedBarChart() {
+
   return (
     <div className=' overflow-x-auto w-full h-full'>
 

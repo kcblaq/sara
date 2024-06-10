@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import APpProvider from "@/redux/features/provider";
+import TanstackProvider from "./providers/TanstackProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
@@ -17,13 +18,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      
       <body className={`className.Inter`}>
-        <APpProvider>
-
-        {children}
-        </APpProvider>
-        </body>
+        <TanstackProvider>
+          <APpProvider>
+            {children}
+          </APpProvider>
+        </TanstackProvider>
+      </body>
     </html>
   );
 }

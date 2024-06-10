@@ -2,7 +2,7 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import navSlice from "../redux/features/navSlice";
 import modalstates from "@/redux/features/modalstates";
 import { persistReducer } from "redux-persist";
-import storageSession from "redux-persist/lib/storage/session";
+// import storageSession from "redux-persist/lib/storage/session";
 import persistStore from "redux-persist/es/persistStore";
 import userSlice from "@/redux/features/userSlice";
 import { configureApiCall } from "./utils/apicalls/axiosInterceptor";
@@ -25,7 +25,7 @@ const propertyPersistConfig = {
     key: 'property',
     storage
 }
-const technicalSeoConfig ={
+const technicalSeoConfig = {
     key: 'technicalSeo',
     storage
 }
@@ -41,7 +41,7 @@ const rootReducer = combineReducers({
 });
 
 const persistedReducer = persistReducer(
-    { key: 'root', storage }, 
+    { key: 'root', storage , serialize: true}, 
     rootReducer
 );
 

@@ -35,7 +35,7 @@ export default function DashboardOverviewPlaceholder() {
         await Promise.all([
             dispatch(setModal('crawling')),
             setLoading(true),
-            ApiCall.get('/crawl/overall', {
+            ApiCall.get('/crawl/webcrawler', {
                 params: {
                     url: removeTrailingSlash(inputUrl),
                     type: 'passive',
@@ -44,10 +44,11 @@ export default function DashboardOverviewPlaceholder() {
             }),
             ApiCall.get('/crawl/technical/mini-crawler', {
                 params: {
-                    url: inputUrl,
+                    url: removeTrailingSlash(inputUrl),
                     timeout: 5
                 }
-            })
+            }),
+            ApiCall.get('/crawl/property')
         ]);
         dispatch(setModal(''));
         

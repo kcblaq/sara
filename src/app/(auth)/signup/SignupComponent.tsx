@@ -32,7 +32,7 @@ export const SignupComponent = () => {
                         // console.log(res.data)
                         router.push('/signup/email-verify/otp')
                     } else {
-                        console.log("RES", res)
+                        // console.log("RES", res)
                         // setError({status:true, msg: res.data})
                     }
                 } )

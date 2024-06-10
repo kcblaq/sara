@@ -28,8 +28,8 @@ ChartJS.register(
 );
 
 export function TrafficOverviewGraph() {
-  const trafficDetail = useSelector((state: RootState) => state.performance.metrics?.history.traffic)
-
+  const trafficDetail = useSelector((state: RootState) => state.performance.metrics?.history)
+  // console.log("TrafficDetai",trafficDetail)
 
   const options = {
     responsive: true,
@@ -62,14 +62,14 @@ export function TrafficOverviewGraph() {
     },
   };
 
-  const labels = trafficDetail?.map((item) => moment(item.createdAt).format("Do MMM,YY")) ?? [];
+  const labels = trafficDetail?.traffic?.map((item) => moment(item.createdAt).format("Do MMM,YY")) ?? [];
 
   const data = {
     labels,
     datasets: [
       {
         label: 'Organic',
-        data: trafficDetail?.map((item) => item.organic),
+        data: trafficDetail?.traffic.map((item) => item.organic),
         borderColor: 'gray',
         backgroundColor: 'gray',
         borderWidth: 1,
@@ -78,7 +78,7 @@ export function TrafficOverviewGraph() {
       },
       {
         label: 'Referal',
-        data: trafficDetail?.map((item) => item.referrals),
+        data: trafficDetail?.traffic?.map((item) => item.referrals),
         borderColor: 'red',
         backgroundColor: 'red',
         borderWidth: 1,
@@ -86,7 +86,7 @@ export function TrafficOverviewGraph() {
       },
       {
         label: 'Search',
-        data: trafficDetail?.map((item) => item.search),
+        data: trafficDetail?.traffic?.map((item) => item.search),
         borderColor: 'blue',
         backgroundColor: 'blue',
         borderWidth: 1,
@@ -94,7 +94,7 @@ export function TrafficOverviewGraph() {
       },
       {
         label: 'Social',
-        data: trafficDetail?.map((item) => item.social),
+        data: trafficDetail?.traffic?.map((item) => item.social),
         borderColor: 'orange',
         backgroundColor: 'orange',
         borderWidth: 1,
@@ -102,7 +102,7 @@ export function TrafficOverviewGraph() {
       },
       {
         label: 'Paid',
-        data: trafficDetail?.map((item) => item.paid),
+        data: trafficDetail?.traffic?.map((item) => item.paid),
         borderColor: 'green',
         backgroundColor: 'green',
         borderWidth: 1,

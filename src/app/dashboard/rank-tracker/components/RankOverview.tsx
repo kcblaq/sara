@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Card from '../../Card'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/app/store'
@@ -6,9 +6,35 @@ import OrganicTrafficCard from '../../technical-seo/components/OrganicTrafficCar
 import { ButtonWithTitle, Title, TitleWithoutUnderline } from '../../technical-seo/components/Overview';
 import { TrafficOverviewGraph } from '../../components/TrafficOverviewGraph';
 import BarChartSingle from '../../technical-seo/components/(technicalseo)/BarChartSingle';
+import ApiCall from '@/app/utils/apicalls/axiosInterceptor';
+import { useQuery } from '@tanstack/react-query';
 
 export default function RankOverview() {
     const traffic = useSelector((state: RootState) => state.performance.metrics);
+    const activeUrl = useSelector((state: RootState) => state.property.activeProperty)
+  
+    // const {data,isError, isLoading } = useQuery({
+    //     queryKey: ['ranking-overview'],
+    //     queryFn: ()=> {
+    //         ApiCall.get('/crawl/rank/mini-crawler', {
+    //             params:{
+    //                 url:activeUrl
+    //             }
+    //         })
+    //     }
+    // })
+
+    // useEffect(()=> {
+    //   async  function getData(){
+    //     await ApiCall.get('/crawl/rank/mini-crawler', {
+    //         params:{
+    //             url: activeUrl
+    //         }
+    //     })
+    //   }
+    //   getData()
+    // })
+
     return (
         <main className='grid w-full h-full items-start content-start gap-6 my-10 mb-20 overflow-auto'>
             <section className='grid grid-cols-1 lg:grid-cols-3 gap-6'>

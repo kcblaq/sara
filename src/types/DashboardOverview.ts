@@ -22,6 +22,7 @@ interface Current {
     ai_recommendation: {}
 }
 
+
 export interface Scores {
     id: number | undefined;
     organic_traffic: number | undefined;
@@ -52,6 +53,7 @@ interface Backlink {
     backlinks: string[]; 
     counts: number;
     new: number;
+    lost: number;
     createdAt: string;
     updatedAt: string;
 }

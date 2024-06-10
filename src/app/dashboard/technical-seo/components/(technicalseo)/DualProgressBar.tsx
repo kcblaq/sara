@@ -10,8 +10,8 @@ const DualProgressBar: React.FC<DualProgressBarProps> = ({ leftPercentage }) => 
     };
 
     return (
-        <section className="flex items-center h-8 bg-red-500 w-full rounded-3xl">
-            <div style={progressStyle} className="h-full bg-green-500 rounded-3xl"></div>
+        <section className="flex items-center h-8 bg-red-500 w-full rounded-tr-3xl rounded-br-3xl">
+            <div style={progressStyle} className="h-full bg-green-500 rounded-tl-3xl rounded-bl-3xl"></div>
         </section>
     );
 };

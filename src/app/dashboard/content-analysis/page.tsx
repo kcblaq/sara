@@ -11,18 +11,38 @@ import { AiOutlineExpandAlt } from "react-icons/ai";
 import { useState } from "react";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import Image from "next/image";
+import { useQuery } from "@tanstack/react-query";
+import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
+import { RootState } from "@/app/store";
+import { useSelector } from "react-redux";
 
 
 export default function ContentAnalysis() {
-  const [showDetail, setShowDetail] = useState(true)
-  const [currentFilter, setCurrentFilter] = useState('All recommendations')
+  const [showDetail, setShowDetail] = useState(false)
+  const [currentFilter, setCurrentFilter] = useState('All recommendations');
+  const activeProperty = useSelector((state:RootState)=> state.property.activeProperty);
 
   const tabsFilter = [
     { name: "All recommendations" },
     { name: "Undone", icon: <Image src={'/dashboard/error.svg'} alt="undone" width={24} height={24} /> },
     { name: "Done", icon: <Image src={'/dashboard/fixed.svg'} alt="Done" width={24} height={24} /> },
   ]
-
+// const {data} = useQuery({
+//   queryKey: ['content-analysis'],
+//   queryFn: async()=> await ApiCall.get("/crawl/content-analysis/mini-crawler/", {
+//     params: {
+//       url: activeProperty
+//     }
+//   })
+// })
+const {data} = useQuery({
+  queryKey: ['content-analysis'],
+  queryFn: async()=> await ApiCall.get("/crawl/content-analysis", {
+    params: {
+      url: activeProperty
+    }
+  })
+})
 
   return (
     <main className='grid w-full h-full items-start content-start gap-6 my-10 mb-20'>

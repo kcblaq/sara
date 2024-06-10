@@ -1,4 +1,5 @@
 
+import Footer from '../component/home/footer/Footer';
 import Nav from '../component/home/nav/Nav';
 
 
@@ -16,6 +17,7 @@ export default function Layout({ children}: Props) {
             <div className="grid">
                 {children}
             </div>
+            <Footer/>
         </main>
     );
 }

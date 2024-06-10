@@ -14,7 +14,7 @@ import { useSelector } from "react-redux";
 // }
 
 const KeywordTable: React.FC = () => {
-  const keywords = useSelector((state: RootState) => state.performance.metrics?.history.keyword);
+  const keywords = useSelector((state: RootState) => state.performance.metrics?.history?.keyword);
   return (
     <>
     <h2 className="my-3"> <span className=" font-medium">Last updated: </span> 10th May,24 </h2>

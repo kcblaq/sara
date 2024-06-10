@@ -32,6 +32,8 @@ import DashboardOverviewPlaceholder from './components/DashboardOverviewPlacehol
 import DropdownMenu from '../component/Dropdown';
 import UserProfile from './components/UserProfile';
 import { removeTrailingSlash } from '../utils/RemoveSlash';
+import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
+import Loader, { LoaderPulse } from '../component/Loader';
 
 
 interface Props {
@@ -90,7 +92,7 @@ export default function Layout({ children }: Props) {
   const user = useSelector((state: RootState)=> state.user.user)
   const dispatch = useDispatch();
 
-
+  // console.log(activeProperty,"HERE>..")
   const getProjects = async () => {
     try {
       const res = await ApiCall.get('/crawl/property');
@@ -118,30 +120,54 @@ export default function Layout({ children }: Props) {
       setProperty(result);
       // setCurrentProperty(result[0]?.website_url)
       dispatch(setAllProperty(result))
-      dispatch(setActiveProperty(result[0]?.website_url))
+      if(activeProperty.length < 2){
+        dispatch(setActiveProperty(result[0]?.website_url))
+      }
     };
     fetchProjects();
     
   }, []);
-  
-  useEffect(()=> {
-   
-    async function Overviewdata(){
-      try {
-        const result = await ApiCall.get('/crawl/overall', {
+
+
+    const {data, isLoading} = useQuery({
+      queryKey: ['dashboardData', activeProperty],
+      queryFn: ()=> {
+        return ApiCall.get('/crawl/overall', {
           params: {
             url: removeTrailingSlash(activeProperty),
             limit: 100
           }
         })
-        dispatch(fetchPerformanceSuccess(result?.data))
-        console.log("RES",result)
-      } catch (error:any) {
-        console.log(error.message)
       }
-    }
-    Overviewdata()
-  }, [activeProperty])
+    })
+    dispatch(fetchPerformanceSuccess(data?.data))
+
+
+
+
+  // useEffect(()=> {
+   
+  //   async function Overviewdata(){
+  //     try {
+  //       const result = await ApiCall.get('/crawl/overall', {
+  //         params: {
+  //           url: removeTrailingSlash(activeProperty),
+  //           limit: 100
+  //         }
+  //       })
+  //       dispatch(fetchPerformanceSuccess(result?.data))
+  //     } catch (error:any) {
+  //       console.log(error.message)
+  //     }
+  //   }
+  //   Overviewdata()
+  // }, [activeProperty])
+
+
+
+
+
+
   // console.log("PROPERTY:",activeProperty)
 
   // const getPerformanceMetrics = async (url: string) => {
@@ -170,9 +196,11 @@ export default function Layout({ children }: Props) {
   //       .catch((error) => console.error("Error fetching performance metrics:", error));
   //   }
   // }, [property, activeProperty]);
-
+// console.log("PROP", activeProperty)
+const quertClient = new QueryClient()
   return (
-    <>
+  //  <QueryClientProvider client={quertClient}>
+     <>
       {modalState === 'addProject' && <MainModal closeModal={() => dispatch(setModal(''))} ModalBody={AddProject} />}
 
       <main className={`h-screen w-full flex overflow-clip `}>
@@ -247,22 +275,20 @@ export default function Layout({ children }: Props) {
                   {user && user?.fullName?.split(' ')[0]?.slice(0,1).toUpperCase()  }
                   {user && user?.fullName?.split(' ')[1]?.slice(0,1).toUpperCase()  }
                 </div>
-                {/* <UserProfile /> */}
               </div>
             </div>
           </div>
           <hr className="w-full  hidden md:flex " />
           {
+            isLoading ?    <LoaderPulse/> :
             property.length < 1 ? <DashboardOverviewPlaceholder /> : <div className=" w-full h-full overflow-auto p-2 md:p-8">
             
             {children}
           </div>
           }
-
-          {/* {children} */}
+       
         </section>
       </main>
     </>
-
   );
 }

@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import PlainButton from '@/app/component/PlainButton';
 import { ButtonFilled } from '@/app/component/FilledButton';
@@ -10,7 +10,7 @@ import { setActiveProperty } from '@/redux/features/propertySlice';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/app/store';
 import { fetchPerformanceFailure, fetchPerformanceStart, fetchPerformanceSuccess } from '@/redux/features/performanceMetric slice';
-import { GetPassiveAndDeepFetch } from '@/app/utils/apicalls/fetches/GetPassiveAndDeepFetchData';
+// import { GetPassiveAndDeepFetch } from '@/app/utils/apicalls/fetches/GetPassiveAndDeepFetchData';
 import { FetchTechnicalSeo } from '../technical-seo/components/FetchTechnicalSeo';
 import { removeTrailingSlash } from '@/app/utils/RemoveSlash';
 
@@ -114,19 +114,18 @@ export default function AddProject() {
       const response =  await ApiCall.get(`crawl/add-property?url=${inputUrl}`);
       dispatch(setActiveProperty(inputUrl));
       dispatch(setModal('crawling'));
-      setLoading(false);
+      // setLoading(false);
       await Promise.all([
-        ApiCall.get('/crawl/overall', {
+        ApiCall.get('/crawl/webcrawler', {
           params: {
             url: inputUrl,
             type: 'passive',
-            limit: 10
           }
         }),
         ApiCall.get('/crawl/technical/mini-crawler', {
           params: {
               url: inputUrl,
-              timeout: 5
+              timeout: 7,
           }
       })
       ])
