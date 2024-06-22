@@ -7,6 +7,7 @@ import PlainButton from "../PlainButton";
 import FAQComponent from "./faq/FAQComponent";
 import { currentYear } from "@/app/utils/currenYear";
 import Footer from "./footer/Footer";
+import TempFooter from "./footer/TempFooter";
 
 export default function HomePage() {
      return (
@@ -80,10 +81,9 @@ export default function HomePage() {
                     </div> */}
 
                     {/* </div> */}
-
-                    <div className=' pt-16'>
+                    <a href="#faq" className=' pt-16'>
                          <FilledButton title="Learn more" />
-                    </div>
+                    </a>
                </section>
 
                {/* <section className="min-h-screen shrink-0 snap-start flex items-center justify-center py-24">
@@ -143,7 +143,7 @@ export default function HomePage() {
                     </div>
                </section>
 
-               <section className="lg:min-h-screen h-full w-full shrink-0 py-24 px-4  snap-start flex flex-col items-center justify-start ">
+               <section id="faq" className="lg:min-h-screen h-full w-full shrink-0 py-24 px-4  snap-start flex flex-col items-center justify-start ">
                     <h1 className="text-center text-4xl font-semibold text-[#101828] "> Frequently asked questions</h1>
                     <p className=" pt-5 text-lg font-normal "> Everything you need to know about the features and billing.</p>
                     <FAQComponent />
@@ -163,7 +163,8 @@ export default function HomePage() {
 
 
                <footer>
-                    <Footer />
+                    {/* <Footer /> */}
+                    <TempFooter/>
                </footer>
 
           </main>

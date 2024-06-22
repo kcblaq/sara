@@ -1,7 +1,7 @@
 "use client"
 import LastUpdated from "@/app/component/LastUpdated";
 import TitleShareSettingTop from "@/app/component/TitleShareSettingTop";
-import Card from "../Card";
+import Card, { SimpleCard } from "../Card";
 import AverageTimeOnsite from "../technical-seo/components/AverageTimeOnsite";
 import { SelectorDropdown } from "../keyword-explorer/component/SmartKeywordFinder";
 import SearchBox from "@/app/component/SearchBox";
@@ -15,6 +15,9 @@ import { useQuery } from "@tanstack/react-query";
 import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
 import { RootState } from "@/app/store";
 import { useSelector } from "react-redux";
+import { contentAnalysisProps } from "@/types/contentAnalysis";
+import { FormattedDate } from "@/helper";
+import { ConvertToMilliuseconds } from "@/app/utils/ConvertToMilliseconds";
 
 
 export default function ContentAnalysis() {
@@ -33,7 +36,7 @@ export default function ContentAnalysis() {
 //     params: {
 //       url: activeProperty
 //     }
-//   })
+//   })7
 // })
 const {data} = useQuery({
   queryKey: ['content-analysis'],
@@ -43,19 +46,23 @@ const {data} = useQuery({
     }
   })
 })
+const detail:contentAnalysisProps  = data?.data.data || undefined;
+
+console.log("DETAIL", detail?.content)
+
 
   return (
     <main className='grid w-full h-full items-start content-start gap-6 my-10 mb-20'>
 
       <TitleShareSettingTop title="Content analysis" />
-      <LastUpdated date={"19, April, 24"} />
+      <LastUpdated date={FormattedDate(detail?.content[0].updatedAt ?? '')} />
 
       {
         !showDetail ? (<section className="grid w-full h-full items-start content-start gap-6 overflow-auto">
           <section className=" grid w-full gap-6 grid-cols-1 lg:grid-cols-3">
-            <Card title={"Number of pages"} amount={undefined} style={""} percent={undefined} chart={undefined} />
+            <SimpleCard title={"Number of pages"} amount={detail?.summary?.number_of_pages ?? 0}/>
             <AverageTimeOnsite />
-            <Card title={"Bounce rate"} amount={undefined} style={""} percent={undefined} chart={undefined} />
+            <Card title={"Bounce rate"} amount={`${(detail?.summary.bounce_rate[0].bounceRate * 1000/10).toFixed(2)}%`} style={""} percent={undefined} chart={undefined} />
           </section>
           <section className="flex items-center justify-end gap-7">
             <SelectorDropdown items={['Words', 'Images', 'Videos']} selected={"Words"} setSelected={function (): void {

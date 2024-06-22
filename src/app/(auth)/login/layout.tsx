@@ -11,13 +11,13 @@ export const metadata: Metadata = {
     children: React.ReactNode;
   }>) {
     return (
-      <html lang="en">
+      // <html lang="en">
        
         <div className={``}>
           <div>
           {children}
           </div>
           </div>
-      </html>
+      // </html>
     );
   }

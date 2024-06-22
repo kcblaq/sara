@@ -97,7 +97,7 @@ export const LoginComponent = () => {
                 onClick={handleLogin}> Sign in 
                 {isLoading && <span className="absolute max-h-[70px] top-3 right-2 "><Loader /></span>}
                 </button>
-                <button className=" w-full p-2 font-bold rounded-md border flex items-center justify-center gap-2"><FcGoogle /> Sign in with Google </button>
+                {/* <button className=" w-full p-2 font-bold rounded-md border flex items-center justify-center gap-2"><FcGoogle /> Sign in with Google </button> */}
                 <Link href={`/signup`}><small className=""> Don't have an account? <span className=" text-primary right-0"> Sign up</span></small> </Link>
             </section>
             <footer className="lg:flex justify-between w-full items-center hidden ">

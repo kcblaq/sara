@@ -11,6 +11,10 @@ import OrganicPick from './components/OrganicPick'
 import { Tab } from '@headlessui/react'
 import RankOverview from './components/RankOverview'
 import Rankings from './components/Rankings'
+import { useQuery } from '@tanstack/react-query'
+import ApiCall from '@/app/utils/apicalls/axiosInterceptor'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/app/store'
 // import PageDistributions from './components/PageDistributions'
 
 
@@ -21,6 +25,17 @@ const tabs = [
 ]
 export default function page() {
   const [mobile, setMobile] = useState(false)
+  const activeProperty = useSelector((state:RootState)=> state.property.activeProperty);
+  const {data} = useQuery({
+    queryKey: ['rank'],
+    queryFn: async () => await ApiCall.get('/crawl/rank-tracker',{
+      params: {
+        url: activeProperty,
+        se: "Google",
+      }
+    })
+  })
+  console.log("RANK",data)
   return (
     <main className='grid w-full h-full items-start content-start gap-6'>
       <section className={`flex items-center w-full justify-between`}>

@@ -52,21 +52,6 @@ export default function AddProject() {
 
   const activeProperty = useSelector((state: RootState) => state.property.activeProperty)
 
-  async function PassiveFetch(){
-    try {
-      dispatch(fetchPerformanceStart())
-     await ApiCall.get('/crawl/webcrawler', {
-        params: {
-          url: removeTrailingSlash(inputUrl),
-          type: 'passive',
-        }
-      }).then((res)=> dispatch(fetchPerformanceSuccess(res.data)))
-    }
-    catch (error:any) {
-      console.log('Error fetching passive', error)
-      dispatch(fetchPerformanceFailure(error.message))
-    }
-  }
 
 
 
@@ -92,6 +77,9 @@ export default function AddProject() {
   // };
   
 
+
+
+
   async function handleSubmitUrl() {
     const urlPattern = /^(ftp|http[s]?):\/\/[^ "]+(\.[^ "]+)+$/
     if (!urlPattern.test(inputUrl)) {
@@ -106,11 +94,6 @@ export default function AddProject() {
     try {
       setLoading(true)
 
-      ///passive fetch
-      console.log('submitting...')
-      // GetPassiveAndDeepFetch(inputUrl,'passive')
-      PassiveFetch()
-
       const response =  await ApiCall.get(`crawl/add-property?url=${inputUrl}`);
       dispatch(setActiveProperty(inputUrl));
       dispatch(setModal('crawling'));
@@ -118,21 +101,25 @@ export default function AddProject() {
       await Promise.all([
         ApiCall.get('/crawl/webcrawler', {
           params: {
-            url: inputUrl,
+            url: removeTrailingSlash(inputUrl),
             type: 'passive',
           }
         }),
         ApiCall.get('/crawl/technical/mini-crawler', {
           params: {
-              url: inputUrl,
+              url: removeTrailingSlash(inputUrl),
               timeout: 7,
+          }
+      }),
+        ApiCall.get('/crawl/content-analysis/mini-crawler', {
+          params: {
+              url: removeTrailingSlash(inputUrl),
           }
       })
       ])
         
       dispatch(setModal(''))
     } catch (error: any) {
-      console.log("ERR", error)
       setErr({ status: true, msg: error.response.data.message });
       if (error.status === 401) {
         router.push('/login')
@@ -144,7 +131,7 @@ export default function AddProject() {
       return false;
 
     }
-    setLoading(false)
+    // setLoading(false)
   }
 
 

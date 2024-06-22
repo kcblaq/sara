@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react'
 import { BsLightningCharge } from 'react-icons/bs';
 import { CiSearch, CiSettings } from 'react-icons/ci';
-// import { FaRegUserCircle } from 'react-icons/fa';
 import { IoMdMenu, IoMdNotificationsOutline } from 'react-icons/io';
 import Image from 'next/image';
 import { RxDashboard, RxDoubleArrowLeft } from "react-icons/rx";
@@ -23,17 +22,16 @@ import MainModal from '../component/modals/MainModal';
 import AddProject from './components/AddProject';
 import ApiCall from '../utils/apicalls/axiosInterceptor';
 import { PropertyType } from '@/types/PropertyType';
-// import DashboardOverviewPlaceholder from './components/DashboardOverviewPlaceholder';
-// import { LoadingState } from '../component/Loader';
-// import { CgOpenCollective } from 'react-icons/cg';
-import { fetchPerformanceFailure, fetchPerformanceStart, fetchPerformanceSuccess } from '@/redux/features/performanceMetric slice';
+import { fetchPerformanceSuccess } from '@/redux/features/performanceMetric slice';
 import { setActiveProperty, setAllProperty } from '@/redux/features/propertySlice';
 import DashboardOverviewPlaceholder from './components/DashboardOverviewPlaceholder';
 import DropdownMenu from '../component/Dropdown';
 import UserProfile from './components/UserProfile';
 import { removeTrailingSlash } from '../utils/RemoveSlash';
-import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
+import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query';
 import Loader, { LoaderPulse } from '../component/Loader';
+import { crawler } from '../services/crawler';
+import { isAllOf } from '@reduxjs/toolkit';
 
 
 interface Props {
@@ -41,10 +39,9 @@ interface Props {
 }
 export default function Layout({ children }: Props) {
   const [fullWidth, setFullWidth] = useState(false);
-  const [property, setProperty] = useState<PropertyType[]>([]);
-  // const [currentProperty, setCurrentProperty] = useState(property.length > 0 ? property[0].website_url : "");
-  // const [performanceMetric, setPerformanceMetric] = useState<PerformanceMetrics>()
-  // const [showProfile, setShowProfile] = useState(false);
+  // const [property, setProperty] = useState<PropertyType[]>([]);
+  const [err, setErr] = useState({ status: false, msg: '' });
+  const [loading, setLoading] = useState(false)
 
   const menus = [
     { title: "Dashboard", icon: <RxDashboard />, link: '/dashboard' },
@@ -55,7 +52,8 @@ export default function Layout({ children }: Props) {
     { title: "Competitor analysis", icon: <FiUsers />, link: '/dashboard/competitor-analysis' },
     { title: "Link building", icon: <IoIosLink />, link: '/dashboard/link-building' },
     { title: "Optimization plans", icon: <FiCheckSquare />, link: '/dashboard/optimization-plans' },
-  ]
+  ];
+
 
   const othermenu = [
     { title: "Feedback", icon: <FiMessageSquare />, link: '/dashboard/feedback' },
@@ -73,8 +71,8 @@ export default function Layout({ children }: Props) {
     return pathname.startsWith(link);
   };
 
- 
-  const token = useSelector((state: RootState) => state.user.token)
+
+  const token = useSelector((state: RootState) => state.user.token);
 
   const router = useRouter();
 
@@ -89,118 +87,138 @@ export default function Layout({ children }: Props) {
 
   const modalState = useSelector((state: RootState) => state.currentModal.currentModal)
   const activeProperty = useSelector((state: RootState) => state.property.activeProperty);
-  const user = useSelector((state: RootState)=> state.user.user)
+  const property = useSelector((state: RootState) => state.property.allProperty);
+  const user = useSelector((state: RootState) => state.user.user)
+
+
   const dispatch = useDispatch();
 
-  // console.log(activeProperty,"HERE>..")
+
   const getProjects = async () => {
     try {
       const res = await ApiCall.get('/crawl/property');
-      if(res.status === 401){
+      if (res.status === 401) {
         router.push('/login');
         return
       }
-      if(res.status === 200){
-        // console.log(res.data)
+      if (res.status === 200) {
+        dispatch(setAllProperty(res.data))
+        activeProperty.length < 1 && dispatch(setActiveProperty(removeTrailingSlash(res.data[0]?.website_url)))
         return res.data;
       }
     } catch (err: any) {
       console.error('Error fetching projects:', err.response.status);
-      if(err.response.status === 401){
+      if (err.response.status === 401) {
         router.push('/login')
       }
       return [];
     }
   };
- 
-  
-  useEffect(() => {
-    const fetchProjects = async () => {
-      const result = await getProjects();
-      setProperty(result);
-      // setCurrentProperty(result[0]?.website_url)
-      dispatch(setAllProperty(result))
-      if(activeProperty.length < 2){
-        dispatch(setActiveProperty(result[0]?.website_url))
-      }
-    };
-    fetchProjects();
+
+  // useQuery({
+  //   queryKey: ["dashboard"],
+  //   queryFn: getProjects,
     
-  }, []);
+  // })
 
-
-    const {data, isLoading} = useQuery({
-      queryKey: ['dashboardData', activeProperty],
-      queryFn: ()=> {
-        return ApiCall.get('/crawl/overall', {
-          params: {
-            url: removeTrailingSlash(activeProperty),
-            limit: 100
-          }
-        })
+  const fetchDashboardData = async () => {
+    // console.log("ACTIVEPROP", activeProperty)
+    const response = await ApiCall.get("/crawl/overall", {
+      params: {
+        url: removeTrailingSlash(activeProperty),
+        limit: 100
       }
     })
-    dispatch(fetchPerformanceSuccess(data?.data))
+    dispatch(fetchPerformanceSuccess(response?.data))
+    
+  }
+  useEffect(() => {
+    const fetchProjects = async () => {
+     getProjects();
+
+
+    };
+    fetchProjects();
+    fetchDashboardData()
+
+  }, [activeProperty]);
 
 
 
 
-  // useEffect(()=> {
-   
-  //   async function Overviewdata(){
-  //     try {
-  //       const result = await ApiCall.get('/crawl/overall', {
+
+  // const { data } = useQuery({
+  //   queryKey: ["dashboard"],
+  //   queryFn: fetchDashboardData,
+  // })
+
+
+  // console.log("DATA", data)
+
+  // console.log("ACTIVE", activeProperty)
+  // console.log("PROP", property)
+  
+  // const enab = activeProperty ? activeProperty.length > 2 : false
+  //  const { data, isLoading } =  useQuery({
+  //     queryKey: ['dashboardData', activeProperty],
+  //     queryFn: () => {
+  //       return ApiCall.get('/crawl/overall', {
   //         params: {
   //           url: removeTrailingSlash(activeProperty),
   //           limit: 100
   //         }
   //       })
-  //       dispatch(fetchPerformanceSuccess(result?.data))
-  //     } catch (error:any) {
-  //       console.log(error.message)
-  //     }
-  //   }
-  //   Overviewdata()
-  // }, [activeProperty])
+  //     },
+  //     enabled: enab
+  //   }) 
 
 
 
 
 
+  async function handleSubmitUrl() {
+    const urlPattern = /^(ftp|http[s]?):\/\/[^ "]+(\.[^ "]+)+$/
+    if (!urlPattern.test(activeProperty)) {
+      setErr({ status: true, msg: 'Enter a valid url' })
+      setLoading(false)
+      setTimeout(() => {
+        setLoading(false)
+        setErr({ status: false, msg: '' })
+      }, 5000)
+      return
+    }
+    try {
+      setLoading(true)
+      dispatch(setModal('addProject'))
+      ApiCall.get(`crawl/add-property?url=${removeTrailingSlash(activeProperty)}`);
+      dispatch(setActiveProperty(removeTrailingSlash(activeProperty)));
+      dispatch(setModal('crawling'));
+      await Promise.all([
+        crawler("/crawl/webcrawler", { url: removeTrailingSlash(activeProperty), type: "passive" }),
+        crawler("/crawl/technical/mini-crawler", { url: removeTrailingSlash(activeProperty), timeout: 7 }),
+        crawler("/crawl/content-analysis/mini-crawler", { url: removeTrailingSlash(activeProperty) }),
+      ])
 
-  // console.log("PROPERTY:",activeProperty)
+      dispatch(setModal(''))
+    } catch (error: any) {
+      console.log("ERR", error)
+      setErr({ status: true, msg: error.response.data.message });
+      if (error.status === 401) {
+        router.push('/login')
+      }
+      setLoading(false)
+      setTimeout(() => {
+        setErr({ status: false, msg: '' });
+      }, 5000);
+      return false;
 
-  // const getPerformanceMetrics = async (url: string) => {
-  //   if(activeProperty.length > 0){
-  //     dispatch(fetchPerformanceStart())
-  //     try {
-  //       const res = await ApiCall.get('/crawl/overall', {
-  //         params: {
-  //           url: activeProperty,
-  //           type: 'passive',
-  //           limit: 10
-  //         }
-  //       });
-  //       dispatch(fetchPerformanceSuccess(res?.data))
-  //     } catch (error) {
-  //       dispatch(fetchPerformanceFailure(`Failed to fetch performance metric, Error: ${error}`))
-  //       console.error('Error fetching performance metrics:', error);
-  //     }
-  //   }
-  // }; 
+    }
+    setLoading(false)
+  }
 
-  // useEffect(() => {
-
-  //   if (property.length > 0) {
-  //     getPerformanceMetrics(activeProperty)
-  //       .catch((error) => console.error("Error fetching performance metrics:", error));
-  //   }
-  // }, [property, activeProperty]);
-// console.log("PROP", activeProperty)
-const quertClient = new QueryClient()
   return (
-  //  <QueryClientProvider client={quertClient}>
-     <>
+    //  <QueryClientProvider client={quertClient}>
+    <div>
       {modalState === 'addProject' && <MainModal closeModal={() => dispatch(setModal(''))} ModalBody={AddProject} />}
 
       <main className={`h-screen w-full flex overflow-clip `}>
@@ -213,7 +231,7 @@ const quertClient = new QueryClient()
           <div className="absolute right-0 z-50 top-12 p-1.5 bg-white border shadow-md rounded-md cursor-pointer" onClick={() => setFullWidth(!fullWidth)}>
             <RxDoubleArrowLeft className={`${!fullWidth && 'scale-x-[-1]'} duration-300 transition-all ease-out`} />
           </div>
-         
+
           <div className="grid ">
             <Link href={`/`}>
               <Image src={`${fullWidth ? "/home/white-logo.png" : "/home/mobile-logo.png"}`} className=" pt-2" alt="Webmaxi Logo" height={24} width={124} />
@@ -254,41 +272,42 @@ const quertClient = new QueryClient()
               <div>
                 <div className="w-full">
                   <button className='w-full rounded-lg flex items-center px-3 text-base py-3 bg-primary text-white font-semibold' onClick={() => dispatch(setModal('addProject'))}>
-                    + <span className={`hidden lg:flex`}>Add project </span>
+                    + <span className={`hidden lg:flex`}> Add project </span>
                   </button>
                 </div>
               </div>
             </div>
             <div className="lg:flex  w-full justify-end hidden">
               <div className="flex items-center justify-end w-full gap-4">
-                <Link href={'/pricing'}  className=' cursor-pointer gap-2 border rounded-lg border-[#D0D5DD] text-base p-3 flex items-center text-[#344054] font-semibold'>
-                  <BsLightningCharge /> Upgrade now 
+                <Link href={'/pricing'} className=' cursor-pointer gap-2 border rounded-lg border-[#D0D5DD] text-base p-3 flex items-center text-[#344054] font-semibold'>
+                  <BsLightningCharge /> Upgrade now
                 </Link>
-                <div className=" flex p-2.5 items-center gap-2">
+                {/* <div className=" flex p-2.5 items-center gap-2">
                   <CiSearch className='text-[#667085] text-2xl' />
-                </div>
-                <div className=" flex p-2.5 items-center gap-2">
-                  
+                </div> */}
+                {/* <div className=" flex p-2.5 items-center gap-2">
+
                   <IoMdNotificationsOutline className='text-[#667085] text-2xl' />
-                </div>
+                </div> */}
                 <div className='h-[40px] w-[40px] rounded-full border flex items-center justify-center '>
-                  {user && user?.fullName?.split(' ')[0]?.slice(0,1).toUpperCase()  }
-                  {user && user?.fullName?.split(' ')[1]?.slice(0,1).toUpperCase()  }
+                  {user && user?.fullName?.split(' ')[0]?.slice(0, 1).toUpperCase()}
+                  {user && user?.fullName?.split(' ')[1]?.slice(0, 1).toUpperCase()}
                 </div>
               </div>
             </div>
           </div>
           <hr className="w-full  hidden md:flex " />
           {
-            isLoading ?    <LoaderPulse/> :
-            property.length < 1 ? <DashboardOverviewPlaceholder /> : <div className=" w-full h-full overflow-auto p-2 md:p-8">
-            
-            {children}
-          </div>
+            loading ? <LoaderPulse /> :
+              property.length < 1 ? <DashboardOverviewPlaceholder /> : <div className=" w-full h-full overflow-auto p-2 md:p-8">
+
+                {children}
+              </div>
           }
-       
+
         </section>
       </main>
-    </>
+    </div>
   );
 }
+

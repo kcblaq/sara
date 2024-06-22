@@ -1,5 +1,6 @@
 "use client"
 import FilledButton from '@/app/component/FilledButton'
+import { crawler } from '@/app/services/crawler';
 import { removeTrailingSlash } from '@/app/utils/RemoveSlash';
 import ApiCall from '@/app/utils/apicalls/axiosInterceptor';
 import { setModal } from '@/redux/features/modalstates';
@@ -48,6 +49,12 @@ export default function DashboardOverviewPlaceholder() {
                     timeout: 5
                 }
             }),
+            ApiCall.get('/crawl/content-analysis/mini-crawler', {
+                params: {
+                    url: removeTrailingSlash(inputUrl),
+                }
+            }),
+            // crawler("/crawl/content-analysis/mini-crawler", {url:removeTrailingSlash(inputUrl)}),
             ApiCall.get('/crawl/property')
         ]);
         dispatch(setModal(''));

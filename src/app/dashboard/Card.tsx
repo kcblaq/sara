@@ -15,18 +15,18 @@ interface Props {
 }
 
 
-export default function Card({ title,  style, amount, percent, chart, arrowPosition }: Props) {
-  
-  const {metrics, loading, error} = useSelector((state: RootState)=> state.performance)
-  const temp = metrics && metrics?.history?.scores  ;
-  const lastScore = temp &&  temp[0] ;
+export default function Card({ title, style, amount, percent, chart, arrowPosition }: Props) {
+
+  const { metrics, loading, error } = useSelector((state: RootState) => state.performance)
+  const temp = metrics && metrics?.history?.scores;
+  const lastScore = temp && temp[0];
   let lastUpdated: string | undefined;
   if (lastScore?.createdAt) {
     lastUpdated = formatDate({ inputDate: lastScore.createdAt });
-} else {
+  } else {
     ''
-}
- 
+  }
+
 
   // const latestDate = formatDate()
 
@@ -65,8 +65,8 @@ export default function Card({ title,  style, amount, percent, chart, arrowPosit
               <FaArrowUp className={arrowPosition}/> {percent && percent?.toFixed(1)}%
             </span> */}
             <span className={style} style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-  <FaArrowUp className={arrowPosition}/> {typeof percent === 'number' ? percent.toFixed(1) : percent}%
-</span>
+              <FaArrowUp className={arrowPosition} /> {typeof percent === 'number' ? percent.toFixed(1) : percent}%
+            </span>
             vs last update
           </p>
           <p className='p-2 float-end'>
@@ -80,3 +80,13 @@ export default function Card({ title,  style, amount, percent, chart, arrowPosit
   );
 }
 
+
+export function SimpleCard({ title, amount }: { title: string, amount: number }) {
+
+  return (
+    <div className="flex flex-col gap-6 w-full max-w-[390px] h-[176px] rounded-md p-6 border ">
+      <h5 className=" font-semibold text-base">{title}</h5>
+      <h1 className='font-bold text-4xl text-[#101828]'>{amount} </h1>
+    </div>
+  );
+}
