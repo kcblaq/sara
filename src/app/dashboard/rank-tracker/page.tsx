@@ -35,7 +35,7 @@ export default function page() {
       }
     })
   })
-  console.log("RANK",data)
+  // console.log("RANK",data)
   return (
     <main className='grid w-full h-full items-start content-start gap-6'>
       <section className={`flex items-center w-full justify-between`}>
@@ -63,7 +63,7 @@ export default function page() {
             {
               tabs.map((tab) => {
                 return (
-                  <div key={tab.title} >
+                  <span key={tab.title} >
                     <Tab as={Fragment}>
                       {({ selected }) => (
                         <p
@@ -75,7 +75,7 @@ export default function page() {
                         </p>
                       )}
                     </Tab>
-                  </div>
+                  </span>
                 )
               })
             }
@@ -89,12 +89,12 @@ export default function page() {
               {
                 tabs.map((tab) => {
                   return (
-                    <div key={tab.title} className='h-full '>
+                    <span key={tab.title} className='h-full '>
                       <Tab.Panel>
 
                         {tab.content}
                       </Tab.Panel>
-                    </div>
+                    </span>
                   )
                 })
               }

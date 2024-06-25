@@ -5,13 +5,11 @@ import Image from "next/image";
 import { FeatureCard, WhyUseWemaxiCard } from "../landingpage/Homecomponents";
 import PlainButton from "../PlainButton";
 import FAQComponent from "./faq/FAQComponent";
-import { currentYear } from "@/app/utils/currenYear";
-import Footer from "./footer/Footer";
 import TempFooter from "./footer/TempFooter";
 
 export default function HomePage() {
      return (
-          <main className="w-full snap-y snap-mandatory overflow-y-scroll h-full text-base font-normal">
+          <div suppressHydrationWarning className="w-full snap-y snap-mandatory overflow-y-scroll h-full text-base font-normal">
                <div className="top-0 z-50 left-0 fixed w-full">
                     <Nav />
                     <hr className="w-full" />
@@ -29,7 +27,6 @@ export default function HomePage() {
                               </p>
                          </div>
                          <Link href={`/signup`} className=" max-w-[400px]" >
-                              {/* <PlainButton title="Learn more" /> */}
                               <FilledButton title="Get started for free" />
                          </Link>
 
@@ -41,12 +38,6 @@ export default function HomePage() {
 
 
                     <div className="flex h-full w-full"
-                    // style={{
-                    //      backgroundImage: 'url("/bghome.png")',
-                    //      backgroundSize: 'auto auto'
-
-                    // }}
-
                     >
                          <Image src={`/bghome.png`} alt="Home page image" width={1280} height={10} />
                     </div>
@@ -59,7 +50,6 @@ export default function HomePage() {
 
                <section className=" snap-start h-full w-full p-4 flex flex-col items-center py-24 justify-center bg-lightBg"> <h1 className=" text-darkPrimary text-base font-semibold">Features </h1> <h1 className="pt-3 text-3xl lg:text-4xl font-semibold text-center"> Unleash the power of Webmaxi: Elevate your SEO game</h1> <p className='text-xl pt-5'> Discover a suite of intelligent features designed to propel your website to new heights.</p>
 
-                    {/* <div className='flex flex-col justify-center 2xl:pt-16 pt-10 gap-8 2xl:gap-12'> */}
                     <div className=' w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 gap-10 justify-items-end md:gap-14 lg:gap-20 2lg:gap-32'>
                          <FeatureCard title="AI-Powered Audits for Precise Insights and Prioritized Actions" description="Our AI algorithms analyze every aspect of your website, providing deep insights into technical issues, content relevance, and user experience." icon="/feature-graph.png" />
                          <FeatureCard title="Smart Keyword Research for Targeted Strategies" description="Uncover hidden gems with our AI-driven keyword research tool, ensuring your content targets the most lucrative and relevant terms." icon="/feature-key.png" />
@@ -68,27 +58,12 @@ export default function HomePage() {
                          <FeatureCard title="Actionable Recommendations for Optimal Performance" description="Get personalized recommendations based on your website's unique needs, allowing for a customized and efficient optimization journey." icon="/feature-marked.png" />
                     </div>
                     
-                    
-                    
-                    
-                    {/* <div className="grid grid-cols-1 md:grid-cols-3 items-center justify-items-center gap-8">
-
-                         <div className="h-40 w-80 bg-green-400">Hi</div>
-                         <div className="h-40 w-80 bg-green-400">Hi</div>
-                         <div className="h-40 w-80 bg-green-400">Hi</div>
-                         <div className="h-40 w-80 bg-green-400">Hi</div>
-                         <div className="h-40 w-80 bg-green-400">Hi</div>
-                    </div> */}
-
-                    {/* </div> */}
+                  
                     <a href="#faq" className=' pt-16'>
                          <FilledButton title="Learn more" />
                     </a>
                </section>
 
-               {/* <section className="min-h-screen shrink-0 snap-start flex items-center justify-center py-24">
-                    Why use webmaxi
-               </section> */}
 
                <section className=" snap-start px-4 min-h-screen w-full flex flex-col items-center pt-18  py-24 justify-start">
                     <div className="text-center">
@@ -127,8 +102,8 @@ export default function HomePage() {
 
                          </div>
                          <div className="pt-10 flex flex-col md:flex-row gap-2 items-center w-full ">
-                              <span className=" w-full lg:w-1/3"><PlainButton title="Learn more" /></span>
-                              <span className="w-full"> <FilledButton title="Unlock your website's potential now!" /></span>
+                              <a href="/pricing" className=" w-full lg:w-1/3"><PlainButton title="Learn more" /></a>
+                              <a href="/signup" className="w-full"> <FilledButton title="Unlock your website's potential now!" /></a>
 
                          </div>
                     </div>
@@ -158,7 +133,7 @@ export default function HomePage() {
                          </h4>
                          <p className=" text-lg text-[#475467] font-normal "> Can’t find the answer you’re looking for? Please chat our friendly team.</p>
                     </div>
-                    <span className=""> <FilledButton title="Get in touch" /></span>
+                    <a href="/contact" className=""> <FilledButton title="Get in touch" /></a>
                </section>
 
 
@@ -167,6 +142,6 @@ export default function HomePage() {
                     <TempFooter/>
                </footer>
 
-          </main>
+          </div>
      )
 }

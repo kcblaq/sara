@@ -39,7 +39,7 @@ const dispatch = useDispatch();
           leaveTo="transform opacity-0 scale-95"
         >
           <Menu.Items className="absolute z-50 right-0 mt-2 w-full origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
-            <div className="px-1 py-1 ">
+            <span className="px-1 py-1 ">
             {
              item && item.map((prop, i )=> {
                 return <Menu.Item key={i}>
@@ -58,7 +58,7 @@ const dispatch = useDispatch();
               })
             }
               
-            </div>
+            </span>
           </Menu.Items>
         </Transition>
       </Menu>

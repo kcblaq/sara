@@ -102,7 +102,7 @@ export default function page() {
               {
                 tabs.map((tab) => {
                   return (
-                    <div key={tab.title} >
+                    <span key={tab.title} >
                       <Tab as={Fragment}>
                         {({ selected }) => (
                           <p
@@ -114,7 +114,7 @@ export default function page() {
                           </p>
                         )}
                       </Tab>
-                    </div>
+                    </span>
                   )
                 })
               }
@@ -123,7 +123,7 @@ export default function page() {
 
             </Tab.List>
             <hr className="w-full" />
-            <div className={` h-full w-full overflow-auto  `}>
+            <span className={` h-full w-full overflow-auto  `}>
               <Tab.Panels>
                 {
                   tabs.map((tab) => {
@@ -138,14 +138,14 @@ export default function page() {
                   })
                 }
               </Tab.Panels>
-            </div>
+            </span>
 
           </Tab.Group>
         </section>
       </main> 
       :
-      <main className="">
+      <span className="">
         Detail
-      </main>
+      </span>
   )
 }

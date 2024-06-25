@@ -49,17 +49,17 @@ export default function BacllinkPages() {
               leaveTo="transform opacity-0 scale-95"
             >
               <Menu.Items className="absolute z-50 right-0 mt-2 w-full origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
-                <div className="px-1 py-1 ">
+                <span className="px-1 py-1 ">
                   {
-                    ['Main','Everyone'].map((item, i) => {
+                    ['Main', 'Everyone'].map((item, i) => {
                       return <Menu.Item key={i}>
                         {({ active }) => (
                           <button
                             className={`${active ? 'bg-primary text-white' : 'text-gray-900'
                               } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                            onClick={()=> setAttribute(item)}
+                            onClick={() => setAttribute(item)}
                           >
-                            
+
                             {item}
                           </button>
                         )}
@@ -67,7 +67,7 @@ export default function BacllinkPages() {
                     })
                   }
 
-                </div>
+                </span>
               </Menu.Items>
             </Transition>
           </Menu>
@@ -79,94 +79,94 @@ export default function BacllinkPages() {
         </div>
       </section>
       <section className=" h-full">
-      <main className='grid w-full h-full items-start content-start gap-6 my-10 mb-20 overflow-auto'>
-      <div className="grid h-full w-full overflow-auto border rounded-md ">
-        <div className="flex w-full items-center justify-between p-6">
-          <p className={` font-medium text-[#101828] text-lg`}> 6,150 Referring pages</p>
-        </div>
-        <table className='py-4 w-full text-xs'>
-          <thead className=' bg-[#EAECF0] h-12'>
-            <tr className='rounded-md items-center'>
-              <th className='font-medium text-xs text-[#475467]   text-left p-2'> 
-              <span className={`flex items-center gap-1 text-xs`}> Referring page title and URL <button title='The volume of ...'> <GoQuestion />
-                </button></span>
-              </th>
-              <th className='font-medium text-xs text-[#475467]  text-left p-2 flex items-center gap-2 mt-2'>
-              <span className={`flex items-center gap-1 text-xs`}> PTS <button title='The volume of ...'> <GoQuestion />
-                </button> <FaArrowUp /> </span>
-                
-              </th>
-              <th className='font-medium text-xs text-[#475467]   text-left p-2 '>
-                <span className={`flex items-center gap-1 text-xs`}> DTS <button title='The volume of ...'> <GoQuestion />
-                </button> <FaArrowUp /> </span>
-              </th>
-              <th className='font-medium text-xs text-[#475467]   text-left p-2 '>
-                <span className={`flex items-center gap-1 text-xs`}> Anchor and target URL  <button title='The volume of ...'> <GoQuestion />
-                </button> </span>
-              </th>
-              <th className='font-medium text-xs text-[#475467]   text-left p-2 '>
-                <span className={`flex items-center gap-1 text-xs`}> Link type <button title='The volume of ...'> <GoQuestion />
-                </button>  </span>
-              </th>
-              <th className='font-medium text-xs text-[#475467]   text-left p-2 '>
-                <span className={`flex items-center gap-1 text-xs`}> Status & Attr. <button title='The volume of ...'> <GoQuestion />
-                </button> </span>
-              </th>
-              <th className='font-medium text-xs text-[#475467]   text-left p-2 '>First seen </th>
-              <th className='font-medium text-xs text-[#475467]   text-left p-2 '>Last seen </th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              mockedData.map((data)=> {
-                return (
-                  <tr className=' border-b'>
-              <td className=' p-2 '>
-                <span className='grid'>
-                {data.keyword} 
-                
-                <span className='text-primary'> {data.url}</span>
-                </span>
-              </td>
-              <td className=' p-2 '> 
-              <span className={`flex items-center text-xs p-1 gap-1`}>{data.position} <span className={` py-0.5 px-2 rounded-full flex items-center gap-1 `}>  </span>  </span>
-              </td>
-              
-              <td className='  p-2 rounded-full'><span className={``}>{data.volume} </span> </td>
-              <td className=' p-2 '>
-                <span className='grid'>
-                {data.keyword} 
-                
-                <span className='text-primary'> {data.url}</span>
-                </span>
-              </td>
-              <td className='  '><span className={`flex rounded-full p-2  text-center justify-center items-center bg-[#F2F4F7] gap-2 text-sm`}>
-                <p>{data.volume > 30 ? 'Text' : 'Image'}</p>
-                </span> </td>
-              <td className='  p-2 rounded-full'><span className={`flex items-center gap-2 `}>
-                <span className={`rounded-full p-2 px-3 ${data.volume % 2 == 0 ? 'text-green-500 bg-green-200': 'bg-red-200 text-red-500'}`}> 
-                  {data.volume % 2 == 0 ? "New" : "Lost"}
-                 </span>
-                <span className={`rounded-full p-2 px-3 ${data.volume % 2 == 0 ? 'text-green-500 bg-green-200': 'bg-red-200 text-red-500'}`}> 
-                  
-                  {data.volume > 30 ? "Follow" : "Nofollow"}
-                 </span>
-                </span> </td>
-              <td className='  p-2 rounded-full'><span className={``}> 20th June,2024</span> </td>
-              <td className='  p-2 rounded-full'><span className={` `}>10th July,2024 </span> </td>
-            </tr>
-                )
-              })
-            }
-           
-            
-          </tbody>
-        </table>
-      </div>
-      <section className='w-full'>
+        <main className='grid w-full h-full items-start content-start gap-6 my-10 mb-20 overflow-auto'>
+          <div className="grid h-full w-full overflow-auto border rounded-md ">
+            <div className="flex w-full items-center justify-between p-6">
+              <p className={` font-medium text-[#101828] text-lg`}> 6,150 Referring pages</p>
+            </div>
+            <table className='py-4 w-full text-xs'>
+              <thead className=' bg-[#EAECF0] h-12'>
+                <tr className='rounded-md items-center'>
+                  <th className='font-medium text-xs text-[#475467]   text-left p-2'>
+                    <span className={`flex items-center gap-1 text-xs`}> Referring page title and URL <button title='The volume of ...'> <GoQuestion />
+                    </button></span>
+                  </th>
+                  <th className='font-medium text-xs text-[#475467]  text-left p-2 flex items-center gap-2 mt-2'>
+                    <span className={`flex items-center gap-1 text-xs`}> PTS <button title='The volume of ...'> <GoQuestion />
+                    </button> <FaArrowUp /> </span>
 
-      </section>
-    </main>
+                  </th>
+                  <th className='font-medium text-xs text-[#475467]   text-left p-2 '>
+                    <span className={`flex items-center gap-1 text-xs`}> DTS <button title='The volume of ...'> <GoQuestion />
+                    </button> <FaArrowUp /> </span>
+                  </th>
+                  <th className='font-medium text-xs text-[#475467]   text-left p-2 '>
+                    <span className={`flex items-center gap-1 text-xs`}> Anchor and target URL  <button title='The volume of ...'> <GoQuestion />
+                    </button> </span>
+                  </th>
+                  <th className='font-medium text-xs text-[#475467]   text-left p-2 '>
+                    <span className={`flex items-center gap-1 text-xs`}> Link type <button title='The volume of ...'> <GoQuestion />
+                    </button>  </span>
+                  </th>
+                  <th className='font-medium text-xs text-[#475467]   text-left p-2 '>
+                    <span className={`flex items-center gap-1 text-xs`}> Status & Attr. <button title='The volume of ...'> <GoQuestion />
+                    </button> </span>
+                  </th>
+                  <th className='font-medium text-xs text-[#475467]   text-left p-2 '>First seen </th>
+                  <th className='font-medium text-xs text-[#475467]   text-left p-2 '>Last seen </th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  mockedData.map((data) => {
+                    return (
+                      <tr className=' border-b'>
+                        <td className=' p-2 '>
+                          <span className='grid'>
+                            {data.keyword}
+
+                            <span className='text-primary'> {data.url}</span>
+                          </span>
+                        </td>
+                        <td className=' p-2 '>
+                          <span className={`flex items-center text-xs p-1 gap-1`}>{data.position} <span className={` py-0.5 px-2 rounded-full flex items-center gap-1 `}>  </span>  </span>
+                        </td>
+
+                        <td className='  p-2 rounded-full'><span className={``}>{data.volume} </span> </td>
+                        <td className=' p-2 '>
+                          <span className='grid'>
+                            {data.keyword}
+
+                            <span className='text-primary'> {data.url}</span>
+                          </span>
+                        </td>
+                        <td className='  '><span className={`flex rounded-full p-2  text-center justify-center items-center bg-[#F2F4F7] gap-2 text-sm`}>
+                          <p>{data.volume > 30 ? 'Text' : 'Image'}</p>
+                        </span> </td>
+                        <td className='  p-2 rounded-full'><span className={`flex items-center gap-2 `}>
+                          <span className={`rounded-full p-2 px-3 ${data.volume % 2 == 0 ? 'text-green-500 bg-green-200' : 'bg-red-200 text-red-500'}`}>
+                            {data.volume % 2 == 0 ? "New" : "Lost"}
+                          </span>
+                          <span className={`rounded-full p-2 px-3 ${data.volume % 2 == 0 ? 'text-green-500 bg-green-200' : 'bg-red-200 text-red-500'}`}>
+
+                            {data.volume > 30 ? "Follow" : "Nofollow"}
+                          </span>
+                        </span> </td>
+                        <td className='  p-2 rounded-full'><span className={``}> 20th June,2024</span> </td>
+                        <td className='  p-2 rounded-full'><span className={` `}>10th July,2024 </span> </td>
+                      </tr>
+                    )
+                  })
+                }
+
+
+              </tbody>
+            </table>
+          </div>
+          <section className='w-full'>
+
+          </section>
+        </main>
       </section>
     </main>
   )

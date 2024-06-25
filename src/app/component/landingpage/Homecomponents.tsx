@@ -56,7 +56,7 @@ export function WhyUseWemaxiCard({ icon, title, description, cat }: WhyCardProps
                 {description}
             </p>
             </div>
-            <Link href={cat} className=" pt-14 text-start text-primary flex items-center gap-2 ">
+            <Link href={`/signup`} className=" pt-14 text-start text-primary flex items-center gap-2 ">
                 Try it out <FaArrowRight />
             </Link>
         </section>

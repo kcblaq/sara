@@ -4,10 +4,10 @@ import React, { Fragment } from 'react'
 
 interface ModalType  {
   closeModal: ()=> void;
-  ModalBody: React.ComponentType<{closeModal: ()=> void}>
+  ModalBody: React.ReactNode
 
 }
-export default function MainModal({ closeModal, ModalBody}: ModalType) {
+export default function AutoModal({ closeModal, ModalBody}: ModalType) {
   // let [isOpen, setIsOpen] = useState(true)
 
   return (
@@ -39,7 +39,7 @@ export default function MainModal({ closeModal, ModalBody}: ModalType) {
               >
                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                   
-                  <ModalBody closeModal={closeModal}/>
+                  {ModalBody}
                   {/* <Dialog.Title
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
