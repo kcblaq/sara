@@ -235,6 +235,16 @@ export default function Layout({ children }: Props) {
   function closeModal(){
     setShow(false)
   }
+
+  const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+      setIsClient(true);
+    }, []);
+  
+    if (!isClient) {
+      return null;
+    }
   return ( 
     //  <QueryClientProvider client={quertClient}>
     <>
