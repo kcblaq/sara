@@ -27,7 +27,7 @@ export default function AverageTimeOnsite() {
     //         return 0
     //     }
     // }
-    const pageData = (scores ?? []).map((item) => item.average_time_on_site).filter((value) => value !== undefined) as number[];
+    const pageData = (scores ?? []).map((item: { average_time_on_site: any; }) => item.average_time_on_site).filter((value: undefined) => value !== undefined) as number[];
 
     // console.log("PAGED", pageData)
     function extractFields(): any[] {

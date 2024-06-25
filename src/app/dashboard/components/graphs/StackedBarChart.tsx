@@ -86,9 +86,9 @@ export function completeArray(arr: string[]) {
 
 export function StackedBarChart() {
   const backlinkData = useSelector((state: RootState)=> state.performance.metrics?.history?.backlinks)
-  const labels = backlinkData?.map((item)=> moment(item.createdAt).format("DD MMM YY")) ?? []
-  const newLinks = backlinkData?.map((item)=> item.new)
-  const lostLinks = backlinkData?.map((item)=> item.lost)
+  const labels = backlinkData?.map((item: { createdAt: moment.MomentInput; })=> moment(item.createdAt).format("DD MMM YY")) ?? []
+  const newLinks = backlinkData?.map((item: { new: any; })=> item.new)
+  const lostLinks = backlinkData?.map((item: { lost: any; })=> item.lost)
 
 
 

@@ -36,6 +36,7 @@ import { PopoverComponent } from './components/ui/PopOver';
 import CheckUserType from './components/CheckUserType';
 import Button from './components/ui/Button';
 import AutoModal from '../component/modals/AutoModal';
+import Error from 'next/error';
 
 
 interface Props {
@@ -77,9 +78,36 @@ export default function Layout({ children }: Props) {
   };
 
 
-  const token = useSelector((state: RootState) => state.user.token);
+  
 
   const router = useRouter();
+
+  
+
+
+  const modalState = useSelector((state: RootState) => state.currentModal.currentModal)
+  const activeProperty = useSelector((state: RootState) => state.property.activeProperty);
+  const property = useSelector((state: RootState) => state.property.allProperty);
+  const user = useSelector((state: RootState) => state.user.user);
+  const token = useSelector((state: RootState) => state.user.token);
+  // const dashboardData = useSelector((state: RootState)=> state.performance);
+ 
+  
+  const { data: dashboardData , isSuccess,} = useQuery({
+    queryKey: ["dashboard"],
+    queryFn: async () => {
+      const response = await ApiCall.get("/crawl/overall", {
+        params: {
+          url: removeTrailingSlash(activeProperty),
+          limit: 100
+        }
+      });
+      return response.data; 
+    },
+    
+  });
+
+ 
 
   useEffect(() => {
     if (!token) {
@@ -89,19 +117,12 @@ export default function Layout({ children }: Props) {
   }, [token, router]);
 
 
-
-  const modalState = useSelector((state: RootState) => state.currentModal.currentModal)
-  const activeProperty = useSelector((state: RootState) => state.property.activeProperty);
-  const property = useSelector((state: RootState) => state.property.allProperty);
-  const user = useSelector((state: RootState) => state.user.user);
-
-
-
   const dispatch = useDispatch();
 
 
   const getProjects = async () => {
     try {
+      // dispatch(setActiveProperty([]))
       const res = await ApiCall.get('/crawl/property');
       if (res.status === 401) {
         router.push('/login');
@@ -113,14 +134,15 @@ export default function Layout({ children }: Props) {
         return res.data;
       }
     } catch (err: any) {
-      console.error('Error fetching projects:', err.response.status);
-      if (err.response.status === 401) {
+      console.error('Error fetching projects:', err?.response?.status ?? "");
+      if (err?.response?.status === 401) {
         router.push('/login')
       }
       return [];
     }
   };
 
+  console.log("DATA", dashboardData)
   // useQuery({
   //   queryKey: ["dashboard"],
   //   queryFn: getProjects,
@@ -145,7 +167,7 @@ export default function Layout({ children }: Props) {
 
     };
     fetchProjects();
-    fetchDashboardData()
+    activeProperty.length ? fetchDashboardData() : ""
 
   }, [activeProperty]);
 
@@ -332,7 +354,7 @@ export default function Layout({ children }: Props) {
             <hr className="w-full  hidden md:flex " />
             {
               loading ? <LoaderPulse /> :
-                property.length < 1 ? <DashboardOverviewPlaceholder /> : <div className=" w-full h-full overflow-auto p-2 md:p-8">
+                property.length < 1 || dashboardData === undefined ? <DashboardOverviewPlaceholder /> : <div className=" w-full h-full overflow-auto p-2 md:p-8">
 
                   {children}
                 </div>

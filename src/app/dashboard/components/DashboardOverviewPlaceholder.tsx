@@ -1,6 +1,8 @@
 "use client"
 import FilledButton from '@/app/component/FilledButton'
 import { crawler } from '@/app/services/crawler';
+import { RootState } from '@/app/store';
+import { notify } from '@/app/utils';
 import { removeTrailingSlash } from '@/app/utils/RemoveSlash';
 import ApiCall from '@/app/utils/apicalls/axiosInterceptor';
 import { setModal } from '@/redux/features/modalstates';
@@ -8,6 +10,7 @@ import { setModal } from '@/redux/features/modalstates';
 import { setActiveProperty } from '@/redux/features/propertySlice';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux'
 
 export default function DashboardOverviewPlaceholder() {
@@ -17,6 +20,7 @@ export default function DashboardOverviewPlaceholder() {
   const [inputUrl, setInputUrl] = useState('')
   const dispatch = useDispatch();
   const router = useRouter();
+    const user = useSelector((state: RootState) => state.user)
 
   async function handleSubmitUrl() {
     const urlPattern = /^(ftp|http[s]?):\/\/[^ "]+(\.[^ "]+)+$/;
@@ -35,7 +39,6 @@ export default function DashboardOverviewPlaceholder() {
 
         await Promise.all([
             dispatch(setModal('crawling')),
-            setLoading(true),
             ApiCall.get('/crawl/webcrawler', {
                 params: {
                     url: removeTrailingSlash(inputUrl),
@@ -67,6 +70,10 @@ export default function DashboardOverviewPlaceholder() {
         if (error.response && error.response.status === 401) {
             router.push('/login');
         }
+        notify({
+            type: "error",
+            message: error?.response?.data?.message
+        })
     } finally {
         setLoading(false);
     }
