@@ -52,7 +52,7 @@ export default function Card({ title, style, amount, percent, chart, arrowPositi
   } as const;
 
   return (
-    <div className="flex flex-col gap-6 w-full max-w-[390px] h-[176px] rounded-md p-6 border ">
+    <div className="flex flex-col gap-6 w-full max-w-[390px] overflow-auto h-[176px] rounded-md p-6 border ">
       <div className="flex w-full justify-between items-center">
         <h5 className=" font-semibold text-base">{title}</h5>
         <p className=" text-sm font-normal">{lastUpdated} </p>

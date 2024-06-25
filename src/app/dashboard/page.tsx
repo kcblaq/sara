@@ -15,6 +15,8 @@ import { useRouter } from 'next/navigation';
 import { StackedBarChart } from './components/graphs/StackedBarChart';
 import { RootState } from '../store';
 import KeywordTable from './components/tables/KeywordTable';
+import AutoModal from '../component/modals/AutoModal';
+import CheckUserType from './components/CheckUserType';
 
 export default function Dashboard() {
 
@@ -30,8 +32,9 @@ export default function Dashboard() {
   </svg>
 
   const [loaded, setLoaded] = useState(false);
-  const User = useSelector((state: RootState) => state.user.user );
-  
+  const [show, setShow] = useState(false);
+  const User = useSelector((state: RootState) => state.user.user);
+
 
   useEffect(() => {
     setLoaded(true)
@@ -46,41 +49,49 @@ export default function Dashboard() {
 
   const router = useRouter()
 
+  function closeModal() {
+    setShow(false)
+  }
   return (
-    <section className=' mb-10 p-2 grid h-full overflow-auto '>
-      <div className="flex w-full flex-col md:flex-row justify-between items-start flex-grow">
-        <div className='flex flex-col'>
-          <h1 className="text-2xl text-[#101828] font-semibold">Welcome back, {User.fullName} </h1>
-          <p>Track, manage and boost your site’s SEO.</p>
-        </div>
-        <div className="flex items-center gap-2">
-          <span>
-            <PlainButton title="Export" icon={exportIcon} />
-          </span>
-          <span>
-            <FilledButton title="View recommendations" handleClick={() => router.push('/dashboard/optimization-plans')} />
-          </span>
-        </div>
-      </div>
-
-      {loaded &&
-        <section className="grid items-center grid-cols-1 md:grid-cols-3 pt-8 gap-6 justify-between">
-          <OrganicTrafficCard />
-          <OrganicKeywords />
-          <AverageTimeOnsite />
-        </section>
+    <>
+      {
+        show && <AutoModal closeModal={() => setShow(false)} ModalBody={<CheckUserType close={closeModal} />} />
       }
-      <section className='' >
-        <TraficOverview />
-      </section>
-      <div className="grid shadow-md border font-bold text-xl items-start h-[426px] mb-10 rounded-md p-2 md:p-6 w-full ">
-        <div className="">
-          <div className="flex w-full h-full items-start justify-between">
-            <span className={`text-[#101828] flex items-center gap-4`}>
-              Backlink status
-              <button title='The links associated with your website either leading out or directing into your website'><RxQuestionMarkCircled /></button>
+      <div className=' mb-10 p-2 grid h-full overflow-auto '>
+        <div className="flex w-full flex-col md:flex-row justify-between items-start flex-grow">
+          <div className='flex flex-col'>
+            <h1 className="text-2xl text-[#101828] font-semibold">Welcome back, {User.fullName} </h1>
+            <p>Track, manage and boost your site’s SEO.</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <span>
+              <PlainButton title="Export" icon={exportIcon} handleClick={() => setShow(true)} />
             </span>
-            <select className={`border rounded-md p-2 text-[#344054] text-sm font-normal`}>
+            {/* <span>
+            <FilledButton title="View recommendations" handleClick={() => router.push('/dashboard/optimization-plans')} />
+          </span> */}
+          </div>
+        </div>
+
+        {loaded &&
+          <section className={`grid items-center grid-cols-1 md:grid-cols-3 pt-8 gap-4 justify-between`}>
+            <OrganicTrafficCard />
+            <OrganicKeywords />
+            <AverageTimeOnsite />
+          </section>
+        }
+
+        <section className='' >
+          <TraficOverview />
+        </section>
+        <div className="grid shadow-md border font-bold text-xl items-start h-[426px] mb-10 rounded-md p-2 md:p-6 w-full ">
+          <div className="">
+            <div className="flex w-full h-full items-start justify-between">
+              <span className={`text-[#101828] flex items-center gap-4`}>
+                Backlink status
+                <button title='The links associated with your website either leading out or directing into your website'><RxQuestionMarkCircled /></button>
+              </span>
+              {/* <select className={`border rounded-md p-2 text-[#344054] text-sm font-normal`}>
               <option className={``}>
                 Last 12 months
               </option>
@@ -90,17 +101,17 @@ export default function Dashboard() {
               <option className={``}>
                 Last 3 months
               </option>
-            </select>
+            </select> */}
+            </div>
+            <hr className='w-full mt-4' />
           </div>
-          <hr className='w-full mt-4' />
-        </div>
-        <div className=" h-full w-full max-w-[600px]">
-          {/* <BacklinkGraph /> */}
-          <StackedBarChart />
-        </div>
+          <div className=" h-full w-full max-w-[600px]">
+            {/* <BacklinkGraph /> */}
+            <StackedBarChart />
+          </div>
 
-      </div>
-      <section className='border w-2/3 rounded-md p-2 md:p-6 '>
+        </div>
+        {/* <section className='border w-2/3 rounded-md p-2 md:p-6 '>
         <div className="grid">
           <div className="flex font-bold w-full h-full items-start justify-between">
             <span className={`text-[#101828] flex items-center gap-4`}>
@@ -108,13 +119,13 @@ export default function Dashboard() {
               <button className='' title='Here is the summary of each of your keyword ranking'> <RxQuestionMarkCircled /></button>
             </span>
           </div>
-          {/* <hr className='w-full mt-4' /> */}
         </div>
-        
+
         <div className=" h-full w-full ">
           <KeywordTable />
         </div>
-      </section>
-    </section>
+      </section> */}
+      </div>
+    </>
   )
 }

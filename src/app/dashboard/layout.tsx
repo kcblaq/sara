@@ -32,6 +32,10 @@ import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query';
 import Loader, { LoaderPulse } from '../component/Loader';
 import { crawler } from '../services/crawler';
 import { isAllOf } from '@reduxjs/toolkit';
+import { PopoverComponent } from './components/ui/PopOver';
+import CheckUserType from './components/CheckUserType';
+import Button from './components/ui/Button';
+import AutoModal from '../component/modals/AutoModal';
 
 
 interface Props {
@@ -42,6 +46,7 @@ export default function Layout({ children }: Props) {
   // const [property, setProperty] = useState<PropertyType[]>([]);
   const [err, setErr] = useState({ status: false, msg: '' });
   const [loading, setLoading] = useState(false)
+  const [show, setShow] = useState(false)
 
   const menus = [
     { title: "Dashboard", icon: <RxDashboard />, link: '/dashboard' },
@@ -88,7 +93,8 @@ export default function Layout({ children }: Props) {
   const modalState = useSelector((state: RootState) => state.currentModal.currentModal)
   const activeProperty = useSelector((state: RootState) => state.property.activeProperty);
   const property = useSelector((state: RootState) => state.property.allProperty);
-  const user = useSelector((state: RootState) => state.user.user)
+  const user = useSelector((state: RootState) => state.user.user);
+
 
 
   const dispatch = useDispatch();
@@ -118,7 +124,7 @@ export default function Layout({ children }: Props) {
   // useQuery({
   //   queryKey: ["dashboard"],
   //   queryFn: getProjects,
-    
+
   // })
 
   const fetchDashboardData = async () => {
@@ -130,11 +136,11 @@ export default function Layout({ children }: Props) {
       }
     })
     dispatch(fetchPerformanceSuccess(response?.data))
-    
+
   }
   useEffect(() => {
     const fetchProjects = async () => {
-     getProjects();
+      getProjects();
 
 
     };
@@ -157,7 +163,7 @@ export default function Layout({ children }: Props) {
 
   // console.log("ACTIVE", activeProperty)
   // console.log("PROP", property)
-  
+
   // const enab = activeProperty ? activeProperty.length > 2 : false
   //  const { data, isLoading } =  useQuery({
   //     queryKey: ['dashboardData', activeProperty],
@@ -216,98 +222,116 @@ export default function Layout({ children }: Props) {
     setLoading(false)
   }
 
-  return (
+
+  const handleRoutes = (e: { preventDefault: () => void; }, link: string) => {
+    if (link !== "/dashboard" && user.account_type !== "paid") {
+      e.preventDefault();
+      setShow(true);
+    } else {
+      window.location.href = link;
+    }
+  };
+
+  function closeModal(){
+    setShow(false)
+  }
+  return ( 
     //  <QueryClientProvider client={quertClient}>
-    <div>
-      {modalState === 'addProject' && <MainModal closeModal={() => dispatch(setModal(''))} ModalBody={AddProject} />}
+    <>
+      <div>
+        {modalState === 'addProject' && <MainModal closeModal={() => dispatch(setModal(''))} ModalBody={AddProject} />}
+          {
+            show && <AutoModal closeModal={()=> setShow(false)} ModalBody={<CheckUserType close={closeModal} />}  />
+          }
 
-      <main className={`h-screen w-full flex overflow-clip `}>
+        <main className={`h-screen w-full flex overflow-clip `}>
 
-        {/* drawer... */}
-        <section
-          style={{ width: fullWidth ? "300px" : "60px" }}
-          className={`bg-darkPrimary hidden p-4 h-screen overflow-clip z-40 lg:flex flex-col justify-between  relative transition-all duration-300 ease-in-out`}
-        >
-          <div className="absolute right-0 z-50 top-12 p-1.5 bg-white border shadow-md rounded-md cursor-pointer" onClick={() => setFullWidth(!fullWidth)}>
-            <RxDoubleArrowLeft className={`${!fullWidth && 'scale-x-[-1]'} duration-300 transition-all ease-out`} />
-          </div>
+          {/* drawer... */}
 
-          <div className="grid ">
-            <Link href={`/`}>
-              <Image src={`${fullWidth ? "/home/white-logo.png" : "/home/mobile-logo.png"}`} className=" pt-2" alt="Webmaxi Logo" height={24} width={124} />
-            </Link>
+          <section
+            style={{ width: fullWidth ? "300px" : "60px" }}
+            className={`bg-darkPrimary hidden p-4 h-screen overflow-clip z-40 lg:flex flex-col justify-between  relative transition-all duration-300 ease-in-out`}
+          >
+            <div className="absolute right-0 z-50 top-12 p-1.5 bg-white border shadow-md rounded-md cursor-pointer" onClick={() => setFullWidth(!fullWidth)}>
+              <RxDoubleArrowLeft className={`${!fullWidth && 'scale-x-[-1]'} duration-300 transition-all ease-out`} />
+            </div>
 
-            <div className="grid gap-2 mt-12">
-              {menus.map((menu) => {
+            <div className="grid ">
+              <Link href={`/`}>
+                <Image src={`${fullWidth ? "/home/white-logo.png" : "/home/mobile-logo.png"}`} className=" pt-2" alt="Webmaxi Logo" height={24} width={124} />
+              </Link>
+
+              <div className="grid gap-2 mt-12">
+                {menus.map((menu) => {
+                  return (
+                    <a key={menu.link} onClick={(e)=> handleRoutes(e, menu.link)} href={`${menu.link}`} className={` ${isActive(menu.link) ? ' text-white bg-[#1570EF]' : ''}  hover:text-white hover:scale-105 transition-all duration-300 ease-in-out p-2 rounded-md flex  text-[#84CAFF] items-center gap-2`}>
+                      {menu.icon}
+                      {fullWidth && menu.title}
+                    </a>
+                  )
+                })}
+              </div>
+            </div>
+            <div className="grid gap-4">
+              {othermenu.map((menu) => {
                 return (
-                  <Link key={menu.link} href={`${menu.link}`} className={` ${isActive(menu.link) ? ' text-white bg-[#1570EF]' : ''}  hover:text-white hover:scale-105 transition-all duration-300 ease-in-out p-2 rounded-md flex  text-[#84CAFF] items-center gap-2`}>
+                  <a onClick={(e)=>handleRoutes(e, menu.link)} key={menu.link} href={`${menu.link}`} className={`flex  ${isActive(menu.link) ? ' text-white bg-[#1570EF]' : ''} hover:text-white hover:scale-105 transition-all duration-300 ease-in-out text-[#84CAFF] items-center gap-2`}>
                     {menu.icon}
                     {fullWidth && menu.title}
-                  </Link>
+                  </a>
                 )
               })}
             </div>
-          </div>
-          <div className="grid gap-4">
-            {othermenu.map((menu) => {
-              return (
-                <Link key={menu.link} href={`${menu.link}`} className={`flex  ${isActive(menu.link) ? ' text-white bg-[#1570EF]' : ''} hover:text-white hover:scale-105 transition-all duration-300 ease-in-out text-[#84CAFF] items-center gap-2`}>
-                  {menu.icon}
-                  {fullWidth && menu.title}
-                </Link>
-              )
-            })}
-          </div>
-        </section>
-        <section className={`w-full  h-screen    `}>
-          <div className="flex md:px-8 lg:hidden items-center justify-between w-full p-2 md:p-4">
-            <Image src={`/logo.png`} className="pt-2" alt="Webmaxi Logo" height={24} width={124} />
-            <IoMdMenu className="text-3xl" />
-          </div>
-          <hr className="w-full mt-1 flex md:hidden" />
+          </section>
+          <section className={`w-full  h-screen    `}>
+            <div className="flex md:px-8 lg:hidden items-center justify-between w-full p-2 md:p-4">
+              <Image src={`/logo.png`} className="pt-2" alt="Webmaxi Logo" height={24} width={124} />
+              <IoMdMenu className="text-3xl" />
 
-          <div className="flex z-0 w-full gap-2 p-2  md:px-8 justify-between items-center h-16">
-            <div className="flex gap-2  w-full items-center ">
-              <DropdownMenu />
-              <div>
-                <div className="w-full">
-                  <button className='w-full rounded-lg flex items-center px-3 text-base py-3 bg-primary text-white font-semibold' onClick={() => dispatch(setModal('addProject'))}>
-                    + <span className={`hidden lg:flex`}> Add project </span>
-                  </button>
+            </div>
+            <hr className="w-full mt-1 flex md:hidden" />
+
+            <div className="flex z-0 w-full gap-2 p-2  md:px-8 justify-between items-center h-16">
+              <div className="flex gap-2  w-full items-center ">
+                <DropdownMenu />
+                <div>
+                  <div className="w-full">
+                    <button className='w-full rounded-lg flex items-center px-3 text-base py-3 bg-primary text-white font-semibold' onClick={() => dispatch(setModal('addProject'))}>
+                      + <span className={`hidden lg:flex`}> Add project </span>
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="lg:flex  w-full justify-end hidden">
-              <div className="flex items-center justify-end w-full gap-4">
-                <Link href={'/pricing'} className=' cursor-pointer gap-2 border rounded-lg border-[#D0D5DD] text-base p-3 flex items-center text-[#344054] font-semibold'>
-                  <BsLightningCharge /> Upgrade now
-                </Link>
-                {/* <div className=" flex p-2.5 items-center gap-2">
+              <div className="lg:flex  w-full justify-end hidden">
+                <div className="flex items-center justify-end w-full gap-4">
+                  <Link href={'/pricing'} className=' cursor-pointer gap-2 border rounded-lg border-[#D0D5DD] text-base p-3 flex items-center text-[#344054] font-semibold'>
+                    <BsLightningCharge /> Upgrade now
+                  </Link>
+                  {/* <div className=" flex p-2.5 items-center gap-2">
                   <CiSearch className='text-[#667085] text-2xl' />
                 </div> */}
-                {/* <div className=" flex p-2.5 items-center gap-2">
+                  {/* <div className=" flex p-2.5 items-center gap-2">
 
                   <IoMdNotificationsOutline className='text-[#667085] text-2xl' />
                 </div> */}
-                <div className='h-[40px] w-[40px] rounded-full border flex items-center justify-center '>
-                  {user && user?.fullName?.split(' ')[0]?.slice(0, 1).toUpperCase()}
-                  {user && user?.fullName?.split(' ')[1]?.slice(0, 1).toUpperCase()}
+
+                  <PopoverComponent />
                 </div>
               </div>
             </div>
-          </div>
-          <hr className="w-full  hidden md:flex " />
-          {
-            loading ? <LoaderPulse /> :
-              property.length < 1 ? <DashboardOverviewPlaceholder /> : <div className=" w-full h-full overflow-auto p-2 md:p-8">
+            <hr className="w-full  hidden md:flex " />
+            {
+              loading ? <LoaderPulse /> :
+                property.length < 1 ? <DashboardOverviewPlaceholder /> : <div className=" w-full h-full overflow-auto p-2 md:p-8">
 
-                {children}
-              </div>
-          }
+                  {children}
+                </div>
+            }
 
-        </section>
-      </main>
-    </div>
+          </section>
+        </main>
+      </div>
+    </>
   );
 }
 

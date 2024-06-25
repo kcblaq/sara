@@ -44,7 +44,7 @@ export default function OrganicPick() {
             leaveTo="transform opacity-0 scale-95"
           >
             <Menu.Items className="absolute z-50 max-h-[184px] overflow-auto right-0 mt-2 w-full origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
-              <div className="px-1 py-1 ">
+              <span className="px-1 py-1 ">
               {
                types.map((prop, i: number )=> {
                   return <Menu.Item key={i}>
@@ -64,7 +64,7 @@ export default function OrganicPick() {
                 })
               }
                 
-              </div>
+              </span>
             </Menu.Items>
           </Transition>
         </Menu>

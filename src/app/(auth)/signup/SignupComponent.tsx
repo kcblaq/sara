@@ -152,7 +152,7 @@ export const SignupComponent = () => {
                     </button>
                     {/* <FilledButton title="Create Account" loading={loading} /> */}
 
-                    <span className=" cursor-pointer w-full p-2 font-bold rounded-md border flex items-center justify-center gap-2"><FcGoogle /> Signup with google </span>
+                    {/* <span className=" cursor-pointer w-full p-2 font-bold rounded-md border flex items-center justify-center gap-2"><FcGoogle /> Signup with google </span> */}
                     <Link href={`/login`}><small className=""> Already have an account? <span className=" text-primary font-bold"> Log in</span></small> </Link>
                 </section>
             </form>

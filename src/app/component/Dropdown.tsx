@@ -1,5 +1,6 @@
+"use client"
 import { Menu, Transition } from '@headlessui/react'
-import { Fragment } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { IoChevronDownOutline } from "react-icons/io5";
 import { RootState } from '../store';
 import { useSelector } from 'react-redux';
@@ -12,6 +13,15 @@ export default function DropdownMenu() {
   const property = useSelector((state: RootState) => state.property.allProperty)
   const activeProperty = useSelector((state: RootState) => state.property.activeProperty)
   const dispatch = useDispatch();
+  const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+      setIsClient(true);
+    }, []);
+  
+    if (!isClient) {
+      return null;
+    }
   return (
     <div className="  text-right">
       <Menu as="div" className=" min-w-[300px]  relative inline-block text-left">
@@ -41,7 +51,7 @@ export default function DropdownMenu() {
           leaveTo="transform opacity-0 scale-95"
         >
           <Menu.Items className="absolute z-50 right-0 mt-2 w-full origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
-            <div className="px-1 py-1 ">
+            <span className="px-1 py-1 ">
               {
                 property.map((prop: PropertyType) => {
                   return <Menu.Item key={prop.website_url}>
@@ -59,7 +69,7 @@ export default function DropdownMenu() {
                 })
               }
 
-            </div>
+            </span>
           </Menu.Items>
         </Transition>
       </Menu>

@@ -47,7 +47,7 @@ export default function TraficOverview() {
           <RxQuestionMarkCircled />
           </button>
             </h1>
-            <select className={`border rounded-md p-2 text-[#344054] text-sm font-normal`}>
+            {/* <select className={`border rounded-md p-2 text-[#344054] text-sm font-normal`}>
               <option className={``}>
                 Last 12 months
               </option>
@@ -57,7 +57,7 @@ export default function TraficOverview() {
               <option className={``}>
                 Last 3 months
               </option>
-            </select>
+            </select> */}
           </div>
           <hr className='w-full mt-4' />
         </div>

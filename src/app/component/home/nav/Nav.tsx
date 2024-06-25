@@ -11,6 +11,8 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import { currentNav, setCurrentState } from "@/redux/features/navSlice";
+import { RootState } from "@/app/store";
+import { PopoverComponent } from "@/app/dashboard/components/ui/PopOver";
 
 
 
@@ -41,16 +43,17 @@ export default function Nav() {
 
   ]
 
-
+  const user = useSelector((state: RootState)=> state.user.user)
 
   return (
-    <main className="w-full z-50 justify-between flex items-center font-normal h-[72px] bg-secondary p-2 ">
+    <main className="w-full z-30 justify-between flex items-center font-normal h-[72px] bg-secondary p-2 ">
       <div className=" items-center h-full gap-8 flex w-full">
         <Link href={`/`} className="flex items-center h-full ">
 
           <Image src={`/logo.png`} alt="Webmaxi Logo" width={145} height={24} className="" />
         </Link>
         <Link href="/" className="text-base font-semibold hidden lg:flex"> Home</Link>
+        {/* { user !== undefined && <Link href="/dashboard" className="text-base font-semibold p-3 "> Dashboard</Link>} */}
 
 
         <span className={`text-base cursor-pointer items-center z-50 font-semibold gap-1 hidden lg:flex`} onClick={(e) => {
@@ -122,9 +125,21 @@ export default function Nav() {
         <Link href={'/pricing'} className="text-base cursor-pointer items-center font-semibold gap-1 hidden lg:flex"> Pricing </Link>
       </div>
       <div className=" items-center justify-end h-full gap-6 lg:flex w-full hidden ">
+        { user === undefined ? 
+        <>
         <Link href={`login`} className=" text-lg font-semibold"> Login </Link>
         <Link href={`/signup`} className=" bg-primary font-semibold px-4 py-3 shadow rounded-md text-white text-lg">Sign up </Link>
+        </>
+        :
+      <>
+      <Link href="/dashboard" className="text-base font-semibold p-3 "> Dashboard</Link>
+      <PopoverComponent />
+      </>
+        
+      }
       </div>
+      
+      {/* Mobile Menu  */}
       <div className="flex items-center justify-end lg:hidden h-full w-full relative">
         <IoMdMenu className="" onClick={() => setShow(true)} />
         {
@@ -136,6 +151,7 @@ export default function Nav() {
             <div className="flex flex-col justify-between h-full w-full overflow-auto">
               <div className=" flex p-4 overflow-auto w-full flex-col mt-8 transition-all duration-300 ease-in-out">
                 <Link href="/" className="text-base font-semibold p-3 "> Home</Link>
+                { user !== undefined && <Link href="/dashboard" className="text-base font-semibold p-3 "> Dashboard</Link>}
 
                 <span className="text-base cursor-pointer overflow-scroll h-full items-center font-semibold p-3 flex gap-1 justify-between w-full " onClick={() => {
                   navstate.current === 'features' ? dispatch(setCurrentState('')) : dispatch(setCurrentState('features'))
@@ -199,8 +215,15 @@ export default function Nav() {
               </div>
 
               <div className="flex p-3 flex-col gap-3">
-                <FilledButton title="Sign up" handleClick={() => router.push('/signup')} />
-                <PlainButton title="Login" handleClick={() => router.push('/login')} />
+                {
+                  user === undefined ?
+                  <>
+                  <FilledButton title="Sign up" handleClick={() => router.push('/signup')} />
+                  <PlainButton title="Login" handleClick={() => router.push('/login')} />
+                  </>
+                  :
+                  <PopoverComponent/>
+                }
               </div>
             </div>
           </section>
