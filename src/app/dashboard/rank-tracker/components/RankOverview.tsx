@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Card from '../../Card'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/app/store'
@@ -34,7 +34,15 @@ export default function RankOverview() {
     //   }
     //   getData()
     // })
+    const [isClient, setIsClient] = useState(false);
 
+    useEffect(() => {
+      setIsClient(true);
+    }, []);
+  
+    if (!isClient) {
+      return null;
+    }
     return (
         <main className='grid w-full h-full items-start content-start gap-6 my-10 mb-20 overflow-auto'>
             <section className='grid grid-cols-1 lg:grid-cols-3 gap-6'>

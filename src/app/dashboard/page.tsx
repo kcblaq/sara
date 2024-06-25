@@ -40,6 +40,16 @@ export default function Dashboard() {
     setLoaded(true)
   }, [loaded])
 
+  const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+      setIsClient(true);
+    }, []);
+  
+    if (!isClient) {
+      return null;
+    }
+
   // const data = [
   //   { id: 1, keyword: 'The beginning of the new eorld order', rank: '3', change: 'Change' },
   //   { id: 2, keyword: 'Managing business for the future', rank: '4', change: 'Change' },
@@ -87,10 +97,10 @@ export default function Dashboard() {
         <div className="grid shadow-md border font-bold text-xl items-start h-[426px] mb-10 rounded-md p-2 md:p-6 w-full ">
           <div className="">
             <div className="flex w-full h-full items-start justify-between">
-              <span className={`text-[#101828] flex items-center gap-4`}>
+              <div className={`text-[#101828] flex items-center gap-4`}>
                 Backlink status
                 <button title='The links associated with your website either leading out or directing into your website'><RxQuestionMarkCircled /></button>
-              </span>
+              </div>
               {/* <select className={`border rounded-md p-2 text-[#344054] text-sm font-normal`}>
               <option className={``}>
                 Last 12 months
