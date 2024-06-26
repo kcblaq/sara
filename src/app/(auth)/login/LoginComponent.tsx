@@ -58,7 +58,7 @@ export const LoginComponent = () => {
       } catch (err: any) {
         console.log(err)
         setError({
-            state:true, message : err.response.data.message
+            state:true, message : err?.response?.data?.message
         })
         setTimeout(()=>{
             setError({state:false, message:''})
