@@ -23,7 +23,7 @@ const SEOProgressiveCircle: FC = () => {
       }} >
         <div className="flex flex-col">
           <p className='text-gray-600 text-center text-sm'> SEO score</p>
-          <p className='text-gray-900 text-center text-5xl'> {averageSeo?.toFixed(0)}% </p>
+          <p className='text-gray-900 text-center text-3xl lg:text-5xl'> {averageSeo?.toFixed(0)}% </p>
         </div>
       </CircularProgressbarWithChildren>
     </div>

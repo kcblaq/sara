@@ -324,14 +324,14 @@ export default function Layout({ children }: Props) {
             <hr className="w-full mt-1 flex md:hidden" />
 
             <div className="flex z-0 w-full gap-2 p-2  md:px-8 justify-between items-center h-16">
-              <div className="flex gap-2  w-full items-center ">
+              <div className="flex gap-2  w-full items-center lg:w-auto">
                 <DropdownMenu />
-                <div>
-                  <div className="w-full">
-                    <button className='w-full rounded-lg flex items-center px-3 text-base py-3 bg-primary text-white font-semibold' onClick={() => dispatch(setModal('addProject'))}>
-                      + <span className={`hidden lg:flex`}> Add project </span>
-                    </button>
-                  </div>
+                <div className=''>
+                  {/* <div className="w-full"> */}
+                    <Button className='w-full rounded-lg flex items-center px-3 text-base py-3 bg-primary text-white font-semibold' onClick={() => dispatch(setModal('addProject'))}>
+                      + <span className={`hidden sm:flex`}> Add project </span>
+                    </Button>
+                  {/* </div> */}
                 </div>
               </div>
               <div className="lg:flex  w-full justify-end hidden">

@@ -9,8 +9,7 @@ import './style.css'
 
 export default function TraficOverview() {
   return (
-    // <section className={`flex h-[480px] md:h-[580px] w-full flex-col md:flex-row gap-4 py-8 justify-between`}>
-    <section className={`main h-[580px] w-full gap-4 py-8 justify-between`}>
+    <section className={`main h-auto lg:h-[580px] grid grid-cols-1 md:grid-cols-2 w-auto lg:w-full gap-4 py-8 justify-between`}>
       <div className="grid shadow-md border font-bold text-xl items-start h-full rounded-md p-2 md:p-6 w-full ">
         <h1 className={`text-[#101828] flex items-center gap-4`}>
         Site health score
@@ -37,7 +36,6 @@ export default function TraficOverview() {
           </div>
         </div>
       </div>
-      {/* <div className=" grid h-full items-start rounded-md p-2 md:p-6 w-full  ">  */}
       <div className="grid shadow-md border font-bold text-xl items-start h-full rounded-md p-2 md:p-6 w-full ">
         <div className="">
           <div className="flex w-full h-full items-start justify-between">

@@ -68,7 +68,7 @@ export default function Dashboard() {
         show && <AutoModal closeModal={() => setShow(false)} ModalBody={<CheckUserType close={closeModal} />} />
       }
       <div className=' mb-10 p-2 grid h-full overflow-auto '>
-        <div className="flex w-full flex-col md:flex-row justify-between items-start flex-grow">
+        <div className="flex w-full flex-col sm:flex-row gap-4 justify-between items-start flex-grow">
           <div className='flex flex-col'>
             <h1 className="text-2xl text-[#101828] font-semibold">Welcome back, {User.fullName} </h1>
             <p>Track, manage and boost your site’s SEO.</p>
@@ -84,7 +84,7 @@ export default function Dashboard() {
         </div>
 
         {loaded &&
-          <section className={`grid items-center grid-cols-1 md:grid-cols-3 pt-8 gap-4 justify-between`}>
+          <section className={`grid items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pt-8 gap-4 justify-between`}>
             <OrganicTrafficCard />
             <OrganicKeywords />
             <AverageTimeOnsite />
