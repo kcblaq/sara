@@ -16,7 +16,7 @@ interface Props {
   pageData: number[];
 }
 
-const ChangeLineChart = ({ pageData }: Props) => {
+export const ChangeLineChart = ({ pageData }: Props) => {
   ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -94,4 +94,3 @@ const ChangeLineChart = ({ pageData }: Props) => {
   );
 };
 
-export default ChangeLineChart;
