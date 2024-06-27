@@ -4,7 +4,7 @@ import { RootState } from "@/app/store";
 import { calculatePercentage, millisecondsToSeconds } from "@/lib/DateFormater";
 import { Scores } from "@/types/DashboardOverview";
 import { ShortenNumber } from "@/app/utils/ShortenedNumber";
-import ChangeLineChart from "@/app/component/charts/Bars";
+import { ChangeLineChart } from "@/app/component/charts/Bars";
 
 
 
