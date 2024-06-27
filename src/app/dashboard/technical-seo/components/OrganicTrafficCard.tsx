@@ -4,7 +4,7 @@ import { RootState } from "@/app/store";
 import { calculatePercentage, millisecondsToSeconds } from "@/lib/DateFormater";
 import { Scores } from "@/types/DashboardOverview";
 import { ShortenNumber } from "@/app/utils/ShortenedNumber";
-import { ChangeLineChart } from "@/app/component/charts/Bars";
+import { LineChart } from "./LineChart";
 
 
 
@@ -84,7 +84,7 @@ const style = scores?.length === 1
             amount={ShortenNumber(actualOrganicTraffic)}
             style={pageData.length === 1 ? '' : pageData[0] > pageData[pageData.length -1] ? 'text-green-500' : pageData[0] === pageData[pageData.length -1] ? 'text-gray-500' : 'text-red-500'}
             percent={checkPercentage}
-            chart={<ChangeLineChart pageData={pageData} />}
+            chart={<LineChart pageData={pageData} />}
             arrowPosition={pageData.length === 1 ? '' : pageData[0] > pageData[pageData.length -1] ? '' : pageData[0] < pageData[1]? 'rotate-180': pageData[0] === pageData[pageData.length -1] ?'':''}
 />
     )

@@ -3,7 +3,7 @@ import { RootState } from "@/app/store";
 import { calculatePercentage } from "@/lib/DateFormater";
 import { useSelector } from "react-redux";
 import { ShortenNumber } from "@/app/utils/ShortenedNumber";
-import { ChangeLineChart } from "@/app/component/charts/Bars";
+import { LineChart } from "./LineChart";
 
 export default function OrganicKeywords() {
     const {  metrics } = useSelector((state: RootState) => state.performance);
@@ -53,7 +53,7 @@ export default function OrganicKeywords() {
         style={pageData.length === 1 ? '' : pageData[0] > pageData[pageData.length -1] ? 'text-green-500' : pageData[0] === pageData[pageData.length -1] ? 'text-gray-500' : 'text-red-500'}
 
         percent={checkPercentage} 
-        chart={<ChangeLineChart pageData={ pageData }  />}
+        chart={<LineChart pageData={ pageData }  />}
         arrowPosition={pageData.length === 1 ? '' : pageData[0] > pageData[pageData.length -1] ? '' : pageData[0] === pageData[pageData.length -1] ? '' : 'rotate-i80'}
         />
     
