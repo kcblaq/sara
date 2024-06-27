@@ -267,6 +267,14 @@ export default function Layout({ children }: Props) {
     if (!isClient) {
       return null;
     }
+
+    function openProjectModal(){
+      if(user.account_type === "free" && activeProperty.length > 1){
+        setShow(true)
+      } else {
+        dispatch(setModal('addProject'))
+      }
+    }
   return ( 
     //  <QueryClientProvider client={quertClient}>
     <>
@@ -328,7 +336,7 @@ export default function Layout({ children }: Props) {
                 <DropdownMenu />
                 <div className=''>
                   {/* <div className="w-full"> */}
-                    <Button className='w-full rounded-lg flex items-center px-3 text-base py-3 bg-primary text-white font-semibold' onClick={() => dispatch(setModal('addProject'))}>
+                    <Button className='w-full rounded-lg flex items-center px-3 text-base py-3 bg-primary text-white font-semibold' onClick={openProjectModal}>
                       + <span className={`hidden sm:flex`}> Add project </span>
                     </Button>
                   {/* </div> */}
