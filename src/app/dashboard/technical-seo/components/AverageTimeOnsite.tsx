@@ -2,7 +2,6 @@
 import Card from "../../Card";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/store";
-import { ChangeLineChart } from "@/app/component/charts/Bars";
 import { LineChart } from "./LineChart";
 
 
