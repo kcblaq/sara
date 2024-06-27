@@ -3,6 +3,7 @@ import Card from "../../Card";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/store";
 import { ChangeLineChart } from "@/app/component/charts/Bars";
+import { LineChart } from "./LineChart";
 
 
 export default function AverageTimeOnsite() {
@@ -46,7 +47,7 @@ export default function AverageTimeOnsite() {
    style={pageData[0] > pageData[pageData.length -1] ? 'text-green-500': pageData[0] === pageData[pageData.length -1] ? 'text-gray-500':'text-red-500' } 
    arrowPosition={arrowPosition}
    percent={Number(per/600) } 
-   chart={<ChangeLineChart pageData={pageData}/>}
+   chart={<LineChart pageData={pageData}/>}
    />
   )
 }
