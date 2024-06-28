@@ -13,6 +13,7 @@ import { fetchPerformanceFailure, fetchPerformanceStart, fetchPerformanceSuccess
 // import { GetPassiveAndDeepFetch } from '@/app/utils/apicalls/fetches/GetPassiveAndDeepFetchData';
 import { FetchTechnicalSeo } from '../technical-seo/components/FetchTechnicalSeo';
 import { removeTrailingSlash } from '@/app/utils/RemoveSlash';
+import { setLoading } from '@/redux/features/loaderSlice';
 
 
 export const getPerformanceMetrics = async () => {
@@ -44,13 +45,13 @@ export const getPerformanceMetrics = async () => {
 
 export default function AddProject() {
   const [err, setErr] = useState({ status: false, msg: '' });
-  const [loading, setLoading] = useState(false)
+  const [isloading, setisLoading] = useState(false)
   const [inputUrl, setInputUrl] = useState('')
   const dispatch = useDispatch();
   // const inputRef = useRef<HTMLInputElement>(null)
   const router = useRouter()
 
-  const activeProperty = useSelector((state: RootState) => state.property.activeProperty)
+  const activeProperty = useSelector((state: RootState) => state.property.activeProperty);
 
 
 
@@ -84,16 +85,16 @@ export default function AddProject() {
     const urlPattern = /^(ftp|http[s]?):\/\/[^ "]+(\.[^ "]+)+$/
     if (!urlPattern.test(inputUrl)) {
       setErr({ status: true, msg: 'Enter a valid url' })
-      setLoading(false)
+      setisLoading(false)
       setTimeout(() => {
-        setLoading(false)
+        setisLoading(false)
         setErr({ status: false, msg: '' })
       }, 5000)
       return
     }
     try {
-      setLoading(true)
-
+      setisLoading(true)
+      dispatch(setLoading(true))
       const response =  await ApiCall.get(`crawl/add-property?url=${inputUrl}`);
       dispatch(setActiveProperty(inputUrl));
       dispatch(setModal('crawling'));
@@ -124,14 +125,16 @@ export default function AddProject() {
       if (error.status === 401) {
         router.push('/login')
       }
-      setLoading(false)
+      setisLoading(false)
       setTimeout(() => {
         setErr({ status: false, msg: '' });
       }, 5000);
       return false;
 
+    } finally {
+
+      setLoading(false)
     }
-    // setLoading(false)
   }
 
 
@@ -150,7 +153,7 @@ export default function AddProject() {
       </div>
       <div className="flex items-center justify-between gap-4 w-full">
         <PlainButton title='Cancel' handleClick={cancel} />
-        <ButtonFilled title='Add' loading={loading} handleClick={handleSubmitUrl} />
+        <ButtonFilled title='Add' loading={isloading} handleClick={handleSubmitUrl} />
       </div>
     </section>
   );

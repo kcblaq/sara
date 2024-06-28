@@ -4,7 +4,7 @@ import Image from "next/image";
 import { IoIosArrowDown, IoMdMenu } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FilledButton from "../../FilledButton";
 import PlainButton from "../../PlainButton";
 import { useRouter } from "next/navigation";
@@ -43,6 +43,9 @@ export default function Nav() {
 
   ]
 
+  useEffect(()=> {
+    
+  })
   const user = useSelector((state: RootState)=> state.user.user)
 
   return (
@@ -125,7 +128,7 @@ export default function Nav() {
         <Link href={'/pricing'} className="text-base cursor-pointer items-center font-semibold gap-1 hidden lg:flex"> Pricing </Link>
       </div>
       <div className=" items-center justify-end h-full gap-6 lg:flex w-full hidden ">
-        { user === undefined ? 
+        { user.id === 0 ? 
         <>
         <Link href={`login`} className=" text-lg font-semibold"> Login </Link>
         <Link href={`/signup`} className=" bg-primary font-semibold px-4 py-3 shadow rounded-md text-white text-lg">Sign up </Link>

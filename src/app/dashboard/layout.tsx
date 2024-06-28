@@ -142,7 +142,6 @@ export default function Layout({ children }: Props) {
     }
   };
 
-  console.log("DATA", dashboardData)
   // useQuery({
   //   queryKey: ["dashboard"],
   //   queryFn: getProjects,
@@ -203,48 +202,6 @@ export default function Layout({ children }: Props) {
 
 
 
-
-  async function handleSubmitUrl() {
-    const urlPattern = /^(ftp|http[s]?):\/\/[^ "]+(\.[^ "]+)+$/
-    if (!urlPattern.test(activeProperty)) {
-      setErr({ status: true, msg: 'Enter a valid url' })
-      setLoading(false)
-      setTimeout(() => {
-        setLoading(false)
-        setErr({ status: false, msg: '' })
-      }, 5000)
-      return
-    }
-    try {
-      setLoading(true)
-      dispatch(setModal('addProject'))
-      ApiCall.get(`crawl/add-property?url=${removeTrailingSlash(activeProperty)}`);
-      dispatch(setActiveProperty(removeTrailingSlash(activeProperty)));
-      dispatch(setModal('crawling'));
-      await Promise.all([
-        crawler("/crawl/webcrawler", { url: removeTrailingSlash(activeProperty), type: "passive" }),
-        crawler("/crawl/technical/mini-crawler", { url: removeTrailingSlash(activeProperty), timeout: 7 }),
-        crawler("/crawl/content-analysis/mini-crawler", { url: removeTrailingSlash(activeProperty) }),
-      ])
-
-      dispatch(setModal(''))
-    } catch (error: any) {
-      console.log("ERR", error)
-      setErr({ status: true, msg: error.response.data.message });
-      if (error.status === 401) {
-        router.push('/login')
-      }
-      setLoading(false)
-      setTimeout(() => {
-        setErr({ status: false, msg: '' });
-      }, 5000);
-      return false;
-
-    }
-    setLoading(false)
-  }
-
-
   const handleRoutes = (e: { preventDefault: () => void; }, link: string) => {
     if (link !== "/dashboard" && user.account_type !== "paid") {
       e.preventDefault();
@@ -269,12 +226,14 @@ export default function Layout({ children }: Props) {
     }
 
     function openProjectModal(){
-      if(user.account_type === "free" && activeProperty.length > 1){
-        setShow(true)
-      } else {
+      if(user.account_type === "free"){
+        property.length === 1 ? setShow(true) : dispatch(setModal("addProject"))
+      }
+      else {
         dispatch(setModal('addProject'))
       }
     }
+
   return ( 
     //  <QueryClientProvider client={quertClient}>
     <>
@@ -347,14 +306,6 @@ export default function Layout({ children }: Props) {
                   <Link href={'/pricing'} className=' cursor-pointer gap-2 border rounded-lg border-[#D0D5DD] text-base p-3 flex items-center text-[#344054] font-semibold'>
                     <BsLightningCharge /> Upgrade now
                   </Link>
-                  {/* <div className=" flex p-2.5 items-center gap-2">
-                  <CiSearch className='text-[#667085] text-2xl' />
-                </div> */}
-                  {/* <div className=" flex p-2.5 items-center gap-2">
-
-                  <IoMdNotificationsOutline className='text-[#667085] text-2xl' />
-                </div> */}
-
                   <PopoverComponent />
                 </div>
               </div>
