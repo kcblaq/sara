@@ -28,11 +28,10 @@ export default function DashboardOverviewPlaceholder() {
     const user = useSelector((state: RootState) => state.user.user);
     const property = useSelector((state: RootState) => state.property.allProperty);
     const loading = useSelector((state:RootState)=> state.loading.loading)
-
     async function handleSubmitUrl() {
         if (user.account_type === "free") {
             property.length === 1 ? setShow(true) : null
-            return
+            
         }
         const urlPattern = /^(ftp|http[s]?):\/\/[^ "]+(\.[^ "]+)+$/;
         if (!urlPattern.test(inputUrl)) {
@@ -121,7 +120,7 @@ export default function DashboardOverviewPlaceholder() {
                     <div className='flex gap-4 items-center w-full flex-wrap'>
                         <input className='p-2 py-3 w-full border rounded-md ' value={inputUrl} placeholder='e.g domain.com' onChange={(e) => setInputUrl(e.target.value)} />
                         <div className='flex justify-self-end'>
-                            <FilledButton disabled={loading} loading={loading} title={loading ? 'Crawling ' : "Let's go"} handleClick={handleSubmitUrl}  />
+                            <FilledButton loading={loading} title={loading ? 'Crawling ' : "Let's go"} handleClick={handleSubmitUrl}  />
                         </div>
                     </div>
                 </div>

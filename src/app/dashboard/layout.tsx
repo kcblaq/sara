@@ -236,7 +236,6 @@ export default function Layout({ children }: Props) {
     }
   }
 
-
   return loading ? <FullpageLoader>
     <LoadingComp text='Crawling' />
   </FullpageLoader>
