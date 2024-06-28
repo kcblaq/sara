@@ -10,9 +10,9 @@ interface Props {
 export default function CheckUserType({close, description}:Props) {
     const router = useRouter()
   return (
-    <div className="grid gap-3">
+    <div className="grid gap-5">
        <div className="grid w-full gap-2">
-       <h3 className=" text-lg font-semibold"> This is a paid feature</h3>
+       <h3 className=" text-lg font-semibold"> This feature is only available to paid users</h3>
        <hr/>
        <p className="">{description} </p>
        </div>

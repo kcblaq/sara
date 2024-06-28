@@ -8,12 +8,16 @@ handleClick?: ()=> void;
 loading?: boolean;
 icon?: React.ReactNode;
 type?: "submit" | "button" | "reset";
+disabled?:boolean;
 }
-export default function FilledButton({title, handleClick, icon, loading,type}: ButtonProps) {
+export default function FilledButton({title,disabled, handleClick, icon, loading,type}: ButtonProps) {
   
   return (
-    <button type={type} className='w-full flex gap-2 items-center relative rounded-lg justify-center text-base px-5 p-3 cursor-pointer bg-primary text-white font-semibold hover:bg-blue-500' onClick={handleClick}>
-       {icon} {title} { loading && <span className=' absolute right-2'> <BiLoader className="w-full  animate-spin text-white" /> </span>}
+    <button type={type} disabled={disabled} className='w-full flex gap-2 items-center relative rounded-lg justify-center text-base px-5 p-3 cursor-pointer bg-primary text-white font-semibold hover:bg-blue-500' onClick={handleClick}>
+       <span> {icon} </span>
+       <span> {title} </span>
+       <span> { loading && <span className=' absolute right-2 top-1/2 -translate-y-1/2'> <BiLoader className="w-full  animate-spin text-white" /> </span>} </span>
+        
     </button>
   )
 }

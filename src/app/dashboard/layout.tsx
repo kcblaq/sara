@@ -37,6 +37,7 @@ import CheckUserType from './components/CheckUserType';
 import Button from './components/ui/Button';
 import AutoModal from '../component/modals/AutoModal';
 import Error from 'next/error';
+import FullpageLoader, { LoadingComp } from '../component/FullpageLoader';
 
 
 interface Props {
@@ -45,9 +46,10 @@ interface Props {
 export default function Layout({ children }: Props) {
   const [fullWidth, setFullWidth] = useState(false);
   // const [property, setProperty] = useState<PropertyType[]>([]);
-  const [err, setErr] = useState({ status: false, msg: '' });
-  const [loading, setLoading] = useState(false)
+  const [err, _setErr] = useState({ status: false, msg: '' });
+  const [isloading, _setisLoading] = useState(false)
   const [show, setShow] = useState(false)
+  const [showOneProject, setShowOneProject] = useState(false)
 
   const menus = [
     { title: "Dashboard", icon: <RxDashboard />, link: '/dashboard' },
@@ -78,11 +80,11 @@ export default function Layout({ children }: Props) {
   };
 
 
-  
+
 
   const router = useRouter();
 
-  
+
 
 
   const modalState = useSelector((state: RootState) => state.currentModal.currentModal)
@@ -90,10 +92,10 @@ export default function Layout({ children }: Props) {
   const property = useSelector((state: RootState) => state.property.allProperty);
   const user = useSelector((state: RootState) => state.user.user);
   const token = useSelector((state: RootState) => state.user.token);
-  // const dashboardData = useSelector((state: RootState)=> state.performance);
- 
-  
-  const { data: dashboardData , isSuccess,} = useQuery({
+  const loading = useSelector((state: RootState) => state.loading.loading);
+
+
+  const { data: dashboardData, isSuccess, } = useQuery({
     queryKey: ["dashboard"],
     queryFn: async () => {
       const response = await ApiCall.get("/crawl/overall", {
@@ -102,12 +104,12 @@ export default function Layout({ children }: Props) {
           limit: 100
         }
       });
-      return response.data; 
+      return response.data;
     },
-    
+
   });
 
- 
+
 
   useEffect(() => {
     if (!token) {
@@ -211,37 +213,43 @@ export default function Layout({ children }: Props) {
     }
   };
 
-  function closeModal(){
+  function closeModal() {
     setShow(false)
   }
 
   const [isClient, setIsClient] = useState(false);
 
-    useEffect(() => {
-      setIsClient(true);
-    }, []);
-  
-    if (!isClient) {
-      return null;
-    }
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
-    function openProjectModal(){
-      if(user.account_type === "free"){
-        property.length === 1 ? setShow(true) : dispatch(setModal("addProject"))
-      }
-      else {
-        dispatch(setModal('addProject'))
-      }
-    }
+  if (!isClient) {
+    return null;
+  }
 
-  return ( 
-    //  <QueryClientProvider client={quertClient}>
+  function openProjectModal() {
+    if (user.account_type === "free") {
+      property.length === 1 ? setShowOneProject(true) : dispatch(setModal("addProject"))
+    }
+    else {
+      dispatch(setModal('addProject'))
+    }
+  }
+
+
+  return loading ? <FullpageLoader>
+    <LoadingComp text='Crawling' />
+  </FullpageLoader>
+    :
     <>
       <div>
         {modalState === 'addProject' && <MainModal closeModal={() => dispatch(setModal(''))} ModalBody={AddProject} />}
-          {
-            show && <AutoModal closeModal={()=> setShow(false)} ModalBody={<CheckUserType close={closeModal} />}  />
-          }
+        { 
+          show && <AutoModal closeModal={() => setShow(false)} ModalBody={<CheckUserType close={closeModal}/>} />
+        }
+        {
+        showOneProject && <AutoModal closeModal={()=> setShowOneProject(false)} ModalBody={<CheckUserType close={()=> setShowOneProject(false)} description='Subscribe to be able to add more projects'/>} />
+        }
 
         <main className={`h-screen w-full flex overflow-clip `}>
 
@@ -263,7 +271,7 @@ export default function Layout({ children }: Props) {
               <div className="grid gap-2 mt-12">
                 {menus.map((menu) => {
                   return (
-                    <a key={menu.link} onClick={(e)=> handleRoutes(e, menu.link)} href={`${menu.link}`} className={` ${isActive(menu.link) ? ' text-white bg-[#1570EF]' : ''}  hover:text-white hover:scale-105 transition-all duration-300 ease-in-out p-2 rounded-md flex  text-[#84CAFF] items-center gap-2`}>
+                    <a key={menu.link} onClick={(e) => handleRoutes(e, menu.link)} href={`${menu.link}`} className={` ${isActive(menu.link) ? ' text-white bg-[#1570EF]' : ''}  hover:text-white hover:scale-105 transition-all duration-300 ease-in-out p-2 rounded-md flex  text-[#84CAFF] items-center gap-2`}>
                       {menu.icon}
                       {fullWidth && menu.title}
                     </a>
@@ -274,7 +282,7 @@ export default function Layout({ children }: Props) {
             <div className="grid gap-4">
               {othermenu.map((menu) => {
                 return (
-                  <a onClick={(e)=>handleRoutes(e, menu.link)} key={menu.link} href={`${menu.link}`} className={`flex  ${isActive(menu.link) ? ' text-white bg-[#1570EF]' : ''} hover:text-white hover:scale-105 transition-all duration-300 ease-in-out text-[#84CAFF] items-center gap-2`}>
+                  <a onClick={(e) => handleRoutes(e, menu.link)} key={menu.link} href={`${menu.link}`} className={`flex  ${isActive(menu.link) ? ' text-white bg-[#1570EF]' : ''} hover:text-white hover:scale-105 transition-all duration-300 ease-in-out text-[#84CAFF] items-center gap-2`}>
                     {menu.icon}
                     {fullWidth && menu.title}
                   </a>
@@ -295,9 +303,9 @@ export default function Layout({ children }: Props) {
                 <DropdownMenu />
                 <div className=''>
                   {/* <div className="w-full"> */}
-                    <Button className='w-full rounded-lg flex items-center px-3 text-base py-3 bg-primary text-white font-semibold' onClick={openProjectModal}>
-                      + <span className={`hidden sm:flex`}> Add project </span>
-                    </Button>
+                  <Button className='w-full rounded-lg flex items-center px-3 text-base py-3 bg-primary text-white font-semibold' onClick={openProjectModal}>
+                    + <span className={`hidden sm:flex`}> Add project </span>
+                  </Button>
                   {/* </div> */}
                 </div>
               </div>
@@ -312,7 +320,7 @@ export default function Layout({ children }: Props) {
             </div>
             <hr className="w-full  hidden md:flex " />
             {
-              loading ? <LoaderPulse /> :
+              isloading ? <LoaderPulse /> :
                 property.length < 1 || dashboardData === undefined ? <DashboardOverviewPlaceholder /> : <div className=" w-full h-full overflow-auto p-2 md:p-8">
 
                   {children}
@@ -323,6 +331,5 @@ export default function Layout({ children }: Props) {
         </main>
       </div>
     </>
-  );
 }
 

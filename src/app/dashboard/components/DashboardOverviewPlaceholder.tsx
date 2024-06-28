@@ -30,6 +30,10 @@ export default function DashboardOverviewPlaceholder() {
     const loading = useSelector((state:RootState)=> state.loading.loading)
 
     async function handleSubmitUrl() {
+        if (user.account_type === "free") {
+            property.length === 1 ? setShow(true) : null
+            return
+        }
         const urlPattern = /^(ftp|http[s]?):\/\/[^ "]+(\.[^ "]+)+$/;
         if (!urlPattern.test(inputUrl)) {
             setErr({ status: true, msg: 'Enter a valid URL' });
@@ -40,9 +44,7 @@ export default function DashboardOverviewPlaceholder() {
             alert("Enter a valid url")
             return;
         }
-        if (user.account_type === "free") {
-            property.length > 1 ? setShow(true) : null
-        }
+        
 
         try {
             setisLoading(true);
@@ -94,11 +96,17 @@ export default function DashboardOverviewPlaceholder() {
     }
     // dispatch(setLoading(false))
     // console.log("LOADING", loading)
-    const PlaceHolder = () => {
-        return (
-            <>
+    // const PlaceHolder = () => {
+    //     return (
+           
+    //     )
+    // }
+
+   return loading ? <FullpageLoader >
+    <LoadingComp text='Crawling' />
+   </FullpageLoader> :  <>
             {
-                show && <AutoModal closeModal={() => setShow(false)} ModalBody={<CheckUserType close={() => setShow(false)} />} />
+                show && <AutoModal closeModal={() => setShow(false)} ModalBody={<CheckUserType close={() => setShow(false)} description='Subscribe to be add more projects' />} />
             }
             <div className='h-full w-full flex-col gap-6 items-start flex justify-start px-4  md:px-[95px] pt-[143px]'>
                 <div className='flex flex-col gap-4'>
@@ -111,18 +119,12 @@ export default function DashboardOverviewPlaceholder() {
                         Enter your domain
                     </label>
                     <div className='flex gap-4 items-center w-full flex-wrap'>
-                        <input className='p-2 py-3 border rounded-md ' placeholder='e.g domain.com' onChange={(e) => setInputUrl(e.target.value)} />
-                        <div >
-                            <FilledButton loading={isloading} title={isloading ? 'Crawling ' : "Let's go"} handleClick={handleSubmitUrl} />
+                        <input className='p-2 py-3 w-full border rounded-md ' value={inputUrl} placeholder='e.g domain.com' onChange={(e) => setInputUrl(e.target.value)} />
+                        <div className='flex justify-self-end'>
+                            <FilledButton disabled={loading} loading={loading} title={loading ? 'Crawling ' : "Let's go"} handleClick={handleSubmitUrl}  />
                         </div>
                     </div>
                 </div>
             </div>
         </>
-        )
-    }
-
-   return loading ? <FullpageLoader >
-    <LoadingComp text='Crawling' />
-   </FullpageLoader> : <PlaceHolder/>
 }
