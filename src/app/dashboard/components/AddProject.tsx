@@ -82,7 +82,7 @@ export default function AddProject() {
 
 
   async function handleSubmitUrl() {
-    const urlPattern = /^(ftp|http[s]?):\/\/[^ "]+(\.[^ "]+)+$/
+    const urlPattern = /^[a-zA-Z][a-zA-Z0-9+.-]+:(\/\/[a-zA-Z0-9\-._~:%!$&'()*+,;=]+@)?(\/)?([a-zA-Z0-9-._~]+)(\.[a-zA-Z0-9-._~]+)*(\/[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]+)?$/i
     if (!urlPattern.test(inputUrl)) {
       setErr({ status: true, msg: 'Enter a valid url' })
       setisLoading(false)
@@ -98,7 +98,7 @@ export default function AddProject() {
       const response =  await ApiCall.get(`crawl/add-property?url=${inputUrl}`);
       dispatch(setActiveProperty(inputUrl));
       dispatch(setModal('crawling'));
-      // setLoading(false);
+
       await Promise.all([
         ApiCall.get('/crawl/webcrawler', {
           params: {
@@ -120,12 +120,15 @@ export default function AddProject() {
       ])
         
       dispatch(setModal(''))
+      dispatch(setLoading(false))
+      getPerformanceMetrics()
     } catch (error: any) {
       setErr({ status: true, msg: error.response.data.message });
       if (error.status === 401) {
         router.push('/login')
       }
       setisLoading(false)
+      dispatch(setLoading(false))
       setTimeout(() => {
         setErr({ status: false, msg: '' });
       }, 5000);
@@ -135,6 +138,7 @@ export default function AddProject() {
 
       setLoading(false)
     }
+    
   }
 
 

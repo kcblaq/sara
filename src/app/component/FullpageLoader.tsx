@@ -41,7 +41,7 @@ export const LoadingComp = ({text}: Props) => {
 
 export default function FullpageLoader({children}:{children: React.ReactNode}) {
   return (
-    <div className='h-full w-full flex items-center justify-center flex-col gap-6'>
+    <div className='h-full w-full py-[50%] flex items-center justify-center flex-col gap-6'>
        <div className='h-14 w-14 2xl:h-20 2xl:w-20'>  <Loader /></div>
        {children}
     </div>
