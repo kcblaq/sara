@@ -119,7 +119,7 @@ export default function Nav() {
         {/* { user !== undefined && <Link href="/dashboard" className="text-base font-semibold p-3 "> Dashboard</Link>} */}
 
         <Menu as="div">
-          <MenuButton className="inline-flex items-center gap-1 rounded-md  font-semibold  shadow-inner shadow-white/10 focus:outline-none ">
+          <MenuButton className=" hidden lg:inline-flex items-center gap-1 rounded-md  font-semibold  shadow-inner shadow-white/10 focus:outline-none ">
             Features
             <MenuButton className="data-[active]:transform data-[active]:rotate-180">
               <IoIosArrowDown />
@@ -137,7 +137,7 @@ export default function Nav() {
             <MenuItems
               // transition
               anchor="top"
-              className="max-w-[800px] origin-top-right  left-10 grid grid-cols-2 gap-5 bg-white p-8 shadow-md rounded-md font-normal border border-white/5  text-sm/6  transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
+              className="w-[790px] translate-x-10 origin-top-right grid grid-cols-2 gap-5 bg-white p-8 shadow-md rounded-md font-normal border border-white/5  text-sm/6  transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
             >
               {feature.map((item) => {
                 return (
@@ -167,58 +167,8 @@ export default function Nav() {
           </Transition>
         </Menu>
 
-        {/* <span
-          className={`text-base cursor-pointer items-center font-semibold gap-1 hidden lg:flex`}
-          onClick={() => {
-            navstate.current === "resources"
-              ? dispatch(setCurrentState(""))
-              : dispatch(setCurrentState("resources"));
-          }}
-        >
-          {" "}
-          Resources{" "}
-          <IoIosArrowDown
-            className={`${
-              navstate.current === "resources" && " transform rotate-180"
-            }`}
-          />
-          <div className="relative z-50 bg-white">
-            {navstate.current === "resources" && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: navstate.current == "resources" ? 1 : 0 }}
-                transition={{ duration: 0.5 }}
-                className=" absolute top-8 bg-white font-normal flex flex-col gap-2 -right-28  min-w-[300px] p-6 shadow-md rounded-md"
-              >
-                {resource.map((item) => {
-                  return (
-                    <div
-                      className="flex h-full text-base p-2 items-start hover:bg-blue-200 hover:rounded-md  w-full gap-3"
-                      onClick={() => router.push(`${item.link}`)}
-                    >
-                      <Image
-                        src={item.file}
-                        alt={item.description}
-                        className="mt-1"
-                        height={24}
-                        width={24}
-                      />
-                      <div className=" flex flex-col w-full h-full overflow-auto">
-                        <p className=" font-semibold text-base">
-                          {item.title}{" "}
-                        </p>
-                        <small className=" text-sm">{item.description} </small>
-                      </div>
-                    </div>
-                  );
-                })}
-              </motion.div>
-            )}
-          </div>
-        </span> */}
-
         <Menu>
-          <MenuButton className="inline-flex items-center gap-1 rounded-md  font-semibold  shadow-inner shadow-white/10 focus:outline-none ">
+          <MenuButton className="hidden lg:inline-flex items-center gap-1 rounded-md  font-semibold  shadow-inner shadow-white/10 focus:outline-none ">
             Resources
             <MenuButton className="data-[active]:transform data-[active]:rotate-180">
               <IoIosArrowDown />
@@ -235,7 +185,7 @@ export default function Nav() {
           >
             <MenuItems
               anchor="top"
-              className="bg-white font-normal flex flex-col gap-2   min-w-[300px] p-6 shadow-md rounded-md"
+              className="bg-white font-normal flex flex-col gap-2 w-[320px] p-6 shadow-md rounded-md"
             >
               {resource.map((item) => {
                 return (
@@ -302,15 +252,28 @@ export default function Nav() {
       <div className="flex items-center justify-end lg:hidden h-full w-full relative">
         <IoMdMenu className="" onClick={() => setShow(true)} />
         {show && (
-          <section className="h-screen py-6 bg-white text-[#101828] overflow-auto w-screen max-w-[500px] absolute transition-transform duration-300 ease-in-out  right-0 -top-3 transform translate-x-0">
-            <span
-              className=" font-semibold absolute text-2xl right-2 top-6 cursor-pointer hover:bg-primary hover:text-white p-1 rounded-full transition-all duration-300"
-              onClick={() => setShow(false)}
-            >
-              <IoClose />
-            </span>
-            <div className="flex flex-col justify-between h-full w-full overflow-auto">
-              <div className=" flex p-4 overflow-auto w-full flex-col mt-8 transition-all duration-300 ease-in-out">
+          //py-6
+          <section className="h-screen bg-white text-[rgb(16,24,40)] overflow-auto w-screen max-w-[500px] absolute transition-transform duration-300 ease-in-out  right-0 -top-3 transform translate-x-0">
+            <div className=" h-[72px] w-full flex justify-between items-center bg-secondary p-2">
+              <Link href={`/`} className="flex items-center h-full px-2">
+                <Image
+                  src={`/logo.png`}
+                  alt="Webmaxi Logo"
+                  width={145}
+                  height={24}
+                  className=""
+                />
+              </Link>
+              <span
+                className=" font-semibold absolute text-2xl right-2 top-6 cursor-pointer hover:bg-primary hover:text-white p-1 rounded-full transition-all duration-300"
+                onClick={() => setShow(false)}
+              >
+                <IoClose />
+              </span>
+            </div>
+
+            <div className="flex flex-col justify-between h-full w-full overflow-auto ">
+              <div className="flex p-4 overflow-auto w-full flex-col transition-all duration-300 ease-in-out">
                 <Link href="/" className="text-base font-semibold p-3 ">
                   {" "}
                   Home
@@ -324,7 +287,6 @@ export default function Nav() {
                     Dashboard
                   </Link>
                 )}
-
                 <span
                   className="text-base cursor-pointer overflow-scroll h-full items-center font-semibold p-3 flex gap-1 justify-between w-full "
                   onClick={() => {
@@ -343,7 +305,6 @@ export default function Nav() {
                     />{" "}
                   </span>
                 </span>
-
                 <div className=" h-full">
                   {navstate.current === "features" && (
                     <div className="p-2 mt-4 m-2 h-full transition-all duration-300 ease-linear border rounded-lg shadow-md w-full flex flex-col overflow-auto">
@@ -372,6 +333,53 @@ export default function Nav() {
                     </div>
                   )}
                 </div>
+                {/* <Menu>
+                  <MenuButton className="inline-flex items-center gap-2 justify-between rounded-md py-1.5 px-3  font-semibold shadow-inner shadow-white/10 focus:outline-none   data-[focus]:outline-1 data-[focus]:outline-white">
+                    Features
+                    <MenuButton className="data-[active]:transform data-[active]:rotate-180">
+                      <IoIosArrowDown />
+                    </MenuButton>
+                  </MenuButton>
+                  <Transition
+                    as={Fragment}
+                    enter="transition duration-150 ease-out"
+                    enterFrom="transform scale-95 opacity-0"
+                    enterTo="transform scale-100 opacity-100"
+                    leave="transition duration-100 ease-in"
+                    leaveFrom="transform scale-100 opacity-100"
+                    leaveTo="transform scale-95 opacity-0"
+                  >
+                    <MenuItems
+                      anchor="bottom end"
+                      className="w-fit z-40 bg-red-400 grid grid-cols-1 origin-top-right rounded-xl border p-1 transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
+                    >
+                      {feature.map((item) => {
+                        return (
+                          <MenuItem>
+                            <div
+                              className="flex h-full text-base p-2 items-start w-full gap-3"
+                              onClick={() => router.push(`${item.link}`)}
+                            >
+                              <Image
+                                src={item.file}
+                                alt={item.description}
+                                className="mt-1"
+                                height={24}
+                                width={24}
+                              />
+                              <div className=" flex flex-col w-full h-full overflow-auto">
+                                <p className=" font-semibold text-base">
+                                  {item.title}{" "}
+                                </p>
+                                <p className=" text-sm">{item.description} </p>
+                              </div>
+                            </div>
+                          </MenuItem>
+                        );
+                      })}
+                    </MenuItems>
+                  </Transition>
+                </Menu> */}
 
                 <span
                   className="text-base overflow-auto h-full cursor-pointer items-center font-semibold p-3 gap-1 flex   justify-between w-full"
