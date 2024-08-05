@@ -1,9 +1,14 @@
 import PlainButton from '@/app/component/PlainButton'
+import { RootState } from '@/app/store'
+import { removeTrailingSlash } from '@/app/utils/RemoveSlash'
+import ApiCall from '@/app/utils/apicalls/axiosInterceptor'
+import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { CiImageOn } from 'react-icons/ci'
 import { FaArrowDown, FaArrowUp, FaLink, FaPlus, FaVideo } from 'react-icons/fa6'
 import { GoQuestion } from 'react-icons/go'
 import { IoCartOutline } from 'react-icons/io5'
+import { useSelector } from 'react-redux'
 
 
 const mocked = [
@@ -14,6 +19,24 @@ const mocked = [
   {keyword: 'When we price goods', position:10, increase:true, volume:90, serp:['link','image','shop','video'], kd:20, traffic:35,url:'www.ogene.com'},
 ]
 export default function Rankings() {
+  const activeProperty = useSelector((state: RootState) => state.property.activeProperty);
+
+  const fetchData = async()=> {
+    const response = await ApiCall.get('/crawl/rank-tracker', {
+      params: {
+        limit: 100,
+        platform: 'desktop',
+        url: removeTrailingSlash(activeProperty),
+        se: 'Bing',
+        tab: "ranking"
+      }
+    });
+    return response.data
+  }
+  const {data} = useQuery({
+    queryKey: ["rankings"],
+    queryFn: fetchData
+  })
  
   return (
     <main className='grid w-full h-full items-start content-start gap-6 my-10 mb-20 overflow-auto'>

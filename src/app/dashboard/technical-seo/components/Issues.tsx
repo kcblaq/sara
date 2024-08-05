@@ -11,6 +11,7 @@ import { RootState } from "@/app/store";
 import { CategoryItem, IssuesType } from "@/types/technicalseo/IssuesType";
 import { BsDot } from "react-icons/bs";
 import Loader from "@/app/component/Loader";
+import { useQuery } from "@tanstack/react-query";
 // import { issuesDetails } from "./data";
 
 
@@ -24,7 +25,7 @@ export default function Issues() {
   const [currentFilter, setCurrentFilter] = useState('All issues')
   const [issueData, setissueData] = useState<IssuesType | null>(null)
   // const [issueCategory, setIssueCategory] = useState<IssueData | null>(null)
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [first, setfirst] = useState(true);
   const [currentCategory, setCurrentCategory] = useState('')
   const [currentCategoryDetail, setCurrentCategoryDetail] = useState<CategoryItem | null>(null)
@@ -39,6 +40,23 @@ export default function Issues() {
     { name: "Notices", icon: <Image src={'/dashboard/notices.svg'} alt="Notices" width={24} height={24} /> },
     { name: "Fixed", icon: <Image src={'/dashboard/fixed.svg'} alt="Fixed issues" width={24} height={24} /> },
   ]
+
+  const fetchData = async()=> {
+    const response = await ApiCall.get('/crawl/technical-seo', {
+      params: {
+        limit: 100,
+        platform: 'desktop',
+        url: removeTrailingSlash(activeProperty),
+        page: 'issues'
+      }
+    });
+    setissueData(response.data);
+  }
+
+  const {data, isLoading} = useQuery({
+    queryKey:["issues"],
+    queryFn: fetchData
+  })
 
   
   issueData?.issues[0].errors.find((item) => {
@@ -69,33 +87,31 @@ export default function Issues() {
 
 
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await ApiCall.get('/crawl/technical-seo', {
-          params: {
-            limit: 100,
-            platform: 'desktop',
-            url: removeTrailingSlash(activeProperty),
-            page: 'issues'
-          }
-        });
-        setissueData(response.data);
-        // console.log("RES",issueData);
-      } catch (error: any) {
-        console.log(error)
-      } finally {
-        setLoading(false);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       setLoading(true);
+  //       const response = await ApiCall.get('/crawl/technical-seo', {
+  //         params: {
+  //           limit: 100,
+  //           platform: 'desktop',
+  //           url: removeTrailingSlash(activeProperty),
+  //           page: 'issues'
+  //         }
+  //       });
+  //       setissueData(response.data);
+  //       // console.log("RES",issueData);
+  //     } catch (error: any) {
+  //       console.log(error)
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    fetchData();
+  //   fetchData();
+  // }, []);
 
-  // }, [activeProperty]);
-  }, []);
-
-
+  
 // console.log("DETAIL",currentCategoryDetail)
 
   // issueData?.issues[0]?.warnings?.find((item) => {
@@ -157,7 +173,7 @@ export default function Issues() {
           </div>
         </section> */}
         {
-          loading ? <div className=" w-full h-10 flex items-center justify-center"> <Loader /> </div> :
+          isLoading ? <div className=" w-full h-10 flex items-center justify-center"> <Loader /> </div> :
           <section className=" grid grid-cols-1 gap-8 md:grid-cols-3 max-h-[80dvh] mt-4  overflow-auto h-full ">
             <div className="flex flex-col h-full gap-2 col-span-1 border   overflow-y-scroll py-8 p-2 2xl:p-4 shadow-sm rounded-md">
 

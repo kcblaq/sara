@@ -42,14 +42,14 @@ export default function page() {
         <div className='w-full'>
           <h3 className="text-[#101828] text-2xl font-semibold">Rank tracker</h3>
         </div>
-        <div className="flex items-center gap-4 w-full justify-end">
+        {/* <div className="flex items-center gap-4 w-full justify-end">
           <div className=""> <FilledButton title={'Re-track rankings'} /></div>
           <div> <button className={`w-full bg-[#EFF8FF] text-primary gap-2  items-center flex justify-center border h-[40px] rounded-lg text-base p-2 font-semibold hover:bg-gray-100 `}>
             <IoCloudUploadOutline /> Export
           </button></div>
           <div className=""> <PlainButton title={''} icon={<IoSettingsOutline />
           } /></div>
-        </div>
+        </div> */}
       </section>
       <section className='w-full gap-6 flex items-center'>
         <ToggleMobile mobile={mobile} setMobile={setMobile} />

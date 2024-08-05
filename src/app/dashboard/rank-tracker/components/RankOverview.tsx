@@ -8,32 +8,32 @@ import { TrafficOverviewGraph } from '../../components/TrafficOverviewGraph';
 import BarChartSingle from '../../technical-seo/components/(technicalseo)/BarChartSingle';
 import ApiCall from '@/app/utils/apicalls/axiosInterceptor';
 import { useQuery } from '@tanstack/react-query';
+import { removeTrailingSlash } from '@/app/utils/RemoveSlash';
 
 export default function RankOverview() {
     const traffic = useSelector((state: RootState) => state.performance.metrics);
     const activeUrl = useSelector((state: RootState) => state.property.activeProperty)
-  
-    // const {data,isError, isLoading } = useQuery({
-    //     queryKey: ['ranking-overview'],
-    //     queryFn: ()=> {
-    //         ApiCall.get('/crawl/rank/mini-crawler', {
-    //             params:{
-    //                 url:activeUrl
-    //             }
-    //         })
-    //     }
-    // })
+    const activeProperty = useSelector((state: RootState) => state.property.activeProperty);
 
-    // useEffect(()=> {
-    //   async  function getData(){
-    //     await ApiCall.get('/crawl/rank/mini-crawler', {
-    //         params:{
-    //             url: activeUrl
-    //         }
-    //     })
-    //   }
-    //   getData()
-    // })
+
+    const fetchData = async()=> {
+        const response = await ApiCall.get('/crawl/rank-tracker', {
+          params: {
+            limit: 100,
+            platform: 'desktop',
+            url: removeTrailingSlash(activeProperty),
+            se: 'Bing',
+            tab: ""
+          }
+        });
+        return response.data
+      }
+      const {data} = useQuery({
+        queryKey: ["rank_overview"],
+        queryFn: fetchData
+      })
+  
+   
     const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
@@ -43,6 +43,8 @@ export default function RankOverview() {
     if (!isClient) {
       return null;
     }
+
+    
     return (
         <main className='grid w-full h-full items-start content-start gap-6 my-10 mb-20 overflow-auto'>
             <section className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
