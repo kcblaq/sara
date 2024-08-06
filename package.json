@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^0.0.0-insiders.f513614",
+    "@heroicons/react": "^2.1.5",
     "@jonasdoesthings/react-activity-rings": "^1.1.2",
     "@netlify/plugin-nextjs": "^5.3.3",
     "@radix-ui/react-accordion": "^1.2.0",
