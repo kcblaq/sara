@@ -15,6 +15,7 @@ import { useDispatch } from 'react-redux'
 import { fetchTechnicalSEOFailure, setTechnicalSeo } from '@/redux/features/technicalSeoSlice'
 import { fetchPerformanceFailure, fetchPerformanceSuccess } from '@/redux/features/performanceMetric slice'
 import { removeTrailingSlash } from '@/app/utils/RemoveSlash'
+import { useQueries, useQuery } from '@tanstack/react-query'
 
 
 
@@ -30,27 +31,26 @@ export default function TechnicalSeoLayout() {
 
 
 
-    const FetchTechnicalSeo = async (page?: string) => {
-        try {
-            // setLoading(true); 
-            await ApiCall.get('/crawl/technical-seo', {
-                params: {
-                    limit: 100,
-                    platform: 'desktop',
-                    url: removeTrailingSlash(activeProperty),
-                    page: page
-                }
-            }).then((res) => dispatch(setTechnicalSeo(res.data)));
-        } catch (error: any) {
-            dispatch(fetchTechnicalSEOFailure(error.message));
-        } finally {
-            // setLoading(false);
-        }
-    };
+    // const FetchTechnicalSeo = async (page?: string) => {
+    //     try {
+    //         await ApiCall.get('/crawl/technical-seo', {
+    //             params: {
+    //                 limit: 100,
+    //                 platform: 'desktop',
+    //                 url: removeTrailingSlash(activeProperty),
+    //                 page: page
+    //             }
+    //         }).then((res) => dispatch(setTechnicalSeo(res.data)));
+    //     } catch (error: any) {
+    //         dispatch(fetchTechnicalSEOFailure(error.message));
+    //     } finally {
+    //         // setLoading(false);
+    //     }
+    // };
 
-    useEffect(() => {
-        FetchTechnicalSeo()
-    }, [activeProperty, ])
+    // useEffect(() => {
+    //     FetchTechnicalSeo()
+    // }, [activeProperty,])
 
 
 
@@ -89,6 +89,23 @@ export default function TechnicalSeoLayout() {
             setLoading(false)
         }
     }
+    const fetchTechseoData = async () => {
+        const result = await ApiCall.get('/crawl/technical-seo', {
+            params: {
+                limit: 100,
+                platform: 'desktop',
+                url: removeTrailingSlash(activeProperty),
+            }
+        })
+        dispatch(setTechnicalSeo(result.data))
+        return result
+    }
+    const {data, isLoading} = useQuery({
+        queryKey: ["techseodata"],
+        queryFn: fetchTechseoData
+    })
+
+
     return (
         <section className={`flex w-full h-full justify-start flex-col gap-2 `}>
             <div className="flex w-full justify-between items-center">
@@ -101,17 +118,17 @@ export default function TechnicalSeoLayout() {
                             {loading ? 'Crawling...' : ' Re-run audit'}
                         </button>
                     </span>
-                    <span className=''>
+                    {/* <span className=''>
                         <PlainButton moreClass="text-primary bg-[#EFF8FF]" title="Share" icon={<CiShare2 />} />
                     </span>
-                    <span className="p-2 rounded-md border cursor-pointer "><CiSettings /></span>
+                    <span className="p-2 rounded-md border cursor-pointer "><CiSettings /></span> */}
                 </div>
             </div>
             <div className='flex items-center gap-4 my-2'>
-                <div className="flex items-center gap-2 bg-[#D0D5DD] rounded-md p-1">
+                {/* <div className="flex items-center gap-2 bg-[#D0D5DD] rounded-md p-1">
                     <span className={`cursor-pointer p-2 text-white ${mobile ? 'text-white' : "bg-[#1570EF] rounded-lg"}`} onClick={() => setMobile(false)}> Desktop</span>
                     <span className={` cursor-pointer p-2 text-white font-semibold ${!mobile ? 'text-white' : "bg-[#1570EF] rounded-lg"}`} onClick={() => setMobile(true)}> Mobile</span>
-                </div>
+                </div> */}
                 <div className="flex items-center gap-2">
                     <p className=" font-semibold"> Last Update:</p>
                     <p className=""> {moment(lastUpdated).format("DD MMM YY")} </p>
@@ -148,22 +165,28 @@ export default function TechnicalSeoLayout() {
                 {/* <p> Here goes the rest</p> */}
 
                 <div className={` h-full w-full overflow-auto  `}>
+                    {
+                        isLoading ? <div className=''> Loading... </div> : 
+
                     <Tab.Panels>
                         {
                             tabs.map((tab) => {
                                 return (
                                     <div key={tab.title} className='h-full overflow-auto'>
-                                        {/* <Suspense fallback={<div className=''> Loading... </div>}> */}
+                                        
+
+                                        
                                         <Tab.Panel>
 
                                             {tab.content}
                                         </Tab.Panel>
-                                        {/* </Suspense> */}
+                                
                                     </div>
                                 )
                             })
                         }
                     </Tab.Panels>
+                    }
                 </div>
 
             </Tab.Group>

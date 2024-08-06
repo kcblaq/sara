@@ -93,14 +93,7 @@ export default function DashboardOverviewPlaceholder() {
             dispatch(setLoading(false));
         }
     }
-    // dispatch(setLoading(false))
-    // console.log("LOADING", loading)
-    // const PlaceHolder = () => {
-    //     return (
-           
-    //     )
-    // }
-
+ 
    return loading ? <FullpageLoader >
     <LoadingComp text='Crawling' />
    </FullpageLoader> :  <>

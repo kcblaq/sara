@@ -135,7 +135,7 @@ export default function Issues() {
     <>
 
       <main className="pb-14 grid w-full gap-8 overflow-auto min-h-[400px] ">
-        <section className="flex h-16 flex-wrap items-center z-10 bg-white justify-between w-full">
+        {/* <section className="flex h-16 flex-wrap items-center z-10 bg-white justify-between w-full">
           <div className="flex items-center gap-2 flex-wrap">
             {
               tabsFilter.map((item, index) => (
@@ -155,10 +155,10 @@ export default function Issues() {
 
             </div>
           </div>
-        </section>
+        </section> */}
         {
           loading ? <div className=" w-full h-10 flex items-center justify-center"> <Loader /> </div> :
-          <section className=" grid grid-cols-1 gap-8 md:grid-cols-3 max-h-[80dvh]  overflow-auto h-full ">
+          <section className=" grid grid-cols-1 gap-8 md:grid-cols-3 max-h-[80dvh] mt-4  overflow-auto h-full ">
             <div className="flex flex-col h-full gap-2 col-span-1 border   overflow-y-scroll py-8 p-2 2xl:p-4 shadow-sm rounded-md">
 
               {/* <div className="grid" style={{ height: '100%' }}>

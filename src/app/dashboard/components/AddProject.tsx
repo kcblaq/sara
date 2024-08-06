@@ -10,7 +10,6 @@ import { setActiveProperty } from '@/redux/features/propertySlice';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/app/store';
 import { fetchPerformanceFailure, fetchPerformanceStart, fetchPerformanceSuccess } from '@/redux/features/performanceMetric slice';
-// import { GetPassiveAndDeepFetch } from '@/app/utils/apicalls/fetches/GetPassiveAndDeepFetchData';
 import { FetchTechnicalSeo } from '../technical-seo/components/FetchTechnicalSeo';
 import { removeTrailingSlash } from '@/app/utils/RemoveSlash';
 import { setLoading } from '@/redux/features/loaderSlice';
@@ -29,7 +28,6 @@ export const getPerformanceMetrics = async () => {
           platform: 'desktop'
         }
       });
-      // setPerformanceMetric(res.data)
       dispatch(fetchPerformanceSuccess(res?.data))
       
     } catch (error) {
@@ -39,7 +37,6 @@ export const getPerformanceMetrics = async () => {
       FetchTechnicalSeo()
     }
   }
-  // console.log("ACTIVE PROP", activeProperty)
 };
 
 
@@ -48,37 +45,7 @@ export default function AddProject() {
   const [isloading, setisLoading] = useState(false)
   const [inputUrl, setInputUrl] = useState('')
   const dispatch = useDispatch();
-  // const inputRef = useRef<HTMLInputElement>(null)
   const router = useRouter()
-
-  const activeProperty = useSelector((state: RootState) => state.property.activeProperty);
-
-
-
-
-  // const getPerformanceMetrics = async () => {
-  //   const dispatch = useDispatch();
-  //   if (activeProperty.length > 0) {
-  //     dispatch(fetchPerformanceStart())
-  //     try {
-  //       const res = await ApiCall.get('/crawl/overall', {
-  //         params: {
-  //           url: activeProperty,
-  //           type: 'passive',
-  //           limit: 10
-  //         }
-  //       });
-  //       dispatch(fetchPerformanceSuccess(res?.data))
-  //     } catch (error) {
-  //       dispatch(fetchPerformanceFailure(`Failed to fetch performance metric, Error: ${error}`))
-  //       console.error('Error fetching performance metrics:', error);
-  //     }
-  //   }
-  //   console.log("ACTIVE PROP", activeProperty)
-  // };
-  
-
-
 
 
   async function handleSubmitUrl() {

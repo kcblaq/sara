@@ -88,8 +88,8 @@ function Overview() {
   
   const technicalSeoData: any = useSelector((state: RootState) => state.technicalSeo);
   const activeProperty = useSelector((state: RootState) => state.property.activeProperty)
-  const statusCodeData = technicalSeoData?.metrics?.httpStatusCode[0] ?? null
-  const issues = technicalSeoData?.metrics?.siteIssue.issues
+  const statusCodeData = technicalSeoData?.metrics?.httpStatusCode ? technicalSeoData.metrics.httpStatusCode[0] : null
+  const issues = technicalSeoData?.metrics?.siteIssue ? technicalSeoData?.metrics?.siteIssue?.issues : null
 // console.log("ISSUES", issues)
 
   // const dispatch = useDispatch()
@@ -199,7 +199,7 @@ function Overview() {
 
   // console.log("SEOT",technicalSeoData)
   const value = technicalSeoData.metrics?.crawled;
-  const total = technicalSeoData.metrics?.crawled.total;
+  const total = technicalSeoData.metrics?.crawled?.total;
   const crawledvalue = calculatePercentage(value ? Number(value) : 0, Number(total))
 
 
@@ -215,8 +215,8 @@ function Overview() {
           <SubHead title="Core web vitals" info="These are a set of specific factors that Google considers important in assessing the user experience of a web page" />
           <div className="grid w-full items-center justify-between grid-col-1 md:grid-cols-3 py-6">
             {/* <EachItem title="Largest Contentful Paint (LCP)" data={LCPdata} poorPages={technicalSeoData.metrics.lcp.poor} needsImprovementPages={technicalSeoData.lcp.needsImprovement} goodPages={technicalSeoData.lcp.good} info={"Largest Contentful Paint (LCP) is a user-centric performance metric that measures the perceived loading speed of a web page. It specifically focuses on the time it takes for the largest content element, such as an image or a block of text, to render on the user's screen"} /> */}
-            <EachItem title="Largest Contentful Paint (LCP)" data={LCPdata} poorPages={technicalSeoData?.metrics?.lcp.poor || 0} needsImprovementPages={technicalSeoData.metrics?.lcp?.needsImprovement || 0} goodPages={technicalSeoData.metrics?.lcp?.good || 0} info={"Largest Contentful Paint (LCP) is a user-centric performance metric that measures the perceived loading speed of a web page. It specifically focuses on the time it takes for the largest content element, such as an image or a block of text, to render on the user's screen"} />
-            <EachItem title="Total Blocking Time (TBT)" data={TBTdata} poorPages={technicalSeoData?.metrics?.tbt?.poor || 0} needsImprovementPages={technicalSeoData?.metrics?.tbt.needsImprovement || 0} goodPages={technicalSeoData?.metrics?.tbt?.good || 0} info={"This is a user-centric performance metric used to evaluate the responsiveness and interactivity of a web page"} />
+            <EachItem title="Largest Contentful Paint (LCP)" data={LCPdata} poorPages={technicalSeoData?.metrics?.lcp?.poor || 0} needsImprovementPages={technicalSeoData.metrics?.lcp?.needsImprovement || 0} goodPages={technicalSeoData.metrics?.lcp?.good || 0} info={"Largest Contentful Paint (LCP) is a user-centric performance metric that measures the perceived loading speed of a web page. It specifically focuses on the time it takes for the largest content element, such as an image or a block of text, to render on the user's screen"} />
+            <EachItem title="Total Blocking Time (TBT)" data={TBTdata} poorPages={technicalSeoData?.metrics?.tbt?.poor || 0} needsImprovementPages={technicalSeoData?.metrics?.tbt?.needsImprovement || 0} goodPages={technicalSeoData?.metrics?.tbt?.good || 0} info={"This is a user-centric performance metric used to evaluate the responsiveness and interactivity of a web page"} />
             <EachItem title="Cumulative Layout Shift (CLS)" data={CLSdata} poorPages={technicalSeoData?.metrics?.cls?.poor || 0} needsImprovementPages={technicalSeoData?.metrics?.cls?.needsImprovement || 0} goodPages={technicalSeoData?.metrics?.cls?.good || 0} info={"This is a user-centric performance metric that quantifies the visual stability of a web page as it loads and interacts with the user"} />
           </div>
         </section>
@@ -237,7 +237,7 @@ function Overview() {
             
             <CrawledPages />
             <div className="flex h-full flex-col justify-end">
-              <p className=' flex items-center text-xs text-[#475467]'> <span className="text-green-300"><GoDotFill />  </span> {`Crwaled(${technicalSeoData.metrics?.crawled.crawled.toLocaleString()})`} </p>
+              <p className=' flex items-center text-xs text-[#475467]'> <span className="text-green-300"><GoDotFill />  </span> {`Crwaled(${technicalSeoData.metrics?.crawled?.crawled.toLocaleString()})`} </p>
               <p className=' flex items-center text-xs text-[#475467]'> <span className="text-green-100"><GoDotFill /></span> {`Uncrawled(${technicalSeoData?.metrics?.crawled?.uncrawled.toLocaleString()})`} </p>
             </div>
           </div>
@@ -278,9 +278,9 @@ function Overview() {
             </h1>
             <div className="flex items-center gap-2 md:gap-4">
 
-              <div className="flex">
+              {/* <div className="flex">
                 <PlainButton title="View all issues"/>
-              </div>
+              </div> */}
               <div className="flex">
                 <FilledButton icon={<FiDownloadCloud />
                 } title="Export issues" handleClick={function (): void {
@@ -309,7 +309,11 @@ function Overview() {
                   return (
                 <tr className=" p-2 font-medium" key={issue.title}>
                 <td className="border text-xs text-[#475467] p-2 border-[#c0c2c5]" >
-                  <TableItems title={issue.title} src={issue.issue_category == 'Error' ? '/dashboard/error.svg' : issue.issue_category == 'Warning' ? '/dashboard/warning.png' : issue.issue_category == 'Notice' ? '/dashboard/notices.svg': '/dashboard/warning.svg'} />
+                  <TableItems title={issue.title} 
+                  src={issue.issue_category == 'Error' ? '/dashboard/error.svg' : issue.issue_category == 'Warning' ? '/dashboard/warning.png' : issue.issue_category == 'Notice' ? '/dashboard/notices.svg' : '/dashboard/warning.svg'} 
+                  description={issue.description}
+                  fix={issue.fix}
+                  />
                  
                 </td>
                 <td className="border text-xs text-[#475467] p-2 border-[#c0c2c5]">{issue.url} </td>
