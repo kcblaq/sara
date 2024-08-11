@@ -40,7 +40,7 @@ export default function ForgetPassword({ children }: PasswordProps) {
         </Link>
         <section className="w-full justify-between flex flex-col gap-2 sm:mt-16">
           <div className=" h-full  flex flex-col justify-center items-center">
-            <div className="flex flex-col justify-center items-center gap-4 w-full sm:w-auto sm:min-w-[400px]">
+            <div className="flex flex-col justify-center items-center gap-4 w-full sm:w-auto sm:max-w-[400px]">
               <DynamicLogo />
               <div className="flex flex-col w-full">{children}</div>
             </div>

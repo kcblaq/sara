@@ -30,7 +30,7 @@ export default function EmailSent() {
     setText("Click to resend");
   }
   return (
-    <main className="flex flex-col gap-8">
+    <main className="flex flex-col gap-8 sm:w-auto sm:min-w-[400px]">
       <TitleAndDescription
         title="Check your email"
         description={`We sent a password reset link to ${userEmail}`}

@@ -64,7 +64,7 @@ export default function ForgetPassword() {
   }
 
   return (
-    <main className=" w-full justify-center items-center flex gap-4 flex-col">
+    <main className=" w-full justify-center items-center flex gap-4 flex-col sm:w-auto sm:min-w-[400px]">
       <h1 className=" font-bold sm:text-3xl text-2xl">Forgot password? </h1>
       {message.status === false && (
         <p className="w-full text-base text-center text-gray-600">
