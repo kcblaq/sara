@@ -7,7 +7,7 @@ import React from "react";
 export default function page() {
   // const route = useRouter();
   return (
-    <div className="flex flex-col gap-4 min-[425px]:min-w-[400px] w-full">
+    <div className="flex flex-col gap-4 min-[425px]:min-w-[400px]  w-full">
       <TitleAndDescription
         title="Email verified"
         description={
