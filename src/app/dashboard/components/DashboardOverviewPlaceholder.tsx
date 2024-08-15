@@ -123,14 +123,14 @@ export default function DashboardOverviewPlaceholder() {
         </div>
         <div className="flex flex-col w-full">
           <label className="">Enter your domain</label>
-          <div className="flex sm:flex-row flex-col gap-4 items-center xl:w-[60%] lg:w-[75%] w-full">
+          <div className="flex sm:flex-row flex-col gap-4 items-center lg:max-w-[70%] w-full">
             <input
-              className="p-2 py-3 w-full border rounded-md sm:w-[75%]"
+              className="p-2 py-3 w-full border rounded-md "
               value={inputUrl}
               placeholder="e.g domain.com"
               onChange={(e) => setInputUrl(e.target.value)}
             />
-            <div className="flex justify-self-end w-full sm:w-fit">
+            <div className="flex justify-self-end w-full sm:max-w-[128px]">
               <FilledButton
                 loading={loading}
                 title={loading ? "Crawling " : "Let's go!"}
