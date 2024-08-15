@@ -1,18 +1,17 @@
-import { Dialog, Transition } from '@headlessui/react'
-import React, { Fragment } from 'react'
+import { Dialog, Transition } from "@headlessui/react";
+import React, { Fragment } from "react";
 // import { IoIosCloseCircleOutline } from 'react-icons/io';
 
-interface ModalType  {
-  closeModal: ()=> void;
-  ModalBody: React.ReactNode
-
+interface ModalType {
+  closeModal: () => void;
+  ModalBody: React.ReactNode;
 }
-export default function AutoModal({ closeModal, ModalBody}: ModalType) {
+export default function AutoModal({ closeModal, ModalBody }: ModalType) {
   // let [isOpen, setIsOpen] = useState(true)
 
   return (
     <>
-     <Transition appear show={true} as={Fragment}>
+      <Transition appear show={true} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <Transition
             as={Fragment}
@@ -38,7 +37,6 @@ export default function AutoModal({ closeModal, ModalBody}: ModalType) {
                 leaveTo="opacity-0 scale-95"
               >
                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                  
                   {ModalBody}
                   {/* <Dialog.Title
                     as="h3"
@@ -62,7 +60,6 @@ export default function AutoModal({ closeModal, ModalBody}: ModalType) {
                       Got it, thanks!
                     </button>
                   </div> */}
-
                 </Dialog.Panel>
               </Transition>
             </span>
@@ -70,5 +67,5 @@ export default function AutoModal({ closeModal, ModalBody}: ModalType) {
         </Dialog>
       </Transition>
     </>
-  )
+  );
 }

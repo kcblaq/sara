@@ -26,10 +26,10 @@ export default function DropdownMenu() {
     return null;
   }
   return (
-    <div className="  text-right">
+    <div className="text-right">
       <Menu
         as="div"
-        className=" min-w-[300px]  relative inline-block text-left"
+        className=" xl:min-w-[300px] lg:w-[200px] w-[300px] relative inline-block text-left"
       >
         <Menu.Button className="inline-flex w-full justify-between rounded-lg text-black p-3 text-sm font-medium border focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75">
           {/* { property && property.activeProperty?.length < 1 ? "Domain name" : property.activeProperty} */}

@@ -383,7 +383,7 @@ export default function Layout({ children }: Props) {
                 <div className="">
                   {/* <div className="w-full"> */}
                   <Button
-                    className="w-[140px] rounded-lg flex items-center gap-4 py-3 bg-primary text-white font-semibold"
+                    className="xl:w-[140px] rounded-lg flex items-center gap-4 py-3 bg-primary text-white font-semibold"
                     onClick={openProjectModal}
                   >
                     <FiPlus className="" />
