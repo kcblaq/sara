@@ -49,6 +49,7 @@ import FullpageLoader, { LoadingComp } from "../component/FullpageLoader";
 import { FiPlus } from "react-icons/fi";
 import { RiSearchLine } from "react-icons/ri";
 import { IoIosNotificationsOutline } from "react-icons/io";
+import { AccountAvatarDropDown } from "./components/ui/AccountAvatarDropdown";
 
 interface Props {
   children: React.ReactNode;
@@ -405,7 +406,8 @@ export default function Layout({ children }: Props) {
                   </Link>
                   <RiSearchLine className="size-10 hover:bg-gray-200 rounded-md p-2 cursor-pointer" />
                   <IoIosNotificationsOutline className="size-10 hover:bg-gray-200 rounded-md p-2 cursor-pointer" />
-                  <PopoverComponent />
+                  {/* <PopoverComponent /> */}
+                  <AccountAvatarDropDown />
                 </div>
               </div>
             </div>
