@@ -85,10 +85,12 @@ export default function Dashboard() {
       <div className=" mb-10 p-2 grid h-full overflow-auto">
         <div className="flex w-full flex-col sm:flex-row gap-4 justify-between items-start flex-grow">
           <div className="flex flex-col">
-            <h1 className="text-2xl text-[#101828] font-semibold">
+            <h1 className="text-3xl text-[#101828] font-bold">
               Welcome back, {User.fullName}{" "}
             </h1>
-            <p>Track, manage and boost your site’s SEO.</p>
+            <p className="text-gray-600">
+              Track, manage and boost your site’s SEO.
+            </p>
           </div>
           <div className="flex items-center gap-2">
             <span>
@@ -98,9 +100,15 @@ export default function Dashboard() {
                 handleClick={() => setShow(true)}
               />
             </span>
-            {/* <span>
-            <FilledButton title="View recommendations" handleClick={() => router.push('/dashboard/optimization-plans')} />
-          </span> */}
+            <span>
+              <button
+                className="bg-primary  text-white hover:bg-primary outline-2 hover:outline-2 hover:outline-offset-2 p-2 rounded-md"
+                // title="View recommendations"
+                // handleClick={() => router.push("/dashboard/optimization-plans")}
+              >
+                View recommendations
+              </button>
+            </span>
           </div>
         </div>
 
