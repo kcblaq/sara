@@ -55,7 +55,7 @@ export function AccountAvatarDropDown() {
           <AvatarImg url="" />
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56 mt-1">
+      <DropdownMenuContent className="w-56 mt-1 -translate-x-8">
         {/* <DropdownMenuLabel>My Account</DropdownMenuLabel> */}
 
         <DropdownMenuGroup>
