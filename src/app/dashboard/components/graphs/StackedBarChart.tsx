@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -7,11 +7,11 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
-import { Bar } from 'react-chartjs-2';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/app/store';
-import moment from 'moment';
+} from "chart.js";
+import { Bar } from "react-chartjs-2";
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/store";
+import moment from "moment";
 
 ChartJS.register(
   CategoryScale,
@@ -22,11 +22,10 @@ ChartJS.register(
   Legend
 );
 
-
 export const options = {
   responsive: true,
   // maintainAspectRatio: false,
-  align: 'start', 
+  align: "start",
   scales: {
     x: {
       stacked: true,
@@ -59,8 +58,8 @@ export const options = {
   },
   plugins: {
     legend: {
-      position: 'top' as const,
-      align: 'end' as const,
+      position: "top" as const,
+      align: "end" as const,
       labels: {
         usePointStyle: true,
       },
@@ -69,7 +68,6 @@ export const options = {
   barThickness: 30, // Set the width of each bar
 };
 
-
 export function completeArray(arr: string[]) {
   const maxLength = 10;
   const currentLength = arr.length;
@@ -77,7 +75,7 @@ export function completeArray(arr: string[]) {
   if (currentLength < maxLength) {
     const emptyElementsToAdd = maxLength - currentLength;
     for (let i = 0; i < emptyElementsToAdd; i++) {
-      arr.push('');
+      arr.push("");
     }
   }
 
@@ -85,35 +83,38 @@ export function completeArray(arr: string[]) {
 }
 
 export function StackedBarChart() {
-  const backlinkData = useSelector((state: RootState)=> state.performance.metrics?.history?.backlinks)
-  const labels = backlinkData?.map((item: { createdAt: moment.MomentInput; })=> moment(item.createdAt).format("DD MMM YY")) ?? []
-  const newLinks = backlinkData?.map((item: { new: any; })=> item.new)
-  const lostLinks = backlinkData?.map((item: { lost: any; })=> item.lost)
+  const backlinkData = useSelector(
+    (state: RootState) => state.performance.metrics?.history?.backlinks
+  );
+  const labels =
+    backlinkData?.map((item: { createdAt: moment.MomentInput }) =>
+      moment(item.createdAt).format("DD MMM YY")
+    ) ?? [];
+  const newLinks = backlinkData?.map((item: { new: any }) => item.new);
+  const lostLinks = backlinkData?.map((item: { lost: any }) => item.lost);
 
-
-
- const data = {
-  labels,
-  datasets: [
-    {
-      label: 'Lost',
-      data: lostLinks,
-      backgroundColor: '#F97066',
-    },
-    {
-      label: 'New',
-      data: newLinks,
-      backgroundColor: '#32D583',
-    }
-  ],
-};
-
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: "Lost",
+        data: lostLinks,
+        backgroundColor: "#F97066",
+      },
+      {
+        label: "New",
+        data: newLinks,
+        backgroundColor: "#32D583",
+      },
+    ],
+  };
 
   return (
-    <div className=' overflow-x-auto w-full h-full'>
-
-      <Bar options={options} data={data}  />
+    <div className="flex flex-col overflow-x-auto w-full h-full">
+      <Bar options={options} data={data} />
+      <button className="bg-blue-50 text-sm text-blue-700 py-2 px-4 rounded-md self-end  mt-2  hover:outline outline-offset-2 outline-slate-300">
+        View Report
+      </button>
     </div>
-
-  )
+  );
 }
