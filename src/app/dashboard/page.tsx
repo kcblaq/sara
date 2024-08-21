@@ -131,7 +131,7 @@ export default function Dashboard() {
               <div className={`text-[#101828] flex items-center gap-4`}>
                 Backlink status
                 <button title="The links associated with your website either leading out or directing into your website">
-                  <RxQuestionMarkCircled />
+                  <RxQuestionMarkCircled className="text-gray-600" />
                 </button>
               </div>
               {/* <select className={`border rounded-md p-2 text-[#344054] text-sm font-normal`}>
@@ -153,20 +153,28 @@ export default function Dashboard() {
             <StackedBarChart />
           </div>
         </div>
-        {/* <section className='border w-2/3 rounded-md p-2 md:p-6 '>
-        <div className="grid">
-          <div className="flex font-bold w-full h-full items-start justify-between">
-            <span className={`text-[#101828] flex items-center gap-4`}>
-              Keyword ranking summary
-              <button className='' title='Here is the summary of each of your keyword ranking'> <RxQuestionMarkCircled /></button>
-            </span>
+        <section className="border w-1/2 rounded-md p-2 md:p-6 ">
+          <div className="grid ">
+            <div className="flex font-bold w-full h-full items-start justify-between">
+              <span
+                className={`text-[#101828] text-xl flex items-center gap-4`}
+              >
+                Keyword ranking summary
+                <button
+                  className=""
+                  title="Here is the summary of each of your keyword ranking"
+                >
+                  {" "}
+                  <RxQuestionMarkCircled />
+                </button>
+              </span>
+            </div>
           </div>
-        </div>
 
-        <div className=" h-full w-full ">
-          <KeywordTable />
-        </div>
-      </section> */}
+          <div className="h-full w-full ">
+            <KeywordTable />
+          </div>
+        </section>
       </div>
     </>
   );

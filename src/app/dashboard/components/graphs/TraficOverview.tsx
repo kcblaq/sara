@@ -1,20 +1,20 @@
-
 import { RxQuestionMarkCircled } from "react-icons/rx";
-import ProgressiveCircle from '../SeoprogressCircle';
-import { TrafficOverviewGraph } from '../TrafficOverviewGraph';
+import ProgressiveCircle from "../SeoprogressCircle";
+import { TrafficOverviewGraph } from "../TrafficOverviewGraph";
 import { FaCircle } from "react-icons/fa";
 
-import './style.css'
-
+import "./style.css";
 
 export default function TraficOverview() {
   return (
-    <section className={`main h-auto lg:h-[580px] grid grid-cols-1 md:grid-cols-2 w-auto lg:w-full gap-4 py-8 justify-between`}>
+    <section
+      className={`main h-auto lg:h-[580px] grid grid-cols-1 md:grid-cols-2 w-auto lg:w-full gap-4 py-8 justify-between`}
+    >
       <div className="grid shadow-md border font-bold text-xl items-start h-full rounded-md p-2 md:p-6 w-full ">
         <h1 className={`text-[#101828] flex items-center gap-4`}>
-        Site health score
+          Site health score
           <button title="This is the overall site health based on general best practice">
-          <RxQuestionMarkCircled />
+            <RxQuestionMarkCircled />
           </button>
         </h1>
         <div className={``}>
@@ -23,16 +23,16 @@ export default function TraficOverview() {
 
         <div className="grid gap-3">
           <div className="flex items-center space-x-2 w-full">
-            <FaCircle className='text-red-500' />
-            <p className=' font-normal'> Low</p>
+            <FaCircle className="text-red-500" />
+            <p className=" font-normal"> Low</p>
           </div>
           <div className="flex items-center space-x-2 w-full">
-            <FaCircle className='text-yellow-500' />
-            <p className=' font-normal'> Moderate</p>
+            <FaCircle className="text-yellow-500" />
+            <p className=" font-normal"> Moderate</p>
           </div>
           <div className="flex items-center space-x-2 w-full">
-            <FaCircle className='text-green-500' />
-            <p className=' font-normal'> High</p>
+            <FaCircle className="text-green-500" />
+            <p className=" font-normal"> High</p>
           </div>
         </div>
       </div>
@@ -42,8 +42,8 @@ export default function TraficOverview() {
             <h1 className={`text-[#101828] flex items-center gap-4`}>
               Traffic overview
               <button title="Here is the summary of your website visitors">
-          <RxQuestionMarkCircled />
-          </button>
+                <RxQuestionMarkCircled className="text-gray-600" />
+              </button>
             </h1>
             {/* <select className={`border rounded-md p-2 text-[#344054] text-sm font-normal`}>
               <option className={``}>
@@ -57,13 +57,12 @@ export default function TraficOverview() {
               </option>
             </select> */}
           </div>
-          <hr className='w-full mt-4' />
+          <hr className="w-full mt-4" />
         </div>
         <div className=" h-full w-full max-w-[600px]">
           <TrafficOverviewGraph />
         </div>
       </div>
-
     </section>
-  )
+  );
 }
