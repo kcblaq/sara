@@ -21,13 +21,12 @@ const KeywordTable: React.FC = () => {
   return (
     <>
       <h2 className="my-3 text-sm">
-        {" "}
         <span className=" font-medium ">Last updated: </span> 10th May,24{" "}
       </h2>
-      <div className="rounded-md border">
-        <table className="divide-y w-full divide-gray-200 ">
+      <div className="w-full h-full rounded-md border overflow-x-auto  ">
+        <table className="divide-y flex flex-col min-w-[500px] divide-gray-200 table-auto">
           <thead className="bg-gray-50">
-            <tr>
+            <tr className="">
               <th
                 scope="col"
                 className="px-6 py-3 text-left text-xs rounded-tl-lg font-medium text-gray-500  tracking-wider"
@@ -45,7 +44,7 @@ const KeywordTable: React.FC = () => {
               </th>
               <th
                 scope="col"
-                className="px-6 inline-flex gap-1 rounded-tr-lg py-3 text-left text-xs font-medium text-gray-500  tracking-wider"
+                className="px-6  inline-flex gap-1 rounded-tr-lg py-3 text-left text-xs font-medium text-gray-500  tracking-wider"
               >
                 Changes{" "}
                 <button className="" title="Here is the changes">

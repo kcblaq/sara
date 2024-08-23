@@ -82,7 +82,7 @@ export default function Dashboard() {
           ModalBody={<CheckUserType close={closeModal} />}
         />
       )}
-      <div className=" mb-10 p-2 grid h-full overflow-auto">
+      <div className=" mb-10 p-2 grid h-full w-full overflow-auto">
         <div className="flex w-full flex-col sm:flex-row gap-4 justify-between items-start flex-grow">
           <div className="flex flex-col">
             <h1 className="text-3xl text-[#101828] font-bold">
@@ -153,8 +153,8 @@ export default function Dashboard() {
             <StackedBarChart />
           </div>
         </div>
-        <section className="border w-1/2 rounded-md p-2 md:p-6 ">
-          <div className="grid ">
+        <section className="border sm:w-1/2 w-full h-full rounded-md p-2 md:p-6">
+          <div className="grid">
             <div className="flex font-bold w-full h-full items-start justify-between">
               <span
                 className={`text-[#101828] text-xl flex items-center gap-4`}
@@ -171,7 +171,7 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <div className="h-full w-full ">
+          <div className="h-fit w-full">
             <KeywordTable />
           </div>
         </section>

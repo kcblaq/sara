@@ -379,7 +379,7 @@ export default function Layout({ children }: Props) {
             <hr className="w-full mt-1 flex md:hidden" />
 
             <div className="flex z-0 w-full gap-2 p-2  md:px-8 justify-between items-center h-16">
-              <div className="flex gap-2  w-full items-center lg:w-auto">
+              <div className="flex gap-2 w-full items-center lg:w-auto  ">
                 <DropdownMenu />
                 <div className="">
                   {/* <div className="w-full"> */}
@@ -412,15 +412,15 @@ export default function Layout({ children }: Props) {
               </div>
             </div>
             <hr className="w-full  hidden md:flex " />
-            {isloading ? (
+            {/* {isloading ? (
               <LoaderPulse />
             ) : property.length < 1 || dashboardData === undefined ? (
               <DashboardOverviewPlaceholder />
-            ) : (
-              <div className=" w-full h-full overflow-auto p-2 md:p-8">
-                {children}
-              </div>
-            )}
+            ) : ( */}
+            <div className=" w-full h-full overflow-auto p-2 md:p-8">
+              {children}
+            </div>
+            {/* )} */}
           </section>
         </main>
       </div>
