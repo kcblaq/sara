@@ -17,11 +17,11 @@ export default function TraficOverview() {
             <RxQuestionMarkCircled />
           </button>
         </h1>
-        <div className={``}>
+        <div className={`size-fit my-4`}>
           <ProgressiveCircle />
         </div>
 
-        <div className="grid gap-3">
+        <div className="grid gap-3 w-full">
           <div className="flex items-center space-x-2 w-full">
             <FaCircle className="text-red-500" />
             <p className=" font-normal"> Low</p>
