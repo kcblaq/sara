@@ -57,12 +57,12 @@ export default function Card({
   } as const;
 
   return (
-    <div className="flex flex-col gap-6 w-full max-w-[390px]  h-[176px] rounded-md p-6 border border-gray-200">
+    <div className="flex  flex-col gap-6 w-full max-w-[390px]  h-[176px] rounded-md p-6 border border-gray-200">
       <div className="flex w-full justify-between items-center">
         <h5 className=" font-semibold text-base">{title}</h5>
         <p className=" text-sm font-normal">{lastUpdated}</p>
       </div>
-      <div className="grid ">
+      <div className="grid">
         <h1 className=" self-start font-semibold text-4xl"> {amount} </h1>
         <div className="flex items-center justify-between w-full ">
           <p className="flex items-center gap-2 text-sm">
