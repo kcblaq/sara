@@ -82,19 +82,20 @@ export default function Dashboard() {
           ModalBody={<CheckUserType close={closeModal} />}
         />
       )}
-      <div className=" mb-10 p-2 grid h-full w-full overflow-auto">
+      <div className=" mb-10 p-2 grid h-full w-full sm:overflow-auto">
         <div className="flex w-full flex-col sm:flex-row gap-4 justify-between items-start flex-grow">
           <div className="flex flex-col">
-            <h1 className="text-3xl text-[#101828] font-bold">
+            <h1 className="sm:text-3xl text-2xl text-[#101828] font-bold">
               Welcome back, {User.fullName}{" "}
             </h1>
-            <p className="text-gray-600">
+            <p className="sm:text-base text-sm text-gray-600">
               Track, manage and boost your site’s SEO.
             </p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex  items-center gap-2">
             <span>
               <PlainButton
+                className="min-[375px]:text-base text-sm"
                 title="Export"
                 icon={exportIcon}
                 handleClick={() => setShow(true)}
@@ -102,7 +103,7 @@ export default function Dashboard() {
             </span>
             <span>
               <button
-                className="bg-primary  text-white hover:bg-primary outline-2 hover:outline-2 hover:outline-offset-2 p-2 rounded-md"
+                className="bg-primary  text-white min-[375px]:text-base text-sm hover:bg-primary outline-2 hover:outline-2 hover:outline-offset-2 p-2 rounded-md"
                 // title="View recommendations"
                 // handleClick={() => router.push("/dashboard/optimization-plans")}
               >
@@ -114,7 +115,7 @@ export default function Dashboard() {
 
         {loaded && (
           <section
-            className={`grid items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pt-8 gap-4 justify-between`}
+            className={` w-fit grid items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pt-8 gap-4 justify-between`}
           >
             <OrganicTrafficCard />
             <OrganicKeywords />
@@ -122,10 +123,10 @@ export default function Dashboard() {
           </section>
         )}
 
-        <section className="">
+        <section className="w-fit">
           <TraficOverview />
         </section>
-        <div className="grid shadow-md border font-bold text-xl items-start h-[426px] mb-10 rounded-md p-2 md:p-6 w-full ">
+        <div className="w-fit grid shadow-md border font-bold text-xl items-start h-[426px] mb-10 rounded-md p-2 md:p-6  ">
           <div className="">
             <div className="flex w-full h-full items-start justify-between">
               <div className={`text-[#101828] flex items-center gap-4`}>
@@ -153,7 +154,7 @@ export default function Dashboard() {
             <StackedBarChart />
           </div>
         </div>
-        <section className="border sm:w-1/2 w-full h-full rounded-md p-2 md:p-6">
+        <section className="border sm:w-1/2 w-fit h-full rounded-md p-2 md:p-6">
           <div className="grid">
             <div className="flex font-bold w-full h-full items-start justify-between">
               <span
