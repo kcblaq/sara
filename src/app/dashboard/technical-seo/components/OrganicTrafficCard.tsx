@@ -81,7 +81,7 @@ export default function OrganicTrafficCard() {
   //     return result;
   // }
 
-  //real implementation
+  // real implementation
   // const pageData = (scores ?? [])
   //   .map((item) => item.organic_traffic)
   //   .filter((value) => value !== undefined) as number[];
