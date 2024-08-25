@@ -17,7 +17,7 @@ export default function TraficOverview() {
             <RxQuestionMarkCircled />
           </button>
         </h1>
-        <div className={`size-fit my-4`}>
+        <div className={`size-fit my-4 mx-auto`}>
           <ProgressiveCircle />
         </div>
 

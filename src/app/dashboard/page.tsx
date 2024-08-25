@@ -115,7 +115,7 @@ export default function Dashboard() {
 
         {loaded && (
           <section
-            className={` w-fit grid items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pt-8 gap-4 justify-between`}
+            className={` w-full grid items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pt-8 gap-4 justify-between`}
           >
             <OrganicTrafficCard />
             <OrganicKeywords />
@@ -123,10 +123,10 @@ export default function Dashboard() {
           </section>
         )}
 
-        <section className="w-fit">
+        <section className="w-full">
           <TraficOverview />
         </section>
-        <div className="w-fit grid shadow-md border font-bold text-xl items-start h-[426px] mb-10 rounded-md p-2 md:p-6  ">
+        <div className="w-full grid shadow-md border font-bold text-xl items-start h-[426px] mb-10 rounded-md p-2 md:p-6  ">
           <div className="">
             <div className="flex w-full h-full items-start justify-between">
               <div className={`text-[#101828] flex items-center gap-4`}>
@@ -154,7 +154,7 @@ export default function Dashboard() {
             <StackedBarChart />
           </div>
         </div>
-        <section className="border sm:w-1/2 w-fit h-full rounded-md p-2 md:p-6">
+        <section className="border sm:w-1/2 w-auto h-full rounded-md p-2 md:p-6">
           <div className="grid">
             <div className="flex font-bold w-full h-full items-start justify-between">
               <span

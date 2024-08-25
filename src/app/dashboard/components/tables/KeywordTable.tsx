@@ -24,7 +24,7 @@ const KeywordTable: React.FC = () => {
         <span className=" font-medium ">Last updated: </span> 10th May,24{" "}
       </h2>
       <div className="w-full h-full rounded-md border overflow-x-auto  ">
-        <table className="divide-y flex flex-col min-w-[500px] divide-gray-200 table-auto">
+        <table className="divide-y flex flex-col sm:min-w-[500px] w-auto divide-gray-200 table-auto">
           <thead className="bg-gray-50">
             <tr className="">
               <th
