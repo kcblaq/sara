@@ -112,7 +112,7 @@ export default function DashboardOverviewPlaceholder() {
           }
         />
       )}
-      <div className="h-full w-full flex-col gap-6 items-start flex justify-start px-4  md:px-[95px] pt-[143px]">
+      <div className="h-full w-full flex-col gap-6 items-start flex justify-start px-4  md:px-[95px] sm:pt-[143px] pt-10">
         <div className="flex flex-col gap-4">
           <h1 className="text-[#101828] font-semibold text-4xl">
             Track, manage and boost your site’s SEO.
