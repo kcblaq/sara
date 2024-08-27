@@ -5,6 +5,7 @@ import "react-circular-progressbar/dist/styles.css";
 import { GoDotFill } from "react-icons/go";
 import { useSelector } from "react-redux";
 import { Title } from "../technical-seo/components/Overview";
+import { BiUpArrowAlt } from "react-icons/bi";
 
 const SEOProgressiveCircle: FC = () => {
   const metrics = useSelector((state: RootState) => state.performance.metrics);
@@ -34,6 +35,10 @@ const SEOProgressiveCircle: FC = () => {
             {" "}
             {averageSeo?.toFixed(0)}%{" "}
           </p>
+          <p className="text-[#027A48] inline-flex items-center justify-center mt-4 gap-0.5 text-sm">
+            <BiUpArrowAlt className="text-lg" />
+            12
+          </p>
         </div>
       </CircularProgressbarWithChildren>
     </div>
@@ -51,7 +56,7 @@ export const CrawledPages: FC = () => {
   const total = crawled?.crawled?.total ?? 0;
 
   return (
-    <div className=" rounded-full flex items-center justify-center">
+    <div className="rounded-full w-full flex items-center justify-center">
       <div className="z-0">
         {/* <CircularProgressbarWithChildren value={averageSeo ?? 0} className='' styles={{
           path: { stroke: averageSeo && averageSeo < 40 ? "#D92D20" : averageSeo && averageSeo > 40 && averageSeo < 70 ? "#FDB022" : "#039855" }
@@ -77,10 +82,7 @@ export const CrawledPages: FC = () => {
             <p className="text-gray-600 text-center text-sm">
               Total links found{" "}
             </p>
-            <p className="text-gray-900 text-center text-5xl">
-              {" "}
-              {crawled?.crawled?.total}{" "}
-            </p>
+            <p className="text-gray-900 text-center text-5xl"> {total} </p>
           </div>
         </CircularProgressbarWithChildren>
       </div>
