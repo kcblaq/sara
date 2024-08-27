@@ -303,7 +303,7 @@ function Overview() {
             </CircularProgressbarWithChildren> */}
 
             <CrawledPages />
-            <div className="flex h-full flex-col justify-end">
+            <div className="flex h-full w-full flex-col justify-end">
               <p className=" flex items-center text-xs text-[#475467]">
                 <span className="text-green-300">
                   <GoDotFill />{" "}
@@ -416,21 +416,22 @@ function Overview() {
           </div>
         </div>
       </section>
-      <section className="w-full grid border rounded-md min-w-[200px] ">
+      <section className="grid border rounded-md lg:max-w-[75%] w-auto">
         <div className=" flex items-center justify-between">
           <div className="flex w-full p-2 md:p-4 items-center justify-between">
             <h1
-              className={`text-[#101828] gap-3 flex items-center font-semibold text-xl`}
+              className={`text-[#101828] gap-3 flex items-center font-semibold text-lg`}
             >
               Top issues
-              <RxQuestionMarkCircled />
+              <RxQuestionMarkCircled className="text-gray-400" />
             </h1>
             <div className="flex items-center gap-2 md:gap-4">
-              {/* <div className="flex">
-                <PlainButton title="View all issues"/>
-              </div> */}
               <div className="flex">
+                <PlainButton className="text-sm" title="View all issues" />
+              </div>
+              <div className="flex ">
                 <FilledButton
+                  className="text-sm"
                   icon={<FiDownloadCloud />}
                   title="Export issues"
                   handleClick={function (): void {
@@ -446,16 +447,16 @@ function Overview() {
           <table className="table-auto w-full border-collapse">
             <thead className="p-4">
               <tr className="bg-[#EAECF0] p-4 font-medium text-start">
-                <th className="border text-xs text-[#475467] text-start border-[#c0c2c5] p-2">
+                <th className="border w-[390px] text-xs text-[#475467] text-start border-[#c0c2c5] p-2">
                   Issues
                 </th>
-                <th className="border text-xs text-[#475467 text-start] text-start border-[#c0c2c5] p-2">
+                <th className="border text-xs flex-1 text-[#475467] text-start border-[#c0c2c5] p-2">
                   Affected Pages
                 </th>
-                <th className="border text-xs text-[#475467] text-start border-[#c0c2c5] p-2">
+                <th className="border text-xs flex-1 text-[#475467] text-start border-[#c0c2c5] p-2">
                   Fixed
                 </th>
-                <th className="border text-xs text-[#475467] text-start border-[#c0c2c5] p-2">
+                <th className="border text-xs flex-1 text-[#475467] text-start border-[#c0c2c5] p-2">
                   Count
                 </th>
               </tr>

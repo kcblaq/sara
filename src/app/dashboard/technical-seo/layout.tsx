@@ -109,17 +109,16 @@ export default function TechnicalSeoLayout() {
 
   return (
     <section className={`flex w-full h-full justify-start flex-col gap-2 `}>
-      <div className="flex w-full justify-between items-center">
-        <div className="w-full">
-          <h2 className=" font-semibold text-[#101828] text-3xl">
-            {" "}
+      <div className="flex sm:flex-row flex-col w-full justify-between sm:items-center gap-2">
+        <div className="w-fit">
+          <h2 className=" font-semibold text-[#101828] sm:text-3xl text-2xl">
             Technical SEO
           </h2>
         </div>
-        <div className="flex w-full md:w-1/2 items-center justify-end gap-2 md:gap-4">
+        <div className="flex w-fit md:w-1/2 items-center justify-end gap-2 md:gap-4">
           <span className="">
             <button
-              className="rounded-lg text-base p-2 bg-primary text-white font-semibold hover:bg-blue-500"
+              className="rounded-lg sm:text-base text-sm p-2 bg-primary text-white font-semibold hover:bg-blue-500"
               onClick={() => CrawlTechnicalSeo()}
             >
               {loading ? "Crawling..." : " Re-run audit"}
@@ -127,7 +126,7 @@ export default function TechnicalSeoLayout() {
           </span>
           <span className="">
             <PlainButton
-              moreClass="text-primary bg-[#EFF8FF]"
+              moreClass="text-primary bg-[#EFF8FF] sm:text-base text-sm"
               title="Share"
               icon={<CiShare2 />}
             />
@@ -138,7 +137,7 @@ export default function TechnicalSeoLayout() {
         </div>
       </div>
       <div className="flex items-center gap-4 my-2">
-        <div className="flex items-center text-sm gap-2 bg-[#D0D5DD] rounded-md p-1">
+        <div className="flex items-center min-[375px]:text-sm text-xs gap-2 bg-[#D0D5DD] rounded-md p-1">
           <span
             className={`cursor-pointer p-2 text-white ${
               mobile ? "text-white" : "bg-[#1570EF] rounded-lg"
@@ -158,13 +157,14 @@ export default function TechnicalSeoLayout() {
             Mobile
           </span>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 sm:text-base min-[375px]:text-sm text-xs">
           <p className=" font-semibold"> Last Update:</p>
           <p className=""> {moment(lastUpdated).format("Do MMM YY")} </p>
         </div>
       </div>
-      <Tab.Group>
-        <Tab.List className="flex gap-4 w-full">
+
+      <Tab.Group className="">
+        <Tab.List className="flex gap-4 w-full overflow-x-auto whitespace-nowrap">
           {tabs.map((tab) => {
             return (
               <div key={tab.title}>
@@ -187,6 +187,7 @@ export default function TechnicalSeoLayout() {
             );
           })}
         </Tab.List>
+
         {/* <p> Here goes the rest</p> */}
 
         <div className={` h-full w-full overflow-auto`}>
