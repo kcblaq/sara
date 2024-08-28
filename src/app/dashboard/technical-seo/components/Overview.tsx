@@ -194,7 +194,7 @@ function Overview() {
     goodPages,
   }: ItemProps) => {
     return (
-      <section className="grid gap-3 md:gap-6 justify-center h-full ">
+      <section className="grid gap-3 md:gap-6 justify-center h-full">
         <h1
           className={`text-[#101828] flex text-sm font-semibold items-center gap-2`}
         >
@@ -237,18 +237,17 @@ function Overview() {
 
   return (
     <main className="pb-14 mt-10 grid w-full gap-8 z-0">
-      <section className={`grid grid-cols-1 md:grid-cols-4 gap-4 `}>
-        {/* <div className=" w-full col-span-1 h-full md:h-[464px]  border rounded-md p-6"> */}
+      <section className={`grid grid-cols-1 md:grid-cols-4 gap-4 w-full`}>
+        {/* <div className="w-full col-span-1 h-full md:h-[464px]  border rounded-md p-6"> */}
         {/* <ReusableProgressiveCircle title="Site health" info="The overall site health rating" val={(technicalSeoData.data[0].site_health * 100).toFixed(0)} pageTitle={"Site health"} /> */}
         <SiteHealthScore />
-
         {/* </div> */}
-        <section className="w-full col-span-3 h-full md:h-[464px] border rounded-md p-6">
+        <section className="w-full h-full col-span-3 md:h-[464px] border rounded-md p-6">
           <SubHead
             title="Core web vitals"
             info="These are a set of specific factors that Google considers important in assessing the user experience of a web page"
           />
-          <div className="grid w-full items-center justify-between grid-col-1 md:grid-cols-3 py-6">
+          <div className="grid w-full h-full items-center justify-between grid-col-1 lg:grid-cols-3 min-[540px]:grid-cols-2 py-6 overflow-y-auto">
             {/* <EachItem title="Largest Contentful Paint (LCP)" data={LCPdata} poorPages={technicalSeoData.metrics.lcp.poor} needsImprovementPages={technicalSeoData.lcp.needsImprovement} goodPages={technicalSeoData.lcp.good} info={"Largest Contentful Paint (LCP) is a user-centric performance metric that measures the perceived loading speed of a web page. It specifically focuses on the time it takes for the largest content element, such as an image or a block of text, to render on the user's screen"} /> */}
             <EachItem
               title="Largest Contentful Paint (LCP)"

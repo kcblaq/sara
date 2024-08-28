@@ -35,7 +35,7 @@ const SEOProgressiveCircle: FC = () => {
             {" "}
             {averageSeo?.toFixed(0)}%{" "}
           </p>
-          <p className="text-[#027A48] inline-flex items-center justify-center mt-4 gap-0.5 text-sm">
+          <p className="text-[#027A48] inline-flex items-center justify-center lg:mt-4 mt-2 gap-0.5 text-sm">
             <BiUpArrowAlt className="text-lg" />
             12
           </p>
