@@ -83,7 +83,7 @@ const OtpInput: React.FC = () => {
             console.log("RES::", res.data.token);
             dispatch(setUser(res.data.user));
             dispatch(setToken(res.data.token));
-            router.push("/dashboard");
+            router.push("/signup/email-verify/verify-success");
           }
         })
         .then(() => console.log("Submitted!"));
