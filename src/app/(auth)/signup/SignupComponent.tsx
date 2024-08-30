@@ -32,7 +32,7 @@ export const SignupComponent = () => {
           if (res.status == 201) {
             sessionStorage.setItem("user", res.data);
             // console.log(res.data)
-            router.push("/signup/email-verify/otp");
+            router.push("/signup/email-verify");
           } else {
             // console.log("RES", res)
             // setError({status:true, msg: res.data})
@@ -95,7 +95,7 @@ export const SignupComponent = () => {
     }
   }, 3000);
   return (
-    <main className="xl:max-w-[800px]  lg:max-w-[600px] p-4 w-full h-full flex flex-col gap-10 lg:justify-between ">
+    <main className="xl:max-w-[800px] lg:max-w-[600px] p-4 w-full h-full flex flex-col gap-10 lg:justify-between ">
       <Link href={`/`}>
         <Image
           src={`/logo.png`}
