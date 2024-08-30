@@ -8,12 +8,28 @@ import { RootState } from "@/app/store";
 import axios from "axios";
 // import { useDispatch } from "react-redux";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function EmailSent() {
+  const [status, setStatus] = useState("idle");
   const userEmail = useSelector((state: RootState) => state.user.user.email);
   const [text, setText] = useState("Click to resend");
-  // const route = useRouter()
+  const route = useRouter();
   // const dispatch = useDispatch()
+
+  const handleOpenMail = () => {
+    try {
+      setStatus("loading");
+      const mailtoLink = `mailto:${userEmail}`;
+
+      window.location.href = mailtoLink;
+      setTimeout(() => {
+        setStatus("success");
+      }, 2000);
+    } catch (error) {
+      setStatus("error");
+    }
+  };
 
   async function handleSubmit() {
     setText("Sending...");
@@ -38,7 +54,14 @@ export default function EmailSent() {
       {/* <button className=" bg-purple-700 rounded-md font-semibold text-white w-full p-2">
                 Open email app
             </button> */}
-      <FilledButton title="Open email app" />
+
+      <FilledButton
+        title="Open email app"
+        loading={status === "loading"}
+        handleClick={handleOpenMail}
+        disabled={status === "loading"}
+      />
+
       <p className="text-sm text-center">
         <span className="text-gray-600">Didn't receive the email?</span>
         <span className=" text-[#175CD3] cursor-pointer" onClick={handleSubmit}>

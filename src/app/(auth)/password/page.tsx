@@ -9,6 +9,7 @@ import * as Yup from "yup";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/redux/features/userSlice";
+import toast from "react-hot-toast";
 
 export default function ForgetPassword() {
   const [loading, setLoading] = useState(false);
@@ -55,11 +56,23 @@ export default function ForgetPassword() {
     } catch (error: any) {
       console.error("Error submitting form:", error);
       setLoading(false);
-
-      setMessage({ status: true, msg: error.message });
-      setTimeout(() => {
-        setMessage({ status: false, msg: "" });
-      }, 6000);
+      if (error.response) {
+        setMessage({ status: true, msg: error.response.data });
+        setTimeout(() => {
+          setMessage({ status: false, msg: "" });
+        }, 6000);
+        toast.error(error.response.data || "Something went wrong", {
+          position: "top-right",
+        });
+      } else {
+        setMessage({ status: true, msg: error.message });
+        setTimeout(() => {
+          setMessage({ status: false, msg: "" });
+        }, 6000);
+        toast.error(error.message || "Something went wrong", {
+          position: "top-right",
+        });
+      }
     }
   }
 
