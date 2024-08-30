@@ -1,9 +1,9 @@
-
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import APpProvider from "@/redux/features/provider";
 import TanstackProvider from "./providers/TanstackProvider";
+import { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-  children
+  children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
@@ -21,6 +21,7 @@ export default function RootLayout({
       <body className={`className.Inter`}>
         <TanstackProvider>
           <APpProvider>
+            <Toaster />
             {children}
           </APpProvider>
         </TanstackProvider>

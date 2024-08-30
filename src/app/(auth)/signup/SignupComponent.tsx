@@ -11,6 +11,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { BiLoader } from "react-icons/bi";
 import MobileLogoIcon from "../../../components/svgComponents/CompanyMobileLogo";
+import toast from "react-hot-toast";
 
 export const SignupComponent = () => {
   const [isPassword, setIsPassword] = useState("password");
@@ -39,15 +40,23 @@ export const SignupComponent = () => {
         })
         .then(() => localStorage.setItem("userEmail", formik.values.email));
     } catch (err: any) {
-      setError({ status: true, msg: err.response.data.message });
+      console.log(err);
+      setLoading(false);
+      setError({
+        status: true,
+        msg: err.response?.data?.message || "Something went wrong",
+      });
+      toast.error(err.response.data.message || "Something went wrong", {
+        position: "top-right",
+      });
     }
 
-    const payload = {
-      fullName: formik.values.name,
-      email: formik.values.email,
-      password: formik.values.password,
-    };
-    setLoading(false);
+    // const payload = {
+    //   fullName: formik.values.name,
+    //   email: formik.values.email,
+    //   password: formik.values.password,
+    // };
+    // setLoading(false);
   };
 
   const formik = useFormik({
@@ -79,6 +88,12 @@ export const SignupComponent = () => {
     return currentDate.getFullYear();
   };
 
+  // reset error
+  setTimeout(() => {
+    if (error.status) {
+      setError({ status: false, msg: "" });
+    }
+  }, 3000);
   return (
     <main className="xl:max-w-[800px]  lg:max-w-[600px] p-4 w-full h-full flex flex-col gap-10 lg:justify-between ">
       <Link href={`/`}>

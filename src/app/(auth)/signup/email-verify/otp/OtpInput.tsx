@@ -3,6 +3,7 @@ import { AxiosInstance } from "@/lib/axios";
 import { setToken, setUser } from "@/redux/features/userSlice";
 import { useRouter } from "next/navigation";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 
 const OtpInput: React.FC = () => {
@@ -86,8 +87,11 @@ const OtpInput: React.FC = () => {
           }
         })
         .then(() => console.log("Submitted!"));
-    } catch (err) {
+    } catch (err: any) {
       console.log(err);
+      toast.error(err.response?.data.message || "Something went wrong", {
+        position: "top-right",
+      });
     }
     setLoading(false);
   }
