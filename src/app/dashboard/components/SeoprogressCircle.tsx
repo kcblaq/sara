@@ -56,7 +56,7 @@ export const CrawledPages: FC = () => {
   const total = crawled?.crawled?.total ?? 0;
 
   return (
-    <div className="rounded-full w-full h-fit flex items-center justify-center">
+    <div className="rounded-full w-full h-fit flex items-center justify-center ">
       <div className="z-0">
         {/* <CircularProgressbarWithChildren value={averageSeo ?? 0} className='' styles={{
           path: { stroke: averageSeo && averageSeo < 40 ? "#D92D20" : averageSeo && averageSeo > 40 && averageSeo < 70 ? "#FDB022" : "#039855" }
@@ -68,7 +68,7 @@ export const CrawledPages: FC = () => {
         </CircularProgressbarWithChildren> */}
         <CircularProgressbarWithChildren
           value={averageSeo ?? 0}
-          className=""
+          className="lg:size-full size-[200px]"
           styles={{
             trail: {
               stroke: "#D1FADF",
