@@ -57,7 +57,7 @@ export const Title = ({
   className?: string;
 }) => {
   return (
-    <div className="flex flex-col w-full bg-purple-300 h-fit">
+    <div className="flex flex-col w-full  h-fit">
       <h1
         className={`text-[#101828] gap-3 flex items-center font-semibold text-xl ${className}`}
       >
@@ -245,10 +245,14 @@ function Overview() {
 
   return (
     <main className="pb-14 mt-10 grid w-full gap-8 z-0">
-      <section className={`grid grid-cols-1 md:grid-cols-4 gap-4 w-full`}>
+      <section
+        className={`grid grid-cols-1 md:grid-cols-4 md:gap-4 md:space-y-0 space-y-4 w-full`}
+      >
         {/* <div className="w-full col-span-1 h-full md:h-[464px]  border rounded-md p-6"> */}
         {/* <ReusableProgressiveCircle title="Site health" info="The overall site health rating" val={(technicalSeoData.data[0].site_health * 100).toFixed(0)} pageTitle={"Site health"} /> */}
+
         <SiteHealthScore />
+
         {/* </div> */}
         <section className="w-full h-full col-span-3 md:h-[464px] border rounded-md p-6">
           <SubHead
@@ -296,14 +300,14 @@ function Overview() {
           </div>
         </section>
       </section>
-      <section className="grid gap-4 justify-items-stretch  w-full grid-cols-1 md:grid-cols-3  sm:grid-cols-2">
+      <section className="grid gap-4 justify-items-stretch h-full w-full grid-cols-1 md:grid-cols-3  min-[540px]:grid-cols-2">
         <div className=" p-2 md:p-4 col-span-1 h-[308px] justify-items-start rounded-md w-full border">
           <Title
             title={"Crawl status"}
             info="The status of the crawl result"
             className="font-bold"
           />
-          <div className="p-2 flex w-full h-full bg-red-400">
+          <div className="p-2 flex lg:flex-row flex-col w-full h-fit ">
             {/* <CircularProgressbarWithChildren value={crawledvalue} className='h-48' styles={{
               path: { stroke: crawledvalue < 40 ? '#D92D20' : crawledvalue > 40 && crawledvalue < 71 ? '#FDB022' : '#039855' }
             }} >
@@ -312,11 +316,11 @@ function Overview() {
                 <p className='text-gray-900 text-center text-5xl'> {Number(technicalSeoData.metrics?.crawled?.total).toLocaleString()} </p>
               </div>
             </CircularProgressbarWithChildren> */}
-            {/* <div className="h-full"> */}
-            <CrawledPages />
-            {/* </div> */}
+            <div className="h-fit object-contain">
+              <CrawledPages />
+            </div>
 
-            <div className="flex flex-col  w-full justify-end">
+            <div className="flex flex-col w-full self-end">
               <p className=" flex items-center text-xs text-[#475467]">
                 <span className="text-green-300">
                   <GoDotFill />{" "}
@@ -351,9 +355,9 @@ function Overview() {
             title="HTTP status codes"
             info="The returned code status that indicate what the response is"
           />
-          <div className="p-4 flex lg:flex-row flex-col gap-2 h-48 bg-yellow-500">
+          <div className="p-4 flex lg:flex-row flex-col gap-2 h-48 w-full ">
             <HTTPStatusCode />
-            <div className="flex flex-col justify-end bg-yellow-500 overflow-y-auto">
+            <div className="flex flex-col justify-end  overflow-y-auto">
               <p className=" text-xs flex items-center text-[#475467]">
                 {" "}
                 <span className="text-green-400">
@@ -397,7 +401,7 @@ function Overview() {
             title="Site issues"
             info="All issues associated with thw website"
           />
-          <div className="p-4 flex gap-2 h-48">
+          <div className="p-4 lg:flex-row flex-col gap-2 h-48">
             <ActivityGuage />
             <div className="flex flex-col justify-end">
               <p className=" text-xs flex items-center text-[#475467]">
@@ -431,20 +435,23 @@ function Overview() {
       </section>
       <section className="grid border rounded-md lg:max-w-[75%] w-auto">
         <div className=" flex items-center justify-between">
-          <div className="flex w-full p-2 md:p-4 items-center justify-between">
+          <div className="flex min-[500px]:flex-row flex-col w-full gap-2 p-2 md:p-4 min-[500px]:items-center justify-between">
             <h1
-              className={`text-[#101828] gap-3 flex items-center font-semibold text-lg`}
+              className={`text-[#101828] gap-3 flex items-center font-semibold sm:text-lg`}
             >
               Top issues
               <RxQuestionMarkCircled className="text-gray-400" />
             </h1>
             <div className="flex items-center gap-2 md:gap-4">
               <div className="flex">
-                <PlainButton className="text-sm" title="View all issues" />
+                <PlainButton
+                  className="min-[500px]:text-sm text-xs"
+                  title="View all issues"
+                />
               </div>
               <div className="flex ">
                 <FilledButton
-                  className="text-sm"
+                  className="min-[500px]:text-sm text-xs"
                   icon={<FiDownloadCloud />}
                   title="Export issues"
                   handleClick={function (): void {

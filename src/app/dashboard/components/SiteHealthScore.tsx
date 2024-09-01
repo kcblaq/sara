@@ -11,22 +11,25 @@ export default function SiteHealthScore() {
           <RxQuestionMarkCircled className="text-gray-400" />
         </button>
       </h1>
-      <div className={`w-full md:w-auto`}>
-        <ProgressiveCircle />
-      </div>
 
-      <div className="grid gap-3">
-        <div className="flex items-center space-x-2 w-full text-sm">
-          <FaCircle className="text-red-500" />
-          <p className=" font-normal"> Low</p>
+      <div className="flex md:flex-col flex-row w-full gap-10">
+        <div className={`size-[60%] md:w-auto`}>
+          <ProgressiveCircle />
         </div>
-        <div className="flex items-center space-x-2 w-full text-sm">
-          <FaCircle className="text-yellow-500" />
-          <p className=" font-normal"> Moderate</p>
-        </div>
-        <div className="flex items-center space-x-2 w-full text-sm">
-          <FaCircle className="text-green-500" />
-          <p className=" font-normal"> High</p>
+
+        <div className="grid gap-3 h-fit md:self-baseline  self-end  w-fit justify-end">
+          <div className="flex items-center space-x-2 w-full text-sm">
+            <FaCircle className="text-red-500" />
+            <p className=" font-normal"> Low</p>
+          </div>
+          <div className="flex items-center space-x-2 w-full text-sm">
+            <FaCircle className="text-yellow-500" />
+            <p className=" font-normal"> Moderate</p>
+          </div>
+          <div className="flex items-center space-x-2 w-full text-sm">
+            <FaCircle className="text-green-500" />
+            <p className=" font-normal"> High</p>
+          </div>
         </div>
       </div>
     </div>
