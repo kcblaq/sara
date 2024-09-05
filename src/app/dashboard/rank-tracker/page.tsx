@@ -92,9 +92,9 @@ export default function page() {
           />
         </div>
         <div className="flex sm:flex-row flex-col  w-full sm:gap-6 gap-2 sm:items-center it">
-          <CountryPick className=" w-full" />
-          <SearchEnginePick className=" w-full" />
-          <OrganicPick className=" w-full" />
+          <CountryPick className=" w-full flex items-center" />
+          <SearchEnginePick className=" w-full flex items-center" />
+          <OrganicPick className=" w-full flex items-center" />
         </div>
       </section>
       <section className={``}>
