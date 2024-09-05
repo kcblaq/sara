@@ -50,8 +50,8 @@ export default function RankOverview() {
     return null;
   }
   return (
-    <main className="grid w-full h-full items-start content-start gap-6 my-10 mb-20 overflow-auto ">
-      <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <main className="grid w-full h-full items-start content-start gap-6 my-10 mb-20 overflow-auto">
+      <section className="grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 gap-6">
         <OrganicTrafficCard />
         <Card
           title={"Search visibility"}
@@ -68,16 +68,16 @@ export default function RankOverview() {
           chart={undefined}
         />
       </section>
-      <section className="grid grid-cols-3 gap-8 ">
+      <section className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 md:gap-8 gap-4">
         <div
-          className={` col-span-1 grid p-6 gap-3 rounded-md border shadow-sm w-full`}
+          className={` col-span-1 min-[375px]:min-w-[330px] grid p-6 gap-3 rounded-md border shadow-sm w-full`}
         >
           <TitleWithoutUnderline
             title={"Keyword ranking "}
             info={"Keyword ranking "}
           />
           <div className="w-full rounded-xl border shadow-sm content-start justify-between ">
-            <table className="py-4 w-full">
+            <table className="py-4 w-full  table-fixed">
               <thead className=" bg-[#EAECF0] h-12 rounded-md">
                 <tr className="rounded-md">
                   <th className="font-medium text-xs text-[#475467] rounded-tl-xl text-left p-2">
@@ -132,7 +132,7 @@ export default function RankOverview() {
           </div>
         </div>
         <div
-          className={` col-span-2 grid p-6 gap-3 rounded-md border shadow-sm w-full`}
+          className={` lg:col-span-2 col-span-1 grid p-6 gap-3 rounded-md border shadow-sm w-full`}
         >
           <TitleWithoutUnderline
             title={"Position distributions "}
