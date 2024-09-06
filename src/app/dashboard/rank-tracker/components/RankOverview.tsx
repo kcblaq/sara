@@ -132,7 +132,7 @@ export default function RankOverview() {
           </div>
         </div>
         <div
-          className={` lg:col-span-2 col-span-1 grid p-6 gap-3 rounded-md border shadow-sm w-full`}
+          className={`lg:col-span-2 col-span-1 grid p-6 gap-3 rounded-md border shadow-sm w-full`}
         >
           <TitleWithoutUnderline
             title={"Position distributions "}

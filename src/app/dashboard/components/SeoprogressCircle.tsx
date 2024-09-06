@@ -98,14 +98,14 @@ export const CrawledPagesComplete: FC = () => {
   const averageSeo = scores && scores.crawled;
 
   return (
-    <div className="grid p-2 md:p-4 col-span-1 h-full justify-items-start  rounded-md w-full border ">
+    <div className="grid p-2 md:p-4 col-span-1 h-full justify-items-start rounded-md w-full border ">
       <Title title={"Crawl status"} info="The status of the crawl result" />
-      <div className="p-2 flex w-full ">
+      <div className="p-2 flex xl:flex-row flex-col w-full h-full  gap-3 xl:-mt-10">
         <div className=" rounded-full flex items-center justify-center">
-          <div className="z-0">
+          <div className="relative w-40 h-40 md:w-48 md:h-48 flex items-center justify-center">
             <CircularProgressbarWithChildren
               value={averageSeo ?? 0}
-              className=""
+              className="w-full h-full aspect-w-1 aspect-h-1"
               styles={{
                 trail: {
                   stroke: "#D1FADF",
@@ -134,7 +134,7 @@ export const CrawledPagesComplete: FC = () => {
             <span className="text-green-300">
               <GoDotFill />{" "}
             </span>{" "}
-            {`Crwaled(${crawled?.crawled.crawled})`}{" "}
+            {`Crawled(${crawled?.crawled.crawled})`}{" "}
           </p>
           <p className=" flex items-center text-xs text-[#475467]">
             {" "}
