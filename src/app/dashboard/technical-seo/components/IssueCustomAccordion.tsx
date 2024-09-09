@@ -14,7 +14,7 @@ export default function IssueCustomAccordion({
   data,
 }: IssueCustomAccordionProps) {
   return (
-    <Accordion type="single" collapsible>
+    <Accordion type="single" collapsible className="w-full">
       <AccordionItem value="item-1">
         <AccordionTrigger className="hover:bg-gray-200 active:bg-gray-200 p-3 rounded-md">
           {title}
