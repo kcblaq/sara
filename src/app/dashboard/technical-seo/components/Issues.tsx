@@ -179,7 +179,7 @@ export default function Issues() {
   return (
     <>
       <main className="pb-14 grid w-full gap-8 overflow-auto min-h-[400px] ">
-        <section className="flex h-16 flex-wrap items-center z-10 bg-white justify-between w-full  my-4">
+        <section className="flex  flex-wrap items-center z-10 bg-white justify-between w-full gap-4 ">
           <div className="flex items-center gap-2 flex-wrap">
             {tabsFilter.map((item, index) => (
               <button
@@ -195,7 +195,7 @@ export default function Issues() {
             ))}
           </div>
           <div className="flex">
-            <div className="flex relative rounded-md w-[320px]  ">
+            <div className="flex relative rounded-md min-[375px]:w-[320px] w-[300px] ">
               <input
                 type="search"
                 placeholder="Search issues"
@@ -212,11 +212,11 @@ export default function Issues() {
           </div>
         ) : (
           <section className="grid grid-cols-1 gap-8 md:grid-cols-3 max-h-[80dvh]  overflow-auto h-full ">
-            <div className="flex flex-col h-full gap-2 col-span-1 border overflow-y-scroll shadow-sm rounded-md">
+            <div className="flex flex-col h-full gap-2 col-span-1 border   shadow-sm rounded-md">
               <IssueCustomAccordion title="Crawlability and indexability" />
               <IssueCustomAccordion title="Site performance" />
               <div
-                className="grid gap-4 my-4 transition-all ease-linear delay-300"
+                className="grid gap-4 my-4 transition-all ease-linear delay-300 p-3"
                 style={{ height: "100%" }}
               >
                 {/* {Object.entries(categories).map(([key, value]) => {
@@ -274,6 +274,7 @@ export default function Issues() {
                     </>
                   );
                 })} */}
+                hello
               </div>
 
               {/* {
@@ -289,22 +290,22 @@ export default function Issues() {
             </div>
 
             {
-              <div className="flex flex-col col-span-2 gap-4">
+              <div className="flex flex-col md:col-span-2 col-span-1 gap-4">
                 <div className="border shadow-sm overflow-auto rounded-md w-full h-full ">
                   <div className="flex gap-6 w-full p-4 items-center font-semibold text-[#101828] text-lg">
                     <FeaturedIcon className="size-10" />{" "}
                     <h2 className=" font-semibold"> Pages with poor CLS: </h2>
                     {/* <h3 className="">{currentCategoryDetail?.title} </h3> */}
                   </div>
-                  <div className="overflow-auto h-[30vh] ">
-                    <table className="w-full text-left ">
+                  <div className="overflow-auto h-[30vh] w-full">
+                    <table className="w-full text-left table-fixed">
                       <thead className="bg-[#EAECF0] h-14 text-sm font-normal">
                         <tr>
-                          <th className="p-2 pl-4"> URL </th>
-                          <th className="p-2"> Page depth </th>
-                          <th className="p-2"> Internal links </th>
-                          <th className="p-2"> Status code </th>
-                          <th className="p-2"> Indexable </th>
+                          <th className="p-2 pl-4 w-[310px]"> URL </th>
+                          <th className="p-2 w-[120px]"> Page depth </th>
+                          <th className="p-2 w-[120px]"> Internal links </th>
+                          <th className="p-2 w-[120px]"> Status code </th>
+                          <th className="p-2 w-[120px]"> Indexable </th>
                         </tr>
                       </thead>
                       <tbody className="overflow-auto h-40 p-2 w-full">
@@ -331,11 +332,20 @@ export default function Issues() {
                     </table>
                   </div>
                 </div>
-                <div className="border shadow-sm flex flex-col gap-4  rounded-md w-full p-4 2xl:p-4">
+                <div className="border shadow-sm h-[170px] overflow-y-auto flex flex-col gap-4  rounded-md w-full p-4 2xl:p-4">
                   <h2 className=" font-semibold text-[#344054] text-2xl ">
                     Issue Description{" "}
                   </h2>
-                  <p className="">{currentCategoryDetail?.description}</p>
+                  {/* <p className="">{currentCategoryDetail?.description}</p> */}
+                  <p>
+                    A tag is a key on-page SEO element. It appears in browsers
+                    and search results, and helps both search engines and users
+                    understand what your page is about. If a page is missing a
+                    title, or a tag is empty, Google may consider it low
+                    quality. In case you promote this page in search results,
+                    you will miss chances to rank high and gain a higher
+                    click-through rate.
+                  </p>
                 </div>
               </div>
             }
