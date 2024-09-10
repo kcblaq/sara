@@ -82,9 +82,9 @@ export default function DashboardOverviewPlaceholder() {
         ? error.response.data.message
         : "An error occurred";
       setErr({ status: true, msg: errorMessage });
-      if (error.response && error.response.status === 401) {
-        router.push("/login");
-      }
+      // if (error.response && error.response.status === 401) {
+      //   router.push("/login");
+      // }
       // notify({
       //     type: "error",
       //     message: error?.response?.data?.message
