@@ -153,11 +153,11 @@ export default function Layout({ children }: Props) {
     },
   });
 
-  useEffect(() => {
-    if (!token) {
-      router.push("/login");
-    }
-  }, [token, router]);
+  // useEffect(() => {
+  //   if (!token) {
+  //     router.push("/login");
+  //   }
+  // }, [token, router]);
 
   const dispatch = useDispatch();
 
