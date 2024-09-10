@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/redux/features/userSlice";
 import toast from "react-hot-toast";
+import { AxiosInstance } from "@/lib/axios";
 
 export default function ForgetPassword() {
   const [loading, setLoading] = useState(false);
@@ -38,8 +39,8 @@ export default function ForgetPassword() {
   ) {
     setLoading(true);
     try {
-      const res = await axios.post(
-        "https://api.webmaxi.net/api/auth/forgot-password",
+      const res = await AxiosInstance.post(
+        "auth/password-reset/forgot-password",
         {
           email: values.email,
         }

@@ -77,7 +77,7 @@ const OtpInput: React.FC = () => {
     console.log(JSON.stringify(token));
     setLoading(true);
     try {
-      await AxiosInstance.post("/auth/verify-otp", payload)
+      await AxiosInstance.post("auth/verification/verify", payload)
         .then((res) => {
           if (res.status == 200) {
             console.log("RES::", res.data.token);

@@ -9,6 +9,7 @@ import axios from "axios";
 // import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { AxiosInstance } from "@/lib/axios";
 
 export default function EmailSent() {
   const [status, setStatus] = useState("idle");
@@ -23,10 +24,8 @@ export default function EmailSent() {
       const mailtoLink = `mailto:${userEmail}`;
 
       window.location.href = mailtoLink;
-      setTimeout(() => {
-        setStatus("success");
-      }, 2000);
     } catch (error) {
+      console.log(error);
       setStatus("error");
     }
   };
@@ -34,8 +33,8 @@ export default function EmailSent() {
   async function handleSubmit() {
     setText("Sending...");
     try {
-      const res = await axios.post(
-        "https://api.webmaxi.net/api/auth/forgot-password",
+      const res = await AxiosInstance.post(
+        "auth/password-reset/forgot-password",
         {
           email: userEmail,
         }
