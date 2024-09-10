@@ -16,7 +16,7 @@ import { StackedBarChart } from "./components/graphs/StackedBarChart";
 import { RootState } from "../store";
 import KeywordTable from "./components/tables/KeywordTable";
 import AutoModal from "../component/modals/AutoModal";
-import CheckUserType from "./components/CheckUserType";
+// import CheckUserType from "./components/CheckUserType";
 
 export default function Dashboard() {
   const exportIcon = (
@@ -76,12 +76,12 @@ export default function Dashboard() {
   }
   return (
     <>
-      {show && (
+      {/* {show && (
         <AutoModal
           closeModal={() => setShow(false)}
           ModalBody={<CheckUserType close={closeModal} />}
         />
-      )}
+      )} */}
       <div className=" mb-10 p-2 grid h-full w-full sm:overflow-auto">
         <div className="flex w-full flex-col sm:flex-row gap-4 justify-between items-start flex-grow">
           <div className="flex flex-col">
