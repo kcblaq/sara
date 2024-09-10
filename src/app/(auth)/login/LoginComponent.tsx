@@ -14,6 +14,7 @@ import { setToken, setUser } from "@/redux/features/userSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/store";
 import MobileLogoIcon from "../../../components/svgComponents/CompanyMobileLogo";
+import toast from "react-hot-toast";
 
 export const LoginComponent = () => {
   const [isPassword, setIsPassword] = useState("password");
@@ -45,14 +46,32 @@ export const LoginComponent = () => {
   async function handleLogin() {
     setIsLoading(true);
     try {
-      const res = await AxiosInstance.post("/auth/login", {
+      const loginPromise = AxiosInstance.post("/auth/login", {
         email: userDetail.email,
         password: userDetail.password,
       });
+
+      toast.promise(
+        loginPromise,
+        {
+          loading: "Loading",
+          success: (data) => `Successfully login`,
+          error: (err) => `Something  just happened`,
+        },
+        {
+          style: {
+            minWidth: "250px",
+          },
+        }
+      );
+
+      const res = await loginPromise; // Wait for the login request to complete
+
       if (res.status == 200) {
         // console.log("RES::",res.data.token)
         dispatch(setUser(res.data.user));
         dispatch(setToken(res.data.token));
+
         router.push("/dashboard");
       }
     } catch (err: any) {

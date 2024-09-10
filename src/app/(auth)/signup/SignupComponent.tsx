@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { BiLoader } from "react-icons/bi";
 import MobileLogoIcon from "../../../components/svgComponents/CompanyMobileLogo";
 import toast from "react-hot-toast";
+import { AxiosInstance } from "@/lib/axios";
 
 export const SignupComponent = () => {
   const [isPassword, setIsPassword] = useState("password");
@@ -22,12 +23,11 @@ export const SignupComponent = () => {
   const Register = async () => {
     setLoading(true);
     try {
-      await axios
-        .post("https://api.webmaxi.net/api/auth/register", {
-          fullName: formik.values.name,
-          email: formik.values.email,
-          password: formik.values.password,
-        })
+      await AxiosInstance.post("auth/register", {
+        name: formik.values.name,
+        email: formik.values.email,
+        password: formik.values.password,
+      })
         .then((res) => {
           if (res.status == 201) {
             sessionStorage.setItem("user", res.data);

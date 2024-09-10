@@ -7,6 +7,7 @@ import BackToLogin from "../../BackToLogin";
 import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { AxiosInstance } from "@/lib/axios";
 
 export default function SetNewPasswordForm() {
   const [password, setPassword] = useState("");
@@ -26,7 +27,7 @@ export default function SetNewPasswordForm() {
 
   async function ConfirmLink() {
     try {
-      const res = await axios.get("https://api.webmaxi.com/api/auth/password", {
+      const res = await AxiosInstance.get("auth/password", {
         params: {
           link,
           email,
@@ -58,8 +59,8 @@ export default function SetNewPasswordForm() {
   async function SubmitNewPassword() {
     try {
       setLoading(true);
-      const response = await axios.post(
-        "https://api.webmaxi.net/api/auth/reset-password",
+      const response = await AxiosInstance.post(
+        "auth/password-reset/reset-password",
         {
           email,
           newPassword: confirmPassword,
