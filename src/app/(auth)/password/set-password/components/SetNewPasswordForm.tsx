@@ -27,15 +27,12 @@ export default function SetNewPasswordForm() {
 
   async function ConfirmLink() {
     try {
-      const res = await AxiosInstance.get(
-        "https://api.webmaxi.com/api/auth/password",
-        {
-          params: {
-            link,
-            email,
-          },
-        }
-      );
+      const res = await AxiosInstance.get("auth/password", {
+        params: {
+          link,
+          email,
+        },
+      });
 
       if (res.status === 200 || res.status === 201) {
         // Process successful response
