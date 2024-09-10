@@ -412,15 +412,15 @@ export default function Layout({ children }: Props) {
               </div>
             </div>
             <hr className="w-full  hidden md:flex " />
-            {isloading ? (
+            {/* {isloading ? (
               <LoaderPulse />
             ) : property.length < 1 || dashboardData === undefined ? (
               <DashboardOverviewPlaceholder />
-            ) : (
-              <div className=" w-full h-full overflow-auto p-2 md:p-8">
-                {children}
-              </div>
-            )}
+            ) : ( */}
+            <div className=" w-full h-full overflow-auto p-2 md:p-8">
+              {children}
+            </div>
+            {/* )} */}
           </section>
         </main>
       </div>

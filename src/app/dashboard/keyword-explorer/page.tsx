@@ -109,15 +109,18 @@ export default function page() {
         </div>
       </section>
       <section
-        className={`flex sm:flex-row flex-col w-full sm:items-center items-start gap-4 text-[#101828] `}
+        className={`flex min:[500px]:flex-nowrap flex-wrap w-full sm:items-center items-start gap-4 text-[#101828] `}
       >
-        <ToggleMobile
-          mobile={mobile}
-          setMobile={setMobile}
-          className="sm:w-auto w-fit font-normal"
-        />
-        <CountryPick className="sm:w-auto w-fit" />
-        <SearchEnginePick className="sm:w-auto w-fit" />
+        <div className="sm:w-auto w-full">
+          <ToggleMobile
+            mobile={mobile}
+            setMobile={setMobile}
+            className="w-fit font-normal"
+          />
+        </div>
+
+        <CountryPick className="sm:w-auto w-full" />
+        <SearchEnginePick className="sm:w-auto w-full" />
       </section>
       <section className={``}>
         <Tab.Group>
