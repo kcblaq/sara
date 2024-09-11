@@ -14,7 +14,7 @@ import KeywordAnalysis from "./component/KeywordAnalysis";
 import SmartKeywordFinder from "./component/SmartKeywordFinder";
 
 const tabs = [
-  // { title: "Keyword analysis", content: <KeywordAnalysis /> },
+  { title: "Keyword analysis", content: <KeywordAnalysis /> },
   { title: "Smart keyword finder", content: <SmartKeywordFinder /> },
   // { title: "Keyword list", content: <KeywordList /> }
 ];
@@ -82,7 +82,7 @@ export default function page() {
       </section>
     </main>
   ) : stage == 1 ? (
-    <main className="grid w-full h-full items-start content-start gap-6  mb-20 overflow-auto">
+    <main className="grid w-full h-full items-start content-start gap-6 mb-20 overflow-auto">
       <section
         className={`flex sm:flex-row flex-col sm:justify-between w-full sm:items-center gap-4 text-[#101828]`}
       >
@@ -109,19 +109,22 @@ export default function page() {
         </div>
       </section>
       <section
-        className={`flex sm:flex-row flex-col w-full sm:items-center items-start gap-4 text-[#101828] `}
+        className={`flex min:[500px]:flex-nowrap flex-wrap w-full sm:items-center items-start gap-4 text-[#101828] `}
       >
-        <ToggleMobile
-          mobile={mobile}
-          setMobile={setMobile}
-          className="sm:w-auto w-fit font-normal"
-        />
-        <CountryPick className="sm:w-auto w-fit" />
-        <SearchEnginePick className="sm:w-auto w-fit" />
+        <div className="sm:w-auto w-full">
+          <ToggleMobile
+            mobile={mobile}
+            setMobile={setMobile}
+            className="w-fit font-normal"
+          />
+        </div>
+
+        <CountryPick className="sm:w-auto w-full" />
+        <SearchEnginePick className="sm:w-auto w-full" />
       </section>
       <section className={``}>
         <Tab.Group>
-          <Tab.List className="flex gap-4 w-full">
+          <Tab.List className="flex gap-4 w-full overflow-x-auto whitespace-nowrap">
             {tabs.map((tab) => {
               return (
                 <span key={tab.title}>
@@ -142,8 +145,8 @@ export default function page() {
               );
             })}
           </Tab.List>
-          <hr className="w-full" />
-          <span className={` h-full w-full overflow-auto  `}>
+          <hr className="" />
+          <span className={` h-full overflow-auto`}>
             <Tab.Panels>
               {tabs.map((tab) => {
                 return (
