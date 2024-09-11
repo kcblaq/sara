@@ -79,12 +79,12 @@ export default function SmartKeywordFinder() {
   const [selected, setSelected] = useState("Volume");
 
   return (
-    <main className="py-10 grid gap-8 w-full">
-      <section className="flex min-[500px]:flex-row flex-col min-[500px]:items-center min-[500px]:gap-0 gap-2 min-[500px]:justify-between w-full">
+    <main className="py-10 grid gap-8 w-fit">
+      <section className="flex min-[500px]:flex-row flex-col min-[500px]:items-center gap-2 justify-between w-full">
         <h1 className=" text-2xl text-black font-semibold">
           Keyword: <span className=" font-normal">{keyword} </span>
         </h1>
-        <div className="flex relative rounded-md sm:w-[320px] w-full">
+        <div className="flex relative rounded-md sm:w-[320px] ">
           <input
             type="search"
             value={keyword}
@@ -94,7 +94,7 @@ export default function SmartKeywordFinder() {
           <CiSearch className=" absolute top-4 left-4 " />
         </div>
       </section>
-      <section className="flex items-center justify-between w-full">
+      <section className="flex xl:flex-row flex-col xl:items-center gap-3 xl:justify-between w-full">
         <div className="flex items-center gap-2 flex-wrap">
           {tabsFilter.map((item, index) => (
             <button
@@ -111,7 +111,7 @@ export default function SmartKeywordFinder() {
             </button>
           ))}
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex min-[375px]:flex-row flex-col min-[375px]:items-center gap-4">
           <SelectorDropdown
             items={["Volume", "Quantity", "Awareness"]}
             selected={selected}
@@ -129,135 +129,134 @@ export default function SmartKeywordFinder() {
           />
         </div>
       </section>
-      <section className=" rounded-md w-full border shadow-sm p-6">
-        <div className="flex items-center gap-3">
-          <p className="text-[#101828] font-medium text-lg ">1,2000 keywords</p>
+      <section className="overflow-x-auto rounded-md w-full border shadow-sm p-6 ">
+        <div className="flex items-center gap-3 mb-3">
+          <p className="text-[#101828] font-medium min-[375px]:text-lg text-sm">
+            1,2000 keywords
+          </p>
           <p className="text-[#344054] font-medium text-xs px-3 p-2 rounded-2xl bg-[#F2F4F7] ">
             6.7M total volume{" "}
           </p>
         </div>
-        <table className="w-full">
-          <thead className="bg-[#F9FAFB] w-full">
-            <tr className=" h-[44px] text-xs text-[#475467]  font-medium">
-              <th>
-                {" "}
-                <span className="flex items-center gap-2 p-2">
+        <div className="overflow-x-auto w-full">
+          <table className="w-full table-fixed">
+            <thead className="bg-[#F9FAFB] w-full">
+              <tr className=" h-[44px] text-xs text-[#475467]  font-medium">
+                <th className="w-10 text-left">
+                  <input type="checkbox" />
+                </th>
+                <th className="text-left p-2 w-[370px]">Keywords</th>
+                <th className="w-[110px]">
                   {" "}
-                  <input type="checkbox" className="" /> Keywords{" "}
-                </span>
-              </th>
-              <th>
-                {" "}
-                <span className="flex items-center gap-1 p-2">
+                  <span className="flex items-center gap-1 p-2">
+                    {" "}
+                    Volume <MdArrowUpward />{" "}
+                  </span>{" "}
+                </th>
+                <th className="w-[110px]">
                   {" "}
-                  Volume <MdArrowUpward />{" "}
-                </span>{" "}
-              </th>
-              <th>
-                {" "}
-                <span className="flex items-center gap-1 p-2">
+                  <span className="flex items-center gap-1 p-2">
+                    {" "}
+                    GV <DetailButton title={""} />{" "}
+                  </span>{" "}
+                </th>
+                <th className="w-[110px]">
                   {" "}
-                  GV <DetailButton title={""} />{" "}
-                </span>{" "}
-              </th>
-              <th>
-                {" "}
-                <span className="flex items-center gap-1 p-2">
+                  <span className="flex items-center gap-1 p-2">
+                    {" "}
+                    KD <DetailButton title={""} />{" "}
+                  </span>{" "}
+                </th>
+                <th className="w-[110px]">
                   {" "}
-                  KD <DetailButton title={""} />{" "}
-                </span>{" "}
-              </th>
-              <th>
-                {" "}
-                <span className="flex items-center gap-1 p-2">
+                  <span className="flex items-center gap-1 p-2">
+                    {" "}
+                    TF <DetailButton title={""} />{" "}
+                  </span>{" "}
+                </th>
+                <th className="w-[110px]">
                   {" "}
-                  TF <DetailButton title={""} />{" "}
-                </span>{" "}
-              </th>
-              <th>
-                {" "}
-                <span className="flex items-center gap-1 p-2">
+                  <span className="flex items-center gap-1 p-2">
+                    {" "}
+                    CPC <DetailButton title={""} />{" "}
+                  </span>{" "}
+                </th>
+                <th className="w-[170px]">
                   {" "}
-                  CPC <DetailButton title={""} />{" "}
-                </span>{" "}
-              </th>
-              <th>
-                {" "}
-                <span className="flex items-center gap-1 p-2">
+                  <span className="flex items-center gap-1 p-2">
+                    {" "}
+                    SERP features <DetailButton title={""} />{" "}
+                  </span>{" "}
+                </th>
+                <th className="w-[110px]">
                   {" "}
-                  SERP features <DetailButton title={""} />{" "}
-                </span>{" "}
-              </th>
-              <th>
-                {" "}
-                <span className="flex items-center gap-1 p-2">
-                  {" "}
-                  Update
-                </span>{" "}
-              </th>
-              <th> </th>
-            </tr>
-          </thead>
-          <tbody>
-            {mockedData.map((data) => {
-              return (
-                <tr className=" border-b">
-                  <td className=" p-2  ">
-                    <span className="flex items-center gap-2 ">
-                      {" "}
-                      <input type="checkbox" className="" /> {data.keyword}{" "}
-                    </span>
-                  </td>
+                  <span className="flex items-center gap-1 p-2">
+                    {" "}
+                    Update
+                  </span>{" "}
+                </th>
+                <th className="w-14"> </th>
+              </tr>
+            </thead>
+            <tbody>
+              {mockedData.map((data) => {
+                return (
+                  <tr className=" border-b">
+                    <td>
+                      <input type="checkbox" className="" />
+                    </td>
+                    <td className=" p-2">{data.keyword} </td>
 
-                  <td className="rounded-full">
-                    <span className={``}>{data.volume} </span>{" "}
-                  </td>
-                  <td className="rounded-full">
-                    <span className={``}>{data.gv} </span>{" "}
-                  </td>
-                  <td className="  p-2  rounded-full">
-                    <span
-                      className={`p-1 w-2/3 rounded-3xl text-center flex items-center justify-center ${
-                        data.kd > 39
-                          ? "bg-[#F6FEF9] text-[#12B76A]"
-                          : "bg-[#FFFAEB] text-[#B54708] "
-                      }`}
-                    >
-                      {" "}
-                      <GoDotFill />
-                      {data.kd}{" "}
-                    </span>{" "}
-                  </td>
-                  <td className="rounded-full">
-                    <span className={``}>{data.tf}</span>{" "}
-                  </td>
-                  <td className="rounded-full">
-                    <span className={``}>{data.cpc}</span>{" "}
-                  </td>
-                  <td className="rounded-full">
-                    <span className={`flex items-center gap-2 text-sm`}>
-                      {data.serp.includes("link") && <FaLink />}
-                      {data.serp.includes("image") && <CiImageOn />}
-                      {data.serp.includes("shop") && <IoCartOutline />}
-                      {data.serp.includes("video") && <FaVideo />}
-                    </span>{" "}
-                  </td>
-                  <td className="rounded-full">
-                    <span className={``}> 2 weeks ago</span>{" "}
-                  </td>
-                  <td className=" ">
-                    <span
-                      className={`  border flex p-3 items-center justify-center rounded-lg cursor-pointer text-primary `}
-                    >
-                      {" "}
-                      <FiRefreshCw />
-                    </span>{" "}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+                    <td className="rounded-full">
+                      <span className={``}>{data.volume} </span>{" "}
+                    </td>
+                    <td className="rounded-full">
+                      <span className={``}>{data.gv} </span>{" "}
+                    </td>
+                    <td className="  p-2  rounded-full">
+                      <span
+                        className={`p-1 w-2/3 rounded-3xl text-center flex items-center justify-center ${
+                          data.kd > 39
+                            ? "bg-[#F6FEF9] text-[#12B76A]"
+                            : "bg-[#FFFAEB] text-[#B54708] "
+                        }`}
+                      >
+                        {" "}
+                        <GoDotFill />
+                        {data.kd}{" "}
+                      </span>{" "}
+                    </td>
+                    <td className="rounded-full">
+                      <span className={``}>{data.tf}</span>{" "}
+                    </td>
+                    <td className="rounded-full">
+                      <span className={``}>{data.cpc}</span>{" "}
+                    </td>
+                    <td className="rounded-full">
+                      <span className={`flex items-center gap-2 text-sm`}>
+                        {data.serp.includes("link") && <FaLink />}
+                        {data.serp.includes("image") && <CiImageOn />}
+                        {data.serp.includes("shop") && <IoCartOutline />}
+                        {data.serp.includes("video") && <FaVideo />}
+                      </span>{" "}
+                    </td>
+                    <td className="rounded-full">
+                      <span className={``}> 2 weeks ago</span>{" "}
+                    </td>
+                    <td className=" ">
+                      <span
+                        className={`  border flex p-3 items-center justify-center rounded-lg cursor-pointer text-primary `}
+                      >
+                        {" "}
+                        <FiRefreshCw />
+                      </span>{" "}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </section>
     </main>
   );
