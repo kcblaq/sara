@@ -86,7 +86,7 @@ export const TitleWithoutUnderline = ({
         {title}
         <button title={info}>
           {" "}
-          <RxQuestionMarkCircled />
+          <RxQuestionMarkCircled className="text-gray-400" />
         </button>
       </h1>
     </div>
