@@ -33,8 +33,8 @@ export default function KeywordAnalysis() {
 
   function Detail() {
     return (
-      <div className="grid gap-6">
-        <div className="flex sm:flex-row flex-col w-full justify-between sm:items-center ">
+      <div className="grid gap-6 ">
+        <div className="flex sm:flex-row flex-col w-full justify-between sm:items-center">
           <div className="flex items-center gap-4">
             <span
               className="p-2 shadow-sm border rounded-md cursor-pointer hover:bg-gray-100"
@@ -58,20 +58,22 @@ export default function KeywordAnalysis() {
           </div>
         </div>
         <section className="grid grid-cols-1 md:grid-cols-7 gap-6 ">
-          <div className="rounded-md border col-span-2 p-6 space-y-6  ">
+          <div className="rounded-md border col-span-2 p-6 space-y-6">
             <TitleWithoutUnderline
               title={"Keyword difficulty"}
               info={"How difficult it is for keyword ..."}
             />
 
-            <ProgressiveCircleReusable value={35} title={"medium"} />
+            <div className="grid md:grid-cols-1 min-[475px]:grid-cols-2 grid-cols-1 min-[475px]: gap-10">
+              <ProgressiveCircleReusable value={35} title={"medium"} />
 
-            <p className="">
-              You need about backlinks from about 22 websites to get into the
-              top 10 search results for this keyword.
-            </p>
+              <p className="mt-auto">
+                You need about backlinks from about 22 websites to get into the
+                top 10 search results for this keyword.
+              </p>
+            </div>
           </div>
-          <div className="rounded-md  col-span-2 grid gap-6">
+          <div className="rounded-md md:grid-cols-1 min-[500px]:grid-cols-2 grid-cols-1 col-span-2 grid gap-6">
             <Card
               title={"Volume"}
               amount={59}
@@ -99,13 +101,15 @@ export default function KeywordAnalysis() {
               title={"Global Volume"}
               info={"Global volume..."}
             />
-            <div className={`flex w-full gap-3 `}>
-              <div className=" w-2/3">
+            <div
+              className={`flex lg:flex-row md:flex-col min-[500px]:flex-row flex-col w-full gap-3`}
+            >
+              <div className="xl:w-full  lg:w-2/3 w-full">
                 <AnotherDoughnutChart />
               </div>
 
-              <div className="flex justify-center flex-col  w-full  ">
-                <p className="flex gap-2 items-center  ">
+              <div className="flex justify-center flex-col w-full">
+                <p className="flex gap-2 items-center">
                   <GoDotFill className="text-[#194185]" /> USA 23000
                 </p>
                 <p className="flex gap-2 items-center  ">
@@ -132,9 +136,9 @@ export default function KeywordAnalysis() {
             </div>
           </div>
         </section>
-        <section className="flex flex-col w-3/4 gap-4 rounded-md border p-6">
+        <section className="flex flex-col xl:w-3/4 w-full gap-4 rounded-md border p-6 ">
           <Title title={"Keyword ideas"} info={"Keyword ideas"} />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 ">
             <div className="flex flex-col gap-4">
               <div className="flex items-center gap-4">
                 <h2 className="text-[#101828] font-semibold text-lg">
@@ -147,7 +151,7 @@ export default function KeywordAnalysis() {
               </div>
               <div className="rounded-md border shadow-sm">
                 <table className="w-full">
-                  <thead className="bg-gray-200 w-full">
+                  <thead className="bg-gray-100 w-full">
                     <tr className="w-full justify-between">
                       <th className="p-4 text-left rounded-tl-md "> Keyword</th>
                       <th className="p-4 text-left rounded-tr-md h-14">
@@ -199,7 +203,7 @@ export default function KeywordAnalysis() {
               </div>
               <div className="rounded-md border shadow-sm">
                 <table className="w-full">
-                  <thead className="bg-gray-200 w-full">
+                  <thead className="bg-gray-100 w-full">
                     <tr className="w-full justify-between">
                       <th className="p-4 text-left rounded-tl-md "> Keyword</th>
                       <th className="p-4 text-left rounded-tr-md h-14">
