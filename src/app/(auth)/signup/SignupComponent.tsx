@@ -30,8 +30,8 @@ export const SignupComponent = () => {
       })
         .then((res) => {
           if (res.status == 201) {
-            sessionStorage.setItem("user", res.data);
-            // console.log(res.data)
+            sessionStorage.setItem("user", JSON.stringify(res.data));
+            // console.log(res.data);
             router.push("/signup/email-verify");
           } else {
             // console.log("RES", res)
