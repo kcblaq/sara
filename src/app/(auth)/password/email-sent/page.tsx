@@ -22,7 +22,6 @@ export default function EmailSent() {
     try {
       setStatus("loading");
       const mailtoLink = `mailto:${userEmail}`;
-
       window.location.href = mailtoLink;
     } catch (error) {
       console.log(error);
