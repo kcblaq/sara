@@ -49,6 +49,9 @@ export default function ForgetPassword() {
       if (res.status == 201) {
         dispatch(setUser({ email: formik.values.email }));
         setMessage({ status: true, msg: "Reset link sent" });
+        toast.success("Reset link sent", {
+          position: "top-right",
+        });
         setTimeout(() => {
           route.push("/password/email-sent");
           setMessage({ status: false, msg: "" });
@@ -78,7 +81,7 @@ export default function ForgetPassword() {
   }
 
   return (
-    <main className=" w-full justify-center items-center flex gap-4 flex-col sm:w-auto sm:min-w-[400px]">
+    <main className=" w-full justify-center items-center flex gap-4 flex-col sm:w-auto sm:min-w-[400px] ">
       <h1 className=" font-bold sm:text-3xl text-2xl">Forgot password? </h1>
       {message.status === false && (
         <p className="w-full text-base text-center text-gray-600">
