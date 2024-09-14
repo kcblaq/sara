@@ -46,6 +46,7 @@ export function AccountAvatarDropDown() {
         updatedAt: "",
       })
     );
+
     router.push("/login");
   }
   return (

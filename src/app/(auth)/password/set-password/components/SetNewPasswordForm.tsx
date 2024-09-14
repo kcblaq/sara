@@ -21,9 +21,18 @@ export default function SetNewPasswordForm() {
   // const params = new URLSearchParams();
   const params = useSearchParams();
 
+  let token = "";
   const link = params.get("link");
   const email = params.get("email");
-  console.log(link, email);
+
+  const sessionToken = sessionStorage.getItem("user");
+  if (sessionToken) {
+    const user = JSON.parse(sessionToken);
+    // console.log(user.token);
+    token = user.token;
+  } else {
+    console.log("No session found");
+  }
 
   async function ConfirmLink() {
     try {
@@ -64,6 +73,7 @@ export default function SetNewPasswordForm() {
         {
           email,
           newPassword: confirmPassword,
+          token,
         }
       );
       // Check response status or data to determine success or failure
