@@ -81,9 +81,8 @@ const OtpInput: React.FC = () => {
   const userEmail = localStorage.getItem("userEmail");
   const payload = {
     // email: userEmail,
-    otp: parseInt(otpValues.join(""), 10),
+    otp: otpValues.join(""),
   };
-
   async function VerifyEmail() {
     const config = {
       headers: {
