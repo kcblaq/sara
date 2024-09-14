@@ -63,21 +63,36 @@ const OtpInput: React.FC = () => {
     setOtpValues(newOtpValues);
   };
 
-  const token = localStorage.getItem("token");
+  // const token = localStorage.getItem("token");
+  let token = "";
+  const sessionToken = sessionStorage.getItem("user");
+  if (sessionToken) {
+    const user = JSON.parse(sessionToken);
+    // console.log(user.token);
+    token = user.token;
+  } else {
+    console.log("No session found");
+  }
+
+  console.log(token);
   const router = useRouter();
 
   const route = useRouter();
   const userEmail = localStorage.getItem("userEmail");
   const payload = {
-    email: userEmail,
+    // email: userEmail,
     otp: parseInt(otpValues.join(""), 10),
   };
 
   async function VerifyEmail() {
-    console.log(JSON.stringify(token));
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
     setLoading(true);
     try {
-      await AxiosInstance.post("auth/verification/verify", payload)
+      await AxiosInstance.post("auth/verification/verify", payload, config)
         .then((res) => {
           if (res.status == 200) {
             console.log("RES::", res.data.token);

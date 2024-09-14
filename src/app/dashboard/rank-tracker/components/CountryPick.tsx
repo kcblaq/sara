@@ -25,6 +25,7 @@ interface Country {
 
 interface Prop {
   title?: string;
+  className?: string;
 }
 
 interface CountryPickProps {
@@ -116,6 +117,7 @@ export default function CountryPick({ className }: CountryPickProps) {
 
 export function CountryPickAllLocationDefault({
   title = "Select location",
+  className,
 }: Prop) {
   const [countries, setCountries] = useState<Country[]>([]);
   const [currentCountry, setCurrentCountry] = useState<Country | null>(null);
@@ -134,7 +136,7 @@ export function CountryPickAllLocationDefault({
     <div className="  text-right">
       <Menu
         as="div"
-        className=" w-[184px] shadow-sm h-38px  relative inline-block text-left"
+        className={`${className} w-[184px] shadow-sm h-38px  relative inline-block text-left`}
       >
         <Menu.Button className="inline-flex w-full justify-between rounded-lg text-black p-3 text-sm font-medium border focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75">
           {currentCountry ? (
