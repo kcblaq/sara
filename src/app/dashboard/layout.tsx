@@ -235,12 +235,12 @@ export default function Layout({ children }: Props) {
   //   })
 
   const handleRoutes = (e: { preventDefault: () => void }, link: string) => {
-    if (link !== "/dashboard" && user.account_type !== "paid") {
-      e.preventDefault();
-      setShow(true);
-    } else {
-      window.location.href = link;
-    }
+    // if (link !== "/dashboard" && user.account_type !== "paid") {
+    //   e.preventDefault();
+    //   setShow(true);
+    // } else {
+    window.location.href = link;
+    // }
   };
 
   function closeModal() {

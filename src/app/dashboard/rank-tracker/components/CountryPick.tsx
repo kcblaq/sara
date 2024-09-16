@@ -1,11 +1,11 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { SetStateAction, useEffect, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { IoChevronDownOutline } from "react-icons/io5";
 import { CiGlobe } from "react-icons/ci";
 
-interface Country {
+export interface Country {
   flags: {
     png: string;
     svg: string;
@@ -30,11 +30,16 @@ interface Prop {
 
 interface CountryPickProps {
   className?: string;
+  setCountry?: React.Dispatch<SetStateAction<Country | null>>;
 }
 
-export default function CountryPick({ className }: CountryPickProps) {
+export default function CountryPick({
+  className,
+  setCountry,
+}: CountryPickProps) {
   const [countries, setCountries] = useState<Country[]>([]);
   const [currentCountry, setCurrentCountry] = useState<Country | null>(null);
+  // console.log(currentCountry);
 
   async function getCountries() {
     const res = await axios.get(
@@ -46,6 +51,10 @@ export default function CountryPick({ className }: CountryPickProps) {
   useEffect(() => {
     getCountries();
   }, []);
+
+  useEffect(() => {
+    setCountry && setCountry(currentCountry);
+  }, [currentCountry]);
 
   return (
     <div className=" text-right">
@@ -92,7 +101,10 @@ export default function CountryPick({ className }: CountryPickProps) {
                           className={`${
                             active ? "bg-primary text-white" : "text-gray-900"
                           } group flex gap-2 w-full items-center justify-start rounded-md px-2 py-2 text-sm cursor-pointer`}
-                          onClick={() => setCurrentCountry(prop)}
+                          onClick={() => {
+                            setCurrentCountry(prop);
+                            // setCountry && setCountry(prop);
+                          }}
                         >
                           <img
                             src={prop.flags.svg}
@@ -121,6 +133,7 @@ export function CountryPickAllLocationDefault({
 }: Prop) {
   const [countries, setCountries] = useState<Country[]>([]);
   const [currentCountry, setCurrentCountry] = useState<Country | null>(null);
+  console.log(countries);
 
   async function getCountries() {
     const res = await axios.get(
