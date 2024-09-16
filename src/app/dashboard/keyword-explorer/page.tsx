@@ -52,23 +52,37 @@ export default function page() {
   console.log(keywords);
 
   async function SearchKeywords() {
+    setStatus("loading");
     try {
       const req = await ApiCall({
         url: "user/crawler/keyword/2",
         method: "POST",
         data: {
           location_name: keywords.locationName,
-          location_code: "",
-
+          location_code: keywords.locationCode,
           keywords: keywords.keywords.split(","),
         },
       });
-
+      console.log(req.data);
       if (req.status) {
         toast.success("Keyword Searched", { position: "top-right" });
+        setStatus("success");
       }
-    } catch (error) {
+    } catch (error: any) {
+      setStatus("error");
       console.log(error);
+      if (error.response) {
+        toast.error(error.response.data.message || "something went wrong", {
+          position: "top-right",
+        });
+      } else if (error.request) {
+        toast.error("something went wrong", { position: "top-right" });
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        toast.error(error.message, { position: "top-right" });
+        console.log("Error", error.message);
+      }
     }
   }
   return stage == 0 ? (
@@ -107,7 +121,12 @@ export default function page() {
         </div>
         <div className={`flex items-center gap-6 mt-8`}>
           <CountryPick setCountry={setSelectedCountry} />
-          <FilledButton handleClick={SearchKeywords} title="Search Keywords" />
+          <FilledButton
+            handleClick={SearchKeywords}
+            loading={status === "loading"}
+            disabled={status === "loading"}
+            title="Search Keywords"
+          />
         </div>
       </section>
       <div className="flex items-center justify-center">

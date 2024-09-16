@@ -150,6 +150,7 @@ export const locationCodes: { [key: string]: number } = {
   Serbia: 688,
   Seychelles: 690,
   "Sierra Leone": 694,
+  "South Georgia": 500,
   Singapore: 702,
   Slovakia: 703,
   Slovenia: 705,
