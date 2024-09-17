@@ -239,9 +239,8 @@ export default function Layout({ children }: Props) {
     //   e.preventDefault();
     //   setShow(true);
     // } else {
-    //   window.location.href = link;
-    // }
     window.location.href = link;
+    // }
   };
 
   // function closeModal() {

@@ -3,42 +3,35 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 
 const ApiCall = axios.create({
-    baseURL: "https://api.webmaxi.net/api",
-    // timeout: 10000
+  // baseURL: "https://api.webmaxi.net/api",
+  baseURL: "https://staging-api.webmaxi.net/api",
+  // timeout: 10000
 });
 
 // Function to get token from Redux store
 const getToken = (store: any) => {
-    const token = store.getState().user.token;
-    return token;
+  const token = store.getState().user.token;
+  console.log("interceptor", token);
+  return token;
 };
 
 // Function to set authorization header based on token
-export const configureApiCall = (store:any) => {
-    ApiCall.interceptors.request.use(
-        (config) => {
-            const token = getToken(store);
-            if (token) {
-                config.headers['Authorization'] = token;
-            }
-            return config;
-        },
-        (error) => {
-            return Promise.reject(error);
-        }
-    );
+export const configureApiCall = (store: any) => {
+  ApiCall.interceptors.request.use(
+    (config) => {
+      const token = getToken(store);
+      if (token) {
+        config.headers["Authorization"] = `Bearer ${token}`;
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
 };
 
 export default ApiCall;
-
-
-
-
-
-
-
-
-
 
 // import { RootState } from "@/app/store";
 // import axios from "axios";

@@ -32,6 +32,8 @@ export default function page() {
   const activeProperty = useSelector(
     (state: RootState) => state.property.activeProperty
   );
+
+  console.log(activeProperty);
   const { data } = useQuery({
     queryKey: ["rank"],
     queryFn: async () =>
