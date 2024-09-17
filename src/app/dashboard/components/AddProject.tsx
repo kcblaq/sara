@@ -98,9 +98,9 @@ export default function AddProject() {
       getPerformanceMetrics();
     } catch (error: any) {
       setErr({ status: true, msg: error.response.data.message });
-      if (error.status === 401) {
-        router.push("/login");
-      }
+      // if (error.status === 401) {
+      //   router.push("/login");
+      // }
       setisLoading(false);
       dispatch(setLoading(false));
       setTimeout(() => {

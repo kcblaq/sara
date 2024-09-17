@@ -82,9 +82,9 @@ export default function DashboardOverviewPlaceholder() {
         ? error.response.data.message
         : "An error occurred";
       setErr({ status: true, msg: errorMessage });
-      if (error.response && error.response.status === 401) {
-        router.push("/login");
-      }
+      // if (error.response && error.response.status === 401) {
+      //   router.push("/login");
+      // }
       // notify({
       //     type: "error",
       //     message: error?.response?.data?.message
@@ -101,7 +101,7 @@ export default function DashboardOverviewPlaceholder() {
     </FullpageLoader>
   ) : (
     <>
-      {show && (
+      {/* {show && (
         <AutoModal
           closeModal={() => setShow(false)}
           ModalBody={
@@ -111,7 +111,7 @@ export default function DashboardOverviewPlaceholder() {
             />
           }
         />
-      )}
+      )} */}
       <div className="h-full w-full flex-col gap-6 items-start flex justify-start px-4  md:px-[95px] sm:pt-[143px] pt-10">
         <div className="flex flex-col gap-4">
           <h1 className="text-[#101828] font-semibold text-4xl">
