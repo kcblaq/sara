@@ -21,7 +21,7 @@ import { useEffect, useState } from "react";
 
 export function AccountAvatarDropDown() {
   const user = useSelector((state: RootState) => state.user.user);
-  console.log(user);
+  // console.log(user);
   const dispatch = useDispatch();
   const router = useRouter();
   const [isClient, setIsClient] = useState(false);

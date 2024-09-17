@@ -7,7 +7,7 @@ export default function BacklinkType() {
   return (
     <section className="flex flex-col gap-4 border shadow-sm rounded-md p-4 py-6">
       <TitleWithoutUnderline title={"Backlink type"} info={"Backlink type"} />
-      <div className="p-4 flex xl:flex-row lg:flex-col gap-2 ">
+      <div className="p-4 flex xl:flex-row lg:flex-col min-[425px]:flex-row flex-col gap-2 ">
         <ReusableDoughnutGraph
           data={{
             labels: ["Jan", "Feb"],
@@ -26,28 +26,28 @@ export default function BacklinkType() {
           }}
         />
         <div className="flex flex-col justify-end">
-          <p className=" text-xs flex items-center text-[#475467]">
+          <p className=" text-xs flex items-center text-[#475467] whitespace-nowrap">
             {" "}
             <span className="text-[#1849A9]">
               <GoDotFill />{" "}
             </span>
             {` Text - (32.8k) `}{" "}
           </p>
-          <p className=" text-xs flex items-center text-[#475467]">
+          <p className=" text-xs flex items-center text-[#475467] whitespace-nowrap">
             {" "}
             <span className="text-[#53B1FD]">
               <GoDotFill />{" "}
             </span>{" "}
             {`Image - (23.9k) `}{" "}
           </p>
-          <p className=" text-xs flex items-center text-[#475467]">
+          <p className=" text-xs flex items-center text-[#475467] whitespace-nowrap">
             {" "}
             <span className="text-[#FECDCA]">
               <GoDotFill />{" "}
             </span>{" "}
             {`Form - (23.9k) `}{" "}
           </p>
-          <p className=" text-xs flex items-center text-[#475467]">
+          <p className=" text-xs flex items-center text-[#475467] whitespace-nowrap">
             {" "}
             <span className="text-[#A6F4C5]">
               <GoDotFill />{" "}
