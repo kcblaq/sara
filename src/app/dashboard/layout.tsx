@@ -41,7 +41,7 @@ import Loader, { LoaderPulse } from "../component/Loader";
 import { crawler } from "../services/crawler";
 import { isAllOf } from "@reduxjs/toolkit";
 import { PopoverComponent } from "./components/ui/PopOver";
-import CheckUserType from "./components/CheckUserType";
+// import CheckUserType from "./components/CheckUserType";
 import Button from "./components/ui/Button";
 import AutoModal from "../component/modals/AutoModal";
 import Error from "next/error";
@@ -59,7 +59,7 @@ export default function Layout({ children }: Props) {
   // const [property, setProperty] = useState<PropertyType[]>([]);
   const [err, _setErr] = useState({ status: false, msg: "" });
   const [isloading, _setisLoading] = useState(false);
-  const [show, setShow] = useState(false);
+  // const [show, setShow] = useState(false);
   const [showOneProject, setShowOneProject] = useState(false);
 
   const menus = [
@@ -243,9 +243,9 @@ export default function Layout({ children }: Props) {
     // }
   };
 
-  function closeModal() {
-    setShow(false);
-  }
+  // function closeModal() {
+  //   setShow(false);
+  // }
 
   const [isClient, setIsClient] = useState(false);
 
@@ -280,13 +280,13 @@ export default function Layout({ children }: Props) {
             ModalBody={AddProject}
           />
         )}
-        {show && (
+        {/* {show && (
           <AutoModal
             closeModal={() => setShow(false)}
             ModalBody={<CheckUserType close={closeModal} />}
           />
-        )}
-        {showOneProject && (
+        )} */}
+        {/* {showOneProject && (
           <AutoModal
             closeModal={() => setShowOneProject(false)}
             ModalBody={
@@ -296,7 +296,7 @@ export default function Layout({ children }: Props) {
               />
             }
           />
-        )}
+        )} */}
 
         <main className={`h-screen w-full flex overflow-clip`}>
           {/* drawer... */}
