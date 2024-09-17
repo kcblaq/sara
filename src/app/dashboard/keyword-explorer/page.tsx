@@ -25,7 +25,7 @@ const tabs = [
 
 export default function page() {
   const [mobile, setMobile] = useState(false);
-  const [stage, setStage] = useState(0);
+  const [stage, setStage] = useState(1);
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
   const [keywords, setKeywords] = useState({
     keywords: "",
