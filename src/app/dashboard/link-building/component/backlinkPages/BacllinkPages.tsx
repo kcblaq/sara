@@ -128,7 +128,7 @@ export default function BacllinkPages() {
                       <FaArrowUp />{" "}
                     </span>
                   </th>
-                  <th className="font-medium text-xs text-[#475467] w-[290px] whitespace-nowrap text-left p-2 ">
+                  <th className="font-medium text-xs text-[#475467] whitespace-nowrap text-left p-2 ">
                     <span className={`flex items-center gap-1 text-xs`}>
                       {" "}
                       Anchor and target URL{" "}
