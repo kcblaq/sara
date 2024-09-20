@@ -33,7 +33,7 @@ export default function Issues() {
   const [currentFilter, setCurrentFilter] = useState("All issues");
   const [issueData, setissueData] = useState<IssuesType | null>(null);
   // const [issueCategory, setIssueCategory] = useState<IssueData | null>(null)
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [first, setfirst] = useState(true);
   const [currentCategory, setCurrentCategory] = useState("");
   const [currentCategoryDetail, setCurrentCategoryDetail] =
@@ -118,7 +118,7 @@ export default function Issues() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
+        // setLoading(true);
         const response = await ApiCall.get("/crawl/technical-seo", {
           params: {
             limit: 100,
@@ -132,7 +132,7 @@ export default function Issues() {
       } catch (error: any) {
         console.log(error);
       } finally {
-        setLoading(false);
+        // setLoading(false);
       }
     };
 
@@ -206,11 +206,11 @@ export default function Issues() {
           </div>
         </section>
 
-        {loading ? (
+        {/* {loading ? (
           <div className=" w-full h-10 flex items-center justify-center">
             <Loader />
           </div>
-        ) : (
+        ) : ( */}
           <section className="grid grid-cols-1 gap-8 md:grid-cols-3 max-h-[80dvh]  overflow-auto h-full ">
             <div className="flex flex-col h-full gap-2 col-span-1 border   shadow-sm rounded-md">
               <IssueCustomAccordion title="Crawlability and indexability" />
@@ -350,7 +350,7 @@ export default function Issues() {
               </div>
             }
           </section>
-        )}
+        {/* )} */}
       </main>
     </>
   );
