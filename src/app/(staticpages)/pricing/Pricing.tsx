@@ -4,7 +4,8 @@ import Image from 'next/image'
 import React, { useState } from 'react'
 import { faqdata, pricingdata, annualPricingData } from './data'
 import MainModal from '@/app/component/modals/MainModal'
-import { PaymentModalBody } from './component/paymentModalBody'
+import { Description, Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
+import { PaymentBody, ReusableModal } from './component/reusableModal'
 
 export default function PricingComponent() {
   const [monthly, setMonthly] = useState(true);
@@ -14,12 +15,9 @@ export default function PricingComponent() {
   })
   return (
     <>
-{
-  paying.status && (
-    <MainModal closeModal={function (): void {
-            throw new Error('Function not implemented.')
-          } } ModalBody={PaymentModalBody} />  )
-}
+
+<ReusableModal closeModal={()=> setPaying({...paying, status:false})} show={paying.status} ModalBody={PaymentBody} />
+
     <main className='grid gap-16 lg:gap-24'>
       <section className='text-left grid gap-4 p-4 mt-16 lg:mt-24 lg:px-28'>
         <p className='text-primary text-sm font-semibold lg:text-base'> Pricing plans</p>
