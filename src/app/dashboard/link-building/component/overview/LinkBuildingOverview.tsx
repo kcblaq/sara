@@ -37,7 +37,7 @@ export default function LinkBuildingOverview() {
           <ReferingDomainandBacklinkOverTime />
         </div>
       </section>
-      <section className="grid sm:gap-6 sm:space-y-0 space-y-6 grid-cols-1 lg:grid-cols-3 ">
+      <section className="grid  sm:gap-6 sm:space-y-0 space-y-6 grid-cols-1 lg:grid-cols-3 ">
         <BacklinkType />
         <div className="col-span-2">
           <NewvslostBacklink />
