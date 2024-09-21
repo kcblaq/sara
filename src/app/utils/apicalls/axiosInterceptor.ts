@@ -3,8 +3,8 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 
 const ApiCall = axios.create({
-  // baseURL: "https://api.webmaxi.net/api",
   baseURL: "https://staging-api.webmaxi.net/api",
+  // baseURL: process.env.NEXT_BASE_URL,
   // timeout: 10000
 });
 

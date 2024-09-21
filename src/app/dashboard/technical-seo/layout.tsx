@@ -71,20 +71,23 @@ export default function TechnicalSeoLayout() {
     try {
       setLoading(true);
 
-      await Promise.all([
-        ApiCall.get("/crawl/webcrawler", {
-          params: {
-            url: removeTrailingSlash(activeProperty),
-            type: "passive",
-          },
-        }),
-        ApiCall.get("/crawl/technical/mini-crawler", {
-          params: {
-            url: removeTrailingSlash(activeProperty),
-            timeout: 5,
-          },
-        }),
-      ]);
+      // await Promise.all([
+      //   ApiCall.get("/crawl/webcrawler", {
+      //     params: {
+      //       url: removeTrailingSlash(activeProperty),
+      //       type: "passive",
+      //     },
+      //   }),
+      //   ApiCall.get("/crawl/technical/mini-crawler", {
+      //     params: {
+      //       url: removeTrailingSlash(activeProperty),
+      //       timeout: 5,
+      //     },
+      //   }),
+      // ]);
+      const response = await ApiCall.post("/user/crawler/technical-seo/3");
+      setLoading(false);
+      console.log(response.data);
     } catch (error) {
       console.log(error);
     } finally {
@@ -92,13 +95,15 @@ export default function TechnicalSeoLayout() {
     }
   };
   const fetchTechseoData = async () => {
-    const result = await ApiCall.get("/crawl/technical-seo", {
-      params: {
-        limit: 100,
-        platform: "desktop",
-        url: removeTrailingSlash(activeProperty),
-      },
+    // const result = await ApiCall.get("/crawl/technical-seo", {
+    const result = await ApiCall.get("/user/crawler/technical-seo/1", {
+      // params: {
+      //   limit: 100,
+      //   platform: "desktop",
+      //   url: removeTrailingSlash(activeProperty),
+      // },
     });
+    console.log("tech seo", result.data);
     dispatch(setTechnicalSeo(result.data));
     return result;
   };
@@ -106,6 +111,8 @@ export default function TechnicalSeoLayout() {
     queryKey: ["techseodata"],
     queryFn: fetchTechseoData,
   });
+
+  console.log(techSeo);
 
   return (
     <section className={`flex w-full h-full justify-start flex-col gap-2 `}>
