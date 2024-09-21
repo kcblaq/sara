@@ -1,14 +1,16 @@
 import React from "react";
 import { Pie } from "react-chartjs-2";
 
-import { ChartData, ChartOptions } from "chart.js";
+import { Chart as ChartJS, ChartData, ChartOptions, Legend } from "chart.js";
+import { Tooltip } from "chart.js";
+ChartJS.register(Tooltip, Legend);
 
 interface PieChartProps {
   dataSet: any[];
 }
 export default function PieChart({ dataSet }: PieChartProps) {
   const data: ChartData<"pie"> = {
-    labels: dataSet.map((item) => item.label),
+    labels: dataSet.map((item) => `${item.label} (${item.percentage}%)`),
     datasets: [
       {
         label: "Positive",
@@ -24,19 +26,27 @@ export default function PieChart({ dataSet }: PieChartProps) {
   };
 
   const options: ChartOptions<"pie"> = {
-    // plugins: {
-    //   legend: {
-    //     position: "right", // Position the legend on right
-    //     labels: {
-    //       usePointStyle: true, // Uses pointStyle for legend labels
-    //       pointStyle: "circle", // Sets the legend symbol to circular
-    //     },
-    //   },
-    // },
+    responsive: true,
+    aspectRatio: 2,
+    plugins: {
+      legend: {
+        position: "right", // Position the legend on right
+        labels: {
+          usePointStyle: true, // Uses pointStyle for legend labels
+          pointStyle: "circle", // Sets the legend symbol to circular
+        },
+      },
+    },
+    layout: {
+      padding: {
+        bottom: 0,
+        top: 0,
+      },
+    },
   };
   return (
-    <section className="">
-      <Pie data={data} />
+    <section className=" h-full w-full">
+      <Pie data={data} options={options} />
     </section>
   );
 }
