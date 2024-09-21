@@ -56,19 +56,18 @@ export default function DropdownMenu() {
         >
           <Menu.Items className="absolute z-50 right-0 mt-2 w-full origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
             <span className="px-1 py-1 ">
+              {/* {JSON.stringify(property)} */}
               {property.map((prop: PropertyType) => {
                 return (
-                  <Menu.Item key={prop.website_url}>
+                  <Menu.Item key={prop.domain}>
                     {({ active }) => (
                       <button
                         className={`${
                           active ? "bg-primary text-white" : "text-gray-900"
                         } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                        onClick={() =>
-                          dispatch(setActiveProperty(prop.website_url))
-                        }
+                        onClick={() => dispatch(setActiveProperty(prop.domain))}
                       >
-                        {prop.website_url}
+                        {prop.domain}
                       </button>
                     )}
                   </Menu.Item>

@@ -143,12 +143,14 @@ export default function Layout({ children }: Props) {
   const { data: dashboardData, isSuccess } = useQuery({
     queryKey: ["dashboard"],
     queryFn: async () => {
-      const response = await ApiCall.get("/crawl/overall", {
-        params: {
-          url: removeTrailingSlash(activeProperty),
-          limit: 100,
-        },
-      });
+      // const response = await ApiCall.get("/crawl/overall", {
+      //   params: {
+      //     url: removeTrailingSlash(activeProperty),
+      //     limit: 100,
+      //   },
+      // });
+      const response = await ApiCall.get("user/project/1");
+
       return response.data;
     },
   });
@@ -164,13 +166,14 @@ export default function Layout({ children }: Props) {
   const getProjects = async () => {
     try {
       // dispatch(setActiveProperty([]))
-      const res = await ApiCall.get("/crawl/property");
+      // const res = await ApiCall.get("/crawl/property");
+      const res = await ApiCall.get("/user/project");
       if (res.status === 401) {
         router.push("/login");
         return;
       }
       if (res.status === 200) {
-        dispatch(setAllProperty(res.data));
+        dispatch(setAllProperty(res.data.projects));
         activeProperty.length < 1 &&
           dispatch(
             setActiveProperty(removeTrailingSlash(res.data[0]?.website_url))
@@ -194,12 +197,15 @@ export default function Layout({ children }: Props) {
   // hello
   const fetchDashboardData = async () => {
     // console.log("ACTIVEPROP", activeProperty)
-    const response = await ApiCall.get("/crawl/overall", {
-      params: {
-        url: removeTrailingSlash(activeProperty),
-        limit: 100,
-      },
-    });
+    // const response = await ApiCall.get("/crawl/overall", {
+    //   params: {
+    //     url: removeTrailingSlash(activeProperty),
+    //     limit: 100,
+    //   },
+    // });
+
+    const response = await ApiCall.get("user/project/1");
+
     dispatch(fetchPerformanceSuccess(response?.data));
   };
   useEffect(() => {
@@ -365,7 +371,8 @@ export default function Layout({ children }: Props) {
               })}
             </div>
           </section>
-          <section className={`w-full h-screen`}>
+
+          <section className={`w-full h-screen `}>
             <div className="flex md:px-8 lg:hidden items-center justify-between w-full p-2 md:p-4">
               <Image
                 src={`/logo.png`}
@@ -394,6 +401,9 @@ export default function Layout({ children }: Props) {
                     </span>
                   </Button>
                   {/* </div> */}
+
+                  {/* {JSON.stringify(property)}
+                  {JSON.stringify(activeProperty)} */}
                 </div>
               </div>
               <div className="lg:flex w-full justify-end hidden">
@@ -412,15 +422,15 @@ export default function Layout({ children }: Props) {
               </div>
             </div>
             <hr className="w-full  hidden md:flex " />
-            {/* {isloading ? (
+            {isloading ? (
               <LoaderPulse />
             ) : property.length < 1 || dashboardData === undefined ? (
               <DashboardOverviewPlaceholder />
-            ) : ( */}
-            <div className=" w-full h-full overflow-auto p-2 md:p-8">
-              {children}
-            </div>
-            {/* )} */}
+            ) : (
+              <div className=" w-full h-full overflow-auto p-2 md:p-8">
+                {children}
+              </div>
+            )}
           </section>
         </main>
       </div>

@@ -106,6 +106,7 @@ export const ButtonWithTitle = ({ info }: { info: string }) => {
     </div>
   );
 };
+
 function Overview() {
   const technicalSeoData: any = useSelector(
     (state: RootState) => state.technicalSeo
@@ -244,7 +245,7 @@ function Overview() {
   );
 
   return (
-    <main className="pb-14 mt-10 grid w-full gap-8 z-0">
+    <main className="pb-14 mt-10 grid w-full gap-8 z-0 ">
       <section
         className={`grid grid-cols-1 md:grid-cols-4 md:gap-4 md:space-y-0 space-y-4 w-full`}
       >
