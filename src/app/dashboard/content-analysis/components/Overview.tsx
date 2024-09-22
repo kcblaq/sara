@@ -57,12 +57,37 @@ export default function Overview() {
           />
         </div>
 
-        <div className="h-[280px] mt-6">
-          <DoughnutChartWithBottomLegend items={sentimentDataset} />
-        </div>
+        {/* <div className="h-full bg-red-400"> */}
+        <DoughnutChartWithBottomLegend items={sentimentDataset} />
+        {/* </div> */}
       </div>
       {/* third grid */}
-      <div className=" h-[480px] border rounded-md px-4">coming ...</div>
+      <div className=" h-[480px] border rounded-md px-4">
+        <div className="mt-6">
+          <TitleWithoutUnderline title={"Top domains"} info={"Top domains"} />
+        </div>
+        <hr className="mt-4" />
+        <div className="overflow-x-auto max-w-full mt-4">
+          <table className="border rounded-lg border-separate border-spacing-0">
+            <tr className="bg-[#F9FAFB] border-b">
+              <th className="w-full  text-left p-3">Domain</th>
+              <th className="w-full  text-left p-3">Mentions</th>
+            </tr>
+            <tr className="border-b">
+              <td className="w-full  text-left p-3">nike.com</td>
+              <td className="w-full  text-left p-3">7.10k</td>
+            </tr>
+            <tr className="border-b">
+              <td className="w-full  text-left p-3">businessbranding.com</td>
+              <td className="w-full  text-left p-3">16.7K</td>
+            </tr>
+            <tr className="border-b">
+              <td className="w-full  text-left p-3">businessbranding.com</td>
+              <td className="w-full  text-left p-3">16.7K</td>
+            </tr>
+          </table>
+        </div>
+      </div>
     </section>
   );
 }

@@ -6,7 +6,10 @@ import { useDispatch } from "react-redux";
 import { setModal } from "@/redux/features/modalstates";
 import { useRouter } from "next/navigation";
 import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
-import { setActiveProperty } from "@/redux/features/propertySlice";
+import {
+  setActiveProperty,
+  setActivePropertyObj,
+} from "@/redux/features/propertySlice";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/store";
 import {
@@ -18,34 +21,34 @@ import { FetchTechnicalSeo } from "../technical-seo/components/FetchTechnicalSeo
 import { removeTrailingSlash } from "@/app/utils/RemoveSlash";
 import { setLoading } from "@/redux/features/loaderSlice";
 
-export const getPerformanceMetrics = async () => {
-  const dispatch = useDispatch();
-  const activeProperty = useSelector(
-    (state: RootState) => state.property.activeProperty
-  );
-  if (activeProperty.length > 0) {
-    dispatch(fetchPerformanceStart());
-    try {
-      const res = await ApiCall.get("/crawl/technical-seo", {
-        params: {
-          url: activeProperty,
-          limit: 100,
-          platform: "desktop",
-        },
-      });
-      dispatch(fetchPerformanceSuccess(res?.data));
-    } catch (error) {
-      dispatch(
-        fetchPerformanceFailure(
-          `Failed to fetch performance metric, Error: ${error}`
-        )
-      );
-      console.error("Error fetching performance metrics:", error);
-    } finally {
-      FetchTechnicalSeo();
-    }
-  }
-};
+// export const getPerformanceMetrics = async () => {
+//   const dispatch = useDispatch();
+//   const activeProperty = useSelector(
+//     (state: RootState) => state.property.activeProperty
+//   );
+//   if (activeProperty.length > 0) {
+//     dispatch(fetchPerformanceStart());
+//     try {
+//       const res = await ApiCall.get("/crawl/technical-seo", {
+//         params: {
+//           url: activeProperty,
+//           limit: 100,
+//           platform: "desktop",
+//         },
+//       });
+//       dispatch(fetchPerformanceSuccess(res?.data));
+//     } catch (error) {
+//       dispatch(
+//         fetchPerformanceFailure(
+//           `Failed to fetch performance metric, Error: ${error}`
+//         )
+//       );
+//       console.error("Error fetching performance metrics:", error);
+//     } finally {
+//       FetchTechnicalSeo();
+//     }
+//   }
+// };
 
 export default function AddProject() {
   const [err, setErr] = useState({ status: false, msg: "" });
@@ -53,10 +56,14 @@ export default function AddProject() {
   const [inputUrl, setInputUrl] = useState("");
   const dispatch = useDispatch();
   const router = useRouter();
+  const activeProperty = useSelector(
+    (state: RootState) => state.property.activeProperty
+  );
 
   async function handleSubmitUrl() {
-    const urlPattern =
-      /^[a-zA-Z][a-zA-Z0-9+.-]+:(\/\/[a-zA-Z0-9\-._~:%!$&'()*+,;=]+@)?(\/)?([a-zA-Z0-9-._~]+)(\.[a-zA-Z0-9-._~]+)*(\/[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]+)?$/i;
+    const urlPattern = /^(ftp|http[s]?):\/\/[^ "]+(\.[^ "]+)+$/;
+    // const urlPattern =
+    //   /^[a-zA-Z][a-zA-Z0-9+.-]+:(\/\/[a-zA-Z0-9\-._~:%!$&'()*+,;=]+@)?(\/)?([a-zA-Z0-9-._~]+)(\.[a-zA-Z0-9-._~]+)*(\/[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]+)?$/i;
     if (!urlPattern.test(inputUrl)) {
       setErr({ status: true, msg: "Enter a valid url" });
       setisLoading(false);
@@ -69,33 +76,38 @@ export default function AddProject() {
     try {
       setisLoading(true);
       dispatch(setLoading(true));
-      const response = await ApiCall.get(`crawl/add-property?url=${inputUrl}`);
+      // const response = await ApiCall.get(`crawl/add-property?url=${inputUrl}`);
+      const response = await ApiCall.post(`/user/project`, {
+        domain: inputUrl,
+      });
       dispatch(setActiveProperty(inputUrl));
+      dispatch(setActivePropertyObj(response.data.project));
       dispatch(setModal("crawling"));
 
-      await Promise.all([
-        ApiCall.get("/crawl/webcrawler", {
-          params: {
-            url: removeTrailingSlash(inputUrl),
-            type: "passive",
-          },
-        }),
-        ApiCall.get("/crawl/technical/mini-crawler", {
-          params: {
-            url: removeTrailingSlash(inputUrl),
-            timeout: 7,
-          },
-        }),
-        ApiCall.get("/crawl/content-analysis/mini-crawler", {
-          params: {
-            url: removeTrailingSlash(inputUrl),
-          },
-        }),
-      ]);
-
+      // await Promise.all([
+      //   ApiCall.get("/crawl/webcrawler", {
+      //     params: {
+      //       url: removeTrailingSlash(inputUrl),
+      //       type: "passive",
+      //     },
+      //   }),
+      //   ApiCall.get("/crawl/technical/mini-crawler", {
+      //     params: {
+      //       url: removeTrailingSlash(inputUrl),
+      //       timeout: 7,
+      //     },
+      //   }),
+      //   ApiCall.get("/crawl/content-analysis/mini-crawler", {
+      //     params: {
+      //       url: removeTrailingSlash(inputUrl),
+      //     },
+      //   }),
+      // ]);
+      console.log(response.data);
       dispatch(setModal(""));
       dispatch(setLoading(false));
-      getPerformanceMetrics();
+
+      // getPerformanceMetrics();
     } catch (error: any) {
       setErr({ status: true, msg: error.response.data.message });
       // if (error.status === 401) {
