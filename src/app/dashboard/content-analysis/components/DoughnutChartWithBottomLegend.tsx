@@ -40,9 +40,8 @@ export default function DoughnutChartWithBottomLegend({
   };
 
   const sentimentOption: ChartOptions<"doughnut"> = {
-    scales: {},
     responsive: true,
-    // aspectRatio: 2,
+    aspectRatio: 1,
     offset: 2,
     plugins: {
       legend: {
@@ -57,7 +56,7 @@ export default function DoughnutChartWithBottomLegend({
   };
 
   return (
-    <div className="">
+    <div className="h-fit ">
       <Doughnut data={dataStructure} options={sentimentOption} />
     </div>
   );

@@ -35,6 +35,9 @@ export default function TechnicalSeoLayout() {
   const activeProperty = useSelector(
     (state: RootState) => state.property.activeProperty
   );
+  const activePropertyObj = useSelector(
+    (state: RootState) => state.property.activePropertyObj
+  );
   const dispatch = useDispatch();
 
   // const FetchTechnicalSeo = async (page?: string) => {
@@ -85,7 +88,9 @@ export default function TechnicalSeoLayout() {
       //     },
       //   }),
       // ]);
-      const response = await ApiCall.post("/user/crawler/technical-seo/3");
+      const response = await ApiCall.post(
+        `/user/crawler/technical-seo/${activePropertyObj.id}`
+      );
       setLoading(false);
       console.log(response.data);
     } catch (error) {
@@ -96,13 +101,16 @@ export default function TechnicalSeoLayout() {
   };
   const fetchTechseoData = async () => {
     // const result = await ApiCall.get("/crawl/technical-seo", {
-    const result = await ApiCall.get("/user/crawler/technical-seo/1", {
+    const result = await ApiCall.get(
+      `/user/crawler/technical-seo/${activePropertyObj.id}`
+      // {
       // params: {
       //   limit: 100,
       //   platform: "desktop",
       //   url: removeTrailingSlash(activeProperty),
       // },
-    });
+      // }
+    );
     console.log("tech seo", result.data);
     dispatch(setTechnicalSeo(result.data));
     return result;
@@ -112,7 +120,7 @@ export default function TechnicalSeoLayout() {
     queryFn: fetchTechseoData,
   });
 
-  console.log(techSeo);
+  // console.log(activePropertyObj);
 
   return (
     <section className={`flex w-full h-full justify-start flex-col gap-2 `}>
@@ -120,6 +128,7 @@ export default function TechnicalSeoLayout() {
         <div className="w-fit">
           <h2 className=" font-semibold text-[#101828] sm:text-3xl text-2xl">
             Technical SEO
+            {/* {JSON.stringify(activePropertyObj.id)} */}
           </h2>
         </div>
         <div className="flex w-fit md:w-1/2 items-center justify-end gap-2 md:gap-4">
@@ -144,7 +153,7 @@ export default function TechnicalSeoLayout() {
         </div>
       </div>
       <div className="flex items-center gap-4 my-2">
-        <div className="flex items-center min-[375px]:text-sm text-xs gap-2 bg-[#D0D5DD] rounded-md p-1">
+        {/* <div className="flex items-center min-[375px]:text-sm text-xs gap-2 bg-[#D0D5DD] rounded-md p-1">
           <span
             className={`cursor-pointer p-2 text-white ${
               mobile ? "text-white" : "bg-[#1570EF] rounded-lg"
@@ -163,7 +172,7 @@ export default function TechnicalSeoLayout() {
             {" "}
             Mobile
           </span>
-        </div>
+        </div> */}
         <div className="flex items-center gap-2 sm:text-base min-[375px]:text-sm text-xs">
           <p className=" font-semibold"> Last Update:</p>
           <p className=""> {moment(lastUpdated).format("Do MMM YY")} </p>

@@ -6,7 +6,10 @@ import { RootState } from "../store";
 import { useSelector } from "react-redux";
 import { PropertyType } from "@/types/PropertyType";
 import { useDispatch } from "react-redux";
-import { setActiveProperty } from "@/redux/features/propertySlice";
+import {
+  setActiveProperty,
+  setActivePropertyObj,
+} from "@/redux/features/propertySlice";
 
 export default function DropdownMenu() {
   const property = useSelector(
@@ -14,6 +17,9 @@ export default function DropdownMenu() {
   );
   const activeProperty = useSelector(
     (state: RootState) => state.property.activeProperty
+  );
+  const activePropertyObj = useSelector(
+    (state: RootState) => state.property.activePropertyObj
   );
   const dispatch = useDispatch();
   const [isClient, setIsClient] = useState(false);
@@ -34,7 +40,7 @@ export default function DropdownMenu() {
         <Menu.Button className="inline-flex w-full justify-between rounded-lg text-black p-3 text-sm font-medium border focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75">
           {/* { property && property.activeProperty?.length < 1 ? "Domain name" : property.activeProperty} */}
           {property.length > 0 ? (
-            activeProperty
+            activePropertyObj.domain
           ) : (
             <p className="text-gray-600">Domain name</p> // Set your default value here
           )}
@@ -65,7 +71,7 @@ export default function DropdownMenu() {
                         className={`${
                           active ? "bg-primary text-white" : "text-gray-900"
                         } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                        onClick={() => dispatch(setActiveProperty(prop.domain))}
+                        onClick={() => dispatch(setActivePropertyObj(prop))}
                       >
                         {prop.domain}
                       </button>

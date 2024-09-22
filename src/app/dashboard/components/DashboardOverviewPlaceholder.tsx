@@ -8,7 +8,10 @@ import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
 import { setLoading } from "@/redux/features/loaderSlice";
 import { setModal } from "@/redux/features/modalstates";
 // import { fetchPerformanceSuccess } from '@/redux/features/performanceMetric slice';
-import { setActiveProperty } from "@/redux/features/propertySlice";
+import {
+  setActiveProperty,
+  setActivePropertyObj,
+} from "@/redux/features/propertySlice";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
@@ -48,8 +51,11 @@ export default function DashboardOverviewPlaceholder() {
     try {
       setisLoading(true);
       // await ApiCall.get(`crawl/add-property?url=${inputUrl}`);
-      await ApiCall.post(`/user/project`, { domain: inputUrl });
+      const response = await ApiCall.post(`/user/project`, {
+        domain: inputUrl,
+      });
       dispatch(setActiveProperty(inputUrl));
+      dispatch(setActivePropertyObj(response.data.project));
       dispatch(setLoading(true));
 
       // console.log(req);
