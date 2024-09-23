@@ -111,6 +111,7 @@ function Overview() {
   const technicalSeoData: any = useSelector(
     (state: RootState) => state.technicalSeo
   );
+  console.log(technicalSeoData);
   const activeProperty = useSelector(
     (state: RootState) => state.property.activeProperty
   );

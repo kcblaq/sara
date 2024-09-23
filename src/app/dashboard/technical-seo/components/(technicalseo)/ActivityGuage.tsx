@@ -6,9 +6,10 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 export default function ActivityGuage() {
-  const siteIssues = useSelector(
-    (state: RootState) => state.technicalSeo.metrics?.siteIssue
-  );
+  // const siteIssues = useSelector(
+  //   (state: RootState) => state.technicalSeo.metrics?.siteIssue
+  // );
+  const siteIssues: any = "";
 
   // Add nullish coalescing to ensure that the values are always numbers
   const errorPercentage = siteIssues?.error ?? 0;
