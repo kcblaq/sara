@@ -2,7 +2,9 @@ export const pricingdata = [
     {
         icon: '/pricing/basic.svg',
         title:'Basic plan',
-        amount: '$79/mth',
+        price: '$79/mth',
+        amount: 79,
+        pricingId:2,
         points: [
             'Unlimited projects',
             '500 credit units per month',
@@ -23,7 +25,9 @@ export const pricingdata = [
     {
         icon: '/pricing/pro.svg',
         title:'Pro plan',
-        amount: '$149/mth',
+        price: '$149/mth',
+        amount:149,
+        pricingId:3,
         points: [
             'Unlimited projects',
             '1,000 credit units per month',
@@ -44,7 +48,9 @@ export const pricingdata = [
     {
         icon: '/pricing/enterprise.svg',
         title:'Enterprise plan',
-        amount: '$229/mth',
+        price: '$229/mth',
+        amount:229,
+        pricingId:4,
         points: [
             'Unlimited projects',
             '2,500 credit units per month',
@@ -68,7 +74,9 @@ export const annualPricingData = [
     {
         icon: '/pricing/basic.svg',
         title:'Basic plan',
-        amount: '$790/yr',
+        price: '$790/yr',
+        amount:790,
+        pricingId:5,
         save: '$158',
         points: [
             'Unlimited projects',
@@ -89,7 +97,9 @@ export const annualPricingData = [
     {
         icon: '/pricing/pro.svg',
         title:'Pro plan',
-        amount: '$1490/yr',
+        price: '$1490/yr',
+        amount:1490,
+        pricingId:6,
         save: '$298',
         points: [
             'Unlimited projects',
@@ -110,7 +120,9 @@ export const annualPricingData = [
     {
         icon: '/pricing/enterprise.svg',
         title:'Enterprise plan',
-        amount: '$2290/yr',
+        price: '$2290/yr',
+        amount:2290,
+        pricingId:7,
         save: '$598',
         points: [
             'Unlimited projects',
