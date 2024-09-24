@@ -10,6 +10,10 @@ interface PageData {
     pages: PageData[];
   }
   
+  type PageLoadSpeedData = {
+    [key: string]: number;
+  }
+
   interface CountCss {
     zeroToTen: number;
     elevenToTwenty: number;
@@ -23,6 +27,7 @@ interface PageData {
  export interface SitePerformanceType {
     average_load_speed: AverageLoadSpeed;
     count_css: CountCss;
+    pageLoadSpeed: PageLoadSpeedData;
   }
   
 

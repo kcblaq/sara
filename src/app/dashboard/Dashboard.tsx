@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 import { StackedBarChart } from './components/graphs/StackedBarChart';
 import { RootState } from '../store';
 import AutoModal from '../component/modals/AutoModal';
-import CheckUserType from './components/CheckUserType';
+// import CheckUserType from './components/CheckUserType';
 
 
 export default function Dashboard() {
@@ -49,7 +49,7 @@ export default function Dashboard() {
     }
     return (
         <>
-            {show && <AutoModal closeModal={() => setShow(false)} ModalBody={<CheckUserType close={closeModal} />} />}
+            {/* {show && <AutoModal closeModal={() => setShow(false)} ModalBody={<CheckUserType close={closeModal} />} />} */}
             <div className=' mb-10 p-2 grid h-full overflow-auto '>
                 <div className="flex w-full flex-col md:flex-row justify-between items-start flex-grow">
                     <div className='flex flex-col'>

@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 
 export default function HTTPStatusCode() {
     const techSeoData: TechnicalSeoType | null = useSelector((state: RootState) => state.technicalSeo.metrics);
-    const statusCodeData = techSeoData?.httpStatusCode[0]; // Add a conditional check using the optional chaining operator (?.)
+    const statusCodeData =  techSeoData?.httpStatusCode ? techSeoData?.httpStatusCode[0] : null; // Add a conditional check using the optional chaining operator (?.)
 
     // Check if statusCodeData is defined before using it
     if (!statusCodeData) {

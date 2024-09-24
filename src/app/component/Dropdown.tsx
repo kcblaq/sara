@@ -1,38 +1,48 @@
-"use client"
-import { Menu, Transition } from '@headlessui/react'
-import { Fragment, useEffect, useState } from 'react'
+"use client";
+import { Menu, Transition } from "@headlessui/react";
+import { Fragment, useEffect, useState } from "react";
 import { IoChevronDownOutline } from "react-icons/io5";
-import { RootState } from '../store';
-import { useSelector } from 'react-redux';
-import { PropertyType } from '@/types/PropertyType';
-import { useDispatch } from 'react-redux';
-import { setActiveProperty } from '@/redux/features/propertySlice';
-
+import { RootState } from "../store";
+import { useSelector } from "react-redux";
+import { PropertyType } from "@/types/PropertyType";
+import { useDispatch } from "react-redux";
+import {
+  setActiveProperty,
+  setActivePropertyObj,
+} from "@/redux/features/propertySlice";
 
 export default function DropdownMenu() {
-  const property = useSelector((state: RootState) => state.property.allProperty)
-  const activeProperty = useSelector((state: RootState) => state.property.activeProperty)
+  const property = useSelector(
+    (state: RootState) => state.property.allProperty
+  );
+  const activeProperty = useSelector(
+    (state: RootState) => state.property.activeProperty
+  );
+  const activePropertyObj = useSelector(
+    (state: RootState) => state.property.activePropertyObj
+  );
   const dispatch = useDispatch();
   const [isClient, setIsClient] = useState(false);
 
-    useEffect(() => {
-      setIsClient(true);
-    }, []);
-  
-    if (!isClient) {
-      return null;
-    }
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return null;
+  }
   return (
-    <div className="  text-right">
-      <Menu as="div" className=" min-w-[300px]  relative inline-block text-left">
-
+    <div className="text-right">
+      <Menu
+        as="div"
+        className=" xl:min-w-[300px] lg:w-[200px] min-[375px]:w-[300px] w-[250px] relative inline-block text-left"
+      >
         <Menu.Button className="inline-flex w-full justify-between rounded-lg text-black p-3 text-sm font-medium border focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75">
-
           {/* { property && property.activeProperty?.length < 1 ? "Domain name" : property.activeProperty} */}
           {property.length > 0 ? (
-            activeProperty
+            activePropertyObj.domain
           ) : (
-            "Domain name" // Set your default value here
+            <p className="text-gray-600">Domain name</p> // Set your default value here
           )}
 
           <IoChevronDownOutline
@@ -52,27 +62,27 @@ export default function DropdownMenu() {
         >
           <Menu.Items className="absolute z-50 right-0 mt-2 w-full origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
             <span className="px-1 py-1 ">
-              {
-                property.map((prop: PropertyType) => {
-                  return <Menu.Item key={prop.website_url}>
+              {/* {JSON.stringify(property)} */}
+              {property.map((prop: PropertyType) => {
+                return (
+                  <Menu.Item key={prop.domain}>
                     {({ active }) => (
                       <button
-                        className={`${active ? 'bg-primary text-white' : 'text-gray-900'
-                          } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                        onClick={() => dispatch(setActiveProperty(prop.website_url))}
+                        className={`${
+                          active ? "bg-primary text-white" : "text-gray-900"
+                        } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                        onClick={() => dispatch(setActivePropertyObj(prop))}
                       >
-
-                        {prop.website_url}
+                        {prop.domain}
                       </button>
                     )}
                   </Menu.Item>
-                })
-              }
-
+                );
+              })}
             </span>
           </Menu.Items>
         </Transition>
       </Menu>
     </div>
-  )
+  );
 }

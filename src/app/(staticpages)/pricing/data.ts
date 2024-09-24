@@ -1,42 +1,141 @@
 export const pricingdata = [
     {
-        icon: '/pricing/basic.png',
+        icon: '/pricing/basic.svg',
         title:'Basic plan',
-        amount: '$2.5/mth',
+        price: '$79/mth',
+        amount: 79,
+        pricingId:2,
         points: [
-            'Access to all features',
-            '3 projects',
-            '500 crawler credits per month',
-            '800 keyword credits per month',
-            'Update frequency: 2 weeks'
+            'Unlimited projects',
+            '500 credit units per month',
+            'Access to all features'
         ],
+        save: null,
+        pricingPerFeature: [
+            'Technical SEO audit - $0.16/unit',
+            'Rank tracker - $0.18/unit',
+            'Content analysis - $0.30/unit',
+            'Competitor analysis - $0.20/unit',
+            'Keyword explorer - $0.17/unit'
+        ],
+        description: "For small businesses, startups, and individual users.",
         fn: ()=> console.log('Hello Basic')
 
     },
     {
-        icon: '/pricing/pro.png',
+        icon: '/pricing/pro.svg',
         title:'Pro plan',
-        amount: '$7.5/mth',
+        price: '$149/mth',
+        amount:149,
+        pricingId:3,
         points: [
-            'Access to all features',
-            '10 projects',
-            '8,000 crawler credits per month',
-            '4,000 keyword credits per month',
-            'Update frequency: weekly'
+            'Unlimited projects',
+            '1,000 credit units per month',
+            'Access to all features'
+        ],
+        save: null,
+        description: 'For medium-sized businesses and growing agencies.',
+        pricingPerFeature: [
+            'Technical SEO audit - $0.15/unit',
+            'Rank tracker - $0.16/unit',
+            'Content analysis - $0.28/unit',
+            'Competitor analysis - $0.18/unit',
+            'Keyword explorer - $0.15/unit'
         ],
         fn: ()=> console.log('Hello Pro')
 
     },
     {
-        icon: '/pricing/advanced.png',
-        title:'Basic plan',
-        amount: '$15/mth',
+        icon: '/pricing/enterprise.svg',
+        title:'Enterprise plan',
+        price: '$229/mth',
+        amount:229,
+        pricingId:4,
         points: [
-            'Access to all features',
-            '30 projects',
-            '40,000 crawler credits per month',
-            '30,000 keyword credits per month',
-            'Update frequency: Weekly'
+            'Unlimited projects',
+            '2,500 credit units per month',
+            'Access to all features'
+        ],
+        save: null,
+        description: 'For large enterprises and established SEO agencies.',
+        pricingPerFeature: [
+            'Technical SEO audit - $0.12/unit',
+            'Rank tracker - $0.14/unit',
+            'Content analysis - $0.25/unit',
+            'Competitor analysis - $0.16/unit',
+            'Keyword explorer - $0.13/unit'
+        ],
+        fn: ()=> console.log('Hello Advanced')
+
+    }
+]
+
+export const annualPricingData = [
+    {
+        icon: '/pricing/basic.svg',
+        title:'Basic plan',
+        price: '$790/yr',
+        amount:790,
+        pricingId:5,
+        save: '$158',
+        points: [
+            'Unlimited projects',
+            '600 credit units per month',
+            'Access to all features'
+        ],
+        pricingPerFeature: [
+            'Technical SEO audit - $0.16/unit',
+            'Rank tracker - $0.18/unit',
+            'Content analysis - $0.30/unit',
+            'Competitor analysis - $0.20/unit',
+            'Keyword explorer - $0.17/unit'
+        ],
+        description: "For small businesses, startups, and individual users.",
+        fn: ()=> console.log('Hello Basic')
+
+    },
+    {
+        icon: '/pricing/pro.svg',
+        title:'Pro plan',
+        price: '$1490/yr',
+        amount:1490,
+        pricingId:6,
+        save: '$298',
+        points: [
+            'Unlimited projects',
+            '12,000 credit units per month',
+            'Access to all features'
+        ],
+        description: 'For medium-sized businesses and growing agencies.',
+        pricingPerFeature: [
+            'Technical SEO audit - $0.15/unit',
+            'Rank tracker - $0.16/unit',
+            'Content analysis - $0.28/unit',
+            'Competitor analysis - $0.18/unit',
+            'Keyword explorer - $0.15/unit'
+        ],
+        fn: ()=> console.log('Hello Pro')
+
+    },
+    {
+        icon: '/pricing/enterprise.svg',
+        title:'Enterprise plan',
+        price: '$2290/yr',
+        amount:2290,
+        pricingId:7,
+        save: '$598',
+        points: [
+            'Unlimited projects',
+            '30,000 credit units per month',
+            'Access to all features'
+        ],
+        description: 'For large enterprises and established SEO agencies.',
+        pricingPerFeature: [
+            'Technical SEO audit - $0.12/unit',
+            'Rank tracker - $0.14/unit',
+            'Content analysis - $0.25/unit',
+            'Competitor analysis - $0.16/unit',
+            'Keyword explorer - $0.13/unit'
         ],
         fn: ()=> console.log('Hello Advanced')
 
