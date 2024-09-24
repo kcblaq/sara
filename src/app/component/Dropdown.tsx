@@ -1,5 +1,5 @@
 "use client";
-import { Menu, Transition } from "@headlessui/react";
+import { Menu, MenuItem, MenuItems, Transition, MenuButton } from "@headlessui/react";
 import { Fragment, useEffect, useState } from "react";
 import { IoChevronDownOutline } from "react-icons/io5";
 import { RootState } from "../store";
@@ -37,10 +37,10 @@ export default function DropdownMenu() {
         as="div"
         className=" xl:min-w-[300px] lg:w-[200px] min-[375px]:w-[300px] w-[250px] relative inline-block text-left"
       >
-        <Menu.Button className="inline-flex w-full justify-between rounded-lg text-black p-3 text-sm font-medium border focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75">
+        <MenuButton className="inline-flex w-full justify-between rounded-lg text-black p-3 text-sm font-medium border focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75">
           {/* { property && property.activeProperty?.length < 1 ? "Domain name" : property.activeProperty} */}
           {property.length > 0 ? (
-            activePropertyObj.domain
+            activePropertyObj?.domain
           ) : (
             <p className="text-gray-600">Domain name</p> // Set your default value here
           )}
@@ -49,7 +49,7 @@ export default function DropdownMenu() {
             className="-mr-1 ml-2 h-5 w-5 text-black"
             aria-hidden="true"
           />
-        </Menu.Button>
+        </MenuButton>
 
         <Transition
           as={Fragment}
@@ -60,12 +60,12 @@ export default function DropdownMenu() {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute z-50 right-0 mt-2 w-full origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
+          <MenuItems className="absolute z-50 right-0 mt-2 w-full origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
             <span className="px-1 py-1 ">
               {/* {JSON.stringify(property)} */}
               {property.map((prop: PropertyType) => {
                 return (
-                  <Menu.Item key={prop.domain}>
+                  <MenuItem key={prop.domain ?? ""}>
                     {({ active }) => (
                       <button
                         className={`${
@@ -76,11 +76,11 @@ export default function DropdownMenu() {
                         {prop.domain}
                       </button>
                     )}
-                  </Menu.Item>
+                  </MenuItem>
                 );
               })}
             </span>
-          </Menu.Items>
+          </MenuItems>
         </Transition>
       </Menu>
     </div>

@@ -8,7 +8,7 @@ import ToggleMobile from "../components/ToggleMobile";
 import CountryPick from "@/app/dashboard/rank-tracker/components/CountryPick";
 import SearchEnginePick from "@/app/dashboard/rank-tracker/components/SearchEnginePick";
 import OrganicPick from "./components/OrganicPick";
-import { Tab } from "@headlessui/react";
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import RankOverview from "./components/RankOverview";
 import Rankings from "./components/Rankings";
 import { useQuery } from "@tanstack/react-query";
@@ -33,7 +33,7 @@ export default function page() {
     (state: RootState) => state.property.activeProperty
   );
 
-  console.log(activeProperty);
+  // console.log(activeProperty);
   const { data } = useQuery({
     queryKey: ["rank"],
     queryFn: async () =>
@@ -100,8 +100,8 @@ export default function page() {
         </div>
       </section>
       <section className={``}>
-        <Tab.Group>
-          <Tab.List className="flex gap-4 w-full">
+        <TabGroup>
+          <TabList className="flex gap-4 w-full">
             {tabs.map((tab) => {
               return (
                 <span key={tab.title}>
@@ -121,20 +121,20 @@ export default function page() {
                 </span>
               );
             })}
-          </Tab.List>
+          </TabList>
           <hr className="w-full" />
           <div className={` h-full w-full overflow-auto  `}>
-            <Tab.Panels>
+            <TabPanels>
               {tabs.map((tab) => {
                 return (
                   <span key={tab.title} className="h-full ">
-                    <Tab.Panel>{tab.content}</Tab.Panel>
+                    <TabPanel>{tab.content}</TabPanel>
                   </span>
                 );
               })}
-            </Tab.Panels>
+            </TabPanels>
           </div>
-        </Tab.Group>
+        </TabGroup>
       </section>
     </main>
   );

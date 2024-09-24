@@ -1,6 +1,7 @@
 import { RootState } from "@/app/store";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { handleUnauthorized } from "./handleUnauthorized";
 
 const ApiCall = axios.create({
   baseURL: "https://staging-api.webmaxi.net/api",
@@ -29,32 +30,17 @@ export const configureApiCall = (store: any) => {
       return Promise.reject(error);
     }
   );
+  ApiCall.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    (error) => {
+      if (error.response.status === 401) {
+        handleUnauthorized();
+      }
+      return Promise.reject(error);
+    }
+  );
 };
 
 export default ApiCall;
-
-// import { RootState } from "@/app/store";
-// import axios from "axios";
-
-// const ApiCall = axios.create({
-//     baseURL: "https://api.webmaxi.net/api",
-//     timeout: 10000
-// });
-
-// // Function to set authorization header based on token
-// const setAuthorizationHeader = (token) => {
-//     if (token) {
-//         ApiCall.defaults.headers.common['Authorization'] = token;
-//     } else {
-//         delete ApiCall.defaults.headers.common['Authorization'];
-//     }
-// };
-
-// export const configureApiCall = (store) => {
-//     store.subscribe(() => {
-//         const state = store.getState();
-//         setAuthorizationHeader(state.user.token);
-//     });
-// };
-
-// export default ApiCall;

@@ -4,7 +4,7 @@ import { Fragment, useState } from "react";
 import PaypalIcon from "../../../../../public/pricing/paypall.svg";
 import Ticked from "../../../../../public/pricing/ticked.svg";
 import Input from "@/app/component/commons/Input";
-import PayPalComponent, { extractNumericValue } from "@/app/component/PayPalComponent";
+import PayPalComponent from "@/app/component/PayPalComponent";
 import React from "react";
 
 

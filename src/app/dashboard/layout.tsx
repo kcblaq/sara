@@ -38,7 +38,6 @@ import UserProfile from "./components/UserProfile";
 import { removeTrailingSlash } from "../utils/RemoveSlash";
 import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
 import Loader, { LoaderPulse } from "../component/Loader";
-import { crawler } from "../services/crawler";
 import { isAllOf } from "@reduxjs/toolkit";
 import { PopoverComponent } from "./components/ui/PopOver";
 // import CheckUserType from "./components/CheckUserType";
@@ -115,6 +114,7 @@ export default function Layout({ children }: Props) {
     { title: "Support", icon: <CiSettings />, link: "/dashboard/settings" },
   ];
 
+
   const pathname = usePathname();
 
   const isActive = (link: string) => {
@@ -133,6 +133,7 @@ export default function Layout({ children }: Props) {
   const activeProperty = useSelector(
     (state: RootState) => state.property.activeProperty
   );
+
   const property = useSelector(
     (state: RootState) => state.property.allProperty
   );
@@ -149,9 +150,9 @@ export default function Layout({ children }: Props) {
       //     limit: 100,
       //   },
       // });
-      const response = await ApiCall.get("user/project/1");
+      const response = await ApiCall.get("/user/project/");
 
-      return response.data;
+      return response.data[0];
     },
   });
 
@@ -264,20 +265,10 @@ export default function Layout({ children }: Props) {
   }
 
   function openProjectModal() {
-    if (user.account_type === "free") {
-      property.length === 1
-        ? setShowOneProject(true)
-        : dispatch(setModal("addProject"));
-    } else {
-      dispatch(setModal("addProject"));
-    }
+    dispatch(setModal("addProject"));
   }
 
-  return loading ? (
-    <FullpageLoader>
-      <LoadingComp text="Crawling" />
-    </FullpageLoader>
-  ) : (
+  return (
     <>
       <div>
         {modalState === "addProject" && (
@@ -316,18 +307,16 @@ export default function Layout({ children }: Props) {
               onClick={() => setFullWidth(!fullWidth)}
             >
               <RxDoubleArrowLeft
-                className={`${
-                  !fullWidth && "scale-x-[-1]"
-                } duration-300 transition-all ease-out`}
+                className={`${!fullWidth && "scale-x-[-1]"
+                  } duration-300 transition-all ease-out`}
               />
             </div>
 
             <div className="grid ">
               <Link href={`/`}>
                 <Image
-                  src={`${
-                    fullWidth ? "/home/white-logo.png" : "/home/mobile-logo.png"
-                  }`}
+                  src={`${fullWidth ? "/home/white-logo.png" : "/home/mobile-logo.png"
+                    }`}
                   className=" pt-2"
                   alt="Webmaxi Logo"
                   height={24}
@@ -342,9 +331,8 @@ export default function Layout({ children }: Props) {
                       key={menu.link}
                       onClick={(e) => handleRoutes(e, menu.link)}
                       href={`${menu.link}`}
-                      className={` ${
-                        isActive(menu.link) ? " text-white bg-[#1570EF]" : ""
-                      }  hover:text-white hover:scale-105 transition-all duration-300 ease-in-out p-2 rounded-md flex  text-[#84CAFF] items-center gap-2`}
+                      className={` ${isActive(menu.link) ? " text-white bg-[#1570EF]" : ""
+                        }  hover:text-white hover:scale-105 transition-all duration-300 ease-in-out p-2 rounded-md flex  text-[#84CAFF] items-center gap-2`}
                     >
                       {menu.icon}
                       {fullWidth && menu.title}
@@ -360,9 +348,8 @@ export default function Layout({ children }: Props) {
                     onClick={(e) => handleRoutes(e, menu.link)}
                     key={menu.link}
                     href={`${menu.link}`}
-                    className={`flex  ${
-                      isActive(menu.link) ? " text-white bg-[#1570EF]" : ""
-                    } hover:text-white hover:scale-105 transition-all duration-300 ease-in-out text-[#84CAFF] items-center gap-2`}
+                    className={`flex  ${isActive(menu.link) ? " text-white bg-[#1570EF]" : ""
+                      } hover:text-white hover:scale-105 transition-all duration-300 ease-in-out text-[#84CAFF] items-center gap-2`}
                   >
                     {menu.icon}
                     {fullWidth && menu.title}
@@ -422,7 +409,7 @@ export default function Layout({ children }: Props) {
               </div>
             </div>
             <hr className="w-full  hidden md:flex " />
-            {isloading ? (
+            {/* {isloading ? (
               <LoaderPulse />
             ) : property.length < 1 || dashboardData === undefined ? (
               <DashboardOverviewPlaceholder />
@@ -430,7 +417,10 @@ export default function Layout({ children }: Props) {
               <div className=" w-full h-full overflow-auto p-2 md:p-8">
                 {children}
               </div>
-            )}
+            )} */}
+            <div className=" w-full h-full overflow-auto p-2 md:p-8">
+              {children}
+            </div>
           </section>
         </main>
       </div>

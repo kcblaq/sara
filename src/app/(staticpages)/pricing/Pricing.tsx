@@ -4,7 +4,6 @@ import Image from 'next/image'
 import React, { useState } from 'react'
 import { faqdata, pricingdata, annualPricingData } from './data'
 import { PaymentBody, ReusableModal } from './component/paymentBody'
-import { extractNumericValue } from '@/app/component/PayPalComponent'
 
 
 interface Plan {
