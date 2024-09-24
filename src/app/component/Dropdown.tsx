@@ -6,7 +6,10 @@ import { RootState } from "../store";
 import { useSelector } from "react-redux";
 import { PropertyType } from "@/types/PropertyType";
 import { useDispatch } from "react-redux";
-import { setActiveProperty } from "@/redux/features/propertySlice";
+import {
+  setActiveProperty,
+  setActivePropertyObj,
+} from "@/redux/features/propertySlice";
 
 export default function DropdownMenu() {
   const property = useSelector(
@@ -14,6 +17,9 @@ export default function DropdownMenu() {
   );
   const activeProperty = useSelector(
     (state: RootState) => state.property.activeProperty
+  );
+  const activePropertyObj = useSelector(
+    (state: RootState) => state.property.activePropertyObj
   );
   const dispatch = useDispatch();
   const [isClient, setIsClient] = useState(false);
@@ -34,7 +40,7 @@ export default function DropdownMenu() {
         <Menu.Button className="inline-flex w-full justify-between rounded-lg text-black p-3 text-sm font-medium border focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75">
           {/* { property && property.activeProperty?.length < 1 ? "Domain name" : property.activeProperty} */}
           {property.length > 0 ? (
-            activeProperty
+            activePropertyObj.domain
           ) : (
             <p className="text-gray-600">Domain name</p> // Set your default value here
           )}
@@ -56,19 +62,18 @@ export default function DropdownMenu() {
         >
           <Menu.Items className="absolute z-50 right-0 mt-2 w-full origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
             <span className="px-1 py-1 ">
+              {/* {JSON.stringify(property)} */}
               {property.map((prop: PropertyType) => {
                 return (
-                  <Menu.Item key={prop.website_url}>
+                  <Menu.Item key={prop.domain}>
                     {({ active }) => (
                       <button
                         className={`${
                           active ? "bg-primary text-white" : "text-gray-900"
                         } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                        onClick={() =>
-                          dispatch(setActiveProperty(prop.website_url))
-                        }
+                        onClick={() => dispatch(setActivePropertyObj(prop))}
                       >
-                        {prop.website_url}
+                        {prop.domain}
                       </button>
                     )}
                   </Menu.Item>

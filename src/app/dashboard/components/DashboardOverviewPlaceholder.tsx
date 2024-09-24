@@ -8,7 +8,10 @@ import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
 import { setLoading } from "@/redux/features/loaderSlice";
 import { setModal } from "@/redux/features/modalstates";
 // import { fetchPerformanceSuccess } from '@/redux/features/performanceMetric slice';
-import { setActiveProperty } from "@/redux/features/propertySlice";
+import {
+  setActiveProperty,
+  setActivePropertyObj,
+} from "@/redux/features/propertySlice";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
@@ -34,6 +37,7 @@ export default function DashboardOverviewPlaceholder() {
       property.length === 1 ? setShow(true) : null;
     }
     const urlPattern = /^(ftp|http[s]?):\/\/[^ "]+(\.[^ "]+)+$/;
+    console.log(urlPattern.test(inputUrl));
     if (!urlPattern.test(inputUrl)) {
       setErr({ status: true, msg: "Enter a valid URL" });
       notify({
@@ -46,33 +50,38 @@ export default function DashboardOverviewPlaceholder() {
 
     try {
       setisLoading(true);
-      await ApiCall.get(`crawl/add-property?url=${inputUrl}`);
+      // await ApiCall.get(`crawl/add-property?url=${inputUrl}`);
+      const response = await ApiCall.post(`/user/project`, {
+        domain: inputUrl,
+      });
       dispatch(setActiveProperty(inputUrl));
+      dispatch(setActivePropertyObj(response.data.project));
       dispatch(setLoading(true));
 
-      await Promise.all([
-        dispatch(setModal("crawling")),
-        ApiCall.get("/crawl/webcrawler", {
-          params: {
-            url: removeTrailingSlash(inputUrl),
-            type: "passive",
-            limit: 10,
-          },
-        }),
-        ApiCall.get("/crawl/technical/mini-crawler", {
-          params: {
-            url: removeTrailingSlash(inputUrl),
-            timeout: 5,
-          },
-        }),
-        ApiCall.get("/crawl/content-analysis/mini-crawler", {
-          params: {
-            url: removeTrailingSlash(inputUrl),
-          },
-        }),
-        // crawler("/crawl/content-analysis/mini-crawler", {url:removeTrailingSlash(inputUrl)}),
-        ApiCall.get("/crawl/property"),
-      ]);
+      // console.log(req);
+      // await Promise.all([
+      //   dispatch(setModal("crawling")),
+      //   ApiCall.get("/crawl/webcrawler", {
+      //     params: {
+      //       url: removeTrailingSlash(inputUrl),
+      //       type: "passive",
+      //       limit: 10,
+      //     },
+      //   }),
+      //   ApiCall.get("/crawl/technical/mini-crawler", {
+      //     params: {
+      //       url: removeTrailingSlash(inputUrl),
+      //       timeout: 5,
+      //     },
+      //   }),
+      //   ApiCall.get("/crawl/content-analysis/mini-crawler", {
+      //     params: {
+      //       url: removeTrailingSlash(inputUrl),
+      //     },
+      //   }),
+      //   // crawler("/crawl/content-analysis/mini-crawler", {url:removeTrailingSlash(inputUrl)}),
+      //   ApiCall.get("/crawl/property"),
+      // ]);
       dispatch(setModal(""));
 
       setisLoading(false);
@@ -86,9 +95,9 @@ export default function DashboardOverviewPlaceholder() {
       //   router.push("/login");
       // }
       // notify({
-      //     type: "error",
-      //     message: error?.response?.data?.message
-      // })
+      //   type: "error",
+      //   message: error?.response?.data?.message,
+      // });
       alert(error?.response?.data?.message);
     } finally {
       dispatch(setLoading(false));
@@ -114,6 +123,7 @@ export default function DashboardOverviewPlaceholder() {
       )} */}
       <div className="h-full w-full flex-col gap-6 items-start flex justify-start px-4  md:px-[95px] sm:pt-[143px] pt-10">
         <div className="flex flex-col gap-4">
+          {/* {JSON.stringify(property)} */}
           <h1 className="text-[#101828] font-semibold text-4xl">
             Track, manage and boost your site’s SEO.
           </h1>
