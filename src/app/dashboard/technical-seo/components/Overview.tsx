@@ -18,6 +18,10 @@ import HTTPStatusCode from "./HTTPStatusCode";
 import SiteHealthScore from "../../components/SiteHealthScore";
 import { DoughnutSample } from "../../components/DoiughnutSample";
 import { CrawledPages } from "../../components/SeoprogressCircle";
+import {
+  CrawlingDataOverview,
+  OverviewDataType,
+} from "@/types/technicalseo/technicalSeoTypes";
 // import { TechnicalSeoType } from "@/types/TechnicalSeoType";
 // import { useEffect } from "react";
 // import { removeTrailingSlash } from "@/app/utils/RemoveSlash";
@@ -111,6 +115,7 @@ function Overview() {
   const technicalSeoData: any = useSelector(
     (state: RootState) => state.technicalSeo
   );
+  console.log(technicalSeoData);
   const activeProperty = useSelector(
     (state: RootState) => state.property.activeProperty
   );
@@ -141,13 +146,38 @@ function Overview() {
   //     }
   // };
 
-  const LCPdata: ItemProps["data"] = technicalSeoData
+  const overviewResult: OverviewDataType[] = technicalSeoData.crawlings.flatMap(
+    (crawling: any) =>
+      crawling.crawlingData
+        .filter((data: any) => data.tab === "overview")
+        .map((overviewData: CrawlingDataOverview) => ({
+          crawlId: overviewData.id,
+          cost: overviewData.data.cost,
+          siteHealth: overviewData.data.site_health,
+          errorsCount: overviewData.data.site_issues.errors.length,
+          warningsCount: overviewData.data.site_issues.warnings.length,
+          tasksCount: overviewData.data.tasks_count,
+          pagesCrawled: overviewData.data.crawl_status.pages_crawled,
+          pagesInQueue: overviewData.data.crawl_status.pages_in_queue,
+          maxCrawlPages: overviewData.data.crawl_status.max_crawl_pages,
+          crawlProgress: overviewData.data.crawl_progress,
+          timeToInteractive: overviewData.data.time_to_interactive,
+          cumulativeLayoutShift: overviewData.data.cumulative_layout_shift,
+          largestContentfulPaint: overviewData.data.largest_contentful_paint,
+          createdAt: overviewData.createdAt,
+          updatedAt: overviewData.updatedAt,
+        }))
+  );
+  console.log(overviewResult[0]);
+  const LCPdata: ItemProps["data"] = overviewResult
     ? {
-        labels: Object.keys(technicalSeoData.metrics?.lcp ?? {}),
+        // labels: Object.keys(technicalSeoData.metrics?.lcp ?? {}),
+        labels: overviewResult.map((lcp) => String(lcp.largestContentfulPaint)),
         datasets: [
           {
             label: "Total",
-            data: Object.values(technicalSeoData.metrics?.lcp ?? {}),
+            // data: Object.values(technicalSeoData.metrics?.lcp ?? {}),
+            data: overviewResult.map((lcp) => lcp.largestContentfulPaint || 4),
             backgroundColor: ["#F04438", "#FDB022", "#12B76A"],
             borderColor: ["#F04438", "#FDB022", "#12B76A"],
             borderWidth: 1,
@@ -156,13 +186,15 @@ function Overview() {
       }
     : { labels: [], datasets: [] };
 
-  const CLSdata: ItemProps["data"] = technicalSeoData
+  const CLSdata: ItemProps["data"] = overviewResult
     ? {
-        labels: Object.keys(technicalSeoData.metrics?.cls ?? {}),
+        // labels: Object.keys(technicalSeoData.metrics?.cls ?? {}),
+        labels: overviewResult.map((lcp) => String(lcp.cumulativeLayoutShift)),
         datasets: [
           {
             label: "Total",
-            data: Object.values(technicalSeoData.metrics?.cls ?? {}),
+            // data: Object.values(technicalSeoData.metrics?.cls ?? {}),
+            data: overviewResult.map((lcp) => lcp.cumulativeLayoutShift || 4),
             backgroundColor: ["#F04438", "#FDB022", "#12B76A"],
             borderColor: ["#F04438", "#FDB022", "#12B76A"],
             borderWidth: 1,
@@ -301,7 +333,7 @@ function Overview() {
           </div>
         </section>
       </section>
-      <section className="grid gap-4 justify-items-stretch h-full w-full grid-cols-1 md:grid-cols-3  min-[540px]:grid-cols-2">
+      <section className="grid  gap-4 justify-items-stretch h-full w-full grid-cols-1 md:grid-cols-3  min-[540px]:grid-cols-2">
         <div className=" p-2 md:p-4 col-span-1 h-[308px] justify-items-start rounded-md w-full border">
           <Title
             title={"Crawl status"}
@@ -329,9 +361,9 @@ function Overview() {
                 Crawled{" "}
                 <strong className="ml-0.5">
                   (
-                  {technicalSeoData.metrics?.crawled?.crawled.toLocaleString() ??
-                    0}
-                  )
+                  {/* {technicalSeoData.metrics?.crawled?.crawled.toLocaleString() ??
+                    0} */}
+                  {overviewResult[0]?.pagesCrawled ?? 0})
                 </strong>
               </p>
               <p className=" flex items-center text-xs text-[#475467]">
@@ -342,9 +374,9 @@ function Overview() {
                 Uncrawled{" "}
                 <strong className="ml-0.5">
                   (
-                  {technicalSeoData?.metrics?.crawled?.uncrawled.toLocaleString() ??
-                    0}
-                  )
+                  {/* {technicalSeoData?.metrics?.crawled?.uncrawled.toLocaleString() ??
+                    0} */}
+                  {overviewResult[0]?.pagesInQueue ?? 0}) )
                 </strong>
               </p>
             </div>
@@ -402,24 +434,26 @@ function Overview() {
             title="Site issues"
             info="All issues associated with thw website"
           />
-          <div className="p-4 lg:flex-row flex-col gap-2 h-48">
+          <div className="p-4 lg:flex-row flex-col gap-2 h-48  w-full">
             <ActivityGuage />
-            <div className="flex flex-col justify-end">
+            <div className="flex flex-col items-end justify-end w-full">
               <p className=" text-xs flex items-center text-[#475467]">
                 {" "}
                 <span className="text-[#F04438]">
                   <GoDotFill />{" "}
                 </span>{" "}
-                {`Errors(${technicalSeoData.metrics?.siteIssue?.error || 0} )`}{" "}
+                {/* {`Errors(${technicalSeoData.metrics?.siteIssue?.error || 0} )`}{" "} */}
+                {`Errors(${overviewResult[0]?.errorsCount || 0} )`}{" "}
               </p>
               <p className=" text-xs flex items-center text-[#475467]">
                 {" "}
                 <span className="text-[#FDB022]">
                   <GoDotFill />{" "}
                 </span>{" "}
-                {`Warnings(${
+                {/* {`Warnings(${
                   technicalSeoData.metrics?.siteIssue?.warning || 0
-                })`}{" "}
+                })`}{" "} */}
+                {`Warnings(${overviewResult[0]?.warningsCount || 0})`}{" "}
               </p>
               <p className=" text-xs flex items-center text-[#475467]">
                 {" "}

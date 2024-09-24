@@ -133,6 +133,9 @@ export default function Layout({ children }: Props) {
   const activeProperty = useSelector(
     (state: RootState) => state.property.activeProperty
   );
+  const activePropertyObj = useSelector(
+    (state: RootState) => state.property.activePropertyObj
+  );
   const property = useSelector(
     (state: RootState) => state.property.allProperty
   );
@@ -149,7 +152,9 @@ export default function Layout({ children }: Props) {
       //     limit: 100,
       //   },
       // });
-      const response = await ApiCall.get("user/project/1");
+      const response = await ApiCall.get(
+        `user/project/${activePropertyObj.id}`
+      );
 
       return response.data;
     },
@@ -176,7 +181,8 @@ export default function Layout({ children }: Props) {
         dispatch(setAllProperty(res.data.projects));
         activeProperty.length < 1 &&
           dispatch(
-            setActiveProperty(removeTrailingSlash(res.data[0]?.website_url))
+            // setActiveProperty(removeTrailingSlash(res.data[0]?.website_url))
+            setActiveProperty(removeTrailingSlash(res.data[0]?.projects.domain))
           );
         return res.data;
       }
@@ -204,7 +210,7 @@ export default function Layout({ children }: Props) {
     //   },
     // });
 
-    const response = await ApiCall.get("user/project/1");
+    const response = await ApiCall.get(`user/project/${activePropertyObj.id}`);
 
     dispatch(fetchPerformanceSuccess(response?.data));
   };
@@ -402,8 +408,10 @@ export default function Layout({ children }: Props) {
                   </Button>
                   {/* </div> */}
 
-                  {/* {JSON.stringify(property)}
-                  {JSON.stringify(activeProperty)} */}
+                  {/* {JSON.stringify(property)} */}
+                  {/* {JSON.stringify(activeProperty)} */}
+                  {/* {JSON.stringify(activePropertyObj)} */}
+                  {/* {JSON.stringify(dashboardData)} */}
                 </div>
               </div>
               <div className="lg:flex w-full justify-end hidden">
