@@ -16,6 +16,10 @@ import { CrawlabilityType } from "@/types/CrawlabilityPageProps";
 import { CrawledPagesComplete } from "../../components/SeoprogressCircle";
 import moment from "moment";
 import Loader from "@/app/component/Loader";
+import {
+  CrawlingDataOverview,
+  OverviewDataType,
+} from "@/types/technicalseo/technicalSeoTypes";
 
 export default function Crawlability() {
   const [crawlabilityData, setCrawlabilityData] =
@@ -25,7 +29,19 @@ export default function Crawlability() {
     status: false,
     message: "",
   });
-  const { metrics } = useSelector((state: RootState) => state.technicalSeo);
+  // const { metrics } = useSelector((state: RootState) => state.technicalSeo);
+  const techSeo = useSelector((state: RootState) => state.technicalSeo);
+
+  const overviewResult: OverviewDataType[] = techSeo.crawlings.flatMap(
+    (crawling: any) =>
+      crawling.crawlingData
+        .filter((data: any) => data.tab === "overview")
+        .map((overviewData: CrawlingDataOverview) => ({
+          pagesCrawled: overviewData.data.crawl_status.pages_crawled,
+          pagesInQueue: overviewData.data.crawl_status.pages_in_queue,
+          maxCrawlPages: overviewData.data.crawl_status.max_crawl_pages,
+        }))
+  );
   const technicalSeoData: any = useSelector(
     (state: RootState) => state.technicalSeo
   );
@@ -61,10 +77,15 @@ export default function Crawlability() {
     fetchData();
   }, [activeProperty]);
 
-  const crawled = metrics?.crawled.crawled || 0;
-  const uncrawled = metrics?.crawled.uncrawled || 0;
+  // const crawled = metrics?.crawled.crawled || 0;
+  // const uncrawled = metrics?.crawled.uncrawled || 0;
 
-  const total = metrics?.crawled.total || 0;
+  // const total = metrics?.crawled.total || 0;
+
+  const crawled = overviewResult[0]?.pagesCrawled || 0;
+  const uncrawled = overviewResult[0]?.pagesInQueue || 0;
+
+  const total = overviewResult[0]?.maxCrawlPages || 0;
   const crawledvalue = (crawled / total) * 100;
 
   // console.log("CRAWLABILITY", crawlabilityData)

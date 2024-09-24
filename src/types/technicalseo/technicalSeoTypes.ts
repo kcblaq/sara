@@ -19,7 +19,7 @@ interface CrawlStatus {
   max_crawl_pages: number;
 }
 
-interface CrawlingDataOverview {
+export interface CrawlingDataOverview {
   id: number;
 
   tab: "overview";
@@ -107,3 +107,21 @@ export interface InitialState {
   updatedAt: string;
   userId: number;
 }
+
+export type OverviewDataType = {
+  crawlId: number;
+  cost: number;
+  siteHealth: number;
+  errorsCount: number;
+  warningsCount: number;
+  tasksCount: number;
+  pagesCrawled: number;
+  pagesInQueue: number;
+  maxCrawlPages: number;
+  crawlProgress: string;
+  timeToInteractive: number;
+  cumulativeLayoutShift: number;
+  largestContentfulPaint: number;
+  createdAt: string;
+  updatedAt: string;
+};
