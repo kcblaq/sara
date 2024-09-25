@@ -29,7 +29,7 @@ export default function DropdownMenu() {
   const [isClient, setIsClient] = useState(false);
 
   
-  console.log("activeProperty",activeProperty)
+  // console.log("activeProperty",activeProperty)
 
   const {data, isError, isPending, isSuccess} = useQuery({
     queryKey: ['all_property' ],

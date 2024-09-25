@@ -11,8 +11,9 @@ import {
 } from "@/redux/features/propertySlice";
 import { useMutation } from "@tanstack/react-query";
 
-import { RankTrackerCrawler } from "@/app/services/crawlers/rank_tracking";
+import useRankMutation, { RankTrackerCrawler } from "@/app/services/crawlers/rank_tracking";
 import { CurrentProperty } from "@/app/utils/currentProperty";
+import { trimDomain } from "@/app/utils/trimDomain";
 
 
 export default function AddProject() {
@@ -23,18 +24,22 @@ export default function AddProject() {
   ;
 
 
+  const {mutate: RankMutate, isError, isPaused,isPending} = useRankMutation()
+
+  console.log("PROPERTY",property)
   const mutate = useMutation({
     mutationFn: async (domain: string) => {
       const response = await ApiCall.post('/user/project/', { domain });
       return response.data;
     },
     onError: (error) => error.message,
-    onSuccess: (data) => {
+    onSuccess: async(data) => {
       dispatch(setActiveProperty(inputUrl));
-      dispatch(setActivePropertyObj(data.project));
+      await dispatch(setActivePropertyObj(data.project));
       dispatch(setModal(""));
-      // // console.log("DATA:", data.project.domain)
-      RankTrackerCrawler(property.domain , 2840);
+      console.log("current:", data.project)
+      RankMutate({target: trimDomain(data.project.domain), id: data.project.id, location_code: 2840});
+      
 
     }
   })
@@ -92,14 +97,5 @@ export default function AddProject() {
       </div>
     </section>
   );
-}
-
-
-
-
-
-
-function currentProperty() {
-  throw new Error("Function not implemented.");
 }
 
