@@ -30,6 +30,7 @@ import { PropertyType } from "@/types/PropertyType";
 import { fetchPerformanceSuccess } from "@/redux/features/performanceMetric slice";
 import {
   setActiveProperty,
+  setActivePropertyObj,
   setAllProperty,
 } from "@/redux/features/propertySlice";
 import DashboardOverviewPlaceholder from "./components/DashboardOverviewPlaceholder";
@@ -153,7 +154,7 @@ export default function Layout({ children }: Props) {
       //   },
       // });
       const response = await ApiCall.get(
-        `user/project/${activePropertyObj.id}`
+        `user/project/${activePropertyObj.project.id}`
       );
 
       return response.data[0];
@@ -177,6 +178,13 @@ export default function Layout({ children }: Props) {
         router.push("/login");
         return;
       }
+      if(res.data.projects.length === 0){
+         dispatch(setActiveProperty(''))
+         dispatch(setActivePropertyObj(''))
+         console.log("RES", res.data.projects)
+         return 
+
+      }
       if (res.status === 200) {
         dispatch(setAllProperty(res.data.projects));
         activeProperty.length < 1 &&
@@ -184,6 +192,7 @@ export default function Layout({ children }: Props) {
             // setActiveProperty(removeTrailingSlash(res.data[0]?.website_url))
             setActiveProperty(removeTrailingSlash(res.data[0]?.projects.domain))
           );
+        console.log("RES",res.data);
         return res.data;
       }
     } catch (err: any) {
@@ -194,6 +203,8 @@ export default function Layout({ children }: Props) {
       return [];
     }
   };
+
+  // console.log({"ACTIVE":activeProperty, "ACTIVEOBJ": activePropertyObj.project.id})
 
   // useQuery({
   //   queryKey: ["dashboard"],
@@ -210,7 +221,7 @@ export default function Layout({ children }: Props) {
     //   },
     // });
 
-    const response = await ApiCall.get(`user/project/${activePropertyObj.id}`);
+    const response = await ApiCall.get(`user/project/${activePropertyObj.project.id}`);
 
     dispatch(fetchPerformanceSuccess(response?.data));
   };

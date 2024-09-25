@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/store";
 
-export default function currentProperty() {
+export function CurrentProperty() {
     const property = useSelector((state: RootState) => state.property.activePropertyObj);
-    return property
+    return (property)
 }

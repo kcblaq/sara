@@ -16,6 +16,7 @@ import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/store";
 import moment from "moment";
+import { CurrentProperty } from "@/app/utils/currentProperty";
 // import PageDistributions from './components/PageDistributions'
 
 const tabs = [
@@ -32,8 +33,12 @@ export default function page() {
   const activeProperty = useSelector(
     (state: RootState) => state.property.activeProperty
   );
+  const property = CurrentProperty();
 
-  // console.log(activeProperty);
+
+  console.log({activeProperty, property} );
+
+  
   const { data } = useQuery({
     queryKey: ["rank"],
     queryFn: async () =>

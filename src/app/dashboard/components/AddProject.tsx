@@ -9,43 +9,48 @@ import {
   setActiveProperty,
   setActivePropertyObj,
 } from "@/redux/features/propertySlice";
-import {useMutation} from "@tanstack/react-query";
-import currentProperty from "@/app/utils/currentProperty";
+import { useMutation } from "@tanstack/react-query";
+
+import { RankTrackerCrawler } from "@/app/services/crawlers/rank_tracking";
+import { CurrentProperty } from "@/app/utils/currentProperty";
 
 
 export default function AddProject() {
   const [err, setErr] = useState({ status: false, msg: "" });
   const [inputUrl, setInputUrl] = useState("");
   const dispatch = useDispatch();
+  const property = CurrentProperty();
+  ;
 
-;
-const mutate = useMutation({
-  mutationFn: async(domain:string) => {
-    const response = await ApiCall.post('/user/project/', {domain});
-    return response.data;
-  },
-  onError: (error) =>  error.message,
-  onSuccess: (data)=> {
-    dispatch(setActiveProperty(inputUrl));
-      dispatch(setActivePropertyObj(data));
+
+  const mutate = useMutation({
+    mutationFn: async (domain: string) => {
+      const response = await ApiCall.post('/user/project/', { domain });
+      return response.data;
+    },
+    onError: (error) => error.message,
+    onSuccess: (data) => {
+      dispatch(setActiveProperty(inputUrl));
+      dispatch(setActivePropertyObj(data.project));
       dispatch(setModal(""));
-      dispatch(setActivePropertyObj(data));
-      
-  }
-})
-console.log("DATA",mutate.data)
+      // // console.log("DATA:", data.project.domain)
+      RankTrackerCrawler(property.domain , 2840);
+
+    }
+  })
+  // console.log("DATA")
 
 
 
-const handleSubmit = () => {
-  const pattern = /^(https?|ftp):\/\/(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+(:[0-9]{1,5})?(\/.*)?$|^(www\.)[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+(:[0-9]{1,5})?(\/.*)?$/
+  const handleSubmit = () => {
+    const pattern = /^(https?|ftp):\/\/(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+(:[0-9]{1,5})?(\/.*)?$|^(www\.)[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+(:[0-9]{1,5})?(\/.*)?$/
 
-  if (!pattern.test(inputUrl)) {
-    setErr({ status: true, msg: 'Enter a valid url' });
-    return;
-  }
-  mutate.mutate(inputUrl);
-};
+    if (!pattern.test(inputUrl)) {
+      setErr({ status: true, msg: 'Enter a valid url' });
+      return;
+    }
+    mutate.mutate(inputUrl);
+  };
 
   const cancel = () => dispatch(setModal(""));
 
@@ -93,4 +98,8 @@ const handleSubmit = () => {
 
 
 
+
+function currentProperty() {
+  throw new Error("Function not implemented.");
+}
 

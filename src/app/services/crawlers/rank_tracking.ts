@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import ApiCall from "../../utils/apicalls/axiosInterceptor";
-import currentProperty from "@/app/utils/currentProperty";
+import { CurrentProperty } from "@/app/utils/currentProperty";
 
 interface RankProps {
     location_code: number,
@@ -9,7 +9,7 @@ interface RankProps {
 
 
 export const UseRankTrackingOverview = async () => {
-    const id = currentProperty()
+    const id = CurrentProperty()
 
     const { isError, isSuccess, isPending, data } = useQuery({
         queryKey: ["ranktracker_overview", id],
@@ -23,7 +23,7 @@ export const UseRankTrackingOverview = async () => {
 
 
 export const useRankTrackingRankingTab = async() => {
-    const id = currentProperty();
+    const id = CurrentProperty();
 
  const {isError, isSuccess, isPending, data} = useQuery({
     queryKey: ['ranktracker_ranking', id.id],
@@ -37,12 +37,12 @@ export const useRankTrackingRankingTab = async() => {
 
 
 
-export const RankTrackerCrawler = async (url: string) => {
-    const property = currentProperty();
+export const RankTrackerCrawler = async (target: string, location_code:number) => {
+    const property = CurrentProperty();
 
 
     const rankCrawler = useMutation({
-        mutationFn: async ({ location_code, target }: RankProps) => {
+        mutationFn: async () => {
             const response = await ApiCall.post(`user/crawler/rank-tracking/${property.id}`, [{
                 target,
                 location_code

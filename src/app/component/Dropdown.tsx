@@ -17,6 +17,8 @@ export default function DropdownMenu() {
   const property = useSelector(
     (state: RootState) => state.property.allProperty
   );
+
+
   const activeProperty = useSelector(
     (state: RootState) => state.property.activeProperty
   );
@@ -27,16 +29,17 @@ export default function DropdownMenu() {
   const [isClient, setIsClient] = useState(false);
 
   
+  console.log("activeProperty",activeProperty)
 
   const {data, isError, isPending, isSuccess} = useQuery({
-    queryKey: ['all_propert' ],
+    queryKey: ['all_property' ],
     queryFn: async()=> {
       return ApiCall.get(`/user/project`)
     }
   })
 
 
-  console.log("DATA:",data?.data.projects)
+  // console.log("DATA:",data?.data.projects)
 
   // useEffect(() => {
   //   setIsClient(true);
@@ -54,9 +57,9 @@ export default function DropdownMenu() {
         <MenuButton className="inline-flex w-full justify-between rounded-lg text-black p-3 text-sm font-medium border focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75">
           {/* { property && property.activeProperty?.length < 1 ? "Domain name" : property.activeProperty} */}
           {(data?.data?.projects?.length ?? []) > 0 ? (
-            activePropertyObj?.domain
+            activePropertyObj.domain
           ) : (
-            <p className="text-gray-600">Domain name</p> // Set your default value here
+            <p className="text-gray-600"> { `Domain name`} </p> 
           )}
 
           <IoChevronDownOutline

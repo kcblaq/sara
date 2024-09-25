@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 type activePropertyType = {
+  project: any;
   id: number;
   userId: number;
   domain: string;
