@@ -55,6 +55,7 @@ export default function page() {
   // });
   // // console.log("RANK",data)
 
+  
 
   return (
     <main className="grid w-full h-full items-start content-start gap-6">

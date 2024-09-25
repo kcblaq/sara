@@ -144,6 +144,9 @@ export default function Layout({ children }: Props) {
   const token = useSelector((state: RootState) => state.user.token);
   const loading = useSelector((state: RootState) => state.loading.loading);
 
+
+
+  // console.log("PROPERTY",activePropertyObj )
   const { data: dashboardData, isSuccess } = useQuery({
     queryKey: ["dashboard"],
     queryFn: async () => {
@@ -154,7 +157,7 @@ export default function Layout({ children }: Props) {
       //   },
       // });
       const response = await ApiCall.get(
-        `user/project/${activePropertyObj.project.id}`
+        `user/project/${activePropertyObj.id}`
       );
 
       return response.data[0];
@@ -181,7 +184,7 @@ export default function Layout({ children }: Props) {
       if(res.data.projects.length === 0){
          dispatch(setActiveProperty(''))
          dispatch(setActivePropertyObj(''))
-         console.log("RES", res.data.projects)
+        //  console.log("RES", res.data.projects)
          return 
 
       }
@@ -192,7 +195,7 @@ export default function Layout({ children }: Props) {
             // setActiveProperty(removeTrailingSlash(res.data[0]?.website_url))
             setActiveProperty(removeTrailingSlash(res.data[0]?.projects.domain))
           );
-        console.log("RES",res.data);
+        // console.log("RES",res.data);
         return res.data;
       }
     } catch (err: any) {
