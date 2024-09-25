@@ -12,7 +12,7 @@ const ApiCall = axios.create({
 // Function to get token from Redux store
 const getToken = (store: any) => {
   const token = store.getState().user.token;
-  console.log("interceptor", token);
+  // console.log("interceptor", token);
   return token;
 };
 

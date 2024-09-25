@@ -10,6 +10,8 @@ import {
   setActiveProperty,
   setActivePropertyObj,
 } from "@/redux/features/propertySlice";
+import { useQuery } from "@tanstack/react-query";
+import ApiCall from "../utils/apicalls/axiosInterceptor";
 
 export default function DropdownMenu() {
   const property = useSelector(
@@ -24,13 +26,25 @@ export default function DropdownMenu() {
   const dispatch = useDispatch();
   const [isClient, setIsClient] = useState(false);
 
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+  
 
-  if (!isClient) {
-    return null;
-  }
+  const {data, isError, isPending, isSuccess} = useQuery({
+    queryKey: ['all_propert' ],
+    queryFn: async()=> {
+      return ApiCall.get(`/user/project`)
+    }
+  })
+
+
+  console.log("DATA:",data?.data.projects)
+
+  // useEffect(() => {
+  //   setIsClient(true);
+  // }, []);
+
+  // if (!isClient) {
+  //   return null;
+  // }
   return (
     <div className="text-right">
       <Menu
@@ -39,7 +53,7 @@ export default function DropdownMenu() {
       >
         <MenuButton className="inline-flex w-full justify-between rounded-lg text-black p-3 text-sm font-medium border focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75">
           {/* { property && property.activeProperty?.length < 1 ? "Domain name" : property.activeProperty} */}
-          {property.length > 0 ? (
+          {(data?.data?.projects?.length ?? []) > 0 ? (
             activePropertyObj?.domain
           ) : (
             <p className="text-gray-600">Domain name</p> // Set your default value here

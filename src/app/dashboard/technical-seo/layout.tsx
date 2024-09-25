@@ -13,7 +13,7 @@ import moment from "moment";
 import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
 import { useDispatch } from "react-redux";
 import {
-  fetchTechnicalSEOFailure,
+  // fetchTechnicalSEOFailure,
   setTechnicalSeo,
 } from "@/redux/features/technicalSeoSlice";
 import {
@@ -27,7 +27,7 @@ export default function TechnicalSeoLayout() {
   const [mobile, setMobile] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  const techSeo = useSelector((state: RootState) => state.technicalSeo.metrics);
+  // const techSeo = useSelector((state: RootState) => state.technicalSeo.metrics);
   const lastUpdated = useSelector(
     (state: RootState) =>
       state.performance.metrics?.history?.scores[0]?.createdAt
@@ -92,7 +92,7 @@ export default function TechnicalSeoLayout() {
         `/user/crawler/technical-seo/${activePropertyObj.id}`
       );
       setLoading(false);
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
       console.log(error);
     } finally {
@@ -175,6 +175,7 @@ export default function TechnicalSeoLayout() {
         </div> */}
         <div className="flex items-center gap-2 sm:text-base min-[375px]:text-sm text-xs">
           <p className=" font-semibold"> Last Update:</p>
+          {/* {JSON.stringify(activePropertyObj)} */}
           <p className=""> {moment(lastUpdated).format("Do MMM YY")} </p>
         </div>
       </div>

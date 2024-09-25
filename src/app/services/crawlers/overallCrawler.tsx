@@ -1,9 +1,15 @@
-import React from 'react'
 
-export default function rankTracker() {
+import currentProperty from '@/app/utils/currentProperty'
+import { RankTrackerCrawler } from './rank_tracking'
 
-  
-  return (
-    <div>rankTracker</div>
+export async function rankTracker() {
+  const property = currentProperty();
+
+
+  const response = await Promise.all(
+    [
+      RankTrackerCrawler(property.domain),
+
+    ]
   )
 }

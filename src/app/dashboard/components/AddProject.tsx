@@ -10,6 +10,7 @@ import {
   setActivePropertyObj,
 } from "@/redux/features/propertySlice";
 import {useMutation} from "@tanstack/react-query";
+import currentProperty from "@/app/utils/currentProperty";
 
 
 export default function AddProject() {
@@ -17,7 +18,7 @@ export default function AddProject() {
   const [inputUrl, setInputUrl] = useState("");
   const dispatch = useDispatch();
 
- 
+;
 const mutate = useMutation({
   mutationFn: async(domain:string) => {
     const response = await ApiCall.post('/user/project/', {domain});
@@ -32,11 +33,13 @@ const mutate = useMutation({
       
   }
 })
+console.log("DATA",mutate.data)
 
 
 
 const handleSubmit = () => {
-  const pattern = /^(https?|ftp):\/\/(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+(:[0-9]{1,5})?(\/.*)?$/;
+  const pattern = /^(https?|ftp):\/\/(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+(:[0-9]{1,5})?(\/.*)?$|^(www\.)[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+(:[0-9]{1,5})?(\/.*)?$/
+
   if (!pattern.test(inputUrl)) {
     setErr({ status: true, msg: 'Enter a valid url' });
     return;

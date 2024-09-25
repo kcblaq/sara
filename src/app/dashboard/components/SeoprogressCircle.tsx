@@ -6,15 +6,30 @@ import { GoDotFill } from "react-icons/go";
 import { useSelector } from "react-redux";
 import { Title } from "../technical-seo/components/Overview";
 import { BiUpArrowAlt } from "react-icons/bi";
+import {
+  CrawlingDataOverview,
+  OverviewDataType,
+} from "@/types/technicalseo/technicalSeoTypes";
 
 const SEOProgressiveCircle: FC = () => {
-  const metrics = useSelector((state: RootState) => state.performance.metrics);
-  const scores = metrics?.history?.scores[0]?.performance || null;
+  // const metrics = useSelector((state: RootState) => state.performance.metrics);
+  const metrics = useSelector((state: RootState) => state.technicalSeo);
+  const healthScore: Partial<OverviewDataType>[] = metrics?.crawlings?.flatMap(
+    (crawling: any) =>
+      crawling.crawlingData
+        .filter((data: any) => data.tab === "overview")
+        .map((overviewData: CrawlingDataOverview) => ({
+          siteHealth: overviewData.data.site_health,
+        }))
+  );
+  // const scores = metrics?.history?.scores[0]?.performance || null;
 
-  const averageSeo = scores && scores * 100;
+  // const averageSeo = scores && scores * 100;
+  const averageSeo = healthScore && healthScore[0]?.siteHealth;
 
   return (
     <div className="z-0">
+      {/* {JSON.stringify(healthScore[0].siteHealth)} */}
       <CircularProgressbarWithChildren
         value={averageSeo ?? 0}
         className=""
@@ -48,12 +63,27 @@ const SEOProgressiveCircle: FC = () => {
 export default SEOProgressiveCircle;
 
 export const CrawledPages: FC = () => {
-  const crawled = useSelector((state: RootState) => state.technicalSeo.metrics);
+  // const crawled = useSelector((state: RootState) => state.technicalSeo.metrics);
+  const crawled = useSelector((state: RootState) => state.technicalSeo);
 
-  const scores = crawled?.crawled || null;
+  const overviewResult: OverviewDataType[] = crawled.crawlings.flatMap(
+    (crawling: any) =>
+      crawling.crawlingData
+        .filter((data: any) => data.tab === "overview")
+        .map((overviewData: CrawlingDataOverview) => ({
+          pagesCrawled: overviewData.data.crawl_status.pages_crawled,
+          pagesInQueue: overviewData.data.crawl_status.pages_in_queue,
+          maxCrawlPages: overviewData.data.crawl_status.max_crawl_pages,
+        }))
+  );
 
-  const averageSeo = scores && scores.crawled;
-  const total = crawled?.crawled?.total ?? 0;
+  // const scores = crawled?.crawled || null;
+  const scores = overviewResult[0]?.pagesCrawled || 0;
+
+  // const averageSeo = scores && scores.crawled;
+  const averageSeo = scores && scores;
+  // const total = crawled?.crawled?.total ?? 0;
+  const total = overviewResult[0]?.maxCrawlPages ?? 0;
 
   return (
     <div className="rounded-full w-full h-fit flex items-center justify-center ">
@@ -91,11 +121,22 @@ export const CrawledPages: FC = () => {
 };
 
 export const CrawledPagesComplete: FC = () => {
-  const crawled = useSelector((state: RootState) => state.technicalSeo.metrics);
+  // const crawled = useSelector((state: RootState) => state.technicalSeo.metrics);
+  const crawled = useSelector((state: RootState) => state.technicalSeo);
+  const overviewResult: OverviewDataType[] = crawled.crawlings.flatMap(
+    (crawling: any) =>
+      crawling.crawlingData
+        .filter((data: any) => data.tab === "overview")
+        .map((overviewData: CrawlingDataOverview) => ({
+          pagesCrawled: overviewData.data.crawl_status.pages_crawled,
+        }))
+  );
 
-  const scores = crawled?.crawled || null;
+  // const scores = crawled?.crawled || null;
+  const scores = overviewResult[0]?.pagesCrawled || null;
 
-  const averageSeo = scores && scores.crawled;
+  // const averageSeo = scores && scores.crawled;
+  const averageSeo = scores && scores;
 
   return (
     <div className="grid p-2 md:p-4 col-span-1 h-full justify-items-start rounded-md w-full border ">
@@ -120,8 +161,8 @@ export const CrawledPagesComplete: FC = () => {
                   Total links found{" "}
                 </p>
                 <p className="text-gray-900 text-center text-5xl">
-                  {" "}
-                  {crawled?.crawled?.total}{" "}
+                  {/* {crawled?.crawled?.total} */}
+                  {overviewResult[0].maxCrawlPages}
                 </p>
               </div>
             </CircularProgressbarWithChildren>
@@ -132,16 +173,18 @@ export const CrawledPagesComplete: FC = () => {
           <p className=" flex items-center text-xs text-[#475467]">
             {" "}
             <span className="text-green-300">
-              <GoDotFill />{" "}
-            </span>{" "}
-            {`Crawled(${crawled?.crawled.crawled})`}{" "}
+              <GoDotFill />
+            </span>
+            {/* {`Crawled(${crawled?.crawled.crawled})`} */}
+            {`Crawled(${overviewResult[0]?.pagesCrawled})`}
           </p>
           <p className=" flex items-center text-xs text-[#475467]">
             {" "}
             <span className="text-green-100">
               <GoDotFill />
             </span>{" "}
-            {`Uncrawled(${crawled?.crawled.uncrawled})`}{" "}
+            {/* {`Uncrawled(${crawled?.crawled.uncrawled})`}{" "} */}
+            {`Uncrawled(${overviewResult[0]?.pagesInQueue})`}{" "}
           </p>
         </div>
       </div>

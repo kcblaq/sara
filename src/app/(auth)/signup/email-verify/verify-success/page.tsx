@@ -11,7 +11,7 @@ export default function page() {
 
   const handleContinue = () => {
     setStatus("loading");
-    route.push("/dashboard");
+    route.push("/login");
   };
   return (
     <div className="flex flex-col gap-4 min-[425px]:min-w-[400px] w-full">
@@ -19,12 +19,12 @@ export default function page() {
         title="Email verified"
         description={
           <>
-            Your Email has been verify successfully. <br /> Click below to log
-            into your dashboard.
+            Your Email has been verify successfully. <br /> Click below to login
+            {/* into your dashboard. */}
           </>
         }
       />
-      <Link href={"/dashboard"}>
+      <Link href={"/login"}>
         <FilledButton
           disabled={status === "loading"}
           loading={status === "loading"}

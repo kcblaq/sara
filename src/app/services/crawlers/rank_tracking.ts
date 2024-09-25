@@ -1,8 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import ApiCall from "../../utils/apicalls/axiosInterceptor";
-import { useSelector } from "react-redux";
-import { RootState } from "@/app/store";
-import currentPropertyId from "@/app/utils/currentPropertyId";
+import currentProperty from "@/app/utils/currentProperty";
 
 interface RankProps {
     location_code: number,
@@ -11,7 +9,7 @@ interface RankProps {
 
 
 export const UseRankTrackingOverview = async () => {
-    const id = currentPropertyId()
+    const id = currentProperty()
 
     const { isError, isSuccess, isPending, data } = useQuery({
         queryKey: ["ranktracker_overview", id],
@@ -25,12 +23,12 @@ export const UseRankTrackingOverview = async () => {
 
 
 export const useRankTrackingRankingTab = async() => {
-    const id = currentPropertyId();
+    const id = currentProperty();
 
  const {isError, isSuccess, isPending, data} = useQuery({
-    queryKey: ['ranktracker_ranking', id],
+    queryKey: ['ranktracker_ranking', id.id],
     queryFn: async()=> {
-        const response = await ApiCall.get(`user/crawler/rank-tracking/by-tab/${id}?tab=ranking`)
+        const response = await ApiCall.get(`user/crawler/rank-tracking/by-tab/${id.id}?tab=ranking`)
         return response.data;
     }
  })
@@ -40,12 +38,12 @@ export const useRankTrackingRankingTab = async() => {
 
 
 export const RankTrackerCrawler = async (url: string) => {
-    const property_id = useSelector((state: RootState) => state.property.activePropertyObj.id)
+    const property = currentProperty();
 
 
     const rankCrawler = useMutation({
         mutationFn: async ({ location_code, target }: RankProps) => {
-            const response = await ApiCall.post(`user/crawler/rank-tracking/${property_id}`, [{
+            const response = await ApiCall.post(`user/crawler/rank-tracking/${property.id}`, [{
                 target,
                 location_code
             }])
@@ -53,7 +51,10 @@ export const RankTrackerCrawler = async (url: string) => {
             return response.data;
         },
         onError: (error) => error.message,
-        onSuccess: (data) => console.log()
+        onSuccess: () => {
+            UseRankTrackingOverview();
+            useRankTrackingRankingTab();
+        }
     })
     return rankCrawler;
 
