@@ -14,7 +14,7 @@ import {
 const SEOProgressiveCircle: FC = () => {
   // const metrics = useSelector((state: RootState) => state.performance.metrics);
   const metrics = useSelector((state: RootState) => state.technicalSeo);
-  const healthScore: Partial<OverviewDataType>[] = metrics.crawlings.flatMap(
+  const healthScore: Partial<OverviewDataType>[] = metrics?.crawlings?.flatMap(
     (crawling: any) =>
       crawling.crawlingData
         .filter((data: any) => data.tab === "overview")

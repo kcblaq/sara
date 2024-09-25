@@ -41,7 +41,7 @@ const rootReducer = combineReducers({
 });
 
 const persistedReducer = persistReducer(
-    { key: 'root', storage , serialize: true}, 
+    { key: 'root', storage , serialize: true, blacklist: ['loading']}, 
     rootReducer
 );
 

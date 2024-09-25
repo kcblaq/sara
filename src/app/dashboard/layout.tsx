@@ -30,6 +30,7 @@ import { PropertyType } from "@/types/PropertyType";
 import { fetchPerformanceSuccess } from "@/redux/features/performanceMetric slice";
 import {
   setActiveProperty,
+  setActivePropertyObj,
   setAllProperty,
 } from "@/redux/features/propertySlice";
 import DashboardOverviewPlaceholder from "./components/DashboardOverviewPlaceholder";
@@ -38,7 +39,6 @@ import UserProfile from "./components/UserProfile";
 import { removeTrailingSlash } from "../utils/RemoveSlash";
 import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
 import Loader, { LoaderPulse } from "../component/Loader";
-import { crawler } from "../services/crawler";
 import { isAllOf } from "@reduxjs/toolkit";
 import { PopoverComponent } from "./components/ui/PopOver";
 // import CheckUserType from "./components/CheckUserType";
@@ -115,6 +115,7 @@ export default function Layout({ children }: Props) {
     { title: "Support", icon: <CiSettings />, link: "/dashboard/settings" },
   ];
 
+
   const pathname = usePathname();
 
   const isActive = (link: string) => {
@@ -153,10 +154,10 @@ export default function Layout({ children }: Props) {
       //   },
       // });
       const response = await ApiCall.get(
-        `user/project/${activePropertyObj.id}`
+        `user/project/${activePropertyObj.project.id}`
       );
 
-      return response.data;
+      return response.data[0];
     },
   });
 
@@ -177,6 +178,13 @@ export default function Layout({ children }: Props) {
         router.push("/login");
         return;
       }
+      if(res.data.projects.length === 0){
+         dispatch(setActiveProperty(''))
+         dispatch(setActivePropertyObj(''))
+         console.log("RES", res.data.projects)
+         return 
+
+      }
       if (res.status === 200) {
         dispatch(setAllProperty(res.data.projects));
         activeProperty.length < 1 &&
@@ -184,6 +192,7 @@ export default function Layout({ children }: Props) {
             // setActiveProperty(removeTrailingSlash(res.data[0]?.website_url))
             setActiveProperty(removeTrailingSlash(res.data[0]?.projects.domain))
           );
+        console.log("RES",res.data);
         return res.data;
       }
     } catch (err: any) {
@@ -194,6 +203,8 @@ export default function Layout({ children }: Props) {
       return [];
     }
   };
+
+  // console.log({"ACTIVE":activeProperty, "ACTIVEOBJ": activePropertyObj.project.id})
 
   // useQuery({
   //   queryKey: ["dashboard"],
@@ -210,7 +221,7 @@ export default function Layout({ children }: Props) {
     //   },
     // });
 
-    const response = await ApiCall.get(`user/project/${activePropertyObj.id}`);
+    const response = await ApiCall.get(`user/project/${activePropertyObj.project.id}`);
 
     dispatch(fetchPerformanceSuccess(response?.data));
   };
@@ -270,20 +281,10 @@ export default function Layout({ children }: Props) {
   }
 
   function openProjectModal() {
-    if (user.account_type === "free") {
-      property.length === 1
-        ? setShowOneProject(true)
-        : dispatch(setModal("addProject"));
-    } else {
-      dispatch(setModal("addProject"));
-    }
+    dispatch(setModal("addProject"));
   }
 
-  return loading ? (
-    <FullpageLoader>
-      <LoadingComp text="Crawling" />
-    </FullpageLoader>
-  ) : (
+  return (
     <>
       <div>
         {modalState === "addProject" && (
@@ -322,18 +323,16 @@ export default function Layout({ children }: Props) {
               onClick={() => setFullWidth(!fullWidth)}
             >
               <RxDoubleArrowLeft
-                className={`${
-                  !fullWidth && "scale-x-[-1]"
-                } duration-300 transition-all ease-out`}
+                className={`${!fullWidth && "scale-x-[-1]"
+                  } duration-300 transition-all ease-out`}
               />
             </div>
 
             <div className="grid ">
               <Link href={`/`}>
                 <Image
-                  src={`${
-                    fullWidth ? "/home/white-logo.png" : "/home/mobile-logo.png"
-                  }`}
+                  src={`${fullWidth ? "/home/white-logo.png" : "/home/mobile-logo.png"
+                    }`}
                   className=" pt-2"
                   alt="Webmaxi Logo"
                   height={24}
@@ -348,9 +347,8 @@ export default function Layout({ children }: Props) {
                       key={menu.link}
                       onClick={(e) => handleRoutes(e, menu.link)}
                       href={`${menu.link}`}
-                      className={` ${
-                        isActive(menu.link) ? " text-white bg-[#1570EF]" : ""
-                      }  hover:text-white hover:scale-105 transition-all duration-300 ease-in-out p-2 rounded-md flex  text-[#84CAFF] items-center gap-2`}
+                      className={` ${isActive(menu.link) ? " text-white bg-[#1570EF]" : ""
+                        }  hover:text-white hover:scale-105 transition-all duration-300 ease-in-out p-2 rounded-md flex  text-[#84CAFF] items-center gap-2`}
                     >
                       {menu.icon}
                       {fullWidth && menu.title}
@@ -366,9 +364,8 @@ export default function Layout({ children }: Props) {
                     onClick={(e) => handleRoutes(e, menu.link)}
                     key={menu.link}
                     href={`${menu.link}`}
-                    className={`flex  ${
-                      isActive(menu.link) ? " text-white bg-[#1570EF]" : ""
-                    } hover:text-white hover:scale-105 transition-all duration-300 ease-in-out text-[#84CAFF] items-center gap-2`}
+                    className={`flex  ${isActive(menu.link) ? " text-white bg-[#1570EF]" : ""
+                      } hover:text-white hover:scale-105 transition-all duration-300 ease-in-out text-[#84CAFF] items-center gap-2`}
                   >
                     {menu.icon}
                     {fullWidth && menu.title}
@@ -430,7 +427,7 @@ export default function Layout({ children }: Props) {
               </div>
             </div>
             <hr className="w-full  hidden md:flex " />
-            {isloading ? (
+            {/* {isloading ? (
               <LoaderPulse />
             ) : property.length < 1 || dashboardData === undefined ? (
               <DashboardOverviewPlaceholder />
@@ -438,7 +435,10 @@ export default function Layout({ children }: Props) {
               <div className=" w-full h-full overflow-auto p-2 md:p-8">
                 {children}
               </div>
-            )}
+            )} */}
+            <div className=" w-full h-full overflow-auto p-2 md:p-8">
+              {children}
+            </div>
           </section>
         </main>
       </div>
