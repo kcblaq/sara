@@ -17,7 +17,7 @@ export const useRankTrackingOverview =  () => {
     const { isError, isSuccess, isPending, data } = useQuery({
         queryKey: ["ranktracker_overview", id.id],
         queryFn:  async() => {
-            const result = await ApiCall.get(`/user/crawler/rank-tracking/by-tab/${id}?tab=overview`);
+            const result = await ApiCall.get(`/user/crawler/rank-tracking/by-tab/${id.id}?tab=overview`);
             return result.data
         }
     })

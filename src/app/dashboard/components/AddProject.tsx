@@ -26,7 +26,7 @@ export default function AddProject() {
 
   const {mutate: RankMutate, isError, isPaused,isPending} = useRankMutation()
 
-  console.log("PROPERTY",property)
+  // console.log("PROPERTY",property)
   const mutate = useMutation({
     mutationFn: async (domain: string) => {
       const response = await ApiCall.post('/user/project/', { domain });
@@ -37,7 +37,7 @@ export default function AddProject() {
       dispatch(setActiveProperty(inputUrl));
       await dispatch(setActivePropertyObj(data.project));
       dispatch(setModal(""));
-      console.log("current:", data.project)
+      // console.log("current:", data.project)
       RankMutate({target: trimDomain(data.project.domain), id: data.project.id, location_code: 2840});
       
 
