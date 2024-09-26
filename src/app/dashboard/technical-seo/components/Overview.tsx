@@ -115,7 +115,7 @@ function Overview() {
   const technicalSeoData: any = useSelector(
     (state: RootState) => state.technicalSeo
   );
-  console.log(technicalSeoData);
+  // console.log(technicalSeoData);
   const activeProperty = useSelector(
     (state: RootState) => state.property.activeProperty
   );
@@ -168,7 +168,8 @@ function Overview() {
           updatedAt: overviewData.updatedAt,
         }))
   );
-  console.log(overviewResult[0]);
+
+  // console.log(overviewResult[0]);
   const LCPdata: ItemProps["data"] = overviewResult
     ? {
         // labels: Object.keys(technicalSeoData.metrics?.lcp ?? {}),
@@ -388,9 +389,9 @@ function Overview() {
             title="HTTP status codes"
             info="The returned code status that indicate what the response is"
           />
-          <div className="p-4 flex lg:flex-row flex-col gap-2 h-48 w-full ">
+          <div className="p-4 flex lg:flex-row flex-col gap-2 h-48 w-full">
             <HTTPStatusCode />
-            <div className="flex flex-col justify-end  overflow-y-auto">
+            {/* <div className="flex flex-col justify-end  overflow-y-auto">
               <p className=" text-xs flex items-center text-[#475467]">
                 {" "}
                 <span className="text-green-400">
@@ -426,7 +427,7 @@ function Overview() {
                 </span>{" "}
                 {`Server error - 5xx (${statusCodeData?.server_error})`}{" "}
               </p>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="grid p-2 md:p-4 col-span-1 h-[308px] justify-items-start rounded-md w-full border ">

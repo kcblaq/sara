@@ -2,20 +2,23 @@
 
 import FilledButton from "@/app/component/FilledButton";
 import PlainButton from "@/app/component/PlainButton";
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { IoCloudUploadOutline, IoSettingsOutline } from "react-icons/io5";
 import ToggleMobile from "../components/ToggleMobile";
 import CountryPick from "@/app/dashboard/rank-tracker/components/CountryPick";
 import SearchEnginePick from "@/app/dashboard/rank-tracker/components/SearchEnginePick";
 import OrganicPick from "./components/OrganicPick";
-import { Tab } from "@headlessui/react";
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import RankOverview from "./components/RankOverview";
 import Rankings from "./components/Rankings";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/store";
 import moment from "moment";
+import { CurrentProperty } from "@/app/utils/currentProperty";
+import { trimDomain } from "@/app/utils/trimDomain";
+import useRankMutation, { RankCrawl, RankTrackerCrawler, useRankTrackingOverview } from "@/app/services/crawlers/rank_tracking";
 // import PageDistributions from './components/PageDistributions'
 
 const tabs = [
@@ -25,6 +28,8 @@ const tabs = [
 ];
 export default function page() {
   const [mobile, setMobile] = useState(false);
+  const [detail, setDetail] = useState([])
+
   const lastUpdated = useSelector(
     (state: RootState) =>
       state.performance.metrics?.history?.scores[0]?.createdAt
@@ -32,19 +37,26 @@ export default function page() {
   const activeProperty = useSelector(
     (state: RootState) => state.property.activeProperty
   );
+  // const property = CurrentProperty();
+  const property = useSelector((state: RootState) => state.property.activePropertyObj);
 
-  console.log(activeProperty);
-  const { data } = useQuery({
-    queryKey: ["rank"],
-    queryFn: async () =>
-      await ApiCall.get("/crawl/rank-tracker", {
-        params: {
-          url: activeProperty,
-          se: "Google",
-        },
-      }),
-  });
-  // console.log("RANK",data)
+ 
+
+
+  // const { data } = useQuery({
+  //   queryKey: ["rank"],
+  //   queryFn: async () =>
+  //     await ApiCall.get("/crawl/rank-tracker", {
+  //       params: {
+  //         url: activeProperty,
+  //         se: "Google",
+  //       },
+  //     }),
+  // });
+  // // console.log("RANK",data)
+
+  
+
   return (
     <main className="grid w-full h-full items-start content-start gap-6">
       <section
@@ -100,19 +112,18 @@ export default function page() {
         </div>
       </section>
       <section className={``}>
-        <Tab.Group>
-          <Tab.List className="flex gap-4 w-full">
+        <TabGroup>
+          <TabList className="flex gap-4 w-full">
             {tabs.map((tab) => {
               return (
                 <span key={tab.title}>
                   <Tab as={Fragment}>
                     {({ selected }) => (
                       <p
-                        className={` cursor-pointer p-2 active:outline-none text-sm font-semibold border-t-0 border-l-0 border-r-0 active:border-r-none ${
-                          selected
+                        className={` cursor-pointer p-2 active:outline-none text-sm font-semibold border-t-0 border-l-0 border-r-0 active:border-r-none ${selected
                             ? "text-primary border-b-2 border-primary"
                             : " text-[#667085] active:border-none"
-                        }`}
+                          }`}
                       >
                         {tab.title}
                       </p>
@@ -121,21 +132,23 @@ export default function page() {
                 </span>
               );
             })}
-          </Tab.List>
+          </TabList>
           <hr className="w-full" />
           <div className={` h-full w-full overflow-auto  `}>
-            <Tab.Panels>
+            <TabPanels>
               {tabs.map((tab) => {
                 return (
                   <span key={tab.title} className="h-full ">
-                    <Tab.Panel>{tab.content}</Tab.Panel>
+                    <TabPanel>{tab.content}</TabPanel>
                   </span>
                 );
               })}
-            </Tab.Panels>
+            </TabPanels>
           </div>
-        </Tab.Group>
+        </TabGroup>
       </section>
     </main>
   );
 }
+
+

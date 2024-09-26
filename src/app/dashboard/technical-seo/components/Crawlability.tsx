@@ -2,7 +2,9 @@
 import { GoDotFill } from "react-icons/go";
 import { RxQuestionMarkCircled } from "react-icons/rx";
 import { Title } from "./Overview";
-import DualProgressBar from "./(technicalseo)/DualProgressBar";
+import DualProgressBar, {
+  HorizontalBar,
+} from "./(technicalseo)/DualProgressBar";
 import BarChartSingle from "./(technicalseo)/BarChartSingle";
 import { useEffect, useState } from "react";
 import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
@@ -17,6 +19,8 @@ import { CrawledPagesComplete } from "../../components/SeoprogressCircle";
 import moment from "moment";
 import Loader from "@/app/component/Loader";
 import {
+  CrawlingData,
+  CrawlingDataCrawlability,
   CrawlingDataOverview,
   OverviewDataType,
 } from "@/types/technicalseo/technicalSeoTypes";
@@ -29,7 +33,13 @@ export default function Crawlability() {
     status: false,
     message: "",
   });
-  // const { metrics } = useSelector((state: RootState) => state.technicalSeo);
+
+  // Type guard to check if a CrawlingData is of type CrawlingDataCrawlability
+  function isCrawlabilityData(
+    data: CrawlingData
+  ): data is CrawlingDataCrawlability {
+    return data.tab === "crawlabilityAndIndexibility";
+  }
   const techSeo = useSelector((state: RootState) => state.technicalSeo);
 
   const overviewResult: OverviewDataType[] = techSeo.crawlings.flatMap(
@@ -42,13 +52,18 @@ export default function Crawlability() {
           maxCrawlPages: overviewData.data.crawl_status.max_crawl_pages,
         }))
   );
-  const technicalSeoData: any = useSelector(
-    (state: RootState) => state.technicalSeo
-  );
+
+  // Loop through the crawlings array
+  const crawlbilityAndIndexibiltyResult: CrawlingDataCrawlability[] =
+    techSeo.crawlings.flatMap((crawling) =>
+      crawling.crawlingData.filter(isCrawlabilityData)
+    );
+
+  console.log("crawl", crawlbilityAndIndexibiltyResult[0]);
+
   const activeProperty = useSelector(
     (state: RootState) => state.property.activeProperty
   );
-  const statusCodeData = technicalSeoData?.metrics?.httpStatusCode[0] ?? null;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -63,7 +78,7 @@ export default function Crawlability() {
           },
         });
         setCrawlabilityData(response.data);
-        console.log(response.data);
+        // console.log(response.data);
       } catch (error: any) {
         setErr({
           status: true,
@@ -77,26 +92,40 @@ export default function Crawlability() {
     fetchData();
   }, [activeProperty]);
 
-  // const crawled = metrics?.crawled.crawled || 0;
-  // const uncrawled = metrics?.crawled.uncrawled || 0;
+  const crawled =
+    crawlbilityAndIndexibiltyResult[0]?.data.crawled_detail.pages_crawled || 0;
+  // const uncrawled = overviewResult[0]?.pagesInQueue || 0;
+  const uncrawled =
+    crawlbilityAndIndexibiltyResult[0]?.data.crawled_detail.pages_in_queue || 0;
 
-  // const total = metrics?.crawled.total || 0;
+  const indexable = crawlbilityAndIndexibiltyResult[0]?.data.indexable || 0;
+  const non_indexable =
+    crawlbilityAndIndexibiltyResult[0]?.data.non_indexible_count || 0;
 
-  const crawled = overviewResult[0]?.pagesCrawled || 0;
-  const uncrawled = overviewResult[0]?.pagesInQueue || 0;
-
-  const total = overviewResult[0]?.maxCrawlPages || 0;
+  // const total = overviewResult[0]?.maxCrawlPages || 0;
+  const total = crawlbilityAndIndexibiltyResult[0]?.data.total_page || 0;
+  const statusCodeData = crawlbilityAndIndexibiltyResult[0]?.data.status_code;
   const crawledvalue = (crawled / total) * 100;
 
-  // console.log("CRAWLABILITY", crawlabilityData)
-
+  const startDate = new Date();
   const labels1 = ["January", "February"];
-  const labels =
-    crawlabilityData?.crawlability?.pages?.map((item) =>
-      moment(item.date).format("DD MMM YY")
-    ) || [];
+
+  const labels = Array.from(
+    { length: crawlbilityAndIndexibiltyResult[0].data.total_page },
+    (_, i) => {
+      const date = new Date(startDate);
+      date.setDate(startDate.getDate() + i); // Increment the date by 'i' days
+      return moment(date).format("DD MMM YY");
+    }
+  );
+
+  // const mockData =
+  //   crawlabilityData?.crawlability?.pages?.map((item) => item.count) || [];
   const mockData =
-    crawlabilityData?.crawlability?.pages?.map((item) => item.count) || [];
+    Array.from(
+      { length: crawlbilityAndIndexibiltyResult[0].data.total_page },
+      (_, i) => i + 1
+    ) || [];
 
   const crawldepthlabels1 = ["1", "2", "3", "4+"];
   const crawldepthlabels = completeArray(crawldepthlabels1);
@@ -106,20 +135,15 @@ export default function Crawlability() {
   const indexibilitData1 = crawlabilityData?.indexability?.unindexableReasons;
   const categories = Object.keys(indexibilitData1 || []);
   const categoriesNumber = Object.values(indexibilitData1 || []);
-  console.log("TSEO", categories, categoriesNumber);
 
-  // const indexibilitData = [600, 300, 200, 900, 700]
-  // const indexibilityLabel = ["X-Robots tags", "'non-index' metatag", "Robots.txt", "Non canonical pages", "Non 200 status"]
-  // const indexibilityLabel = completeArray(indexibilityLabel1)
   return loading ? (
     <div className=" w-full h-20 flex items-center justify-center mt-10">
-      {" "}
-      <Loader />{" "}
+      <Loader />
     </div>
   ) : (
     <main className="pb-14 mt-10 grid w-full gap-8">
       <section
-        className={`grid grid-cols-1 md:grid-cols-3 sm:grid-cols-2 gap-4`}
+        className={`grid grid-cols-1 md:grid-cols-3 sm:grid-cols-2 gap-4 `}
       >
         {/* <div className="grid p-2 md:p-4 col-span-1 h-[348px] justify-items-start  rounded-md w-full border ">
 
@@ -195,38 +219,46 @@ export default function Crawlability() {
           />
           <div className="grid w-full gap-4 justify-items-center  ">
             <p className="text-center font-semibold">
-              Crawled pages: {crawlabilityData?.crawlability.crawled.crawled}{" "}
+              Crawled pages: {crawled}{" "}
             </p>
             <div className="flex flex-col w-full gap-2">
-              <DualProgressBar
+              {/* <DualProgressBar
                 leftPercentage={`${calculatePercentage(crawled, total)}px`}
+              /> */}
+
+              <HorizontalBar
+                indexable={indexable}
+                no_indexable={non_indexable}
               />
+
               {/* <DualProgressBar leftPercentage={`10px`} /> */}
               <div className="flex justify-between w-full items-center">
                 <p className="">
-                  {" "}
-                  {calculatePercentage(crawled, total).toFixed(2)}%{" "}
+                  {/* {" "}
+                  {calculatePercentage(crawled, total).toFixed(2)}%{" "} */}
+                  {indexable}%
                 </p>
                 <p className="">
                   {" "}
-                  {calculatePercentage(uncrawled, total).toFixed(2)}%{" "}
+                  {/* {calculatePercentage(uncrawled, total).toFixed(2)}%{" "} */}
+                  {non_indexable}%
                 </p>
               </div>
             </div>
-            <div className="flex flex-col justify-center items-center">
+            <div className="flex flex-col justify-center items-center ">
               <p className=" text-xs flex items-center text-[#475467]">
                 {" "}
                 <span className="text-green-400">
                   <GoDotFill />{" "}
-                </span>{" "}
-                Indexable ({}){" "}
+                </span>
+                Indexable ({indexable})
               </p>
               <p className=" text-xs flex items-center text-[#475467]">
                 {" "}
                 <span className="text-orange-400">
                   <GoDotFill />{" "}
                 </span>{" "}
-                Non indexable ({}){" "}
+                Non indexable ({non_indexable})
               </p>
             </div>
           </div>
@@ -260,45 +292,8 @@ export default function Crawlability() {
             }
           />
           <div className="grid w-full gap-4 justify-items-center ">
-            <div className="p-4 flex min-[1440px]:flex-row md:flex-col sm:flex-row flex-col gap-2 h-48 ">
+            <div className="p-4 flex min-[1440px]:flex-row md:flex-col sm:flex-row flex-col gap-2 h-fit -y-auto">
               <HTTPStatusCode />
-              <div className="flex flex-col justify-end">
-                <p className=" text-xs flex items-center text-[#475467]">
-                  {" "}
-                  <span className="text-green-400">
-                    <GoDotFill />{" "}
-                  </span>
-                  {`Info - 1xx (${statusCodeData?.info}) `}{" "}
-                </p>
-                <p className=" text-xs flex items-center text-[#475467]">
-                  {" "}
-                  <span className="text-green-600">
-                    <GoDotFill />{" "}
-                  </span>{" "}
-                  {`Success - 1xx (${statusCodeData?.success}) `}{" "}
-                </p>
-                <p className=" text-xs flex items-center text-[#475467]">
-                  {" "}
-                  <span className="text-orange-400">
-                    <GoDotFill />{" "}
-                  </span>
-                  {`Redirect - 1xx (${statusCodeData?.redirect}) `}{" "}
-                </p>
-                <p className=" text-xs flex items-center text-[#475467]">
-                  {" "}
-                  <span className="text-red-400">
-                    <GoDotFill />{" "}
-                  </span>{" "}
-                  {`Client error - 1xx (${statusCodeData?.client_error})`}{" "}
-                </p>
-                <p className=" text-xs flex items-center text-[#475467]">
-                  {" "}
-                  <span className="text-red-200">
-                    <GoDotFill />{" "}
-                  </span>{" "}
-                  {`Server error - 1xx (${statusCodeData?.server_error})`}{" "}
-                </p>
-              </div>
             </div>
           </div>
         </div>

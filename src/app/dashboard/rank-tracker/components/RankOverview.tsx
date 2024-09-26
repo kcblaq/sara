@@ -12,6 +12,7 @@ import { TrafficOverviewGraph } from "../../components/TrafficOverviewGraph";
 import BarChartSingle from "../../technical-seo/components/(technicalseo)/BarChartSingle";
 import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
 import { useQuery } from "@tanstack/react-query";
+import { useRankTrackingOverview } from "@/app/services/crawlers/rank_tracking";
 
 export default function RankOverview() {
   const traffic = useSelector((state: RootState) => state.performance.metrics);
@@ -19,28 +20,12 @@ export default function RankOverview() {
     (state: RootState) => state.property.activeProperty
   );
 
-  // const {data,isError, isLoading } = useQuery({
-  //     queryKey: ['ranking-overview'],
-  //     queryFn: ()=> {
-  //         ApiCall.get('/crawl/rank/mini-crawler', {
-  //             params:{
-  //                 url:activeUrl
-  //             }
-  //         })
-  //     }
-  // })
 
-  // useEffect(()=> {
-  //   async  function getData(){
-  //     await ApiCall.get('/crawl/rank/mini-crawler', {
-  //         params:{
-  //             url: activeUrl
-  //         }
-  //     })
-  //   }
-  //   getData()
-  // })
   const [isClient, setIsClient] = useState(false);
+
+
+  const {isError, isPending, isSuccess,data:OverviewData} = useRankTrackingOverview();
+  !isPending && console.log("OVDATA", OverviewData.project.crawlings[0].crawlingData[0].data.google)
 
   useEffect(() => {
     setIsClient(true);

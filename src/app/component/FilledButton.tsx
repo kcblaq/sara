@@ -61,7 +61,7 @@ export function ButtonFilled({
       {loading && (
         <span>
           {" "}
-          <BiLoader className="w-full  animate-spin text-white" />{" "}
+          <BiLoader className=" animate-spin text-white" />{" "}
         </span>
       )}
     </button>

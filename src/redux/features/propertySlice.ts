@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 type activePropertyType = {
+  project: any;
   id: number;
   userId: number;
   domain: string;
@@ -16,6 +17,7 @@ const initialState: {
   allProperty: [],
   activeProperty: "",
   activePropertyObj: {
+    project: "",
     id: 0,
     userId: 0,
     domain: "",
