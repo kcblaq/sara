@@ -17,6 +17,7 @@ const initialState: {
   allProperty: [],
   activeProperty: "",
   activePropertyObj: {
+    project: "",
     id: 0,
     userId: 0,
     domain: "",

@@ -64,7 +64,7 @@ export default function TechnicalSeoLayout() {
   const tabs = [
     { title: "Overview", content: <Overview /> },
     { title: "Crawlability and indexability", content: <Crawlability /> },
-    { title: "Site performance", content: <SitePerformance /> },
+    // { title: "Site performance", content: <SitePerformance /> },
     { title: "Issues", content: <Issues /> },
     // { title: "Internal linking", content: <InternalLinking /> },
     // { title: "Crawl comparisons", content: <CrawlComparison /> },

@@ -7,6 +7,8 @@ import { useSelector } from "react-redux";
 import { Title } from "../technical-seo/components/Overview";
 import { BiUpArrowAlt } from "react-icons/bi";
 import {
+  CrawlingData,
+  CrawlingDataCrawlability,
   CrawlingDataOverview,
   OverviewDataType,
 } from "@/types/technicalseo/technicalSeoTypes";
@@ -121,22 +123,41 @@ export const CrawledPages: FC = () => {
 };
 
 export const CrawledPagesComplete: FC = () => {
+  function isCrawlabilityData(
+    data: CrawlingData
+  ): data is CrawlingDataCrawlability {
+    return data.tab === "crawlabilityAndIndexibility";
+  }
   // const crawled = useSelector((state: RootState) => state.technicalSeo.metrics);
   const crawled = useSelector((state: RootState) => state.technicalSeo);
-  const overviewResult: OverviewDataType[] = crawled.crawlings.flatMap(
-    (crawling: any) =>
-      crawling.crawlingData
-        .filter((data: any) => data.tab === "overview")
-        .map((overviewData: CrawlingDataOverview) => ({
-          pagesCrawled: overviewData.data.crawl_status.pages_crawled,
-        }))
-  );
+  // const overviewResult: OverviewDataType[] = crawled.crawlings.flatMap(
+  //   (crawling: any) =>
+  //     crawling.crawlingData
+  //       .filter((data: any) => data.tab === "overview")
+  //       .map((overviewData: CrawlingDataOverview) => ({
+  //         pagesCrawled: overviewData.data.crawl_status.pages_crawled,
+  //       }))
+  // );
+
+  // const crawlbilityAndIndexibiltyResult: CrawlingDataCrawlability[] =
+  //   crawled.crawlings.flatMap((crawling) =>
+  //     // Filter the crawlingData array for entries that belong to the 'crawlabilityAndIndexibility' tab
+  //     crawling.crawlingData.filter(
+  //       (data) => data.tab === "crawlabilityAndIndexibility"
+  //     )
+  //   );
+
+  const crawlbilityAndIndexibiltyResult: CrawlingDataCrawlability[] =
+    crawled.crawlings.flatMap((crawling) =>
+      crawling.crawlingData.filter(isCrawlabilityData)
+    );
+  // console.log("crawl", crawlbilityAndIndexibiltyResult);
 
   // const scores = crawled?.crawled || null;
-  const scores = overviewResult[0]?.pagesCrawled || null;
+  // const scores = overviewResult[0]?.pagesCrawled || null;
 
   // const averageSeo = scores && scores.crawled;
-  const averageSeo = scores && scores;
+  // const averageSeo = scores && scores;
 
   return (
     <div className="grid p-2 md:p-4 col-span-1 h-full justify-items-start rounded-md w-full border ">
@@ -145,7 +166,7 @@ export const CrawledPagesComplete: FC = () => {
         <div className=" rounded-full flex items-center justify-center">
           <div className="relative w-40 h-40 md:w-48 md:h-48 flex items-center justify-center">
             <CircularProgressbarWithChildren
-              value={averageSeo ?? 0}
+              value={crawlbilityAndIndexibiltyResult[0]?.data.items.length ?? 0}
               className="w-full h-full aspect-w-1 aspect-h-1"
               styles={{
                 trail: {
@@ -162,7 +183,7 @@ export const CrawledPagesComplete: FC = () => {
                 </p>
                 <p className="text-gray-900 text-center text-5xl">
                   {/* {crawled?.crawled?.total} */}
-                  {overviewResult[0].maxCrawlPages}
+                  {crawlbilityAndIndexibiltyResult[0]?.data.items.length}
                 </p>
               </div>
             </CircularProgressbarWithChildren>
@@ -176,7 +197,7 @@ export const CrawledPagesComplete: FC = () => {
               <GoDotFill />
             </span>
             {/* {`Crawled(${crawled?.crawled.crawled})`} */}
-            {`Crawled(${overviewResult[0]?.pagesCrawled})`}
+            {`Crawled(${crawlbilityAndIndexibiltyResult[0]?.data.crawled_detail.pages_crawled})`}
           </p>
           <p className=" flex items-center text-xs text-[#475467]">
             {" "}
@@ -184,7 +205,7 @@ export const CrawledPagesComplete: FC = () => {
               <GoDotFill />
             </span>{" "}
             {/* {`Uncrawled(${crawled?.crawled.uncrawled})`}{" "} */}
-            {`Uncrawled(${overviewResult[0]?.pagesInQueue})`}{" "}
+            {`Uncrawled(${crawlbilityAndIndexibiltyResult[0]?.data.crawled_detail.pages_in_queue})`}{" "}
           </p>
         </div>
       </div>
