@@ -4,125 +4,58 @@ import PlainButton from "@/app/component/PlainButton";
 import { ButtonFilled } from "@/app/component/FilledButton";
 import { useDispatch } from "react-redux";
 import { setModal } from "@/redux/features/modalstates";
-import { useRouter } from "next/navigation";
 import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
 import {
   setActiveProperty,
   setActivePropertyObj,
 } from "@/redux/features/propertySlice";
-import { useSelector } from "react-redux";
-import { RootState } from "@/app/store";
-import {
-  fetchPerformanceFailure,
-  fetchPerformanceStart,
-  fetchPerformanceSuccess,
-} from "@/redux/features/performanceMetric slice";
-import { FetchTechnicalSeo } from "../technical-seo/components/FetchTechnicalSeo";
-import { removeTrailingSlash } from "@/app/utils/RemoveSlash";
-import { setLoading } from "@/redux/features/loaderSlice";
+import { useMutation } from "@tanstack/react-query";
 
-// export const getPerformanceMetrics = async () => {
-//   const dispatch = useDispatch();
-//   const activeProperty = useSelector(
-//     (state: RootState) => state.property.activeProperty
-//   );
-//   if (activeProperty.length > 0) {
-//     dispatch(fetchPerformanceStart());
-//     try {
-//       const res = await ApiCall.get("/crawl/technical-seo", {
-//         params: {
-//           url: activeProperty,
-//           limit: 100,
-//           platform: "desktop",
-//         },
-//       });
-//       dispatch(fetchPerformanceSuccess(res?.data));
-//     } catch (error) {
-//       dispatch(
-//         fetchPerformanceFailure(
-//           `Failed to fetch performance metric, Error: ${error}`
-//         )
-//       );
-//       console.error("Error fetching performance metrics:", error);
-//     } finally {
-//       FetchTechnicalSeo();
-//     }
-//   }
-// };
+import useRankMutation, { RankTrackerCrawler } from "@/app/services/crawlers/rank_tracking";
+import { CurrentProperty } from "@/app/utils/currentProperty";
+import { trimDomain } from "@/app/utils/trimDomain";
+
 
 export default function AddProject() {
   const [err, setErr] = useState({ status: false, msg: "" });
-  const [isloading, setisLoading] = useState(false);
   const [inputUrl, setInputUrl] = useState("");
   const dispatch = useDispatch();
-  const router = useRouter();
-  const activeProperty = useSelector(
-    (state: RootState) => state.property.activeProperty
-  );
+  const property = CurrentProperty();
+  ;
 
-  async function handleSubmitUrl() {
-    const urlPattern = /^(ftp|http[s]?):\/\/[^ "]+(\.[^ "]+)+$/;
-    // const urlPattern =
-    //   /^[a-zA-Z][a-zA-Z0-9+.-]+:(\/\/[a-zA-Z0-9\-._~:%!$&'()*+,;=]+@)?(\/)?([a-zA-Z0-9-._~]+)(\.[a-zA-Z0-9-._~]+)*(\/[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]+)?$/i;
-    if (!urlPattern.test(inputUrl)) {
-      setErr({ status: true, msg: "Enter a valid url" });
-      setisLoading(false);
-      setTimeout(() => {
-        setisLoading(false);
-        setErr({ status: false, msg: "" });
-      }, 5000);
+
+  const {mutate: RankMutate, isError, isPaused,isPending} = useRankMutation()
+
+  // console.log("PROPERTY",property)
+  const mutate = useMutation({
+    mutationFn: async (domain: string) => {
+      const response = await ApiCall.post('/user/project/', { domain });
+      return response.data;
+    },
+    onError: (error) => error.message,
+    onSuccess: async(data) => {
+      dispatch(setActiveProperty(inputUrl));
+      await dispatch(setActivePropertyObj(data.project));
+      dispatch(setModal(""));
+      // console.log("current:", data.project)
+      RankMutate({target: trimDomain(data.project.domain), id: data.project.id, location_code: 2840});
+      
+
+    }
+  })
+  // console.log("DATA")
+
+
+
+  const handleSubmit = () => {
+    const pattern = /^(https?|ftp):\/\/(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+(:[0-9]{1,5})?(\/.*)?$|^(www\.)[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+(:[0-9]{1,5})?(\/.*)?$/
+
+    if (!pattern.test(inputUrl)) {
+      setErr({ status: true, msg: 'Enter a valid url' });
       return;
     }
-    try {
-      setisLoading(true);
-      dispatch(setLoading(true));
-      // const response = await ApiCall.get(`crawl/add-property?url=${inputUrl}`);
-      const response = await ApiCall.post(`/user/project`, {
-        domain: inputUrl,
-      });
-      dispatch(setActiveProperty(inputUrl));
-      dispatch(setActivePropertyObj(response.data.project));
-      dispatch(setModal("crawling"));
-
-      // await Promise.all([
-      //   ApiCall.get("/crawl/webcrawler", {
-      //     params: {
-      //       url: removeTrailingSlash(inputUrl),
-      //       type: "passive",
-      //     },
-      //   }),
-      //   ApiCall.get("/crawl/technical/mini-crawler", {
-      //     params: {
-      //       url: removeTrailingSlash(inputUrl),
-      //       timeout: 7,
-      //     },
-      //   }),
-      //   ApiCall.get("/crawl/content-analysis/mini-crawler", {
-      //     params: {
-      //       url: removeTrailingSlash(inputUrl),
-      //     },
-      //   }),
-      // ]);
-      console.log(response.data);
-      dispatch(setModal(""));
-      dispatch(setLoading(false));
-
-      // getPerformanceMetrics();
-    } catch (error: any) {
-      setErr({ status: true, msg: error.response.data.message });
-      // if (error.status === 401) {
-      //   router.push("/login");
-      // }
-      setisLoading(false);
-      dispatch(setLoading(false));
-      setTimeout(() => {
-        setErr({ status: false, msg: "" });
-      }, 5000);
-      return false;
-    } finally {
-      setLoading(false);
-    }
-  }
+    mutate.mutate(inputUrl);
+  };
 
   const cancel = () => dispatch(setModal(""));
 
@@ -158,10 +91,11 @@ export default function AddProject() {
         <PlainButton title="Cancel" handleClick={cancel} />
         <ButtonFilled
           title="Add"
-          loading={isloading}
-          handleClick={handleSubmitUrl}
+          loading={mutate.isPending}
+          handleClick={handleSubmit}
         />
       </div>
     </section>
   );
 }
+

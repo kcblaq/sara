@@ -189,7 +189,7 @@ export default function Nav() {
             >
               {resource.map((item) => {
                 return (
-                  <MenuItem>
+                  <MenuItem key={item.title}>
                     <div
                       className="flex h-full text-base p-2 items-start hover:bg-blue-200 hover:rounded-md  w-full gap-3"
                       onClick={() => router.push(`${item.link}`)}
@@ -310,7 +310,7 @@ export default function Nav() {
                     <div className="p-2 mt-4 m-2 h-full transition-all duration-300 ease-linear border rounded-lg shadow-md w-full flex flex-col overflow-auto">
                       {feature.map((item) => {
                         return (
-                          <div
+                          <div key={item.link}
                             className="flex h-full text-base p-2 items-start w-full gap-3"
                             onClick={() => router.push(`${item.link}`)}
                           >
@@ -401,7 +401,7 @@ export default function Nav() {
                   <div className="p-2 mt-4 m-2 h-full  border rounded-lg shadow-md w-full flex flex-col">
                     {resource.map((item) => {
                       return (
-                        <div
+                        <div key={item.link}
                           className="flex h-full text-base p-2 items-start w-full gap-3"
                           onClick={() => router.push(`${item.link}`)}
                         >
