@@ -4,14 +4,24 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { SetStateAction } from "react";
 
+type IssueData = {
+  id: string;
+  score: number;
+  title: string;
+  description: string;
+  scoreDisplayMode: string;
+};
 interface IssueCustomAccordionProps {
   title: string;
-  data?: [];
+  data?: IssueData[];
+  setCurrentSitePerfId: React.Dispatch<SetStateAction<string>>;
 }
 export default function IssueCustomAccordion({
   title,
   data,
+  setCurrentSitePerfId,
 }: IssueCustomAccordionProps) {
   return (
     <Accordion type="single" collapsible className="w-full">
@@ -19,9 +29,17 @@ export default function IssueCustomAccordion({
         <AccordionTrigger className="hover:bg-gray-200 active:bg-gray-200 p-3 rounded-md">
           {title}
         </AccordionTrigger>
-        <AccordionContent className="px-2">
-          Yes. It adheres to the WAI-ARIA design pattern.
-        </AccordionContent>
+        {data?.map((item, i) => (
+          <AccordionContent className="px-2 truncate" key={i}>
+            <div
+              className="flex gap-2 justify-between items-center  cursor-pointer"
+              onClick={() => setCurrentSitePerfId(item.id)}
+            >
+              <span>{item?.title} </span>
+              <span>{item?.score} </span>
+            </div>
+          </AccordionContent>
+        ))}
       </AccordionItem>
     </Accordion>
   );

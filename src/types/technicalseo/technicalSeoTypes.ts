@@ -51,7 +51,7 @@ interface CrawledDetail {
   max_crawl_pages: number;
 }
 
-interface CrawlingDataCrawlability {
+export interface CrawlingDataCrawlability {
   id: number;
   crawlingId: number;
   tab: "crawlabilityAndIndexibility";
@@ -72,8 +72,55 @@ interface CrawlingDataCrawlability {
   updatedAt: string;
 }
 
+export type SitePerformanceData = {
+  id: number;
+  crawlingId: number;
+  tab: "sitePerformance";
+  data: {
+    issues: Array<{
+      id: string;
+      score: number;
+      title: string;
+      description: string;
+      scoreDisplayMode: string;
+    }>;
+    page_load_speed: number[];
+    performance_issues: Array<{
+      id: string;
+      score: number;
+      title: string;
+      description: string;
+      scoreDisplayMode: string;
+    }>;
+    amount_of_javascript: Array<{
+      error: {
+        errors: Array<{
+          line: number;
+          column: number;
+          message: string;
+          status_code: number;
+        }>;
+        warnings: Array<{
+          line: number;
+          column: number;
+          message: string;
+          status_code: number;
+        }>;
+      };
+      script_count: number;
+      stylesheet_count: number;
+    }>;
+    average_page_load_speed: number;
+  };
+  createdAt: string;
+  updatedAt: string;
+};
+
 // Union type for the different crawling data types
-export type CrawlingData = CrawlingDataOverview | CrawlingDataCrawlability;
+export type CrawlingData =
+  | CrawlingDataOverview
+  | CrawlingDataCrawlability
+  | SitePerformanceData;
 
 // export interface Project {
 //   id: number;
