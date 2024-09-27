@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { formatDate } from "@/lib/DateFormater";
 import { ShortenNumber } from "../utils/ShortenedNumber";
+import Loader from "../component/Loader";
 
 interface Props {
   title: string;
@@ -11,6 +12,8 @@ interface Props {
   percent: number | undefined | string;
   arrowPosition?: string;
   chart: React.ReactNode;
+  isLoading?: boolean;
+  isError?: boolean
 }
 
 export default function Card({
@@ -20,6 +23,8 @@ export default function Card({
   percent,
   chart,
   arrowPosition,
+  isLoading,
+  isError
 }: Props) {
   const { metrics, loading, error } = useSelector(
     (state: RootState) => state.performance
@@ -57,34 +62,42 @@ export default function Card({
   } as const;
 
   return (
-    <div className="flex  flex-col gap-6 w-full sm:max-w-[390px]  h-[176px] rounded-md p-6 border border-gray-200">
-      <div className="flex w-full justify-between items-center">
-        <h5 className=" font-semibold text-base">{title}</h5>
-        <p className=" text-sm font-normal">{lastUpdated}</p>
-      </div>
-      <div className="grid">
-        <h1 className=" self-start font-semibold text-4xl"> {amount} </h1>
-        <div className="flex items-center justify-between w-full ">
-          <p className="flex items-center gap-2 text-sm">
-            {/* <span className={style} style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+    <div className={`flex  flex-col gap-6 w-full  sm:max-w-[390px]  h-[176px] rounded-md p-6 border border-gray-200 ${isLoading && "items-center justify-center"} ${isError && "items-center justify-center"}` }>
+      {
+        isLoading ? <div className="flex items-center justify-center h-6 w-6"> <Loader /> </div>
+        :
+        isError ? <h2 className=""> NA </h2>
+        :
+        <div className="">
+        <div className="flex w-full justify-between items-center">
+          <h5 className=" font-semibold text-base">{title}</h5>
+          <p className=" text-sm font-normal">{lastUpdated}</p>
+        </div>
+        <div className="grid">
+          <h1 className=" self-start font-semibold text-4xl"> {amount} </h1>
+          <div className="flex items-center justify-between w-full ">
+            <p className="flex items-center gap-2 text-sm">
+              {/* <span className={style} style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
               <FaArrowUp className={arrowPosition}/> {percent && percent?.toFixed(1)}%
             </span> */}
-            <span
-              className={style}
-              style={{ display: "flex", alignItems: "center", gap: 2 }}
-            >
-              <FaArrowUp className={arrowPosition} />{" "}
-              {typeof percent === "number" ? percent.toFixed(1) : percent}%
-            </span>
-            <span className="text-gray-600 font-medium">vs last update</span>
-          </p>
-          <p className="p-2 float-end">
-            {/* <Line data={chartData} options={options} /> */}
-            {/* <BarChart data1={0} data2={20} data3={60} /> */}
-            {chart}
-          </p>
+              <span
+                className={style}
+                style={{ display: "flex", alignItems: "center", gap: 2 }}
+              >
+                <FaArrowUp className={arrowPosition} />{" "}
+                {typeof percent === "number" ? percent.toFixed(1) : percent}%
+              </span>
+              <span className="text-gray-600 font-medium">vs last update</span>
+            </p>
+            <p className="p-2 float-end">
+              {/* <Line data={chartData} options={options} /> */}
+              {/* <BarChart data1={0} data2={20} data3={60} /> */}
+              {chart}
+            </p>
+          </div>
         </div>
       </div>
+      }
     </div>
   );
 }
