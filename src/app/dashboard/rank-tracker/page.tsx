@@ -21,15 +21,17 @@ import { trimDomain } from "@/app/utils/trimDomain";
 import useRankMutation, { RankCrawl, RankTrackerCrawler, useRankTrackingOverview } from "@/app/services/crawlers/rank_tracking";
 // import PageDistributions from './components/PageDistributions'
 
-const tabs = [
-  { title: "Overview", content: <RankOverview /> },
-  { title: "Rankings", content: <Rankings /> },
-  // { title: "Page distributions", content: <PageDistributions /> }
-];
+
 export default function page() {
   const [mobile, setMobile] = useState(false);
   const [detail, setDetail] = useState([])
+  const [se, setSe] = useState("google")
 
+  const tabs = [
+    { title: "Overview", content: <RankOverview se={se} /> },
+    { title: "Rankings", content: <Rankings /> },
+    // { title: "Page distributions", content: <PageDistributions /> }
+  ];
   const lastUpdated = useSelector(
     (state: RootState) =>
       state.performance.metrics?.history?.scores[0]?.createdAt
@@ -99,11 +101,11 @@ export default function page() {
             <strong> Last Update:</strong>{" "}
             {moment(lastUpdated).format("Do MMM YY")}{" "}
           </p>
-          <ToggleMobile
+          {/* <ToggleMobile
             mobile={mobile}
             setMobile={setMobile}
             className="min-[425px]:text-inherit text-sm"
-          />
+          /> */}
         </div>
         <div className="flex sm:flex-row flex-col  w-full sm:gap-6 gap-2 sm:items-center it">
           <CountryPick className=" w-full flex items-center" />
