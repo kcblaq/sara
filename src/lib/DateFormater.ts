@@ -26,3 +26,13 @@ export function calculatePercentage(value: number, total: number): number {
 
     return (value / total) * 100;
 }
+
+
+export function calculatePercentageDifference(oldValue: number, newValue: number): number {
+    if (oldValue === 0) {
+        return newValue * 100; // If the old value is 0, the difference is 100% of the new value
+    }
+
+    const difference = newValue - oldValue;
+    return (difference / oldValue) * 100;
+}
