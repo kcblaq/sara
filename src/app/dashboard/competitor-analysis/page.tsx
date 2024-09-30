@@ -12,6 +12,9 @@ import toast from "react-hot-toast";
 import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
 import { countries } from "@/app/component/data/countries";
 import { AxiosError } from "axios";
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/store";
+import { removeTrailingSlash } from "@/app/utils/RemoveSlash";
 
 interface competitorDomains {
   target: string;
@@ -22,6 +25,9 @@ interface competitorDomains {
 }
 export default function page() {
   const [mobile, setMobile] = useState(true);
+  const [status, setStatus] = useState<
+    "loading" | "success" | "error" | "idle"
+  >("idle");
   const [competitorDomains, setCompetitorDomains] = useState<competitorDomains>(
     {
       target: "",
@@ -32,6 +38,9 @@ export default function page() {
     }
   );
   const [country, setCountry] = useState<Country | null>(null);
+  const activeProperty = useSelector(
+    (state: RootState) => state.property.activePropertyObj
+  );
   console.log(competitorDomains);
   const handleToggleMobile = () => {
     setMobile(!mobile);
@@ -65,23 +74,33 @@ export default function page() {
         return;
       }
 
-      new URL(target);
+      if (!activeProperty.id) {
+        toast.error("project(url) must be selected");
+        return;
+      }
 
+      setStatus("loading");
       const response = await ApiCall.post(
-        `/user/crawler/competitor-analysis/${""}`,
-        {
-          target,
-          target2,
-          target3,
-          location_code,
-          language_code,
-        }
+        `/user/crawler/competitor-analysis/${activeProperty?.id}`,
+        [
+          {
+            target: removeTrailingSlash(target),
+            target1: removeTrailingSlash(target2),
+            target2: removeTrailingSlash(target3),
+            location_code: location_code,
+            language_code: language_code,
+          },
+        ]
       );
       const result = response.data;
-      stage = 1;
+
+      console.log(result);
+      // stage = 1;
+      setStatus("success");
     } catch (error: AxiosError | any) {
       toast.error(error.response.data.message);
       console.log(error);
+      setStatus("error");
     }
   };
 
@@ -89,16 +108,22 @@ export default function page() {
     if (country) {
       setCompetitorDomains((prevDomains) => ({
         ...prevDomains,
-        ...countries.reduce(
-          (acc, location) => {
-            if (location.location_name === country.name.common) {
-              acc.language_code = location.country_iso_code;
-              acc.location_code = location.location_code;
-            }
-            return acc;
-          },
-          { language_code: "", location_code: 0 }
-        ),
+        language_code: "GB",
+        location_code: 2826,
+
+        // this code is correct.
+        // ...countries.reduce(
+        //   (acc, location) => {
+        //     if (location.location_name === country.name.common) {
+
+        //       acc.language_code = location.country_iso_code;
+        //       acc.location_code = location.location_code;
+
+        //     }
+        //     return acc;
+        //   },
+        //   { language_code: "", location_code: 0 }
+        // ),
       }));
     }
   }, [country]);
@@ -155,16 +180,13 @@ export default function page() {
         `}
     >
       <h1 className={`font-semibold text-4xl 2xl:text-5xl`}>
-        {" "}
-        Competitor analysis{" "}
+        Competitor analysis
       </h1>
       <p className="text-[#101828] font-medium text-lg 2xl:text-xl">
-        {" "}
         Research your online competitors and improve your SEO
       </p>
       <div className="flex flex-col">
         <p className="text-sm text-[#344054] font-medium my-2">
-          {" "}
           Enter up to three competitor domains and start analyzing
         </p>
         <div className="flex flex-col gap-3 w-[80%] lg:w-[727px]">
@@ -205,6 +227,8 @@ export default function page() {
             <CountryPick setCountry={setCountry} />
             <span>
               <FilledButton
+                disabled={status === "loading"}
+                loading={status === "loading"}
                 handleClick={handleSubmitAnalyzeCompetitor}
                 title={"Analyze competitors"}
               />
