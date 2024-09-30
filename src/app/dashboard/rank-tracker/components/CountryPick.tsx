@@ -39,7 +39,7 @@ export default function CountryPick({
 }: CountryPickProps) {
   const [countries, setCountries] = useState<Country[]>([]);
   const [currentCountry, setCurrentCountry] = useState<Country | null>(null);
-  // console.log(currentCountry);
+  console.log(currentCountry);
 
   async function getCountries() {
     const res = await axios.get(
