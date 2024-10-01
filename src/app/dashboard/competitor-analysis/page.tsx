@@ -92,7 +92,8 @@ export default function page() {
           },
         ]
       );
-      const result = response.data;
+
+      const result = await response.data;
 
       console.log(result);
       // stage = 1;

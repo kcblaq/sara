@@ -115,7 +115,6 @@ export default function Layout({ children }: Props) {
     { title: "Support", icon: <CiSettings />, link: "/dashboard/settings" },
   ];
 
-
   const pathname = usePathname();
 
   const isActive = (link: string) => {
@@ -143,8 +142,6 @@ export default function Layout({ children }: Props) {
   const user = useSelector((state: RootState) => state.user.user);
   const token = useSelector((state: RootState) => state.user.token);
   const loading = useSelector((state: RootState) => state.loading.loading);
-
-
 
   // console.log("PROPERTY",activePropertyObj )
   const { data: dashboardData, isSuccess } = useQuery({
@@ -181,12 +178,11 @@ export default function Layout({ children }: Props) {
         router.push("/login");
         return;
       }
-      if(res.data.projects.length === 0){
-         dispatch(setActiveProperty(''))
-         dispatch(setActivePropertyObj(''))
+      if (res.data.projects.length === 0) {
+        dispatch(setActiveProperty(""));
+        dispatch(setActivePropertyObj(""));
         //  console.log("RES", res.data.projects)
-         return 
-
+        return;
       }
       if (res.status === 200) {
         dispatch(setAllProperty(res.data.projects));
@@ -216,15 +212,7 @@ export default function Layout({ children }: Props) {
   // })
   // hello
   const fetchDashboardData = async () => {
-    // console.log("ACTIVEPROP", activeProperty)
-    // const response = await ApiCall.get("/crawl/overall", {
-    //   params: {
-    //     url: removeTrailingSlash(activeProperty),
-    //     limit: 100,
-    //   },
-    // });
-
-    const response = await ApiCall.get(`user/project/${activePropertyObj.project.id}`);
+    const response = await ApiCall.get(`user/project/${activePropertyObj?.id}`);
 
     dispatch(fetchPerformanceSuccess(response?.data));
   };
@@ -326,16 +314,18 @@ export default function Layout({ children }: Props) {
               onClick={() => setFullWidth(!fullWidth)}
             >
               <RxDoubleArrowLeft
-                className={`${!fullWidth && "scale-x-[-1]"
-                  } duration-300 transition-all ease-out`}
+                className={`${
+                  !fullWidth && "scale-x-[-1]"
+                } duration-300 transition-all ease-out`}
               />
             </div>
 
             <div className="grid ">
               <Link href={`/`}>
                 <Image
-                  src={`${fullWidth ? "/home/white-logo.png" : "/home/mobile-logo.png"
-                    }`}
+                  src={`${
+                    fullWidth ? "/home/white-logo.png" : "/home/mobile-logo.png"
+                  }`}
                   className=" pt-2"
                   alt="Webmaxi Logo"
                   height={24}
@@ -350,8 +340,9 @@ export default function Layout({ children }: Props) {
                       key={menu.link}
                       onClick={(e) => handleRoutes(e, menu.link)}
                       href={`${menu.link}`}
-                      className={` ${isActive(menu.link) ? " text-white bg-[#1570EF]" : ""
-                        }  hover:text-white hover:scale-105 transition-all duration-300 ease-in-out p-2 rounded-md flex  text-[#84CAFF] items-center gap-2`}
+                      className={` ${
+                        isActive(menu.link) ? " text-white bg-[#1570EF]" : ""
+                      }  hover:text-white hover:scale-105 transition-all duration-300 ease-in-out p-2 rounded-md flex  text-[#84CAFF] items-center gap-2`}
                     >
                       {menu.icon}
                       {fullWidth && menu.title}
@@ -367,8 +358,9 @@ export default function Layout({ children }: Props) {
                     onClick={(e) => handleRoutes(e, menu.link)}
                     key={menu.link}
                     href={`${menu.link}`}
-                    className={`flex  ${isActive(menu.link) ? " text-white bg-[#1570EF]" : ""
-                      } hover:text-white hover:scale-105 transition-all duration-300 ease-in-out text-[#84CAFF] items-center gap-2`}
+                    className={`flex  ${
+                      isActive(menu.link) ? " text-white bg-[#1570EF]" : ""
+                    } hover:text-white hover:scale-105 transition-all duration-300 ease-in-out text-[#84CAFF] items-center gap-2`}
                   >
                     {menu.icon}
                     {fullWidth && menu.title}
