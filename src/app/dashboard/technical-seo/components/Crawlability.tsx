@@ -24,6 +24,7 @@ import {
   CrawlingDataOverview,
   OverviewDataType,
 } from "@/types/technicalseo/technicalSeoTypes";
+import ReUsableHTTPStatusCode from "./(technicalseo)/ReusableHTTPStatusCode";
 
 export default function Crawlability() {
   const [crawlabilityData, setCrawlabilityData] =
@@ -42,16 +43,16 @@ export default function Crawlability() {
   }
   const techSeo = useSelector((state: RootState) => state.technicalSeo);
 
-  const overviewResult: OverviewDataType[] = techSeo.crawlings.flatMap(
-    (crawling: any) =>
-      crawling.crawlingData
-        .filter((data: any) => data.tab === "overview")
-        .map((overviewData: CrawlingDataOverview) => ({
-          pagesCrawled: overviewData.data.crawl_status.pages_crawled,
-          pagesInQueue: overviewData.data.crawl_status.pages_in_queue,
-          maxCrawlPages: overviewData.data.crawl_status.max_crawl_pages,
-        }))
-  );
+  // const overviewResult: OverviewDataType[] = techSeo.crawlings.flatMap(
+  //   (crawling: any) =>
+  //     crawling.crawlingData
+  //       .filter((data: any) => data.tab === "overview")
+  //       .map((overviewData: CrawlingDataOverview) => ({
+  //         pagesCrawled: overviewData.data.crawl_status.pages_crawled,
+  //         pagesInQueue: overviewData.data.crawl_status.pages_in_queue,
+  //         maxCrawlPages: overviewData.data.crawl_status.max_crawl_pages,
+  //       }))
+  // );
 
   // Loop through the crawlings array
   const crawlbilityAndIndexibiltyResult: CrawlingDataCrawlability[] =
@@ -94,7 +95,6 @@ export default function Crawlability() {
 
   const crawled =
     crawlbilityAndIndexibiltyResult[0]?.data.crawled_detail.pages_crawled || 0;
-  // const uncrawled = overviewResult[0]?.pagesInQueue || 0;
   const uncrawled =
     crawlbilityAndIndexibiltyResult[0]?.data.crawled_detail.pages_in_queue || 0;
 
@@ -102,13 +102,11 @@ export default function Crawlability() {
   const non_indexable =
     crawlbilityAndIndexibiltyResult[0]?.data.non_indexible_count || 0;
 
-  // const total = overviewResult[0]?.maxCrawlPages || 0;
   const total = crawlbilityAndIndexibiltyResult[0]?.data.total_page || 0;
   const statusCodeData = crawlbilityAndIndexibiltyResult[0]?.data.status_code;
   const crawledvalue = (crawled / total) * 100;
 
   const startDate = new Date();
-  const labels1 = ["January", "February"];
 
   const labels = Array.from(
     { length: crawlbilityAndIndexibiltyResult[0].data.total_page },
@@ -119,8 +117,6 @@ export default function Crawlability() {
     }
   );
 
-  // const mockData =
-  //   crawlabilityData?.crawlability?.pages?.map((item) => item.count) || [];
   const mockData =
     Array.from(
       { length: crawlbilityAndIndexibiltyResult[0].data.total_page },
@@ -293,7 +289,8 @@ export default function Crawlability() {
           />
           <div className="grid w-full gap-4 justify-items-center ">
             <div className="p-4 flex min-[1440px]:flex-row md:flex-col sm:flex-row flex-col gap-2 h-fit -y-auto">
-              <HTTPStatusCode />
+              {/* <HTTPStatusCode /> */}
+              <ReUsableHTTPStatusCode item={statusCodeData} />
             </div>
           </div>
         </div>

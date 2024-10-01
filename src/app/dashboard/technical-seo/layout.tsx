@@ -102,7 +102,7 @@ export default function TechnicalSeoLayout() {
   const fetchTechseoData = async () => {
     // const result = await ApiCall.get("/crawl/technical-seo", {
     const result = await ApiCall.get(
-      `/user/crawler/technical-seo/${activePropertyObj.id}`
+      `/user/crawler/technical-seo/${activePropertyObj?.id}`
       // {
       // params: {
       //   limit: 100,

@@ -22,6 +22,7 @@ import Link from "next/link";
 import { CiSearch } from "react-icons/ci";
 import { usePathname, useSearchParams } from "next/navigation";
 import Overview from "./components/Overview";
+import ExploreContent from "./components/ExploreContent";
 
 export default function ContentAnalysis() {
   const [showDetail, setShowDetail] = useState(false);
@@ -112,7 +113,7 @@ export default function ContentAnalysis() {
       </section>
       <section className="h-[500px] overflow-y-auto pb-20 mb-20">
         {queryParameter === null && <Overview />}
-        {queryParameter === "explore-content" && "explore-content"}
+        {queryParameter === "explore-content" && <ExploreContent />}
       </section>
 
       {/* {!showDetail ? (
