@@ -22,6 +22,7 @@ import {
   CrawlingDataOverview,
   OverviewDataType,
 } from "@/types/technicalseo/technicalSeoTypes";
+import ReusableHTTPStatusCode from "./(technicalseo)/ReusableHTTPStatusCode";
 // import { TechnicalSeoType } from "@/types/TechnicalSeoType";
 // import { useEffect } from "react";
 // import { removeTrailingSlash } from "@/app/utils/RemoveSlash";
@@ -152,8 +153,11 @@ function Overview() {
         .filter((data: any) => data.tab === "overview")
         .map((overviewData: CrawlingDataOverview) => ({
           crawlId: overviewData.id,
+          coreWebVital: overviewData.data.core_web_vitals,
           cost: overviewData.data.cost,
           siteHealth: overviewData.data.site_health,
+          Issues: overviewData.data.issues,
+          status_code: overviewData.data.status_code,
           errorsCount: overviewData.data.site_issues.errors.length,
           warningsCount: overviewData.data.site_issues.warnings.length,
           tasksCount: overviewData.data.tasks_count,
@@ -169,16 +173,25 @@ function Overview() {
         }))
   );
 
-  // console.log(overviewResult[0]);
+  const LcpAnalysis = overviewResult[0].coreWebVital.largest_contentful_paint;
+  const CLSAnalysis = overviewResult[0].coreWebVital.cumulative_layout_shift;
+
+  console.log(overviewResult[0]);
+  const LcpLabel = [
+    String(LcpAnalysis.poor),
+
+    String(LcpAnalysis.needs_improvement),
+    String(LcpAnalysis.good),
+  ];
   const LCPdata: ItemProps["data"] = overviewResult
     ? {
         // labels: Object.keys(technicalSeoData.metrics?.lcp ?? {}),
-        labels: overviewResult.map((lcp) => String(lcp.largestContentfulPaint)),
+        labels: LcpLabel,
         datasets: [
           {
             label: "Total",
             // data: Object.values(technicalSeoData.metrics?.lcp ?? {}),
-            data: overviewResult.map((lcp) => lcp.largestContentfulPaint || 4),
+            data: LcpLabel.map((lcp) => Number(lcp) || 0),
             backgroundColor: ["#F04438", "#FDB022", "#12B76A"],
             borderColor: ["#F04438", "#FDB022", "#12B76A"],
             borderWidth: 1,
@@ -187,15 +200,21 @@ function Overview() {
       }
     : { labels: [], datasets: [] };
 
-  const CLSdata: ItemProps["data"] = overviewResult
+  const CLSLabel = [
+    String(CLSAnalysis.poor),
+
+    String(CLSAnalysis.needs_improvement),
+    String(CLSAnalysis.good),
+  ];
+  const CLSdata: ItemProps["data"] = CLSAnalysis
     ? {
         // labels: Object.keys(technicalSeoData.metrics?.cls ?? {}),
-        labels: overviewResult.map((lcp) => String(lcp.cumulativeLayoutShift)),
+        labels: CLSLabel,
         datasets: [
           {
             label: "Total",
             // data: Object.values(technicalSeoData.metrics?.cls ?? {}),
-            data: overviewResult.map((lcp) => lcp.cumulativeLayoutShift || 4),
+            data: CLSLabel.map((cml) => Number(cml) || 0),
             backgroundColor: ["#F04438", "#FDB022", "#12B76A"],
             borderColor: ["#F04438", "#FDB022", "#12B76A"],
             borderWidth: 1,
@@ -298,11 +317,9 @@ function Overview() {
             <EachItem
               title="Largest Contentful Paint (LCP)"
               data={LCPdata}
-              poorPages={technicalSeoData?.metrics?.lcp?.poor || 0}
-              needsImprovementPages={
-                technicalSeoData.metrics?.lcp?.needsImprovement || 0
-              }
-              goodPages={technicalSeoData.metrics?.lcp?.good || 0}
+              poorPages={LcpAnalysis.poor || 0}
+              needsImprovementPages={LcpAnalysis.needs_improvement || 0}
+              goodPages={LcpAnalysis.good || 0}
               info={
                 "Largest Contentful Paint (LCP) is a user-centric performance metric that measures the perceived loading speed of a web page. It specifically focuses on the time it takes for the largest content element, such as an image or a block of text, to render on the user's screen"
               }
@@ -322,11 +339,9 @@ function Overview() {
             <EachItem
               title="Cumulative Layout Shift (CLS)"
               data={CLSdata}
-              poorPages={technicalSeoData?.metrics?.cls?.poor || 0}
-              needsImprovementPages={
-                technicalSeoData?.metrics?.cls?.needsImprovement || 0
-              }
-              goodPages={technicalSeoData?.metrics?.cls?.good || 0}
+              poorPages={CLSAnalysis.poor || 0}
+              needsImprovementPages={CLSAnalysis.needs_improvement || 0}
+              goodPages={CLSAnalysis.good || 0}
               info={
                 "This is a user-centric performance metric that quantifies the visual stability of a web page as it loads and interacts with the user"
               }
@@ -390,7 +405,7 @@ function Overview() {
             info="The returned code status that indicate what the response is"
           />
           <div className="p-4 flex lg:flex-row flex-col gap-2 h-48 w-full">
-            <HTTPStatusCode />
+            <ReusableHTTPStatusCode item={overviewResult[0].status_code} />
             {/* <div className="flex flex-col justify-end  overflow-y-auto">
               <p className=" text-xs flex items-center text-[#475467]">
                 {" "}
