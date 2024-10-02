@@ -13,6 +13,32 @@ interface SiteIssues {
   }[];
 }
 
+type Issues = {
+  id: string;
+  score: number;
+  title: string;
+  description: string;
+  scoreDisplayMode: "metricSavings" | "binary";
+};
+
+interface core_web {
+  first_input_delay: {
+    good: number;
+    poor: number;
+    needs_improvement: number;
+  };
+  cumulative_layout_shift: {
+    good: number;
+    poor: number;
+    needs_improvement: number;
+  };
+  largest_contentful_paint: {
+    good: number;
+    poor: number;
+    needs_improvement: number;
+  };
+}
+
 interface CrawlStatus {
   pages_crawled: number;
   pages_in_queue: number;
@@ -24,9 +50,12 @@ export interface CrawlingDataOverview {
 
   tab: "overview";
   data: {
+    core_web_vitals: core_web;
     cost: number;
     site_health: number;
     site_issues: SiteIssues;
+    issues: Issues[];
+    status_code: StatusCode;
     tasks_count: number;
     crawl_status: CrawlStatus;
     crawl_progress: string;
@@ -157,8 +186,11 @@ export interface InitialState {
 
 export type OverviewDataType = {
   crawlId: number;
+  coreWebVital: core_web;
   cost: number;
   siteHealth: number;
+  Issues: Issues[];
+  status_code: StatusCode;
   errorsCount: number;
   warningsCount: number;
   tasksCount: number;
