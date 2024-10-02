@@ -66,7 +66,7 @@ export default function Card({
       {
         isLoading ? <div className="flex items-center justify-center h-6 w-6"> <Loader /> </div>
         :
-        isError ? <h2 className=""> NA </h2>
+        isError ? <h2 className="font-black"> N/A </h2>
         :
         <div className="">
         <div className="flex w-full justify-between items-center">
