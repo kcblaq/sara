@@ -1,21 +1,16 @@
 import React, { useEffect, useState } from "react";
 import Card from "../../Card";
-import { useSelector } from "react-redux";
-import { RootState } from "@/app/store";
 import OrganicTrafficCard from "../../technical-seo/components/OrganicTrafficCard";
 import {
   ButtonWithTitle,
-  Title,
   TitleWithoutUnderline,
 } from "../../technical-seo/components/Overview";
-import { TrafficOverviewGraph } from "../../components/TrafficOverviewGraph";
-import BarChartSingle from "../../technical-seo/components/(technicalseo)/BarChartSingle";
-import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
-import { useQuery } from "@tanstack/react-query";
 import { useRankTrackingOverview } from "@/app/services/crawlers/rank_tracking";
 import { calculatePercentageDifference } from "@/lib/DateFormater";
 import { LineChart } from "../../technical-seo/components/LineChart";
 import { FaArrowUp } from "react-icons/fa";
+import { Line } from "react-chartjs-2";
+import { ChartData } from "chart.js";
 
 
 interface Props {
@@ -31,12 +26,7 @@ export default function RankOverview({ se }: Props) {
   //Traffic Volume
   const route = OverviewData?.project?.crawlings[0]?.crawlingData[0]?.data;
   const routePrevious = OverviewData?.project?.crawlings[1]?.crawlingData[0]?.data;
-  const google_traffic_volume = route?.google?.organic_traffic?.organic_positions?.etv ?? 0;
-  const bing_traffic_volume = route?.bing?.organic_traffic?.organic_positions?.etv ?? 0;
 
-  const googleTvDiff = calculatePercentageDifference(OverviewData?.project?.crawlings[1]?.crawlingData[0]?.data?.google?.organic_traffic?.organic_positions?.etv, google_traffic_volume);
-
-  const bingTvPercentageDiff = calculatePercentageDifference(OverviewData?.project?.crawlings[1]?.crawlingData[0]?.data?.bing?.organic_positions?.etv, bing_traffic_volume);
 
   function getGoogleTrafficLineGraphData() {
     const googleTrafficVolumeData = [];
@@ -71,6 +61,38 @@ export default function RankOverview({ se }: Props) {
     return bingTrafficVolumeData;
   }
 
+  function getGoogleNewRankingGraphData() {
+    const googleNewRankingElement = [];
+    const crawlings = OverviewData?.project?.crawlings || [];
+
+    for (let i = 0; i < crawlings.length && googleNewRankingElement.length < 5; i++) {
+      const crawlingData = crawlings[i]?.crawlingData || [];
+      for (let j = 0; j < crawlingData.length && googleNewRankingElement.length < 5; j++) {
+        const newRank = crawlingData[j]?.data?.google?.new_ranking_elements;
+        if (newRank !== undefined) {
+          googleNewRankingElement.push(newRank);
+        }
+      }
+    }
+
+    return googleNewRankingElement;
+  }
+  function getBingNewRankingGraphData() {
+    const bingNewRankingElement = [];
+    const crawlings = OverviewData?.project?.crawlings || [];
+
+    for (let i = 0; i < crawlings.length && bingNewRankingElement.length < 5; i++) {
+      const crawlingData = crawlings[i]?.crawlingData || [];
+      for (let j = 0; j < crawlingData.length && bingNewRankingElement.length < 5; j++) {
+        const newRank = crawlingData[j]?.data?.bing?.new_ranking_elements;
+        if (newRank !== undefined) {
+          bingNewRankingElement.push(newRank);
+        }
+      }
+    }
+
+    return bingNewRankingElement;
+  }
 
 
   //Search Volume
@@ -93,9 +115,6 @@ export default function RankOverview({ se }: Props) {
   const googlePrevious = route?.google?.keyword_ranking[1]?.reduce((acc: any, num: any) => acc + num, 0)
   const bingPrevious = route?.bing?.keyword_ranking[1]?.reduce((acc: any, num: any) => acc + num, 0)
 
-  const googleRankingPercentage = calculatePercentageDifference(googlePrevious, googleAverageKeywordRanking);
-  const bingRankingPercentage = calculatePercentageDifference(bingPrevious, bingAverageKeywordRanking);
-
 
 
 
@@ -114,8 +133,16 @@ export default function RankOverview({ se }: Props) {
   // Keyword Ranking
   const google_positions = route?.google.organic_positions;
   const previous_google_positions = route?.google.organic_positions;
-  const bing_positions = route?.bing?.organic_positions;
+  const google_featured_snippet = route?.google?.featured_snippet.toFixed(2) ?? 0;
+  const bing_featured_snippet = route?.bing?.featured_snippet.toFixed(2) ?? 0;
+  const gfs_percentage = calculatePercentageDifference(routePrevious?.google?.featured_snippet?.toFixed(2) ?? 0,google_featured_snippet )
+  const bfs_percentage = calculatePercentageDifference(routePrevious?.bing?.featured_snippet?.toFixed(2) ?? 0, bing_featured_snippet )
 
+  //New ranking
+  const google_new_ranking = route?.google?.new_ranking_elements.toFixed(2) ?? 0;
+  const bing_new_ranking = route?.bing?.new_ranking_elements.toFixed(2) ?? 0;
+  const google_new_ranking_perc = calculatePercentageDifference(routePrevious?.google?.new_ranking_elements ?? 0,google_new_ranking )
+  const bing_new_ranking_perc = calculatePercentageDifference(routePrevious?.bing?.new_ranking_elements ?? 0, bing_new_ranking )
 
 
   const pos_31_and_above = google_positions?.pos_31_40 + google_positions?.pos_41_50 + google_positions?.pos_51_60 + google_positions?.pos_61_70 + google_positions?.pos_71_80 + google_positions?.pos_81_90 + google_positions?.pos_91_100
@@ -132,16 +159,143 @@ export default function RankOverview({ se }: Props) {
 
     },
     bing: {
-
+"2-3": calculatePercentageDifference(routePrevious?.bing?.organic_positions?.pos_2_3, route?.bing?.organic_positions.pos_2_3),
+      "4-10": calculatePercentageDifference(routePrevious?.bing?.organic_positions?.pos_4_10, routePrevious?.bing?.organic_positions?.pos_4_10),
+      "11-20": calculatePercentageDifference(routePrevious?.bing?.organic_positions?.pos_11_20, routePrevious?.bing?.organic_positions?.pos_11_20),
+      "21-30": calculatePercentageDifference(routePrevious?.bing?.organic_positions?.pos_21_30, routePrevious?.bing?.organic_positions?.pos_21_30),
+      "Above 30": calculatePercentageDifference(previous_pos_31_and_above, pos_31_and_above),
     }
 
   }
 
-  function Truncate(num: number) {
-    return Math.round(num * 10) / 10
-  }
 
   // console.log("V", bing_positions)
+
+  const options = {
+    plugins: {
+      tooltip: {
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        borderRadius: 10, // Adjust this value to make the corners more or less rounded
+        titleFont: {
+          size: 16,
+        },
+        bodyFont: {
+          size: 14,
+        },
+        padding: 10,
+      },
+    },
+  };
+
+  const data = {
+    // changing labels to changes values on X-axis.
+    labels: ["23.05", "24.05", "25.05", "26.05", "27.05", "28.05", "29.05"],
+    // each label must be unique name
+    // add a new #color for backgroundColor, borderColor, pointBorderColor, pointHoverBackgroundColor properties for every new entry
+    datasets: [
+      {
+        color: "#fff",
+        label: "0 - 3",
+        fill: false,
+        lineTension: 0.3,
+        backgroundColor: "#717BBC",
+        borderColor: "#717BBC",
+        borderCapStyle: "round",
+        borderJoinStyle: "round",
+        pointBorderColor: "#2a2c30",
+        pointBackgroundColor: "#fff",
+        pointBorderWidth: 1,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: "#2a2c30",
+        pointHoverBorderColor: "#fff",
+        pointHoverBorderWidth: 5,
+        pointRadius: 0,
+        pointHitRadius: 5,
+        // always the number of elements in the data array have to be equal to the number of elements in label.
+        data: [0, 14, 21, 9, 35]
+      },
+      {
+        color: "#000",
+        label: "4 - 10",
+        fill: false,
+        lineTension: 0.3,
+        backgroundColor: "#F97065",
+        borderColor: "#F97065",
+        borderCapStyle: "round",
+        borderJoinStyle: "round",
+        pointBorderColor: "#F97065",
+        pointBackgroundColor: "#fff",
+        pointBorderWidth: 1,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: "#f84c1e",
+        pointHoverBorderColor: "#fff",
+        pointHoverBorderWidth: 5,
+        pointRadius: 0,
+        pointHitRadius: 5,
+        data: [20, 39, 10, 11, 16, 2, 40]
+      },
+      {
+        color: "#000",
+        label: "11 - 50",
+        fill: false,
+        lineTension: 0.3,
+        backgroundColor: "#36BFFA",
+        borderColor: "#36BFFA",
+        borderCapStyle: "round",
+        borderJoinStyle: "round",
+        pointBorderColor: "#008000",
+        pointBackgroundColor: "#fff",
+        pointBorderWidth: 1,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: "#008000",
+        pointHoverBorderColor: "#fff",
+        pointHoverBorderWidth: 5,
+        pointRadius: 0,
+        pointHitRadius: 5,
+        data: [10, 49, 15, 31, 26, 21, 50]
+      },
+      {
+        color: "#000",
+        label: "51 - 100",
+        fill: false,
+        lineTension: 0.3,
+        backgroundColor: "#F670C7",
+        borderColor: "#F670C7",
+        borderCapStyle: "round",
+        borderJoinStyle: "round",
+        pointBorderColor: "#F670C7",
+        pointBackgroundColor: "#fff",
+        pointBorderWidth: 1,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: "#F670C7",
+        pointHoverBorderColor: "#fff",
+        pointHoverBorderWidth: 5,
+        pointRadius: 0,
+        pointHitRadius: 5,
+        data: [10, 49, 15, 31, 26, 21, 50]
+      },
+      {
+        color: "#000",
+        label: "100+",
+        fill: false,
+        lineTension: 0.3,
+        backgroundColor: "#39D583",
+        borderColor: "#39D583",
+        borderCapStyle: "round",
+        borderJoinStyle: "round",
+        pointBorderColor: "#39D583",
+        pointBackgroundColor: "#fff",
+        pointBorderWidth: 1,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: "#39D583",
+        pointHoverBorderColor: "#fff",
+        pointHoverBorderWidth: 5,
+        pointRadius: 0,
+        pointHitRadius: 5,
+        data: [10, 49, 15, 31, 26, 21, 50]
+      }
+    ]
+  };
 
 
   return (
@@ -151,35 +305,35 @@ export default function RankOverview({ se }: Props) {
         <Card
           isLoading={isPending}
           isError={isError}
-          title={"Traffic Volume"}
-          amount={se == "google" ? google_traffic_volume : bing_traffic_volume}
+          title={"Featured Snippet"}
+          amount={se == "google" ? google_featured_snippet : bing_featured_snippet}
           style={se === "google" ? (
-            googleTvDiff === 0 ? "text-gray-500"
-              : googleTvDiff > 0 ? "text-green-500" : "text-red-500"
+            gfs_percentage === 0 ? "text-gray-500"
+              : gfs_percentage > 0 ? "text-green-500" : "text-red-500"
           ) :
             (
-              bingTvPercentageDiff === 0 ? "text-gray-500"
-                : bingTvPercentageDiff > 0 ? "text-green-500" : "text-red-500"
+              bfs_percentage === 0 ? "text-gray-500"
+                : bfs_percentage > 0 ? "text-green-500" : "text-red-500"
             )
           }
-          percent={se === "google" ? googleTvDiff : bingTvPercentageDiff}
+          percent={se === "google" ? gfs_percentage : bfs_percentage}
           chart={<LineChart pageData={se === "google" ? getGoogleTrafficLineGraphData() : getBingTrafficLineGraphData()} />}
         />
         <Card
-          title={"Search Volume"}
-          amount={se === "google" ? googleAverageKeywordRanking ?? 0 : bingAverageKeywordRanking ?? 0}
+          title={"New Ranking Element"}
+          amount={se === "google" ? google_new_ranking: bing_new_ranking }
           style={se == "google" ?
-            (googleAverageKeywordRanking === 0 ? "text-gray-500"
-              : googleAverageKeywordRanking > 0 ? "text-green-500" : "text-red-500"
+            (google_new_ranking_perc === 0 ? "text-gray-500"
+              : google_new_ranking_perc > 0 ? "text-green-500" : "text-red-500"
             )
             :
             (
-              bingRankingPercentage === 0 ? "text-gray-500"
-                : bingRankingPercentage > 0 ? "text-green-500" : "text-red-500"
+              bing_new_ranking_perc === 0 ? "text-gray-500"
+                : bing_new_ranking_perc > 0 ? "text-green-500" : "text-red-500"
             )
           }
-          percent={se === "google" ? googleRankingPercentage : bingRankingPercentage}
-          chart={undefined}
+          percent={se === "google" ? google_new_ranking_perc : bing_new_ranking_perc}
+          chart={<LineChart pageData={se === "google" ? getGoogleNewRankingGraphData() : getBingNewRankingGraphData()} />}
         />
       </section>
       <section className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 md:gap-8 gap-4">
@@ -271,7 +425,7 @@ export default function RankOverview({ se }: Props) {
                           : keywordDisDiff.google["11-20"] < 0 ? "text-red-400 rotate-180"
                             : "text-gray-500"
                         }
-                      `} />{keywordDisDiff.google["11-20"]} </span>
+                      `} />{keywordDisDiff.google["11-20"] ?? 0} </span>
 
 
                   </td>
@@ -293,7 +447,7 @@ export default function RankOverview({ se }: Props) {
                           : keywordDisDiff.google["21-30"] < 0 ? "text-red-400 rotate-180"
                             : "text-gray-500"
                         }
-                      `} />{keywordDisDiff.google["21-30"]} </span>
+                      `} />{keywordDisDiff.google["21-30"] ?? 0} </span>
 
 
                   </td>
@@ -312,7 +466,7 @@ export default function RankOverview({ se }: Props) {
                           : keywordDisDiff.google["Above 30"] < 0 ? "text-red-400 rotate-180"
                             : "text-gray-500"
                         }
-                      `} />{keywordDisDiff.google["Above 30"]} </span>
+                      `} />{keywordDisDiff.google["Above 30"] ?? 0} </span>
                   </td>
                 </tr>
               </tbody>
@@ -326,12 +480,13 @@ export default function RankOverview({ se }: Props) {
             title={"Position distributions "}
             info={"Position distributions"}
           />
-          <BarChartSingle
-            labels={[]}
-            data={[]}
+          {/* <BarChartSingle
+            labels={["23","33", "90","33"]}
+            data={[23,50,10,33,10]}
             xAxisLabel="Month"
-            yAxisLabel="Number of Visitors"
-          />
+            yAxisLabel="Number of Keywords"
+          /> */}
+          <Line data={data as ChartData<"line", number[], string>} options={options} />
         </div>
       </section>
     </main>
