@@ -1,8 +1,12 @@
 import { FaCircle } from "react-icons/fa6";
 import { RxQuestionMarkCircled } from "react-icons/rx";
 import ProgressiveCircle from "./SeoprogressCircle";
+import SiteHealthDoughnutChart from "../technical-seo/components/(technicalseo)/SiteHealthDoughnutChart";
 
-export default function SiteHealthScore() {
+interface SiteHealthScoreProps {
+  site_health: number;
+}
+export default function SiteHealthScore({ site_health }: SiteHealthScoreProps) {
   return (
     <div className="grid shadow-md border font-bold items-start h-full w-full rounded-md p-2 lg:p-6">
       <h1 className={`text-[#101828] text-xl flex items-center gap-4`}>
@@ -14,7 +18,7 @@ export default function SiteHealthScore() {
 
       <div className="flex md:flex-col flex-row w-full gap-10">
         <div className={`size-[60%] md:w-auto`}>
-          <ProgressiveCircle />
+          <SiteHealthDoughnutChart site_healthPercentage={site_health} />
         </div>
 
         <div className="grid gap-3 h-fit md:self-baseline  self-end  w-fit justify-end">

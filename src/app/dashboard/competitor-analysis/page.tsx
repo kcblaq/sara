@@ -57,14 +57,14 @@ export default function page() {
     const { target, target2, target3, location_code, language_code } =
       competitorDomains;
     try {
-      if (
-        target.trim() === "" ||
-        target2.trim() === "" ||
-        target3.trim() === ""
-      ) {
-        toast.error("Please enter all competitor domains");
-        return;
-      }
+      // if (
+      //   target.trim() === "" ||
+      //   target2.trim() === "" ||
+      //   target3.trim() === ""
+      // ) {
+      //   toast.error("Please enter all competitor domains");
+      //   return;
+      // }
       if (location_code === null) {
         toast.error("Please select a country");
         return;
