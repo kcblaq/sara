@@ -22,6 +22,7 @@ import {
 } from "@/redux/features/performanceMetric slice";
 import { removeTrailingSlash } from "@/app/utils/RemoveSlash";
 import { useQueries, useQuery } from "@tanstack/react-query";
+import { useTechnicalSeoFetchData } from "@/app/services/technicalSeo/TechnicalSeoFetch";
 
 export default function TechnicalSeoLayout() {
   const [mobile, setMobile] = useState(true);
@@ -64,7 +65,7 @@ export default function TechnicalSeoLayout() {
   const tabs = [
     { title: "Overview", content: <Overview /> },
     { title: "Crawlability and indexability", content: <Crawlability /> },
-    // { title: "Site performance", content: <SitePerformance /> },
+    { title: "Site performance", content: <SitePerformance /> },
     { title: "Issues", content: <Issues /> },
     // { title: "Internal linking", content: <InternalLinking /> },
     // { title: "Crawl comparisons", content: <CrawlComparison /> },
@@ -99,26 +100,21 @@ export default function TechnicalSeoLayout() {
       setLoading(false);
     }
   };
-  const fetchTechseoData = async () => {
-    // const result = await ApiCall.get("/crawl/technical-seo", {
-    const result = await ApiCall.get(
-      `/user/crawler/technical-seo/${activePropertyObj?.id}`
-      // {
-      // params: {
-      //   limit: 100,
-      //   platform: "desktop",
-      //   url: removeTrailingSlash(activeProperty),
-      // },
-      // }
-    );
-    console.log("tech seo", result.data);
-    dispatch(setTechnicalSeo(result.data));
-    return result;
-  };
-  const { data, isLoading } = useQuery({
-    queryKey: ["techseodata"],
-    queryFn: fetchTechseoData,
-  });
+  // const fetchTechseoData = async () => {
+  //   const result = await ApiCall.get(
+  //     `/user/crawler/technical-seo/${activePropertyObj?.id}`
+
+  //   );
+  //   console.log("tech seo", result.data);
+  //   dispatch(setTechnicalSeo(result.data));
+  //   return result;
+  // };
+  // const { data, isLoading } = useQuery({
+  //   queryKey: ["techseodata"],
+  //   queryFn: fetchTechseoData,
+  // });
+
+  const { isLoading } = useTechnicalSeoFetchData();
 
   // console.log(activePropertyObj);
 
