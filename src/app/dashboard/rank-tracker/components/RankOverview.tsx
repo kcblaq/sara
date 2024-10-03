@@ -10,7 +10,8 @@ import { calculatePercentageDifference } from "@/lib/DateFormater";
 import { LineChart } from "../../technical-seo/components/LineChart";
 import { FaArrowUp } from "react-icons/fa";
 import { Line } from "react-chartjs-2";
-import { ChartData } from "chart.js";
+import { ChartData, ChartOptions } from "chart.js";
+import moment from "moment";
 
 
 interface Props {
@@ -22,7 +23,7 @@ export default function RankOverview({ se }: Props) {
   const [isClient, setIsClient] = useState(false);
 
 
-  const { isError, isPending, isSuccess, data: OverviewData } = useRankTrackingOverview();
+  const { isError, isPending, isSuccess, data: OverviewData } = useRankTrackingOverview("overview");
   //Traffic Volume
   const route = OverviewData?.project?.crawlings[0]?.crawlingData[0]?.data;
   const routePrevious = OverviewData?.project?.crawlings[1]?.crawlingData[0]?.data;
@@ -133,14 +134,14 @@ export default function RankOverview({ se }: Props) {
   // Keyword Ranking
   const google_positions = route?.google.organic_positions;
   const previous_google_positions = route?.google.organic_positions;
-  const google_featured_snippet = route?.google?.featured_snippet.toFixed(2) ?? 0;
-  const bing_featured_snippet = route?.bing?.featured_snippet.toFixed(2) ?? 0;
+  const google_featured_snippet = route?.google?.featured_snippet?.toFixed(2) ?? 0;
+  const bing_featured_snippet = route?.bing?.featured_snippet?.toFixed(2) ?? 0;
   const gfs_percentage = calculatePercentageDifference(routePrevious?.google?.featured_snippet?.toFixed(2) ?? 0,google_featured_snippet )
   const bfs_percentage = calculatePercentageDifference(routePrevious?.bing?.featured_snippet?.toFixed(2) ?? 0, bing_featured_snippet )
 
   //New ranking
-  const google_new_ranking = route?.google?.new_ranking_elements.toFixed(2) ?? 0;
-  const bing_new_ranking = route?.bing?.new_ranking_elements.toFixed(2) ?? 0;
+  const google_new_ranking = route?.google?.new_ranking_elements?.toFixed(2) ?? 0;
+  const bing_new_ranking = route?.bing?.new_ranking_elements?.toFixed(2) ?? 0;
   const google_new_ranking_perc = calculatePercentageDifference(routePrevious?.google?.new_ranking_elements ?? 0,google_new_ranking )
   const bing_new_ranking_perc = calculatePercentageDifference(routePrevious?.bing?.new_ranking_elements ?? 0, bing_new_ranking )
 
@@ -151,31 +152,33 @@ export default function RankOverview({ se }: Props) {
 
   const keywordDisDiff = {
     google: {
-      "2-3": calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_2_3, route?.google?.organic_positions.pos_2_3),
-      "4-10": calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_4_10, routePrevious?.google?.organic_positions?.pos_4_10),
-      "11-20": calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_11_20, routePrevious?.google?.organic_positions?.pos_11_20),
-      "21-30": calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_21_30, routePrevious?.google?.organic_positions?.pos_21_30),
-      "Above 30": calculatePercentageDifference(previous_pos_31_and_above, pos_31_and_above),
+      "2-3": calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_2_3 ?? 0, route?.google?.organic_positions.pos_2_3 ?? 0),
+      "4-10": calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_4_10 ?? 0, routePrevious?.google?.organic_positions?.pos_4_10 ?? 0),
+      "11-20": calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_11_20 ?? 0, routePrevious?.google?.organic_positions?.pos_11_20 ?? 0),
+      "21-30": calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_21_30 ?? 0, routePrevious?.google?.organic_positions?.pos_21_30 ?? 0),
+      "Above 30": calculatePercentageDifference(previous_pos_31_and_above ?? 0, pos_31_and_above ?? 0),
 
     },
     bing: {
-"2-3": calculatePercentageDifference(routePrevious?.bing?.organic_positions?.pos_2_3, route?.bing?.organic_positions.pos_2_3),
-      "4-10": calculatePercentageDifference(routePrevious?.bing?.organic_positions?.pos_4_10, routePrevious?.bing?.organic_positions?.pos_4_10),
-      "11-20": calculatePercentageDifference(routePrevious?.bing?.organic_positions?.pos_11_20, routePrevious?.bing?.organic_positions?.pos_11_20),
-      "21-30": calculatePercentageDifference(routePrevious?.bing?.organic_positions?.pos_21_30, routePrevious?.bing?.organic_positions?.pos_21_30),
+"2-3": calculatePercentageDifference(routePrevious?.bing?.organic_positions?.pos_2_3, route?.bing?.organic_positions.pos_2_3) ?? 0,
+      "4-10": +calculatePercentageDifference(routePrevious?.bing?.organic_positions?.pos_4_10, routePrevious?.bing?.organic_positions?.pos_4_10) ?? 0,
+      "11-20": +calculatePercentageDifference(routePrevious?.bing?.organic_positions?.pos_11_20, routePrevious?.bing?.organic_positions?.pos_11_20) ?? 0,
+      "21-30": +calculatePercentageDifference(routePrevious?.bing?.organic_positions?.pos_21_30, routePrevious?.bing?.organic_positions?.pos_21_30) ?? 0,
       "Above 30": calculatePercentageDifference(previous_pos_31_and_above, pos_31_and_above),
     }
 
   }
 
 
-  // console.log("V", bing_positions)
+  const dist_labels = OverviewData?.project?.crawlings.map((label:any)=> moment(label.createdAt.replace(/^0+/, '')).format("MMM DD"));
+  const gdist_data = OverviewData?.project?.crawlings?.map((item:any)=> item?.crawlingData)
+// console.log("GL", gdist_data)
 
   const options = {
     plugins: {
       tooltip: {
         backgroundColor: 'rgba(0, 0, 0, 0.7)',
-        borderRadius: 10, // Adjust this value to make the corners more or less rounded
+        borderRadius: 10,
         titleFont: {
           size: 16,
         },
@@ -184,12 +187,52 @@ export default function RankOverview({ se }: Props) {
         },
         padding: 10,
       },
+      legend: {
+        position: 'top',
+        align: 'end',
+        labels: {
+          font: {
+            size: 12,
+          },
+          color: '#333',
+          usePointStyle: true,
+          backgroundColor: "#333",
+          pointStyle: 'circle',
+          padding: 20,
+        },
+      },
+    },
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: 'Date',
+        },
+        grid: {
+          display: true,
+        },
+      },
+      y: {
+        title: {
+          display: true,
+          text: 'Number of Keywords',
+        },
+        ticks: {
+          stepSize: 10,
+        },
+        grid: {
+          drawTicks: false,
+        },
+      },
     },
   };
+  
+
+//  const moment = 
 
   const data = {
     // changing labels to changes values on X-axis.
-    labels: ["23.05", "24.05", "25.05", "26.05", "27.05", "28.05", "29.05"],
+    labels: dist_labels,
     // each label must be unique name
     // add a new #color for backgroundColor, borderColor, pointBorderColor, pointHoverBackgroundColor properties for every new entry
     datasets: [
@@ -369,7 +412,7 @@ export default function RankOverview({ se }: Props) {
               <tbody>
                 <tr className=" border-b">
                   <td className=" p-2 ">2 - 3</td>
-                  <td className=" p-2 ">{(google_positions?.pos_2_3)?.toFixed(1)} </td>
+                  <td className=" p-2 ">{(google_positions?.pos_2_3)?.toFixed(1) ??0} </td>
                   <td className="  p-2 rounded-full">
 
 
@@ -383,7 +426,7 @@ export default function RankOverview({ se }: Props) {
                           : keywordDisDiff.google["2-3"] < 0 ? "text-red-400 rotate-180"
                             : "text-gray-500"
                         }
-                      `} />{keywordDisDiff.google["2-3"].toFixed(1)} </span>
+                      `} />{keywordDisDiff.google["2-3"]?.toFixed(1)} </span>
 
 
                   </td>
@@ -404,7 +447,7 @@ export default function RankOverview({ se }: Props) {
                           : keywordDisDiff.google["4-10"] < 0 ? "text-red-400 rotate-180"
                             : "text-gray-500"
                         }
-                      `} />{keywordDisDiff.google["4-10"]} </span>
+                      `} />{keywordDisDiff.google["4-10"].toFixed(1)} </span>
                       
                     
                   </td>
@@ -425,7 +468,7 @@ export default function RankOverview({ se }: Props) {
                           : keywordDisDiff.google["11-20"] < 0 ? "text-red-400 rotate-180"
                             : "text-gray-500"
                         }
-                      `} />{keywordDisDiff.google["11-20"] ?? 0} </span>
+                      `} />{keywordDisDiff.google["11-20"].toFixed(1) ?? 0} </span>
 
 
                   </td>
@@ -447,7 +490,7 @@ export default function RankOverview({ se }: Props) {
                           : keywordDisDiff.google["21-30"] < 0 ? "text-red-400 rotate-180"
                             : "text-gray-500"
                         }
-                      `} />{keywordDisDiff.google["21-30"] ?? 0} </span>
+                      `} />{keywordDisDiff.google["21-30"].toFixed(1) ?? 0} </span>
 
 
                   </td>
@@ -466,7 +509,7 @@ export default function RankOverview({ se }: Props) {
                           : keywordDisDiff.google["Above 30"] < 0 ? "text-red-400 rotate-180"
                             : "text-gray-500"
                         }
-                      `} />{keywordDisDiff.google["Above 30"] ?? 0} </span>
+                      `} />{keywordDisDiff.google["Above 30"].toFixed(1) ?? 0} </span>
                   </td>
                 </tr>
               </tbody>
@@ -486,7 +529,7 @@ export default function RankOverview({ se }: Props) {
             xAxisLabel="Month"
             yAxisLabel="Number of Keywords"
           /> */}
-          <Line data={data as ChartData<"line", number[], string>} options={options} />
+          <Line data={data as ChartData<"line", number[], string>} options={options as ChartOptions<"line">} />
         </div>
       </section>
     </main>

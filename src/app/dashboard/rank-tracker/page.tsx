@@ -11,25 +11,21 @@ import OrganicPick from "./components/OrganicPick";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import RankOverview from "./components/RankOverview";
 import Rankings from "./components/Rankings";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/store";
 import moment from "moment";
-import { CurrentProperty } from "@/app/utils/currentProperty";
-import { trimDomain } from "@/app/utils/trimDomain";
 import useRankMutation, { RankCrawl, RankTrackerCrawler, useRankTrackingOverview } from "@/app/services/crawlers/rank_tracking";
 // import PageDistributions from './components/PageDistributions'
 
 
 export default function page() {
-  const [mobile, setMobile] = useState(false);
-  const [detail, setDetail] = useState([])
+  // const [mobile, setMobile] = useState(false);
+  // const [detail, setDetail] = useState([])
   const [se, setSe] = useState("google")
 
   const tabs = [
+    { title: "Rankings", content: <Rankings se={se} /> },
     { title: "Overview", content: <RankOverview se={se} /> },
-    { title: "Rankings", content: <Rankings /> },
     // { title: "Page distributions", content: <PageDistributions /> }
   ];
   const lastUpdated = useSelector(
@@ -39,25 +35,8 @@ export default function page() {
   const activeProperty = useSelector(
     (state: RootState) => state.property.activeProperty
   );
-  // const property = CurrentProperty();
-  const property = useSelector((state: RootState) => state.property.activePropertyObj);
-
- 
 
 
-  // const { data } = useQuery({
-  //   queryKey: ["rank"],
-  //   queryFn: async () =>
-  //     await ApiCall.get("/crawl/rank-tracker", {
-  //       params: {
-  //         url: activeProperty,
-  //         se: "Google",
-  //       },
-  //     }),
-  // });
-  // // console.log("RANK",data)
-
-  
 
   return (
     <main className="grid w-full h-full items-start content-start gap-6">

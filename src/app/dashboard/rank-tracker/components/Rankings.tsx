@@ -1,75 +1,95 @@
 import PlainButton from "@/app/component/PlainButton";
+import { useRankTrackingOverview } from "@/app/services/crawlers/rank_tracking";
 import React from "react";
-import { CiImageOn } from "react-icons/ci";
+import { CiImageOn, CiSquareQuestion } from "react-icons/ci";
 import {
   FaArrowDown,
   FaArrowUp,
   FaLink,
   FaPlus,
+  FaQuestion,
   FaVideo,
 } from "react-icons/fa6";
 import { GoQuestion } from "react-icons/go";
 import { IoCartOutline } from "react-icons/io5";
 import { MdOutlineArrowForward } from "react-icons/md";
+import { RiExpandUpDownFill } from "react-icons/ri";
 
-const mocked = [
-  {
-    keyword: "When we price goods",
-    position: 20,
-    increase: true,
-    volume: 40,
-    serp: ["link", "image", "shop"],
-    kd: 20,
-    traffic: 35,
-    url: "www.ogene.com",
-  },
-  {
-    keyword: "When we price goods",
-    position: 30,
-    increase: true,
-    volume: 30,
-    serp: ["link", "video", "shop"],
-    kd: 20,
-    traffic: 35,
-    url: "www.ogene.com",
-  },
-  {
-    keyword: "When we price goods",
-    position: 34,
-    increase: true,
-    volume: 28,
-    serp: ["location", "image", "shop"],
-    kd: 20,
-    traffic: 35,
-    url: "www.ogene.com",
-  },
-  {
-    keyword: "When we price goods",
-    position: 43,
-    increase: true,
-    volume: 43,
-    serp: ["link", "image", "shop", "location", "video"],
-    kd: 20,
-    traffic: 35,
-    url: "www.ogene.com",
-  },
-  {
-    keyword: "When we price goods",
-    position: 10,
-    increase: true,
-    volume: 90,
-    serp: ["link", "image", "shop", "video"],
-    kd: 20,
-    traffic: 35,
-    url: "www.ogene.com",
-  },
-];
-export default function Rankings() {
+
+interface Props {
+  se: string
+}
+
+// const mocked = [
+//   {
+//     keyword: "When we price goods",
+//     position: 20,
+//     increase: true,
+//     volume: 40,
+//     serp: ["link", "image", "shop"],
+//     kd: 20,
+//     traffic: 35,
+//     url: "www.ogene.com",
+//   },
+//   {
+//     keyword: "When we price goods",
+//     position: 30,
+//     increase: true,
+//     volume: 30,
+//     serp: ["link", "video", "shop"],
+//     kd: 20,
+//     traffic: 35,
+//     url: "www.ogene.com",
+//   },
+//   {
+//     keyword: "When we price goods",
+//     position: 34,
+//     increase: true,
+//     volume: 28,
+//     serp: ["location", "image", "shop"],
+//     kd: 20,
+//     traffic: 35,
+//     url: "www.ogene.com",
+//   },
+//   {
+//     keyword: "When we price goods",
+//     position: 43,
+//     increase: true,
+//     volume: 43,
+//     serp: ["link", "image", "shop", "location", "video"],
+//     kd: 20,
+//     traffic: 35,
+//     url: "www.ogene.com",
+//   },
+//   {
+//     keyword: "When we price goods",
+//     position: 10,
+//     increase: true,
+//     volume: 90,
+//     serp: ["link", "image", "shop", "video"],
+//     kd: 20,
+//     traffic: 35,
+//     url: "www.ogene.com",
+//   },
+// ];
+export default function Rankings({se}:Props) {
+  const { isError, isPending, isSuccess, data: rankingData } = useRankTrackingOverview("ranking");
+  const route = rankingData?.project?.crawlings[0]?.crawlingData[0]?.data ;
+
+  const previousRouteBing = rankingData?.project?.crawlings[1]?.crawlingData[0]?.data?.bing; 
+  const previousRouteGoogle = rankingData?.project?.crawlings[1]?.crawlingData[0]?.data?.google; 
+
+  const bing = route?.bing?.map((item:any)=> item)
+  const google = route?.google?.map((item:any)=> item)
+
+ 
+  console.log("RANKING",route?.bing)
+
   return (
     <main className="grid w-full h-full items-start content-start gap-6 my-10 mb-20 overflow-auto">
       <div className="grid h-full w-full overflow-auto border rounded-md ">
         <div className="flex w-full items-center justify-between p-6">
-          <p className={` font-medium text-[#101828] text-lg`}>106 keywords </p>
+          <p className={` font-medium text-[#101828] text-lg`}> {se == "google" ? google?.length ?? 0 : bing?.length ?? 0} keywords </p>
           <span>
             <PlainButton title={"Add keyword"} icon={<FaPlus />} />
           </span>
@@ -83,7 +103,7 @@ export default function Rankings() {
               <th className="font-medium text-xs text-[#475467]  text-left p-2 flex items-center gap-2 mt-2">
                 <span className={`flex items-center gap-1 text-xs`}>
                   {" "}
-                  Position <FaArrowDown />{" "}
+                  Position <RiExpandUpDownFill />
                 </span>
               </th>
               <th className="font-medium text-xs text-[#475467]   text-left p-2 ">
@@ -94,7 +114,7 @@ export default function Rankings() {
                     {" "}
                     <GoQuestion />
                   </button>{" "}
-                  <FaArrowUp />{" "}
+                  <RiExpandUpDownFill />{" "}
                 </span>
               </th>
               <th className="font-medium text-xs text-[#475467]  min-w-[240px] text-left p-2 ">
@@ -105,7 +125,7 @@ export default function Rankings() {
                     {" "}
                     <GoQuestion />
                   </button>{" "}
-                  <FaArrowUp />{" "}
+                  <RiExpandUpDownFill />{" "}
                 </span>
               </th>
               <th className="font-medium text-xs text-[#475467]   text-left p-2 ">
@@ -121,7 +141,7 @@ export default function Rankings() {
               <th className="font-medium text-xs text-[#475467]   text-left p-2 ">
                 <span className={`flex items-center gap-1 text-xs`}>
                   {" "}
-                  Traffic{" "}
+                  CPC
                   <button title="The volume of ...">
                     {" "}
                     <GoQuestion />
@@ -134,46 +154,51 @@ export default function Rankings() {
             </tr>
           </thead>
           <tbody>
-            {mocked.map((data) => {
+            {(se == "google" ? google ?? []: bing ?? []).map((data:any, index:number) => {
+              const gpastRank = previousRouteGoogle[index].rank
+              const bpastRank = previousRouteBing[index].rank
+
               return (
                 <tr className=" border-b">
                   <td className=" p-2 ">{data.keyword} </td>
                   <td className=" p-2 ">
                     <span className={`flex items-center text-xs p-1 gap-1`}>
-                      {data.position}{" "}
+                      {data.rank.toFixed(2)}
                       <span
                         className={` py-0.5 px-2 rounded-full flex items-center gap-1 ${
-                          data.position > 23
-                            ? "bg-green-100 text-green-500"
-                            : " bg-red-100 text-red-300"
-                        }`}
+                         se == "google" && data.rank > gpastRank
+                            ? "bg-green-100 text-green-500" :  data.rank < gpastRank ?
+                            " bg-red-100 text-red-300 rotate-180" : ""
+                        } ${se == "bing" && data.rank > bpastRank
+                          ? "bg-green-100 text-green-500" :  data.rank < bpastRank ?
+                          " bg-red-100 text-red-300" : "" }`
+                      
+                      }
                       >
-                        {" "}
-                        {data.position > 23 ? (
-                          <FaArrowUp />
-                        ) : (
-                          <FaArrowDown />
-                        )}{" "}
-                        {data.position}{" "}
+                        
+                          <FaArrowUp /> { se == "google" ? data.rank !== gpastRank && data.rank - gpastRank : data.rank !== bpastRank && data.rank - bpastRank}
+                        
                       </span>{" "}
                     </span>
                   </td>
                   <td className="  p-2 rounded-full">
-                    <span className={``}>{data.volume} </span>{" "}
+                    <span className={``}>{data.search_volume} </span>{" "}
                   </td>
                   <td className="  p-2 rounded-full">
                     <span className={`flex items-center gap-2 text-sm`}>
-                      {data.serp.includes("link") && <FaLink />}
-                      {data.serp.includes("image") && <CiImageOn />}
-                      {data.serp.includes("shop") && <IoCartOutline />}
-                      {data.serp.includes("video") && <FaVideo />}
+                      {data.serp_item_types.includes("link") && <FaLink />}
+                      {data.serp_item_types.includes("images") && <CiImageOn />}
+                      {data.serp_item_types.includes("shop") && <IoCartOutline />}
+                      {data.serp_item_types.includes("video") && <FaVideo />}
+                      {data.serp_item_types.includes("people_also_ask") && <FaQuestion />
+                      }
                     </span>{" "}
                   </td>
                   <td className="  p-2 rounded-full">
-                    <span className={``}>{data.kd}% </span>{" "}
+                    <span className={``}>{data.keyword_difficulty}% </span>{" "}
                   </td>
                   <td className="  p-2 rounded-full">
-                    <span className={``}>{data.traffic}</span>{" "}
+                    <span className={``}>{data.cpc?.toFixed(2) ?? 0}</span>
                   </td>
                   <td className="  p-2 rounded-full">
                     <span className={`text-blue-500 cursor-pointer`}>

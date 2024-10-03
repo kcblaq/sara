@@ -10,14 +10,14 @@ interface RankProps {
 }
 
 
-export const useRankTrackingOverview =  () => {
-    // const id = CurrentProperty()
-    const id = useSelector((state: RootState) => state.property.activePropertyObj);
+export const useRankTrackingOverview =  (tab:string) => {
+    const id = CurrentProperty()
+    // const id = useSelector((state: RootState) => state.property.activePropertyObj);
 
     const { isError, isSuccess, isPending, data } = useQuery({
         queryKey: ["ranktracker_overview", id.id],
         queryFn:  async() => {
-            const result = await ApiCall.get(`/user/crawler/rank-tracking/by-tab/${id.id}?tab=overview`);
+            const result = await ApiCall.get(`/user/crawler/rank-tracking/by-tab/${id.id}?tab=${tab}`);
             return result.data
         }
     })
@@ -25,21 +25,22 @@ export const useRankTrackingOverview =  () => {
 }
 
 
-export const useRankTrackingRankingTab = () => {
-    // const id = CurrentProperty();
-    const id = useSelector((state: RootState) => state.property.activePropertyObj.id);
 
- const {isError, isSuccess, isPending, data} = useQuery({
-    queryKey: ['ranktracker_ranking', id],
-    queryFn: async()=> {
-        const response = await ApiCall.get(`/user/crawler/rank-tracking/by-tab/${id}?tab=ranking`)
-        return response.data;
-    },
+// export const useRankTrackingRankingTab = () => {
+//     // const id = CurrentProperty();
+//     const id = useSelector((state: RootState) => state.property.activePropertyObj.id);
+
+//  const {isError, isSuccess, isPending, data} = useQuery({
+//     queryKey: ['ranktracker_ranking', id],
+//     queryFn: async()=> {
+//         const response = await ApiCall.get(`/user/crawler/rank-tracking/by-tab/${id}?tab=ranking`)
+//         return response.data;
+//     },
    
- });
+//  });
 
- return {isError, isSuccess, isPending, data }
-}
+//  return {isError, isSuccess, isPending, data }
+// }
 
 
 
@@ -57,8 +58,9 @@ export const RankTrackerCrawler =  (target: string, location_code:number, id:num
         },
         onError: (error) => error.message,
         onSuccess: () => {
-            useRankTrackingOverview();
-            useRankTrackingRankingTab();
+            useRankTrackingOverview("overview");
+            useRankTrackingOverview("ranking");
+          
         }
     })
     return rankCrawler;
