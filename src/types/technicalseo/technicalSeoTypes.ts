@@ -13,7 +13,7 @@ interface SiteIssues {
   }[];
 }
 
-type Issues = {
+export type Issues = {
   id: string;
   score: number;
   title: string;
@@ -74,7 +74,7 @@ interface StatusCode {
   is_redirect: number;
 }
 
-interface CrawledDetail {
+export interface CrawledDetail {
   pages_crawled: number;
   pages_in_queue: number;
   max_crawl_pages: number;
@@ -150,14 +150,6 @@ export type CrawlingData =
   | CrawlingDataOverview
   | CrawlingDataCrawlability
   | SitePerformanceData;
-
-// export interface Project {
-//   id: number;
-//   userId: number;
-//   domain: string;
-//   createdAt: string;
-//   updatedAt: string;
-// }
 
 export interface Crawler {
   id: number;
