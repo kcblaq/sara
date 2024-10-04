@@ -2,34 +2,23 @@
 import { GoDotFill } from "react-icons/go";
 import { RxQuestionMarkCircled } from "react-icons/rx";
 import { Title } from "./Overview";
-import DualProgressBar, {
-  HorizontalBar,
-} from "./(technicalseo)/DualProgressBar";
+import { HorizontalBar } from "./(technicalseo)/DualProgressBar";
 import BarChartSingle from "./(technicalseo)/BarChartSingle";
 import { useEffect, useState } from "react";
-import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/store";
-import { calculatePercentage } from "@/lib/DateFormater";
-import HTTPStatusCode from "./HTTPStatusCode";
 import { completeArray } from "../../components/graphs/StackedBarChart";
-import { removeTrailingSlash } from "@/app/utils/RemoveSlash";
-import { CrawlabilityType } from "@/types/CrawlabilityPageProps";
 import { CrawledPagesComplete } from "../../components/SeoprogressCircle";
 import moment from "moment";
 import Loader from "@/app/component/Loader";
 import {
   CrawlingData,
   CrawlingDataCrawlability,
-  CrawlingDataOverview,
-  OverviewDataType,
 } from "@/types/technicalseo/technicalSeoTypes";
 import ReUsableHTTPStatusCode from "./(technicalseo)/ReusableHTTPStatusCode";
+import { useTechnicalSeoFetchData } from "@/app/services/technicalSeo/TechnicalSeoFetch";
 
 export default function Crawlability() {
-  const [crawlabilityData, setCrawlabilityData] =
-    useState<CrawlabilityType | null>(null);
-  const [loading, setLoading] = useState(false);
   const [Err, setErr] = useState({
     status: false,
     message: "",
@@ -41,7 +30,8 @@ export default function Crawlability() {
   ): data is CrawlingDataCrawlability {
     return data.tab === "crawlabilityAndIndexibility";
   }
-  const techSeo = useSelector((state: RootState) => state.technicalSeo);
+  // const techSeo = useSelector((state: RootState) => state.technicalSeo);
+  const { data, isLoading } = useTechnicalSeoFetchData();
 
   // const overviewResult: OverviewDataType[] = techSeo.crawlings.flatMap(
   //   (crawling: any) =>
@@ -56,42 +46,38 @@ export default function Crawlability() {
 
   // Loop through the crawlings array
   const crawlbilityAndIndexibiltyResult: CrawlingDataCrawlability[] =
-    techSeo.crawlings.flatMap((crawling) =>
+    data?.crawlings?.flatMap((crawling: any) =>
       crawling.crawlingData.filter(isCrawlabilityData)
-    );
+    ) ?? [];
 
   console.log("crawl", crawlbilityAndIndexibiltyResult[0]);
 
-  const activeProperty = useSelector(
-    (state: RootState) => state.property.activeProperty
-  );
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       setLoading(true);
+  //       const response = await ApiCall.get("/crawl/technical-seo", {
+  //         params: {
+  //           limit: 100,
+  //           platform: "desktop",
+  //           url: removeTrailingSlash(activeProperty),
+  //           page: "crawlability",
+  //         },
+  //       });
+  //       setCrawlabilityData(response.data);
+  //       // console.log(response.data);
+  //     } catch (error: any) {
+  //       setErr({
+  //         status: true,
+  //         message: error.message,
+  //       });
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await ApiCall.get("/crawl/technical-seo", {
-          params: {
-            limit: 100,
-            platform: "desktop",
-            url: removeTrailingSlash(activeProperty),
-            page: "crawlability",
-          },
-        });
-        setCrawlabilityData(response.data);
-        // console.log(response.data);
-      } catch (error: any) {
-        setErr({
-          status: true,
-          message: error.message,
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [activeProperty]);
+  //   fetchData();
+  // }, [activeProperty]);
 
   const crawled =
     crawlbilityAndIndexibiltyResult[0]?.data.crawled_detail.pages_crawled || 0;
@@ -104,12 +90,15 @@ export default function Crawlability() {
 
   const total = crawlbilityAndIndexibiltyResult[0]?.data.total_page || 0;
   const statusCodeData = crawlbilityAndIndexibiltyResult[0]?.data.status_code;
+  const CrawledDetail = crawlbilityAndIndexibiltyResult[0]?.data.crawled_detail;
+  const TotalLinkFound = crawlbilityAndIndexibiltyResult[0]?.data.items;
+
   const crawledvalue = (crawled / total) * 100;
 
   const startDate = new Date();
 
   const labels = Array.from(
-    { length: crawlbilityAndIndexibiltyResult[0].data.total_page },
+    { length: crawlbilityAndIndexibiltyResult[0]?.data.total_page },
     (_, i) => {
       const date = new Date(startDate);
       date.setDate(startDate.getDate() + i); // Increment the date by 'i' days
@@ -119,20 +108,20 @@ export default function Crawlability() {
 
   const mockData =
     Array.from(
-      { length: crawlbilityAndIndexibiltyResult[0].data.total_page },
+      { length: crawlbilityAndIndexibiltyResult[0]?.data.total_page },
       (_, i) => i + 1
     ) || [];
 
   const crawldepthlabels1 = ["1", "2", "3", "4+"];
   const crawldepthlabels = completeArray(crawldepthlabels1);
-  const crawldepthLabelData =
-    crawlabilityData?.countDepth.flatMap((obj) => Object.values(obj)) || [];
+  const crawldepthLabelData: any[] = [];
 
-  const indexibilitData1 = crawlabilityData?.indexability?.unindexableReasons;
+  // const indexibilitData1 = crawlabilityData?.indexability?.unindexableReasons;
+  const indexibilitData1 = "";
   const categories = Object.keys(indexibilitData1 || []);
   const categoriesNumber = Object.values(indexibilitData1 || []);
 
-  return loading ? (
+  return isLoading ? (
     <div className=" w-full h-20 flex items-center justify-center mt-10">
       <Loader />
     </div>
@@ -180,7 +169,10 @@ export default function Crawlability() {
             </div>
           </div>
         </div> */}
-        <CrawledPagesComplete />
+        <CrawledPagesComplete
+          linkFound={TotalLinkFound}
+          CrawlDetaildata={CrawledDetail}
+        />
 
         <section className="w-full grid md:col-span-2 col-span-1 h-full  md:h-[348px] border rounded-md p-6">
           <div className="flex flex-col w-full">
