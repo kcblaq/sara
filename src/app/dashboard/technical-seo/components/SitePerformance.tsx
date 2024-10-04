@@ -66,7 +66,6 @@ export default function SitePerformance() {
   const metric2Percentage = `${((metric2 / total) * 100).toFixed(2)}%`;
   const metric3Percentage = `${((metric3 / total) * 100).toFixed(2)}%`;
   const metric4Percentage = `${((metric4 / total) * 100).toFixed(2)}%`;
-  console.log(metric1Percentage);
 
   const CardClone = (
     <div className="grid gap-4 w-full md:max-w-[390px] h-[226px] rounded-md p-6 pb-2 border">
