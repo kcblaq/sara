@@ -1,22 +1,26 @@
+"use client";
 import Input from "@/app/component/commons/Input";
 import { RootState } from "@/app/store";
 import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
 import { Button } from "@/components/ui/button";
 import { useFormik } from "formik";
-import { useState } from "react";
+import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import * as Yup from "yup";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 export default function EmptyState() {
   const activePropertyObj = useSelector(
     (state: RootState) => state.property.activePropertyObj
   );
 
+  const router = useRouter();
   const searchTopic = async () => {
     console.log("Form submitted with values:", formik.values); // Debug line
 
     try {
-      const result = await ApiCall.post(
+      const result =  ApiCall.post(
         `/user/crawler/content-analysis/${activePropertyObj?.id}`,
         {
           keywords: [
@@ -26,7 +30,27 @@ export default function EmptyState() {
           ]
         }
       );
-      console.log("Search result:", result.data);
+
+      toast.promise(
+        result,
+        {
+          loading: "Loading",
+          success: (data) => `Search successful`,
+          error: (err) => `Something  just happened`,
+        },
+        {
+          style: {
+            minWidth: "250px",
+          },
+        }
+      )
+
+      const res = await result;
+
+      if (res.status == 200) {
+        router.push("/dashboard/content-analysis");
+      }
+      
     } catch (error) {
       console.error("Error during search:", error);
     }
