@@ -17,7 +17,8 @@ import moment from "moment";
 interface Props {
   se: string
 }
-export default function RankOverview({ se }: Props) {
+export default function RankOverview() {
+  const [se, setSe] = useState("google")
 
 
   const [isClient, setIsClient] = useState(false);
@@ -26,7 +27,9 @@ export default function RankOverview({ se }: Props) {
   const { isError, isPending, isSuccess, data: OverviewData } = useRankTrackingOverview("overview");
   //Traffic Volume
   const route = OverviewData?.project?.crawlings[0]?.crawlingData[0]?.data;
-  const routePrevious = OverviewData?.project?.crawlings[1]?.crawlingData[0]?.data;
+  const routePrevious = OverviewData?.project?.crawlings[0]?.crawlingData[0]?.data ?? 0;
+
+  // console.log("PRE",routePrevious)
 
 
   function getGoogleTrafficLineGraphData() {
@@ -97,8 +100,11 @@ export default function RankOverview({ se }: Props) {
 
 
   //Search Volume
-  const googleData = route?.google?.keyword_ranking[0]?.map((item: { search_volume: number; }) => item.search_volume) || [];
-  const bingData = route?.bing?.keyword_ranking[0]?.map((item: { search_volume: number; }) => item.search_volume) || [];
+  // const googleData = route?.google?.keyword_ranking[0]?.map((item: { search_volume: number; }) => item.search_volume) || [];
+  // const bingData = route?.bing?.keyword_ranking[0]?.map((item: { search_volume: number; }) => item.search_volume) || [];
+
+  const googleData = route?.google?.keyword_ranking?.[0]?.map((item: { search_volume: any; }) => item.search_volume) || [];
+  const bingData = route?.bing?.keyword_ranking?.[0]?.map((item: { search_volume: any; }) => item.search_volume) || [];
 
   let googleAverageKeywordRanking = 0;
   if (googleData.length > 0) {
@@ -113,8 +119,8 @@ export default function RankOverview({ se }: Props) {
     googleAverageKeywordRanking = bingSum / bingData.length;
   }
 
-  const googlePrevious = route?.google?.keyword_ranking[1]?.reduce((acc: any, num: any) => acc + num, 0)
-  const bingPrevious = route?.bing?.keyword_ranking[1]?.reduce((acc: any, num: any) => acc + num, 0)
+  // const googlePrevious = route?.google?.keyword_ranking[1]?.reduce((acc: any, num: any) => acc + num, 0)
+  // const bingPrevious = route?.bing?.keyword_ranking[1]?.reduce((acc: any, num: any) => acc + num, 0)
 
 
 
@@ -136,43 +142,103 @@ export default function RankOverview({ se }: Props) {
   const previous_google_positions = route?.google.organic_positions;
   const google_featured_snippet = route?.google?.featured_snippet?.toFixed(2) ?? 0;
   const bing_featured_snippet = route?.bing?.featured_snippet?.toFixed(2) ?? 0;
-  const gfs_percentage = calculatePercentageDifference(routePrevious?.google?.featured_snippet?.toFixed(2) ?? 0,google_featured_snippet )
-  const bfs_percentage = calculatePercentageDifference(routePrevious?.bing?.featured_snippet?.toFixed(2) ?? 0, bing_featured_snippet )
+  const gfs_percentage = calculatePercentageDifference(routePrevious?.google?.featured_snippet?.toFixed(2) ?? 0, google_featured_snippet)
+  const bfs_percentage = calculatePercentageDifference(routePrevious?.bing?.featured_snippet?.toFixed(2) ?? 0, bing_featured_snippet)
 
   //New ranking
   const google_new_ranking = route?.google?.new_ranking_elements?.toFixed(2) ?? 0;
   const bing_new_ranking = route?.bing?.new_ranking_elements?.toFixed(2) ?? 0;
-  const google_new_ranking_perc = calculatePercentageDifference(routePrevious?.google?.new_ranking_elements ?? 0,google_new_ranking )
-  const bing_new_ranking_perc = calculatePercentageDifference(routePrevious?.bing?.new_ranking_elements ?? 0, bing_new_ranking )
+  const google_new_ranking_perc = calculatePercentageDifference(routePrevious?.google?.new_ranking_elements ?? 0, google_new_ranking)
+  const bing_new_ranking_perc = calculatePercentageDifference(routePrevious?.bing?.new_ranking_elements ?? 0, bing_new_ranking)
 
 
   const pos_31_and_above = google_positions?.pos_31_40 + google_positions?.pos_41_50 + google_positions?.pos_51_60 + google_positions?.pos_61_70 + google_positions?.pos_71_80 + google_positions?.pos_81_90 + google_positions?.pos_91_100
 
   const previous_pos_31_and_above = previous_google_positions?.pos_31_40 + previous_google_positions?.pos_41_50 + previous_google_positions?.pos_51_60 + previous_google_positions?.pos_61_70 + previous_google_positions?.pos_71_80 + previous_google_positions?.pos_81_90 + previous_google_positions?.pos_91_100
 
+  //   const keywordDisDiff = {
+  //     google: {
+  //       "2-3": calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_2_3, route?.google?.organic_positions.pos_2_3),
+  //       "4-10": calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_4_10, routePrevious?.google?.organic_positions?.pos_4_10),
+  //       "11-20": calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_11_20, routePrevious?.google?.organic_positions?.pos_11_20),
+  //       "21-30": calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_21_30, routePrevious?.google?.organic_positions?.pos_21_30),
+  //       "Above 30": calculatePercentageDifference(previous_pos_31_and_above, pos_31_and_above),
+
+  //     },
+  //     bing: {
+  // "2-3": calculatePercentageDifference(routePrevious?.bing?.organic_positions?.pos_2_3, route?.bing?.organic_positions.pos_2_3) ?? 0,
+  //       "4-10": calculatePercentageDifference(routePrevious?.bing?.organic_positions?.pos_4_10, routePrevious?.bing?.organic_positions?.pos_4_10) ?? 0,
+  //       "11-20": calculatePercentageDifference(routePrevious?.bing?.organic_positions?.pos_11_20, routePrevious?.bing?.organic_positions?.pos_11_20) ?? 0,
+  //       "21-30": calculatePercentageDifference(routePrevious?.bing?.organic_positions?.pos_21_30, routePrevious?.bing?.organic_positions?.pos_21_30) ?? 0,
+  //       "Above 30": calculatePercentageDifference(previous_pos_31_and_above, pos_31_and_above),
+  //     }
+
+  //   }
+
+  // const keywordDisDiff = {
+  //   google: {
+  //     "2-3": calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_2_3, route?.google?.organic_positions?.pos_2_3) ?? 0,
+  //     "4-10": calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_4_10, route?.google?.organic_positions?.pos_4_10) ?? 0,
+  //     "11-20": calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_11_20, route?.google?.organic_positions?.pos_11_20) ?? 0,
+  //     "21-30": calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_21_30, route?.google?.organic_positions?.pos_21_30) ?? 0,
+  //     "Above 30": calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_31_and_above, route?.google?.organic_positions?.pos_31_and_above) ?? 0,
+  //   },
+  //   bing: {
+  //     "2-3": calculatePercentageDifference(+routePrevious?.bing?.organic_positions?.pos_2_3 ?? 0, +route?.bing?.organic_positions?.pos_2_3 ?? 0) ?? 0,
+  //     "4-10": calculatePercentageDifference(+routePrevious?.bing?.organic_positions?.pos_4_10 ?? 0, +route?.bing?.organic_positions?.pos_4_10 ?? 0) ?? 0,
+  //     "11-20": calculatePercentageDifference(+routePrevious?.bing?.organic_positions?.pos_11_20 ?? 0, +route?.bing?.organic_positions?.pos_11_20 ?? 0) ?? 0,
+  //     "21-30": calculatePercentageDifference(+routePrevious?.bing?.organic_positions?.pos_21_30 ?? 0, +route?.bing?.organic_positions?.pos_21_30 ?? 0) ?? 0,
+  //     "Above 30": calculatePercentageDifference(+routePrevious?.bing?.organic_positions?.pos_31_and_above ?? 0, +route?.bing?.organic_positions?.pos_31_and_above ?? 0) ?? 0,
+  //   }
+  // }
+
+
+
+
+
+
+  const previousRouteExists = routePrevious && routePrevious.google && routePrevious.bing;
+
   const keywordDisDiff = {
     google: {
-      "2-3": calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_2_3 ?? 0, route?.google?.organic_positions.pos_2_3 ?? 0),
-      "4-10": calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_4_10 ?? 0, routePrevious?.google?.organic_positions?.pos_4_10 ?? 0),
-      "11-20": calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_11_20 ?? 0, routePrevious?.google?.organic_positions?.pos_11_20 ?? 0),
-      "21-30": calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_21_30 ?? 0, routePrevious?.google?.organic_positions?.pos_21_30 ?? 0),
-      "Above 30": calculatePercentageDifference(previous_pos_31_and_above ?? 0, pos_31_and_above ?? 0),
-
+      "2-3": previousRouteExists
+        ? calculatePercentageDifference(routePrevious?.google.organic_positions?.pos_2_3, route?.google.organic_positions?.pos_2_3)
+        : 0,
+      "4-10": previousRouteExists
+        ? calculatePercentageDifference(routePrevious?.google.organic_positions?.pos_4_10, route?.google.organic_positions?.pos_4_10)
+        : 0,
+      "11-20": previousRouteExists
+        ? calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_11_20, route?.google?.organic_positions?.pos_11_20)
+        : 0,
+      "21-30": previousRouteExists
+        ? calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_21_30, route?.google?.organic_positions?.pos_21_30)
+        : 0,
+      "Above 30": previousRouteExists
+        ? calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_31_and_above, route?.google?.organic_positions?.pos_31_and_above)
+        : 0,
     },
     bing: {
-"2-3": calculatePercentageDifference(routePrevious?.bing?.organic_positions?.pos_2_3, route?.bing?.organic_positions.pos_2_3) ?? 0,
-      "4-10": +calculatePercentageDifference(routePrevious?.bing?.organic_positions?.pos_4_10, routePrevious?.bing?.organic_positions?.pos_4_10) ?? 0,
-      "11-20": +calculatePercentageDifference(routePrevious?.bing?.organic_positions?.pos_11_20, routePrevious?.bing?.organic_positions?.pos_11_20) ?? 0,
-      "21-30": +calculatePercentageDifference(routePrevious?.bing?.organic_positions?.pos_21_30, routePrevious?.bing?.organic_positions?.pos_21_30) ?? 0,
-      "Above 30": calculatePercentageDifference(previous_pos_31_and_above, pos_31_and_above),
+      "2-3": previousRouteExists
+        ? calculatePercentageDifference(+routePrevious?.bing?.organic_positions?.pos_2_3, +route?.bing?.organic_positions?.pos_2_3)
+        : 0,
+      "4-10": previousRouteExists
+        ? calculatePercentageDifference(+routePrevious?.bing?.organic_positions?.pos_4_10, +route?.bing?.organic_positions?.pos_4_10)
+        : 0,
+      "11-20": previousRouteExists
+        ? calculatePercentageDifference(+routePrevious?.bing?.organic_positions?.pos_11_20, +route?.bing?.organic_positions?.pos_11_20)
+        : 0,
+      "21-30": previousRouteExists
+        ? calculatePercentageDifference(+routePrevious?.bing?.organic_positions?.pos_21_30, +route?.bing?.organic_positions?.pos_21_30)
+        : 0,
+      "Above 30": previousRouteExists
+        ? calculatePercentageDifference(+routePrevious?.bing?.organic_positions?.pos_31_and_above, +route?.bing.organic_positions?.pos_31_and_above)
+        : 0,
     }
-
   }
 
-
-  const dist_labels = OverviewData?.project?.crawlings.map((label:any)=> moment(label.createdAt.replace(/^0+/, '')).format("MMM DD"));
-  const gdist_data = OverviewData?.project?.crawlings?.map((item:any)=> item?.crawlingData)
-// console.log("GL", gdist_data)
+  const dist_labels = OverviewData?.project?.crawlings.map((label: any) => moment(label.createdAt.replace(/^0+/, '')).format("MMM DD"));
+  const gdist_data = OverviewData?.project?.crawlings?.map((item: any) => item?.crawlingData)
+  // console.log("GL", gdist_data)
 
   const options = {
     plugins: {
@@ -226,9 +292,43 @@ export default function RankOverview({ se }: Props) {
       },
     },
   };
-  
 
-//  const moment = 
+
+  // const position = OverviewData?.project?.crawlings?.map((item: any) => {
+  //   const crawlingData = item.crawlingData && item.crawlingData.find((data:any) => data.data);
+  //   const bingData = crawlingData.data.bing.organic_positions;
+  // const googleData = crawlingData.data.google.organic_positions;
+  //   return {
+  //     bing: {
+  //       pos_2_3: bingData.pos_2_3,
+  //       pos_4_10: bingData.pos_4_10,
+  //       pos_11_20: bingData.pos_11_20,
+  //       pos_21_30: bingData.pos_21_30,
+  //       pos_31_40: bingData.pos_31_40,
+  //       pos_41_50: bingData.pos_41_50,
+  //       pos_51_60: bingData.pos_51_60,
+  //       pos_61_70: bingData.pos_61_70,
+  //       pos_71_80: bingData.pos_71_80,
+  //       pos_81_90: bingData.pos_81_90,
+  //       pos_91_100: bingData.pos_91_100,
+  //     },
+  //     google: {
+  //       pos_2_3: googleData.pos_2_3,
+  //       pos_4_10: googleData.pos_4_10,
+  //       pos_11_20: googleData.pos_11_20,
+  //       pos_21_30: googleData.pos_21_30,
+  //       pos_31_40: googleData.pos_31_40,
+  //       pos_41_50: googleData.pos_41_50,
+  //       pos_51_60: googleData.pos_51_60,
+  //       pos_61_70: googleData.pos_61_70,
+  //       pos_71_80: googleData.pos_71_80,
+  //       pos_81_90: googleData.pos_81_90,
+  //       pos_91_100: googleData.pos_91_100,
+  //     },
+  //   }
+  // })
+
+  // console.log("POS",position?.bing?.pos_2_3)
 
   const data = {
     // changing labels to changes values on X-axis.
@@ -340,198 +440,204 @@ export default function RankOverview({ se }: Props) {
     ]
   };
 
+  console.log("KEY", route?.bing?.organic_positions?.pos_2_3)
 
   return (
-    <main className="grid w-full h-full items-start content-start gap-6 my-10 mb-20 overflow-auto">
-      <section className="grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 gap-6">
-        <OrganicTrafficCard />
-        <Card
-          isLoading={isPending}
-          isError={isError}
-          title={"Featured Snippet"}
-          amount={se == "google" ? google_featured_snippet : bing_featured_snippet}
-          style={se === "google" ? (
-            gfs_percentage === 0 ? "text-gray-500"
-              : gfs_percentage > 0 ? "text-green-500" : "text-red-500"
-          ) :
-            (
-              bfs_percentage === 0 ? "text-gray-500"
-                : bfs_percentage > 0 ? "text-green-500" : "text-red-500"
-            )
-          }
-          percent={se === "google" ? gfs_percentage : bfs_percentage}
-          chart={<LineChart pageData={se === "google" ? getGoogleTrafficLineGraphData() : getBingTrafficLineGraphData()} />}
-        />
-        <Card
-          title={"New Ranking Element"}
-          amount={se === "google" ? google_new_ranking: bing_new_ranking }
-          style={se == "google" ?
-            (google_new_ranking_perc === 0 ? "text-gray-500"
-              : google_new_ranking_perc > 0 ? "text-green-500" : "text-red-500"
-            )
-            :
-            (
-              bing_new_ranking_perc === 0 ? "text-gray-500"
-                : bing_new_ranking_perc > 0 ? "text-green-500" : "text-red-500"
-            )
-          }
-          percent={se === "google" ? google_new_ranking_perc : bing_new_ranking_perc}
-          chart={<LineChart pageData={se === "google" ? getGoogleNewRankingGraphData() : getBingNewRankingGraphData()} />}
-        />
-      </section>
-      <section className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 md:gap-8 gap-4">
-        <div
-          className={` col-span-1 min-[375px]:min-w-[330px] grid p-6 gap-3 rounded-md border shadow-sm w-full`}
-        >
-          <TitleWithoutUnderline
-            title={"Keyword ranking "}
-            info={"Keyword ranking "}
-          />
-          <div className="w-full rounded-xl border shadow-sm content-start justify-between ">
-            <table className="py-4 w-full  table-fixed">
-              <thead className=" bg-[#EAECF0] h-12 rounded-md">
-                <tr className="rounded-md">
-                  <th className="font-medium text-xs text-[#475467] rounded-tl-xl text-left p-2">
-                    Positions
-                  </th>
-                  <th className="font-medium text-xs text-[#475467] text-left p-2 ">
-                    <span className={`flex items-center gap-1`}>
-                      {" "}
-                      Number <ButtonWithTitle info={"More or less keywords"} />
-                    </span>
-                  </th>
-                  <th className="font-medium text-xs text-[#475467] rounded-tr-xl text-left p-2 ">
-                    <span className={`flex items-center gap-1`}>
-                      {" "}
-                      Changes{" "}
-                      <ButtonWithTitle info={"Changes in rank position"} />
-                    </span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className=" border-b">
-                  <td className=" p-2 ">2 - 3</td>
-                  <td className=" p-2 ">{(google_positions?.pos_2_3)?.toFixed(1) ??0} </td>
-                  <td className="  p-2 rounded-full">
+
+    isPending ? <div className=""> Loading...</div>
+      :
+      (
+        <main className="grid w-full h-full items-start content-start gap-6 my-10 mb-20 overflow-auto">
+          <section className="grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 gap-6">
+            <OrganicTrafficCard />
+            <Card
+              isLoading={isPending}
+              isError={isError}
+              title={"Featured Snippet"}
+              amount={se == "google" ? google_featured_snippet : bing_featured_snippet}
+              style={se === "google" ? (
+                gfs_percentage === 0 ? "text-gray-500"
+                  : gfs_percentage > 0 ? "text-green-500" : "text-red-500"
+              ) :
+                (
+                  bfs_percentage === 0 ? "text-gray-500"
+                    : bfs_percentage > 0 ? "text-green-500" : "text-red-500"
+                )
+              }
+              percent={se === "google" ? gfs_percentage : bfs_percentage}
+              chart={<LineChart pageData={se === "google" ? getGoogleTrafficLineGraphData() : getBingTrafficLineGraphData()} />}
+            />
+            <Card
+              title={"New Ranking Element"}
+              amount={se === "google" ? google_new_ranking : bing_new_ranking}
+              style={se == "google" ?
+                (google_new_ranking_perc === 0 ? "text-gray-500"
+                  : google_new_ranking_perc > 0 ? "text-green-500" : "text-red-500"
+                )
+                :
+                (
+                  bing_new_ranking_perc === 0 ? "text-gray-500"
+                    : bing_new_ranking_perc > 0 ? "text-green-500" : "text-red-500"
+                )
+              }
+              percent={se === "google" ? google_new_ranking_perc : bing_new_ranking_perc}
+              chart={<LineChart pageData={se === "google" ? getGoogleNewRankingGraphData() : getBingNewRankingGraphData()} />}
+            />
+          </section>
+          <section className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 md:gap-8 gap-4">
+            <div
+              className={` col-span-1 min-[375px]:min-w-[330px] grid p-6 gap-3 rounded-md border shadow-sm w-full`}
+            >
+              <TitleWithoutUnderline
+                title={"Keyword ranking "}
+                info={"Keyword ranking "}
+              />
+              <div className="w-full rounded-xl border shadow-sm content-start justify-between ">
+                <table className="py-4 w-full  table-fixed">
+                  <thead className=" bg-[#EAECF0] h-12 rounded-md">
+                    <tr className="rounded-md">
+                      <th className="font-medium text-xs text-[#475467] rounded-tl-xl text-left p-2">
+                        Positions
+                      </th>
+                      <th className="font-medium text-xs text-[#475467] text-left p-2 ">
+                        <span className={`flex items-center gap-1`}>
+                          {" "}
+                          Number <ButtonWithTitle info={"More or less keywords"} />
+                        </span>
+                      </th>
+                      <th className="font-medium text-xs text-[#475467] rounded-tr-xl text-left p-2 ">
+                        <span className={`flex items-center gap-1`}>
+                          {" "}
+                          Changes{" "}
+                          <ButtonWithTitle info={"Changes in rank position"} />
+                        </span>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className=" border-b">
+                      <td className=" p-2 ">2 - 3</td>
+                      <td className=" p-2 ">{(google_positions?.pos_2_3)?.toFixed(1) ?? 0} </td>
+                      <td className="  p-2 rounded-full">
 
 
-                  <span className={`p-2 rounded-full flex items-center gap-1
+                        <span className={`p-2 rounded-full flex items-center gap-1
                       ${keywordDisDiff.google["2-3"] > 0 ? "bg-green-200"
-                        : keywordDisDiff.google["2-3"] < 0 ? "bg-red-400"
-                          : "bg-gray-200"
-                      }
+                            : keywordDisDiff.google["2-3"] < 0 ? "bg-red-400"
+                              : "bg-gray-200"
+                          }
                       `}><FaArrowUp className={`
                         ${keywordDisDiff.google["2-3"] > 0 ? "text-green-500"
-                          : keywordDisDiff.google["2-3"] < 0 ? "text-red-400 rotate-180"
-                            : "text-gray-500"
-                        }
-                      `} />{keywordDisDiff.google["2-3"]?.toFixed(1)} </span>
+                              : keywordDisDiff.google["2-3"] < 0 ? "text-red-400 rotate-180"
+                                : "text-gray-500"
+                            }
+                      `} />{keywordDisDiff.google["2-3"]?.toFixed(2) ?? 0} </span>
 
 
-                  </td>
-                </tr>
-                <tr className="border-b">
-                  <td className=" p-2 ">4 - 10</td>
-                  <td className=" p-2 "> {google_positions?.pos_4_10} </td>
-                  <td className="  p-2 rounded-full">
+                      </td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className=" p-2 ">4 - 10</td>
+                      <td className=" p-2 "> {google_positions?.pos_4_10} </td>
+                      <td className="  p-2 rounded-full">
 
 
-                  <span className={`p-2 rounded-full flex items-center gap-1
+                        <span className={`p-2 rounded-full flex items-center gap-1
                       ${keywordDisDiff.google["4-10"] > 0 ? "bg-green-200"
-                        : keywordDisDiff.google["4-10"] < 0 ? "bg-red-400"
-                          : "bg-gray-200"
-                      }
+                            : keywordDisDiff.google["4-10"] < 0 ? "bg-red-400"
+                              : "bg-gray-200"
+                          }
                       `}><FaArrowUp className={`
                         ${keywordDisDiff.google["4-10"] > 0 ? "text-green-500"
-                          : keywordDisDiff.google["4-10"] < 0 ? "text-red-400 rotate-180"
-                            : "text-gray-500"
-                        }
-                      `} />{keywordDisDiff.google["4-10"].toFixed(1)} </span>
-                      
-                    
-                  </td>
-                </tr>
-                <tr className="border-b">
-                  <td className="w-1/3 p-2 ">11 - 20</td>
-                  <td className="w-1/3 p-2 "> {google_positions?.pos_11_20} </td>
-                  <td className="  p-2 rounded-full">
+                              : keywordDisDiff.google["4-10"] < 0 ? "text-red-400 rotate-180"
+                                : "text-gray-500"
+                            }
+                      `} />{keywordDisDiff.google["4-10"]?.toFixed(2) ?? 0} </span>
 
 
-                  <span className={`p-2 rounded-full flex items-center gap-1
+                      </td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className="w-1/3 p-2 ">11 - 20</td>
+                      <td className="w-1/3 p-2 "> {google_positions?.pos_11_20} </td>
+                      <td className="  p-2 rounded-full">
+
+
+                        <span className={`p-2 rounded-full flex items-center gap-1
                       ${keywordDisDiff.google["11-20"] > 0 ? "bg-green-200"
-                        : keywordDisDiff.google["11-20"] < 0 ? "bg-red-400"
-                          : "bg-gray-200"
-                      }
+                            : keywordDisDiff.google["11-20"] < 0 ? "bg-red-400"
+                              : "bg-gray-200"
+                          }
                       `}><FaArrowUp className={`
                         ${keywordDisDiff.google["11-20"] > 0 ? "text-green-500"
-                          : keywordDisDiff.google["11-20"] < 0 ? "text-red-400 rotate-180"
-                            : "text-gray-500"
-                        }
-                      `} />{keywordDisDiff.google["11-20"].toFixed(1) ?? 0} </span>
+                              : keywordDisDiff.google["11-20"] < 0 ? "text-red-400 rotate-180"
+                                : "text-gray-500"
+                            }
+                      `} />{keywordDisDiff.google["11-20"]?.toFixed(2) ?? 0} </span>
 
 
-                  </td>
-                </tr>
-                <tr className="">
-                  <td className="w-1/3 p-2 ">21 - 30</td>
-                  <td className="w-1/3 p-2 ">{google_positions?.pos_21_30} </td>
-                  <td className="  p-2 rounded-full">
+                      </td>
+                    </tr>
+                    <tr className="">
+                      <td className="w-1/3 p-2 ">21 - 30</td>
+                      <td className="w-1/3 p-2 ">{google_positions?.pos_21_30} </td>
+                      <td className="  p-2 rounded-full">
 
 
 
-                    <span className={`p-2 rounded-full flex items-center gap-1
+                        <span className={`p-2 rounded-full flex items-center gap-1
                       ${keywordDisDiff.google["21-30"] > 0 ? "bg-green-200"
-                        : keywordDisDiff.google["21-30"] < 0 ? "bg-red-400"
-                          : "bg-gray-200"
-                      }
+                            : keywordDisDiff.google["21-30"] < 0 ? "bg-red-400"
+                              : "bg-gray-200"
+                          }
                       `}><FaArrowUp className={`
                         ${keywordDisDiff.google["21-30"] > 0 ? "text-green-500"
-                          : keywordDisDiff.google["21-30"] < 0 ? "text-red-400 rotate-180"
-                            : "text-gray-500"
-                        }
-                      `} />{keywordDisDiff.google["21-30"].toFixed(1) ?? 0} </span>
+                              : keywordDisDiff.google["21-30"] < 0 ? "text-red-400 rotate-180"
+                                : "text-gray-500"
+                            }
+                      `} />{keywordDisDiff.google["21-30"]?.toFixed(2) ?? 0} </span>
 
 
-                  </td>
-                </tr>
-                <tr className="">
-                  <td className="w-1/3 p-2 ">Above 31</td>
-                  <td className="w-1/3 p-2 "> {pos_31_and_above} </td>
-                  <td className="  p-2 rounded-full">
-                    <span className={`p-2 rounded-full flex items-center gap-1
+                      </td>
+                    </tr>
+                    <tr className="">
+                      <td className="w-1/3 p-2 ">Above 31</td>
+                      <td className="w-1/3 p-2 "> {pos_31_and_above} </td>
+                      <td className="  p-2 rounded-full">
+                        <span className={`p-2 rounded-full flex items-center gap-1
                       ${keywordDisDiff.google["Above 30"] > 0 ? "bg-green-200"
-                        : keywordDisDiff.google["Above 30"] < 0 ? "bg-red-400"
-                          : "bg-gray-200"
-                      }
+                            : keywordDisDiff.google["Above 30"] < 0 ? "bg-red-400"
+                              : "bg-gray-200"
+                          }
                       `}><FaArrowUp className={`
                         ${keywordDisDiff.google["Above 30"] > 0 ? "text-green-500"
-                          : keywordDisDiff.google["Above 30"] < 0 ? "text-red-400 rotate-180"
-                            : "text-gray-500"
-                        }
-                      `} />{keywordDisDiff.google["Above 30"].toFixed(1) ?? 0} </span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div
-          className={`lg:col-span-2 col-span-1 grid p-6 gap-3 rounded-md border shadow-sm w-full`}
-        >
-          <TitleWithoutUnderline
-            title={"Position distributions "}
-            info={"Position distributions"}
-          />
-          {/* <BarChartSingle
+                              : keywordDisDiff.google["Above 30"] < 0 ? "text-red-400 rotate-180"
+                                : "text-gray-500"
+                            }
+                      `} />{keywordDisDiff.google["Above 30"]?.toFixed(2) ?? 0} </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div
+              className={`lg:col-span-2 col-span-1 grid p-6 gap-3 rounded-md border shadow-sm w-full`}
+            >
+              <TitleWithoutUnderline
+                title={"Position distributions "}
+                info={"Position distributions"}
+              />
+              {/* <BarChartSingle
             labels={["23","33", "90","33"]}
             data={[23,50,10,33,10]}
             xAxisLabel="Month"
             yAxisLabel="Number of Keywords"
           /> */}
-          <Line data={data as ChartData<"line", number[], string>} options={options as ChartOptions<"line">} />
-        </div>
-      </section>
-    </main>
+              <Line data={data as ChartData<"line", number[], string>} options={options as ChartOptions<"line">} />
+            </div>
+          </section>
+        </main>
+      )
   );
 }

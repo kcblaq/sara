@@ -15,6 +15,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/app/store";
 import moment from "moment";
 import useRankMutation, { RankCrawl, RankTrackerCrawler, useRankTrackingOverview } from "@/app/services/crawlers/rank_tracking";
+import { trimDomain } from "@/app/utils/trimDomain";
+import { CurrentProperty } from "@/app/utils/currentProperty";
+import Button from "../components/ui/Button";
 // import PageDistributions from './components/PageDistributions'
 
 
@@ -24,18 +27,23 @@ export default function page() {
   const [se, setSe] = useState("google")
 
   const tabs = [
-    { title: "Rankings", content: <Rankings se={se} /> },
-    { title: "Overview", content: <RankOverview se={se} /> },
+    { title: "Overview", content: <RankOverview /> },
+    { title: "Rankings", content: <Rankings /> },
     // { title: "Page distributions", content: <PageDistributions /> }
   ];
-  const lastUpdated = useSelector(
-    (state: RootState) =>
-      state.performance.metrics?.history?.scores[0]?.createdAt
-  );
-  const activeProperty = useSelector(
-    (state: RootState) => state.property.activeProperty
-  );
 
+  const { isError, isPending, isSuccess, data: OverviewData } = useRankTrackingOverview("overview");
+
+  // const lastUpdated = (OverviewData?.project?.crawlings[0]?.crawlingData[0]?.updatedAt)
+  const lastUpdated = moment(OverviewData?.project?.crawlings[0]?.crawlingData[0]?.updatedAt).format("Do MMM YY")
+  // console.log("LU", lastUpdated)
+
+
+
+  const {mutate: RankMutate, isSuccess:mutateSuccess, isError: mutateError, isPaused: mutatePaused,isPending: mutatePending} = useRankMutation();
+
+ const project = CurrentProperty();
+ 
 
 
   return (
@@ -50,35 +58,53 @@ export default function page() {
         </div>
         <div className="flex items-center gap-4 w-full sm:justify-end">
           <div className="">
-            <FilledButton
+            {/* <FilledButton
               title={"Re-track rankings"}
+              loading={mutatePending}
               className="sm:text-base text-sm min-[375px]:px-5 px-px  min-[375px]:h-full h-9"
-            />
+              handleClick={() => {
+                RankMutate({
+                  target: trimDomain(project.domain), 
+                  id: project.id, 
+                  location_code: 2840
+                })
+              }
+            }
+            /> */}
+            <Button className="" loading={mutatePending} onClick={()=>{
+              RankMutate({
+                target: trimDomain(project.domain), 
+                id: project.id, 
+                location_code: 2840
+              })
+            } }>
+            Re-track rankings
+            </Button>
           </div>
           <div>
             {" "}
-            <button
-              className={`w-full bg-[#EFF8FF] text-primary gap-2  items-center flex justify-center border min-[375px]:h-[40px] h-9  rounded-lg sm:text-base text-sm p-2 font-semibold hover:bg-gray-100 `}
+            <Button
+              className={`w-full bg-[#EFF8FF] text-primary gap-2  items-center flex justify-center border  rounded-lg sm:text-base text-sm p-2 font-semibold hover:bg-gray-100 `}
             >
               <IoCloudUploadOutline /> Export
-            </button>
+            </Button>
           </div>
           <div className="">
             {" "}
-            <PlainButton
+            {/* <PlainButton
               title={""}
               icon={<IoSettingsOutline />}
               className="sm:text-base text-sm min-[375px]:h-full h-9"
-            />
+            /> */}
           </div>
         </div>
       </section>
 
       <section className="w-full gap-6 flex lg:flex-row flex-col lg:items-center ">
         <div className="flex min-[375px]:flex-row flex-col min-[375px]:items-center min-[375px]:gap-4 gap">
-          <p className="min-[425px]:text-inherit text-sm whitespace-nowrap">
-            <strong> Last Update:</strong>{" "}
-            {moment(lastUpdated).format("Do MMM YY")}{" "}
+          <p className="min-[425px]:text-inherit gap-2 flex items-center text-sm whitespace-nowrap">
+            <strong> Last Update:</strong>
+            { lastUpdated}
           </p>
           {/* <ToggleMobile
             mobile={mobile}
@@ -87,7 +113,7 @@ export default function page() {
           /> */}
         </div>
         <div className="flex sm:flex-row flex-col  w-full sm:gap-6 gap-2 sm:items-center it">
-          <CountryPick className=" w-full flex items-center" />
+          {/* <CountryPick className=" w-full flex items-center" /> */}
           <SearchEnginePick className=" w-full flex items-center" />
           <OrganicPick className=" w-full flex items-center" />
         </div>

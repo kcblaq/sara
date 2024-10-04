@@ -101,7 +101,8 @@ export const useRankMutation = () => {
         return(`Mutation failed:, ${error}`);
       },
       onSuccess: (data) => {
-        console.log('Mutation successful:', data);
+        useRankTrackingOverview("overview")
+        useRankTrackingOverview("ranking")
       },
     });
   };
