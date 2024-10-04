@@ -1,39 +1,18 @@
-import {
-  AwaitedReactNode,
-  JSXElementConstructor,
-  Key,
-  ReactElement,
-  ReactNode,
-  ReactPortal,
-  useEffect,
-  useState,
-} from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { CiSearch } from "react-icons/ci";
-import { IoIosArrowDown } from "react-icons/io";
-import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
-import { removeTrailingSlash } from "@/app/utils/RemoveSlash";
-// import { setLoading } from "@/redux/features/loaderSlice";
-import { useSelector } from "react-redux";
-import { RootState } from "@/app/store";
+
 import { CategoryItem, IssuesType } from "@/types/technicalseo/IssuesType";
 import { BsDot } from "react-icons/bs";
 import Loader from "@/app/component/Loader";
-import CustomAccordion from "./IssueCustomAccordion";
 import IssueCustomAccordion from "./IssueCustomAccordion";
 import FeaturedIcon from "@/components/svgComponents/FeaturedIcon";
-import {
-  CrawlingData,
-  SitePerformanceData,
-} from "@/types/technicalseo/technicalSeoTypes";
+import { CrawlingData, IssueTab } from "@/types/technicalseo/technicalSeoTypes";
 import { useTechnicalSeoFetchData } from "@/app/services/technicalSeo/TechnicalSeoFetch";
-// import { issuesDetails } from "./data";
 
 export default function Issues() {
   const categories: { [key: string]: any[] } = {};
-  const activeProperty = useSelector(
-    (state: RootState) => state.property.activeProperty
-  );
+
   // const loading = useSelector((state: RootState) => state.loading.loading);
   const [currentFilter, setCurrentFilter] = useState("All issues");
   const [currentSitePerfId, setCurrentSitePerfId] = useState("");
@@ -54,28 +33,22 @@ export default function Issues() {
     useState<CategoryItem | null>(null);
 
   // Type guard to check if a CrawlingData is of type SitePerformanceData
-  function isSitePerformanceData(
-    data: CrawlingData
-  ): data is SitePerformanceData {
-    return data.tab === "sitePerformance";
+  function isIssues(data: CrawlingData): data is IssueTab {
+    return data.tab === "issues";
   }
-
-  const crawlings = useSelector(
-    (state: RootState) => state.technicalSeo.crawlings
-  );
 
   const { data, isLoading } = useTechnicalSeoFetchData();
   console.log("react query issue", data);
   // Extract the `sitePerformance` data
-  const sitePerformanceData = crawlings
-    .flatMap((crawling) => crawling.crawlingData) // Get all crawlingData arrays
-    .filter(isSitePerformanceData); // Filter by tab = 'sitePerformance'
+  const siteIssues: IssueTab[] =
+    data?.crawlings
+      .flatMap((crawling: any) => crawling.crawlingData)
+      .filter(isIssues) ?? []; // Filter by tab = 'issues tab'
 
-  const currentDescription =
-    sitePerformanceData[0]?.data.performance_issues.find(
-      (item) => item.id === currentSitePerfId
-    );
-  console.log(sitePerformanceData);
+  const currentDescription = siteIssues[0]?.data.issueArr.find(
+    (item) => item.id === currentSitePerfId
+  );
+  console.log(siteIssues);
   const tabsFilter = [
     { name: "All issues" },
     {
@@ -124,65 +97,6 @@ export default function Issues() {
     },
   ];
 
-  // issueData?.issues[0].errors.find((item) => {
-  //   const single = item.category;
-  //   if (!categories.hasOwnProperty(single)) {
-  //     categories[single] = [];
-  //   }
-  //   categories[single].push(item);
-  // });
-
-  // issueData?.issues[0].notice.find((item) => {
-  //   const single = item.category;
-  //   if (!categories.hasOwnProperty(single)) {
-  //     categories[single] = [];
-  //   }
-  //   categories[single].push(item);
-  // });
-  // issueData?.issues[0].warnings.find((item) => {
-  //   const single = item.category;
-  //   if (!categories.hasOwnProperty(single)) {
-  //     categories[single] = [];
-  //   }
-  //   categories[single].push(item);
-  // });
-
-  // console.log("CUR",currentCategoryDetail)
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       // setLoading(true);
-  //       const response = await ApiCall.get("/crawl/technical-seo", {
-  //         params: {
-  //           limit: 100,
-  //           platform: "desktop",
-  //           url: removeTrailingSlash(activeProperty),
-  //           page: "issues",
-  //         },
-  //       });
-  //       setissueData(response.data);
-  //       // console.log("RES",issueData);
-  //     } catch (error: any) {
-  //       console.log(error);
-  //     } finally {
-
-  //     }
-  //   };
-
-  //   fetchData();
-
-  //   // }, [activeProperty]);
-  // }, []);
-
-  // console.log("DETAIL",currentCategoryDetail)
-
-  // issueData?.issues[0]?.warnings?.find((item) => {
-  //     if(categories.hasOwnProperty(category)){
-  //       categories[category].push(item)
-  //     }
-
-  //   })
   interface Props {
     title: string;
   }
@@ -228,7 +142,7 @@ export default function Issues() {
 
               <IssueCustomAccordion
                 title="Site performance"
-                data={sitePerformanceData[0]?.data.performance_issues}
+                data={siteIssues[0]?.data.issueArr}
                 setCurrentSitePerfId={setCurrentSitePerfId}
               />
 
