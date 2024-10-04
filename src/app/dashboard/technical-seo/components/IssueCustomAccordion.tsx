@@ -26,7 +26,7 @@ export default function IssueCustomAccordion({
   return (
     <Accordion type="single" collapsible className="w-full">
       <AccordionItem value="item-1">
-        <AccordionTrigger className="hover:bg-gray-200 active:bg-gray-200 p-3 rounded-md">
+        <AccordionTrigger className="hover:bg-gray-200 active:bg-gray-200 p-3 rounded-md ">
           {title}
         </AccordionTrigger>
         {data?.map((item, i) => (
@@ -35,7 +35,7 @@ export default function IssueCustomAccordion({
               className="flex gap-2 justify-between items-center  cursor-pointer"
               onClick={() => setCurrentSitePerfId(item.id)}
             >
-              <span>{item?.title} </span>
+              <span className="truncate">{item?.title} </span>
               <span>{item?.score} </span>
             </div>
           </AccordionContent>

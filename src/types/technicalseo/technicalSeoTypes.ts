@@ -13,12 +13,16 @@ interface SiteIssues {
   }[];
 }
 
-type Issues = {
+export type Issues = {
   id: string;
   score: number;
   title: string;
   description: string;
   scoreDisplayMode: "metricSavings" | "binary";
+};
+
+type issuesDataTab = {
+  issueArr: Issues[];
 };
 
 interface core_web {
@@ -74,7 +78,7 @@ interface StatusCode {
   is_redirect: number;
 }
 
-interface CrawledDetail {
+export interface CrawledDetail {
   pages_crawled: number;
   pages_in_queue: number;
   max_crawl_pages: number;
@@ -145,19 +149,21 @@ export type SitePerformanceData = {
   updatedAt: string;
 };
 
+export type IssueTab = {
+  id: number;
+  crawlingId: number;
+  tab: string;
+  data: issuesDataTab;
+  createdAt: string;
+  updatedAt: string;
+};
+
 // Union type for the different crawling data types
 export type CrawlingData =
   | CrawlingDataOverview
   | CrawlingDataCrawlability
-  | SitePerformanceData;
-
-// export interface Project {
-//   id: number;
-//   userId: number;
-//   domain: string;
-//   createdAt: string;
-//   updatedAt: string;
-// }
+  | SitePerformanceData
+  | IssueTab;
 
 export interface Crawler {
   id: number;

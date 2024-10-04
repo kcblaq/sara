@@ -1,42 +1,21 @@
-import {
-  AwaitedReactNode,
-  JSXElementConstructor,
-  Key,
-  ReactElement,
-  ReactNode,
-  ReactPortal,
-  useEffect,
-  useState,
-} from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { CiSearch } from "react-icons/ci";
-import { IoIosArrowDown } from "react-icons/io";
-import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
-import { removeTrailingSlash } from "@/app/utils/RemoveSlash";
-// import { setLoading } from "@/redux/features/loaderSlice";
-import { useSelector } from "react-redux";
-import { RootState } from "@/app/store";
+
 import { CategoryItem, IssuesType } from "@/types/technicalseo/IssuesType";
 import { BsDot } from "react-icons/bs";
 import Loader from "@/app/component/Loader";
-import CustomAccordion from "./IssueCustomAccordion";
 import IssueCustomAccordion from "./IssueCustomAccordion";
 import FeaturedIcon from "@/components/svgComponents/FeaturedIcon";
-import {
-  CrawlingData,
-  SitePerformanceData,
-} from "@/types/technicalseo/technicalSeoTypes";
-// import { issuesDetails } from "./data";
+import { CrawlingData, IssueTab } from "@/types/technicalseo/technicalSeoTypes";
+import { useTechnicalSeoFetchData } from "@/app/services/technicalSeo/TechnicalSeoFetch";
 
 export default function Issues() {
   const categories: { [key: string]: any[] } = {};
-  const activeProperty = useSelector(
-    (state: RootState) => state.property.activeProperty
-  );
+
   // const loading = useSelector((state: RootState) => state.loading.loading);
   const [currentFilter, setCurrentFilter] = useState("All issues");
   const [currentSitePerfId, setCurrentSitePerfId] = useState("");
-  // const [issueData, setissueData] = useState<IssuesType | null>(null);
   const [issueData, setissueData] = useState<
     | {
         id: string;
@@ -54,26 +33,22 @@ export default function Issues() {
     useState<CategoryItem | null>(null);
 
   // Type guard to check if a CrawlingData is of type SitePerformanceData
-  function isSitePerformanceData(
-    data: CrawlingData
-  ): data is SitePerformanceData {
-    return data.tab === "sitePerformance";
+  function isIssues(data: CrawlingData): data is IssueTab {
+    return data.tab === "issues";
   }
 
-  const crawlings = useSelector(
-    (state: RootState) => state.technicalSeo.crawlings
-  );
-
+  const { data, isLoading } = useTechnicalSeoFetchData();
+  console.log("react query issue", data);
   // Extract the `sitePerformance` data
-  const sitePerformanceData = crawlings
-    .flatMap((crawling) => crawling.crawlingData) // Get all crawlingData arrays
-    .filter(isSitePerformanceData); // Filter by tab = 'sitePerformance'
+  const siteIssues: IssueTab[] =
+    data?.crawlings
+      .flatMap((crawling: any) => crawling.crawlingData)
+      .filter(isIssues) ?? []; // Filter by tab = 'issues tab'
 
-  const currentDescription =
-    sitePerformanceData[0]?.data.performance_issues.find(
-      (item) => item.id === currentSitePerfId
-    );
-  console.log(sitePerformanceData);
+  const currentDescription = siteIssues[0]?.data.issueArr.find(
+    (item) => item.id === currentSitePerfId
+  );
+  console.log(siteIssues);
   const tabsFilter = [
     { name: "All issues" },
     {
@@ -122,72 +97,13 @@ export default function Issues() {
     },
   ];
 
-  // issueData?.issues[0].errors.find((item) => {
-  //   const single = item.category;
-  //   if (!categories.hasOwnProperty(single)) {
-  //     categories[single] = [];
-  //   }
-  //   categories[single].push(item);
-  // });
-
-  // issueData?.issues[0].notice.find((item) => {
-  //   const single = item.category;
-  //   if (!categories.hasOwnProperty(single)) {
-  //     categories[single] = [];
-  //   }
-  //   categories[single].push(item);
-  // });
-  // issueData?.issues[0].warnings.find((item) => {
-  //   const single = item.category;
-  //   if (!categories.hasOwnProperty(single)) {
-  //     categories[single] = [];
-  //   }
-  //   categories[single].push(item);
-  // });
-
-  // console.log("CUR",currentCategoryDetail)
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // setLoading(true);
-        const response = await ApiCall.get("/crawl/technical-seo", {
-          params: {
-            limit: 100,
-            platform: "desktop",
-            url: removeTrailingSlash(activeProperty),
-            page: "issues",
-          },
-        });
-        setissueData(response.data);
-        // console.log("RES",issueData);
-      } catch (error: any) {
-        console.log(error);
-      } finally {
-        // setLoading(false);
-      }
-    };
-
-    fetchData();
-
-    // }, [activeProperty]);
-  }, []);
-
-  // console.log("DETAIL",currentCategoryDetail)
-
-  // issueData?.issues[0]?.warnings?.find((item) => {
-  //     if(categories.hasOwnProperty(category)){
-  //       categories[category].push(item)
-  //     }
-
-  //   })
   interface Props {
     title: string;
   }
 
   return (
     <>
-      <main className="pb-14 grid w-full gap-8 overflow-auto min-h-[400px] ">
+      <main className="pb-14 grid w-full gap-8 overflow-auto min-h-[400px]">
         <section className="flex  flex-wrap items-center z-10 bg-white justify-between w-full gap-4 ">
           <div className="flex items-center gap-2 flex-wrap">
             {tabsFilter.map((item, index) => (
@@ -215,26 +131,26 @@ export default function Issues() {
           </div>
         </section>
 
-        {/* {loading ? (
+        {isLoading ? (
           <div className=" w-full h-10 flex items-center justify-center">
             <Loader />
           </div>
-        ) : ( */}
-        <section className="grid grid-cols-1 gap-8 md:grid-cols-3 max-h-[80dvh]  overflow-auto h-full ">
-          <div className="flex flex-col h-full gap-2 col-span-1 border   shadow-sm rounded-md">
-            {/* <IssueCustomAccordion title="Crawlability and indexability" /> */}
+        ) : (
+          <section className="grid grid-cols-1 gap-8 md:grid-cols-3 max-h-[80dvh]  overflow-auto h-full ">
+            <div className="flex flex-col h-full gap-2 col-span-1 border   shadow-sm rounded-md">
+              {/* <IssueCustomAccordion title="Crawlability and indexability" /> */}
 
-            <IssueCustomAccordion
-              title="Site performance"
-              data={sitePerformanceData[0]?.data.performance_issues}
-              setCurrentSitePerfId={setCurrentSitePerfId}
-            />
+              <IssueCustomAccordion
+                title="Site performance"
+                data={siteIssues[0]?.data.issueArr}
+                setCurrentSitePerfId={setCurrentSitePerfId}
+              />
 
-            <div
-              className="grid gap-4 my-4 transition-all ease-linear delay-300 p-3"
-              style={{ height: "100%" }}
-            >
-              {/* {Object.entries(categories).map(([key, value]) => {
+              <div
+                className="grid gap-4 my-4 transition-all ease-linear delay-300 p-3"
+                style={{ height: "100%" }}
+              >
+                {/* {Object.entries(categories).map(([key, value]) => {
                   // console.log("VALUES", value)
                   return (
                     <>
@@ -289,9 +205,9 @@ export default function Issues() {
                     </>
                   );
                 })} */}
-            </div>
+              </div>
 
-            {/* {
+              {/* {
                   currentCategoryDetail.map((item, i) => {
                     return <div key={i} className="flex w-full h-full cursor-pointer  py-2 justify-between items-center" onClick={() => {
                       setIssueCategory(item)
@@ -301,59 +217,64 @@ export default function Issues() {
                     </div>
                   })
                 } */}
-          </div>
-
-          {
-            <div className="flex flex-col md:col-span-2 col-span-1 gap-4">
-              <div className="border shadow-sm overflow-auto rounded-md w-full h-full ">
-                <div className="flex gap-6 w-full p-4 items-center font-semibold text-[#101828] text-lg">
-                  <FeaturedIcon className="size-10" />{" "}
-                  <h2 className=" font-semibold"> Pages with poor CLS: </h2>
-                  {/* <h3 className="">{currentCategoryDetail?.title} </h3> */}
-                </div>
-                <div className="overflow-auto h-[30vh] w-full">
-                  <table className="w-full text-left table-fixed">
-                    <thead className="bg-[#EAECF0] h-14 text-sm font-normal">
-                      <tr>
-                        <th className="p-2 pl-4 w-[310px]"> URL </th>
-                        <th className="p-2 w-[120px]"> Page depth </th>
-                        <th className="p-2 w-[120px]"> Internal links </th>
-                        <th className="p-2 w-[120px]"> Status code </th>
-                        <th className="p-2 w-[120px]"> Indexable </th>
-                      </tr>
-                    </thead>
-                    <tbody className="overflow-auto h-40 p-2 w-full">
-                      {currentCategoryDetail?.titleItems[0].pageData.rows.map(
-                        (item, i) => {
-                          return (
-                            <tr key={i} className="px-2 space-y-1 border-y">
-                              <td className="px-2 pl-4 space-y-1">
-                                {" "}
-                                {item.website}{" "}
-                              </td>
-                              <td className="px-2"> {item.crawlDepth} </td>
-                              <td className="px-2"> {item.url} </td>
-                              <td className="px-2"> {item.httpStatusCode} </td>
-                              <td className="px-2"> {item.index_status} </td>
-                            </tr>
-                          );
-                        }
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              <div className="border shadow-sm h-[170px] overflow-y-auto flex flex-col gap-4  rounded-md w-full p-4 2xl:p-4">
-                <h2 className=" font-semibold text-[#344054] text-2xl ">
-                  Issue Description{" "}
-                </h2>
-                {/* <p className="">{currentCategoryDetail?.description}</p> */}
-                <p>{currentDescription?.description ?? "issue Description "}</p>
-              </div>
             </div>
-          }
-        </section>
-        {/* )} */}
+
+            {
+              <div className="flex flex-col md:col-span-2 col-span-1 gap-4">
+                <div className="border shadow-sm overflow-auto rounded-md w-full h-full ">
+                  <div className="flex gap-6 w-full p-4 items-center font-semibold text-[#101828] text-lg">
+                    <FeaturedIcon className="size-10" />{" "}
+                    <h2 className=" font-semibold"> Pages with poor CLS: </h2>
+                    {/* <h3 className="">{currentCategoryDetail?.title} </h3> */}
+                  </div>
+                  <div className="overflow-auto h-[30vh] w-full">
+                    <table className="w-full text-left table-fixed">
+                      <thead className="bg-[#EAECF0] h-14 text-sm font-normal">
+                        <tr>
+                          <th className="p-2 pl-4 w-[310px]"> URL </th>
+                          <th className="p-2 w-[120px]"> Page depth </th>
+                          <th className="p-2 w-[120px]"> Internal links </th>
+                          <th className="p-2 w-[120px]"> Status code </th>
+                          <th className="p-2 w-[120px]"> Indexable </th>
+                        </tr>
+                      </thead>
+                      <tbody className="overflow-auto h-40 p-2 w-full">
+                        {currentCategoryDetail?.titleItems[0].pageData.rows.map(
+                          (item, i) => {
+                            return (
+                              <tr key={i} className="px-2 space-y-1 border-y">
+                                <td className="px-2 pl-4 space-y-1">
+                                  {" "}
+                                  {item.website}{" "}
+                                </td>
+                                <td className="px-2"> {item.crawlDepth} </td>
+                                <td className="px-2"> {item.url} </td>
+                                <td className="px-2">
+                                  {" "}
+                                  {item.httpStatusCode}{" "}
+                                </td>
+                                <td className="px-2"> {item.index_status} </td>
+                              </tr>
+                            );
+                          }
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div className="border shadow-sm h-[170px] overflow-y-auto flex flex-col gap-4  rounded-md w-full p-4 2xl:p-4">
+                  <h2 className=" font-semibold text-[#344054] text-2xl ">
+                    Issue Description{" "}
+                  </h2>
+                  {/* <p className="">{currentCategoryDetail?.description}</p> */}
+                  <p>
+                    {currentDescription?.description ?? "issue Description "}
+                  </p>
+                </div>
+              </div>
+            }
+          </section>
+        )}
       </main>
     </>
   );
