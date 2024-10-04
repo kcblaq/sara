@@ -21,6 +21,10 @@ export type Issues = {
   scoreDisplayMode: "metricSavings" | "binary";
 };
 
+type issuesDataTab = {
+  issueArr: Issues[];
+};
+
 interface core_web {
   first_input_delay: {
     good: number;
@@ -145,11 +149,21 @@ export type SitePerformanceData = {
   updatedAt: string;
 };
 
+export type IssueTab = {
+  id: number;
+  crawlingId: number;
+  tab: string;
+  data: issuesDataTab;
+  createdAt: string;
+  updatedAt: string;
+};
+
 // Union type for the different crawling data types
 export type CrawlingData =
   | CrawlingDataOverview
   | CrawlingDataCrawlability
-  | SitePerformanceData;
+  | SitePerformanceData
+  | IssueTab;
 
 export interface Crawler {
   id: number;
