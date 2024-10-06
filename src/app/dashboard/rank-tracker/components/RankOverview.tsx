@@ -12,34 +12,32 @@ import { FaArrowUp } from "react-icons/fa";
 import { Line } from "react-chartjs-2";
 import { ChartData, ChartOptions } from "chart.js";
 import moment from "moment";
+import { ShortenNumber } from "@/app/utils/ShortenedNumber";
 
 
 interface Props {
-  se: string
+  se: string,
+  type: { name: string, value: string }
 }
-export default function RankOverview() {
-  const [se, setSe] = useState("google")
+export default function RankOverview({ se, type }: Props) {
 
 
   const [isClient, setIsClient] = useState(false);
 
 
   const { isError, isPending, isSuccess, data: OverviewData } = useRankTrackingOverview("overview");
-  //Traffic Volume
-  const route = OverviewData?.project?.crawlings[0]?.crawlingData[0]?.data;
-  const routePrevious = OverviewData?.project?.crawlings[0]?.crawlingData[0]?.data ?? 0;
 
-  // console.log("PRE",routePrevious)
+  const specificroute = OverviewData?.project?.crawlings[0]?.crawlingData[0]?.data?.[se]
+  const prevspecificroute = OverviewData?.project?.crawlings[1]?.crawlingData[0]?.data?.[se]
 
-
-  function getGoogleTrafficLineGraphData() {
+  function getTrafficData() {
     const googleTrafficVolumeData = [];
     const crawlings = OverviewData?.project?.crawlings || [];
 
     for (let i = 0; i < crawlings.length && googleTrafficVolumeData.length < 5; i++) {
       const crawlingData = crawlings[i]?.crawlingData || [];
       for (let j = 0; j < crawlingData.length && googleTrafficVolumeData.length < 5; j++) {
-        const googleTraffic = crawlingData[j]?.data?.google?.organic_positions?.etv;
+        const googleTraffic = crawlingData[j]?.data?.[se]?.[type.value]?.etv;
         if (googleTraffic !== undefined) {
           googleTrafficVolumeData.push(googleTraffic);
         }
@@ -48,85 +46,96 @@ export default function RankOverview() {
 
     return googleTrafficVolumeData;
   }
-  function getBingTrafficLineGraphData() {
-    const bingTrafficVolumeData = [];
+
+
+
+  function getFeaturedSnippetData() {
+    const featuredSnippet = [];
     const crawlings = OverviewData?.project?.crawlings || [];
 
-    for (let i = 0; i < crawlings.length && bingTrafficVolumeData.length < 5; i++) {
+    for (let i = 0; i < crawlings.length && featuredSnippet.length < 5; i++) {
       const crawlingData = crawlings[i]?.crawlingData || [];
-      for (let j = 0; j < crawlingData.length && bingTrafficVolumeData.length < 5; j++) {
-        const BingTraffic = crawlingData[j]?.data?.bing?.organic_positions?.etv;
-        if (BingTraffic !== undefined) {
-          bingTrafficVolumeData.push(BingTraffic);
+      for (let j = 0; j < crawlingData.length && featuredSnippet.length < 5; j++) {
+        const googleTraffic = crawlingData[j]?.data?.[se]?.featured_snippet;
+        if (googleTraffic !== undefined) {
+          featuredSnippet.push(googleTraffic);
         }
       }
     }
 
-    return bingTrafficVolumeData;
+    return featuredSnippet;
   }
-
-  function getGoogleNewRankingGraphData() {
-    const googleNewRankingElement = [];
+  function getNewrankingData() {
+    const newRankingData = [];
     const crawlings = OverviewData?.project?.crawlings || [];
 
-    for (let i = 0; i < crawlings.length && googleNewRankingElement.length < 5; i++) {
+    for (let i = 0; i < crawlings.length && newRankingData.length < 5; i++) {
       const crawlingData = crawlings[i]?.crawlingData || [];
-      for (let j = 0; j < crawlingData.length && googleNewRankingElement.length < 5; j++) {
-        const newRank = crawlingData[j]?.data?.google?.new_ranking_elements;
-        if (newRank !== undefined) {
-          googleNewRankingElement.push(newRank);
+      for (let j = 0; j < crawlingData.length && newRankingData.length < 5; j++) {
+        const newRanking = crawlingData[j]?.data?.[se]?.new_ranking_elements;
+        if (newRanking !== undefined) {
+          newRankingData.push(newRanking);
         }
       }
     }
 
-    return googleNewRankingElement;
-  }
-  function getBingNewRankingGraphData() {
-    const bingNewRankingElement = [];
-    const crawlings = OverviewData?.project?.crawlings || [];
-
-    for (let i = 0; i < crawlings.length && bingNewRankingElement.length < 5; i++) {
-      const crawlingData = crawlings[i]?.crawlingData || [];
-      for (let j = 0; j < crawlingData.length && bingNewRankingElement.length < 5; j++) {
-        const newRank = crawlingData[j]?.data?.bing?.new_ranking_elements;
-        if (newRank !== undefined) {
-          bingNewRankingElement.push(newRank);
-        }
-      }
-    }
-
-    return bingNewRankingElement;
+    return newRankingData;
   }
 
+  const positionRoute = specificroute?.[type.value]
 
-  //Search Volume
-  // const googleData = route?.google?.keyword_ranking[0]?.map((item: { search_volume: number; }) => item.search_volume) || [];
-  // const bingData = route?.bing?.keyword_ranking[0]?.map((item: { search_volume: number; }) => item.search_volume) || [];
-
-  const googleData = route?.google?.keyword_ranking?.[0]?.map((item: { search_volume: any; }) => item.search_volume) || [];
-  const bingData = route?.bing?.keyword_ranking?.[0]?.map((item: { search_volume: any; }) => item.search_volume) || [];
-
-  let googleAverageKeywordRanking = 0;
-  if (googleData.length > 0) {
-    const googleSum = googleData.reduce((acc: number, num: number) => acc + (num || 0), 0);
-    googleAverageKeywordRanking = googleSum / googleData.length;
-    // console.log("V", googleAverageKeywordRanking);
+  const positions = {
+    "2 - 3": positionRoute?.["pos_2_3"],
+    "4 - 10": positionRoute?.["pos_4_10"],
+    "11 - 20": positionRoute?.["pos_11_20"],
+    "21 - 30": positionRoute?.["pos_21_30"],
+    "31 - 40": positionRoute?.["pos_31_40"],
+    "41 - 50": positionRoute?.["pos_41_50"],
+    "51 - 60": positionRoute?.["pos_51_60"],
+    "61 - 70": positionRoute?.["pos_61_70"],
+    "71 - 80": positionRoute?.["pos_71_80"],
+    "81 - 90": positionRoute?.["pos_81_90"],
+    "91 - 100": positionRoute?.["pos_91_100"],
+    "41 above": [
+      positionRoute?.["pos_41_50"],
+      positionRoute?.["pos_51_60"],
+      positionRoute?.["pos_61_70"],
+      positionRoute?.["pos_71_80"],
+      positionRoute?.["pos_81_90"],
+      positionRoute?.["pos_91_100"],
+    ].reduce((sum, value) => sum + (value ?? 0), 0),
   }
 
-  let bingAverageKeywordRanking = 0;
-  if (googleData.length > 0) {
-    const bingSum = bingData.reduce((acc: number, num: number) => acc + (num || 0), 0);
-    googleAverageKeywordRanking = bingSum / bingData.length;
+  const positionPrevious = prevspecificroute?.[type.value];
+  const positionDifference = {
+    "2 - 3": (positionPrevious?.["pos_2_3"] === undefined ? 0 : positionRoute?.["pos_2_3"] - positionPrevious?.["pos_2_3"]),
+    "4 - 10": (positionPrevious?.["pos_4_10"] === undefined ? 0 : positionRoute?.["pos_4_10"] - positionPrevious?.["pos_4_10"]),
+    "11 - 20": (positionPrevious?.["pos_11_20"] === undefined ? 0 : positionRoute?.["pos_11_20"] - positionPrevious?.["pos_11_20"]),
+    "21 - 30": (positionPrevious?.["pos_21_30"] === undefined ? 0 : positionRoute?.["pos_21_30"] - positionPrevious?.["pos_21_30"]),
+    "31 - 40": (positionPrevious?.["pos_31_40"] === undefined ? 0 : positionRoute?.["pos_31_40"] - positionPrevious?.["pos_31_40"]),
+    "41 - 50": (positionPrevious?.["pos_31_40"] === undefined ? 0 : positionRoute?.["pos_41_50"] - positionPrevious?.["pos_41_50"]),
+    "51 - 60": (positionPrevious?.["pos_41_50"] === undefined ? 0 : positionRoute?.["pos_51_60"] - positionPrevious?.["pos_51_60"]),
+    "61 - 70": (positionPrevious?.["pos_51_60"] === undefined ? 0 : positionRoute?.["pos_61_70"] - positionPrevious?.["pos_61_70"]),
+    "71 - 80": (positionPrevious?.["pos_71_80"] === undefined ? 0 : positionRoute?.["pos_71_80"] - positionPrevious?.["pos_71_80"]),
+    "81 - 90": (positionPrevious?.["pos_81_90"] === undefined ? 0 : positionRoute?.["pos_81_90"] - positionPrevious?.["pos_81_90"]),
+    "91 - 100": (positionPrevious?.["91 - 100"] === undefined ? 0 : positionRoute?.["pos_91_100"] - positionPrevious?.["pos_91_100"]),
+    "41 above": [
+      ( positionPrevious?.["pos_41_50"] === undefined ? 0 : positionRoute?.["pos_41_50"] - positionPrevious?.["pos_41_50"]),
+      ( positionPrevious?.["pos_51_60"] === undefined ? 0 : positionRoute?.["pos_51_60"] - positionPrevious?.["pos_51_60"]),
+      ( positionPrevious?.["pos_61_70"] === undefined ? 0 : positionRoute?.["pos_61_70"] - positionPrevious?.["pos_61_70"]),
+      ( positionPrevious?.["pos_71_80"] === undefined ? 0 : positionRoute?.["pos_71_80"] - positionPrevious?.["pos_71_80"]),
+      ( positionPrevious?.["pos_81_90"] === undefined ? 0 : positionRoute?.["pos_81_90"] - positionPrevious?.["pos_81_90"]),
+      ( positionPrevious?.["pos_91_100"] === undefined ? 0 : positionRoute?.["pos_91_100"] - positionPrevious?.["pos_91_100"])
+    ].reduce((sum, value) => sum + (value ?? 0), 0),
   }
 
-  // const googlePrevious = route?.google?.keyword_ranking[1]?.reduce((acc: any, num: any) => acc + num, 0)
-  // const bingPrevious = route?.bing?.keyword_ranking[1]?.reduce((acc: any, num: any) => acc + num, 0)
 
-
-
-
-  //   !isPending && console.log("OVDATA", OverviewData.project.crawlings[0].crawlingData[0].data.bing.organic_positions
-  // .etv  )
+  const getClass = (value: number) => {
+    return value > 0 ? "bg-green-200" : value < 0 ? "bg-red-400" : "bg-gray-200";
+  };
+  const arrowStyle = (value: number) => {
+    return value > 0 ? "text-green-500" : value < 0 ? "text-red-400 rotate-180" : "";
+  };
 
   useEffect(() => {
     setIsClient(true);
@@ -137,108 +146,10 @@ export default function RankOverview() {
   }
 
 
-  // Keyword Ranking
-  const google_positions = route?.google.organic_positions;
-  const previous_google_positions = route?.google.organic_positions;
-  const google_featured_snippet = route?.google?.featured_snippet?.toFixed(2) ?? 0;
-  const bing_featured_snippet = route?.bing?.featured_snippet?.toFixed(2) ?? 0;
-  const gfs_percentage = calculatePercentageDifference(routePrevious?.google?.featured_snippet?.toFixed(2) ?? 0, google_featured_snippet)
-  const bfs_percentage = calculatePercentageDifference(routePrevious?.bing?.featured_snippet?.toFixed(2) ?? 0, bing_featured_snippet)
-
-  //New ranking
-  const google_new_ranking = route?.google?.new_ranking_elements?.toFixed(2) ?? 0;
-  const bing_new_ranking = route?.bing?.new_ranking_elements?.toFixed(2) ?? 0;
-  const google_new_ranking_perc = calculatePercentageDifference(routePrevious?.google?.new_ranking_elements ?? 0, google_new_ranking)
-  const bing_new_ranking_perc = calculatePercentageDifference(routePrevious?.bing?.new_ranking_elements ?? 0, bing_new_ranking)
-
-
-  const pos_31_and_above = google_positions?.pos_31_40 + google_positions?.pos_41_50 + google_positions?.pos_51_60 + google_positions?.pos_61_70 + google_positions?.pos_71_80 + google_positions?.pos_81_90 + google_positions?.pos_91_100
-
-  const previous_pos_31_and_above = previous_google_positions?.pos_31_40 + previous_google_positions?.pos_41_50 + previous_google_positions?.pos_51_60 + previous_google_positions?.pos_61_70 + previous_google_positions?.pos_71_80 + previous_google_positions?.pos_81_90 + previous_google_positions?.pos_91_100
-
-  //   const keywordDisDiff = {
-  //     google: {
-  //       "2-3": calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_2_3, route?.google?.organic_positions.pos_2_3),
-  //       "4-10": calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_4_10, routePrevious?.google?.organic_positions?.pos_4_10),
-  //       "11-20": calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_11_20, routePrevious?.google?.organic_positions?.pos_11_20),
-  //       "21-30": calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_21_30, routePrevious?.google?.organic_positions?.pos_21_30),
-  //       "Above 30": calculatePercentageDifference(previous_pos_31_and_above, pos_31_and_above),
-
-  //     },
-  //     bing: {
-  // "2-3": calculatePercentageDifference(routePrevious?.bing?.organic_positions?.pos_2_3, route?.bing?.organic_positions.pos_2_3) ?? 0,
-  //       "4-10": calculatePercentageDifference(routePrevious?.bing?.organic_positions?.pos_4_10, routePrevious?.bing?.organic_positions?.pos_4_10) ?? 0,
-  //       "11-20": calculatePercentageDifference(routePrevious?.bing?.organic_positions?.pos_11_20, routePrevious?.bing?.organic_positions?.pos_11_20) ?? 0,
-  //       "21-30": calculatePercentageDifference(routePrevious?.bing?.organic_positions?.pos_21_30, routePrevious?.bing?.organic_positions?.pos_21_30) ?? 0,
-  //       "Above 30": calculatePercentageDifference(previous_pos_31_and_above, pos_31_and_above),
-  //     }
-
-  //   }
-
-  // const keywordDisDiff = {
-  //   google: {
-  //     "2-3": calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_2_3, route?.google?.organic_positions?.pos_2_3) ?? 0,
-  //     "4-10": calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_4_10, route?.google?.organic_positions?.pos_4_10) ?? 0,
-  //     "11-20": calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_11_20, route?.google?.organic_positions?.pos_11_20) ?? 0,
-  //     "21-30": calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_21_30, route?.google?.organic_positions?.pos_21_30) ?? 0,
-  //     "Above 30": calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_31_and_above, route?.google?.organic_positions?.pos_31_and_above) ?? 0,
-  //   },
-  //   bing: {
-  //     "2-3": calculatePercentageDifference(+routePrevious?.bing?.organic_positions?.pos_2_3 ?? 0, +route?.bing?.organic_positions?.pos_2_3 ?? 0) ?? 0,
-  //     "4-10": calculatePercentageDifference(+routePrevious?.bing?.organic_positions?.pos_4_10 ?? 0, +route?.bing?.organic_positions?.pos_4_10 ?? 0) ?? 0,
-  //     "11-20": calculatePercentageDifference(+routePrevious?.bing?.organic_positions?.pos_11_20 ?? 0, +route?.bing?.organic_positions?.pos_11_20 ?? 0) ?? 0,
-  //     "21-30": calculatePercentageDifference(+routePrevious?.bing?.organic_positions?.pos_21_30 ?? 0, +route?.bing?.organic_positions?.pos_21_30 ?? 0) ?? 0,
-  //     "Above 30": calculatePercentageDifference(+routePrevious?.bing?.organic_positions?.pos_31_and_above ?? 0, +route?.bing?.organic_positions?.pos_31_and_above ?? 0) ?? 0,
-  //   }
-  // }
-
-
-
-
-
-
-  const previousRouteExists = routePrevious && routePrevious.google && routePrevious.bing;
-
-  const keywordDisDiff = {
-    google: {
-      "2-3": previousRouteExists
-        ? calculatePercentageDifference(routePrevious?.google.organic_positions?.pos_2_3, route?.google.organic_positions?.pos_2_3)
-        : 0,
-      "4-10": previousRouteExists
-        ? calculatePercentageDifference(routePrevious?.google.organic_positions?.pos_4_10, route?.google.organic_positions?.pos_4_10)
-        : 0,
-      "11-20": previousRouteExists
-        ? calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_11_20, route?.google?.organic_positions?.pos_11_20)
-        : 0,
-      "21-30": previousRouteExists
-        ? calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_21_30, route?.google?.organic_positions?.pos_21_30)
-        : 0,
-      "Above 30": previousRouteExists
-        ? calculatePercentageDifference(routePrevious?.google?.organic_positions?.pos_31_and_above, route?.google?.organic_positions?.pos_31_and_above)
-        : 0,
-    },
-    bing: {
-      "2-3": previousRouteExists
-        ? calculatePercentageDifference(+routePrevious?.bing?.organic_positions?.pos_2_3, +route?.bing?.organic_positions?.pos_2_3)
-        : 0,
-      "4-10": previousRouteExists
-        ? calculatePercentageDifference(+routePrevious?.bing?.organic_positions?.pos_4_10, +route?.bing?.organic_positions?.pos_4_10)
-        : 0,
-      "11-20": previousRouteExists
-        ? calculatePercentageDifference(+routePrevious?.bing?.organic_positions?.pos_11_20, +route?.bing?.organic_positions?.pos_11_20)
-        : 0,
-      "21-30": previousRouteExists
-        ? calculatePercentageDifference(+routePrevious?.bing?.organic_positions?.pos_21_30, +route?.bing?.organic_positions?.pos_21_30)
-        : 0,
-      "Above 30": previousRouteExists
-        ? calculatePercentageDifference(+routePrevious?.bing?.organic_positions?.pos_31_and_above, +route?.bing.organic_positions?.pos_31_and_above)
-        : 0,
-    }
-  }
 
   const dist_labels = OverviewData?.project?.crawlings.map((label: any) => moment(label.createdAt.replace(/^0+/, '')).format("MMM DD"));
-  const gdist_data = OverviewData?.project?.crawlings?.map((item: any) => item?.crawlingData)
-  // console.log("GL", gdist_data)
+
+
 
   const options = {
     plugins: {
@@ -294,41 +205,7 @@ export default function RankOverview() {
   };
 
 
-  // const position = OverviewData?.project?.crawlings?.map((item: any) => {
-  //   const crawlingData = item.crawlingData && item.crawlingData.find((data:any) => data.data);
-  //   const bingData = crawlingData.data.bing.organic_positions;
-  // const googleData = crawlingData.data.google.organic_positions;
-  //   return {
-  //     bing: {
-  //       pos_2_3: bingData.pos_2_3,
-  //       pos_4_10: bingData.pos_4_10,
-  //       pos_11_20: bingData.pos_11_20,
-  //       pos_21_30: bingData.pos_21_30,
-  //       pos_31_40: bingData.pos_31_40,
-  //       pos_41_50: bingData.pos_41_50,
-  //       pos_51_60: bingData.pos_51_60,
-  //       pos_61_70: bingData.pos_61_70,
-  //       pos_71_80: bingData.pos_71_80,
-  //       pos_81_90: bingData.pos_81_90,
-  //       pos_91_100: bingData.pos_91_100,
-  //     },
-  //     google: {
-  //       pos_2_3: googleData.pos_2_3,
-  //       pos_4_10: googleData.pos_4_10,
-  //       pos_11_20: googleData.pos_11_20,
-  //       pos_21_30: googleData.pos_21_30,
-  //       pos_31_40: googleData.pos_31_40,
-  //       pos_41_50: googleData.pos_41_50,
-  //       pos_51_60: googleData.pos_51_60,
-  //       pos_61_70: googleData.pos_61_70,
-  //       pos_71_80: googleData.pos_71_80,
-  //       pos_81_90: googleData.pos_81_90,
-  //       pos_91_100: googleData.pos_91_100,
-  //     },
-  //   }
-  // })
 
-  // console.log("POS",position?.bing?.pos_2_3)
 
   const data = {
     // changing labels to changes values on X-axis.
@@ -440,7 +317,8 @@ export default function RankOverview() {
     ]
   };
 
-  console.log("KEY", route?.bing?.organic_positions?.pos_2_3)
+  
+
 
   return (
 
@@ -454,34 +332,28 @@ export default function RankOverview() {
               isLoading={isPending}
               isError={isError}
               title={"Featured Snippet"}
-              amount={se == "google" ? google_featured_snippet : bing_featured_snippet}
-              style={se === "google" ? (
-                gfs_percentage === 0 ? "text-gray-500"
-                  : gfs_percentage > 0 ? "text-green-500" : "text-red-500"
-              ) :
-                (
-                  bfs_percentage === 0 ? "text-gray-500"
-                    : bfs_percentage > 0 ? "text-green-500" : "text-red-500"
-                )
+              amount={ShortenNumber(specificroute?.featured_snippet?.toFixed(2)) ?? 0}
+              style={
+                prevspecificroute?.featured_snippet === 0 || prevspecificroute?.featured_snippet == undefined ? "text-gray-500"
+                  : prevspecificroute?.featured_snippet ?? 0 === specificroute?.featured_snippet ? "text-gray-500"
+                    : specificroute?.featured_snippet > prevspecificroute?.featured_snippet ?? 0 ? "text-green-500" : "text-red-500"
               }
-              percent={se === "google" ? gfs_percentage : bfs_percentage}
-              chart={<LineChart pageData={se === "google" ? getGoogleTrafficLineGraphData() : getBingTrafficLineGraphData()} />}
+              // percent={se === "google" ? gfs_percentage : bfs_percentage}
+              percent={calculatePercentageDifference(prevspecificroute?.featured_snippet ?? 0, specificroute?.featured_snippet ?? 0)}
+              chart={<LineChart pageData={getFeaturedSnippetData()} />}
             />
             <Card
               title={"New Ranking Element"}
-              amount={se === "google" ? google_new_ranking : bing_new_ranking}
-              style={se == "google" ?
-                (google_new_ranking_perc === 0 ? "text-gray-500"
-                  : google_new_ranking_perc > 0 ? "text-green-500" : "text-red-500"
-                )
-                :
-                (
-                  bing_new_ranking_perc === 0 ? "text-gray-500"
-                    : bing_new_ranking_perc > 0 ? "text-green-500" : "text-red-500"
-                )
+              // amount={se === "google" ? google_new_ranking : bing_new_ranking}
+              amount={ShortenNumber(specificroute?.new_ranking_elements?.toFixed(2))}
+              style={
+                prevspecificroute?.new_ranking_elements === 0 || prevspecificroute?.new_ranking_elements == undefined ? "text-gray-500"
+                  : prevspecificroute?.new_ranking_elements ?? 0 === specificroute?.new_ranking_elements ? "text-gray-500"
+                    : specificroute?.new_ranking_elements > prevspecificroute?.new_ranking_elements ?? 0 ? "text-green-500"
+                      : "text-red-500"
               }
-              percent={se === "google" ? google_new_ranking_perc : bing_new_ranking_perc}
-              chart={<LineChart pageData={se === "google" ? getGoogleNewRankingGraphData() : getBingNewRankingGraphData()} />}
+              percent={calculatePercentageDifference(prevspecificroute?.new_ranking_elements, prevspecificroute?.new_ranking_elements)}
+              chart={<LineChart pageData={getNewrankingData()} />}
             />
           </section>
           <section className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 md:gap-8 gap-4">
@@ -517,104 +389,85 @@ export default function RankOverview() {
                   <tbody>
                     <tr className=" border-b">
                       <td className=" p-2 ">2 - 3</td>
-                      <td className=" p-2 ">{(google_positions?.pos_2_3)?.toFixed(1) ?? 0} </td>
+                      <td className=" p-2 ">{(positions["2 - 3"])?.toFixed(2) ?? 0} </td>
                       <td className="  p-2 rounded-full">
 
 
                         <span className={`p-2 rounded-full flex items-center gap-1
-                      ${keywordDisDiff.google["2-3"] > 0 ? "bg-green-200"
-                            : keywordDisDiff.google["2-3"] < 0 ? "bg-red-400"
-                              : "bg-gray-200"
+                      ${getClass(positionDifference?.["2 - 3"])
                           }
                       `}><FaArrowUp className={`
-                        ${keywordDisDiff.google["2-3"] > 0 ? "text-green-500"
-                              : keywordDisDiff.google["2-3"] < 0 ? "text-red-400 rotate-180"
-                                : "text-gray-500"
+                        ${arrowStyle(positionDifference?.["2 - 3"])
                             }
-                      `} />{keywordDisDiff.google["2-3"]?.toFixed(2) ?? 0} </span>
+                      `} />{positionDifference?.["2 - 3"]?.toFixed(2)} </span>
 
 
                       </td>
                     </tr>
-                    <tr className="border-b">
+                    <tr className=" border-b">
                       <td className=" p-2 ">4 - 10</td>
-                      <td className=" p-2 "> {google_positions?.pos_4_10} </td>
+                      <td className=" p-2 ">{(positions["4 - 10"])?.toFixed(2) ?? 0} </td>
                       <td className="  p-2 rounded-full">
 
 
                         <span className={`p-2 rounded-full flex items-center gap-1
-                      ${keywordDisDiff.google["4-10"] > 0 ? "bg-green-200"
-                            : keywordDisDiff.google["4-10"] < 0 ? "bg-red-400"
-                              : "bg-gray-200"
+                      ${getClass(positionDifference?.["4 - 10"])
                           }
                       `}><FaArrowUp className={`
-                        ${keywordDisDiff.google["4-10"] > 0 ? "text-green-500"
-                              : keywordDisDiff.google["4-10"] < 0 ? "text-red-400 rotate-180"
-                                : "text-gray-500"
+                        ${arrowStyle(positionDifference?.["4 - 10"])
                             }
-                      `} />{keywordDisDiff.google["4-10"]?.toFixed(2) ?? 0} </span>
+                      `} />{positionDifference?.["4 - 10"]?.toFixed(2)} </span>
 
 
                       </td>
                     </tr>
+
                     <tr className="border-b">
                       <td className="w-1/3 p-2 ">11 - 20</td>
-                      <td className="w-1/3 p-2 "> {google_positions?.pos_11_20} </td>
+                      <td className="w-1/3 p-2 "> {positions["11 - 20"]?.toFixed(2)} </td>
                       <td className="  p-2 rounded-full">
 
 
                         <span className={`p-2 rounded-full flex items-center gap-1
-                      ${keywordDisDiff.google["11-20"] > 0 ? "bg-green-200"
-                            : keywordDisDiff.google["11-20"] < 0 ? "bg-red-400"
-                              : "bg-gray-200"
+                      ${getClass(positionDifference?.["11 - 20"])
                           }
                       `}><FaArrowUp className={`
-                        ${keywordDisDiff.google["11-20"] > 0 ? "text-green-500"
-                              : keywordDisDiff.google["11-20"] < 0 ? "text-red-400 rotate-180"
-                                : "text-gray-500"
+                        ${arrowStyle(positionDifference?.["4 - 10"])
                             }
-                      `} />{keywordDisDiff.google["11-20"]?.toFixed(2) ?? 0} </span>
+                      `} />{positionDifference?.["11 - 20"]?.toFixed(2) ?? 0} </span>
 
 
                       </td>
                     </tr>
                     <tr className="">
                       <td className="w-1/3 p-2 ">21 - 30</td>
-                      <td className="w-1/3 p-2 ">{google_positions?.pos_21_30} </td>
+                      <td className="w-1/3 p-2 ">{positions["21 - 30"]?.toFixed(2)} </td>
                       <td className="  p-2 rounded-full">
 
 
 
                         <span className={`p-2 rounded-full flex items-center gap-1
-                      ${keywordDisDiff.google["21-30"] > 0 ? "bg-green-200"
-                            : keywordDisDiff.google["21-30"] < 0 ? "bg-red-400"
-                              : "bg-gray-200"
+                      ${getClass(positionDifference?.["21 - 30"])
                           }
                       `}><FaArrowUp className={`
-                        ${keywordDisDiff.google["21-30"] > 0 ? "text-green-500"
-                              : keywordDisDiff.google["21-30"] < 0 ? "text-red-400 rotate-180"
-                                : "text-gray-500"
+                        ${arrowStyle(positionDifference?.["21 - 30"])
                             }
-                      `} />{keywordDisDiff.google["21-30"]?.toFixed(2) ?? 0} </span>
+                      `} />{positionDifference?.["21 - 30"]?.toFixed(2) ?? 0} </span>
 
 
                       </td>
                     </tr>
                     <tr className="">
-                      <td className="w-1/3 p-2 ">Above 31</td>
-                      <td className="w-1/3 p-2 "> {pos_31_and_above} </td>
+                      <td className="w-1/3 p-2 ">Above 41</td>
+                      <td className="w-1/3 p-2 "> {positions["41 above"]} </td>
                       <td className="  p-2 rounded-full">
                         <span className={`p-2 rounded-full flex items-center gap-1
-                      ${keywordDisDiff.google["Above 30"] > 0 ? "bg-green-200"
-                            : keywordDisDiff.google["Above 30"] < 0 ? "bg-red-400"
-                              : "bg-gray-200"
+                      ${getClass(positionDifference?.["41 above"])
                           }
                       `}><FaArrowUp className={`
-                        ${keywordDisDiff.google["Above 30"] > 0 ? "text-green-500"
-                              : keywordDisDiff.google["Above 30"] < 0 ? "text-red-400 rotate-180"
-                                : "text-gray-500"
+                        ${arrowStyle(positionDifference?.["41 above"])
                             }
-                      `} />{keywordDisDiff.google["Above 30"]?.toFixed(2) ?? 0} </span>
+                      `} />{positionDifference?.["41 above"]?.toFixed(2) ?? 0} </span>
                       </td>
                     </tr>
                   </tbody>
@@ -628,12 +481,6 @@ export default function RankOverview() {
                 title={"Position distributions "}
                 info={"Position distributions"}
               />
-              {/* <BarChartSingle
-            labels={["23","33", "90","33"]}
-            data={[23,50,10,33,10]}
-            xAxisLabel="Month"
-            yAxisLabel="Number of Keywords"
-          /> */}
               <Line data={data as ChartData<"line", number[], string>} options={options as ChartOptions<"line">} />
             </div>
           </section>
