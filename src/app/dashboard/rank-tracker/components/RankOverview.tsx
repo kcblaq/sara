@@ -30,23 +30,44 @@ export default function RankOverview({ se, type }: Props) {
   const specificroute = OverviewData?.project?.crawlings[0]?.crawlingData[0]?.data?.[se]
   const prevspecificroute = OverviewData?.project?.crawlings[1]?.crawlingData[0]?.data?.[se]
 
-  function getTrafficData() {
-    const googleTrafficVolumeData = [];
-    const crawlings = OverviewData?.project?.crawlings || [];
 
-    for (let i = 0; i < crawlings.length && googleTrafficVolumeData.length < 5; i++) {
-      const crawlingData = crawlings[i]?.crawlingData || [];
-      for (let j = 0; j < crawlingData.length && googleTrafficVolumeData.length < 5; j++) {
-        const googleTraffic = crawlingData[j]?.data?.[se]?.[type.value]?.etv;
-        if (googleTraffic !== undefined) {
-          googleTrafficVolumeData.push(googleTraffic);
-        }
-      }
-    }
 
-    return googleTrafficVolumeData;
-  }
 
+// const distribution = crawlings?.map((crawling: { crawlingData: { data: { [x: string]: { [x: string]: any; }; }; }[]; })=> {
+//     const single = crawling?.crawlingData[0].data?.[se]?.[type.value];
+//     return {
+//       "2 - 3": crawling.map((item: { crawlingData: { data: { [x: string]: { [x: string]: any; }; }; }[]; })=> item?.crawlingData[0].data?.[se]?.[type.value]),
+//       "4 - 5": single.pos_4_5,
+//       "6 - 7": single.pos_6_7,
+//       "8 - 9": single.pos_8_9,
+//       "10 - 100": single.pos_10_100
+//     }
+
+//   })
+
+const pos2_3Values = OverviewData?.project?.crawlings?.map((crawling: any) => 
+  crawling?.crawlingData[0].data?.[se]?.[type.value]?.pos_2_3
+).filter((value: undefined) => value !== undefined);
+
+const crawlings = OverviewData?.project?.crawlings
+  
+const distributions = 
+    {
+     "2 - 3": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_2_3),
+     "4 - 10": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_4_10),
+     "11 - 20": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_11_20),
+     "21 - 30": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_21_30),
+     "31 - 40": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_31_40),
+     "41 - 50": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_31_40),
+     "51 - 60": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_31_40),
+     "61 - 70": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_31_40),
+     "71 - 80": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_31_40),
+     "81 - 90": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_31_40),
+     "91 - 100": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_31_40),
+   }
+
+
+// console.log("DIST", distributions["2 - 3"] )
 
 
   function getFeaturedSnippetData() {
@@ -146,7 +167,6 @@ export default function RankOverview({ se, type }: Props) {
   }
 
 
-
   const dist_labels = OverviewData?.project?.crawlings.map((label: any) => moment(label.createdAt.replace(/^0+/, '')).format("MMM DD"));
 
 
@@ -203,6 +223,7 @@ export default function RankOverview({ se, type }: Props) {
       },
     },
   };
+
 
 
 
