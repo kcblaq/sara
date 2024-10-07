@@ -15,6 +15,7 @@ import { GoQuestion } from "react-icons/go";
 import { IoCartOutline } from "react-icons/io5";
 import { MdOutlineArrowForward } from "react-icons/md";
 import { RiExpandUpDownFill } from "react-icons/ri";
+import AddKeywordModal from "./AddKeywordModal";
 
 
 interface Props {
@@ -103,7 +104,7 @@ export default function Rankings() {
       (
         <>
         {
-          add && <AutoModal closeModal={()=> setAdd(false)} ModalBody={<h1> Add keyword modal</h1>} />
+          add && <AutoModal closeModal={()=> setAdd(false)} ModalBody={<AddKeywordModal/>} />
         }
         <main className="grid w-full h-full items-start content-start gap-6 my-10 mb-20 overflow-auto">
           <div className="grid h-full w-full border rounded-md ">
