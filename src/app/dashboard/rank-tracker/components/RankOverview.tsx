@@ -25,28 +25,31 @@ export default function RankOverview({ se, type }: Props) {
   const [isClient, setIsClient] = useState(false);
 
 
-  const { isError, isPending, isSuccess, data: OverviewData } = useRankTrackingOverview("overview");
+  const { isError, isPending, data: OverviewData } = useRankTrackingOverview("overview");
 
   const specificroute = OverviewData?.project?.crawlings[0]?.crawlingData[0]?.data?.[se]
   const prevspecificroute = OverviewData?.project?.crawlings[1]?.crawlingData[0]?.data?.[se]
 
-  function getTrafficData() {
-    const googleTrafficVolumeData = [];
-    const crawlings = OverviewData?.project?.crawlings || [];
 
-    for (let i = 0; i < crawlings.length && googleTrafficVolumeData.length < 5; i++) {
-      const crawlingData = crawlings[i]?.crawlingData || [];
-      for (let j = 0; j < crawlingData.length && googleTrafficVolumeData.length < 5; j++) {
-        const googleTraffic = crawlingData[j]?.data?.[se]?.[type.value]?.etv;
-        if (googleTraffic !== undefined) {
-          googleTrafficVolumeData.push(googleTraffic);
-        }
-      }
-    }
+const crawlings = OverviewData?.project?.crawlings
+  
+const distributions = 
+    {
+     "2 - 3": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_2_3),
+     "4 - 10": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_4_10),
+     "11 - 20": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_11_20),
+     "21 - 30": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_21_30),
+     "31 - 40": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_31_40),
+     "41 - 50": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_41_50),
+     "51 - 60": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_51_60),
+     "61 - 70": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_61_70),
+     "71 - 80": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_71_80),
+     "81 - 90": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_81_90),
+     "91 - 100": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_91_100),
+   }
 
-    return googleTrafficVolumeData;
-  }
 
+// console.log("DIST", distributions["2 - 3"] )
 
 
   function getFeaturedSnippetData() {
@@ -146,7 +149,6 @@ export default function RankOverview({ se, type }: Props) {
   }
 
 
-
   const dist_labels = OverviewData?.project?.crawlings.map((label: any) => moment(label.createdAt.replace(/^0+/, '')).format("MMM DD"));
 
 
@@ -207,6 +209,7 @@ export default function RankOverview({ se, type }: Props) {
 
 
 
+
   const data = {
     // changing labels to changes values on X-axis.
     labels: dist_labels,
@@ -215,15 +218,15 @@ export default function RankOverview({ se, type }: Props) {
     datasets: [
       {
         color: "#fff",
-        label: "0 - 3",
+        label: "2 - 3",
         fill: false,
         lineTension: 0.3,
         backgroundColor: "#717BBC",
-        borderColor: "#717BBC",
+        borderColor: "##717BBC",
         borderCapStyle: "round",
         borderJoinStyle: "round",
-        pointBorderColor: "#2a2c30",
-        pointBackgroundColor: "#fff",
+        pointBorderColor: "##717BBC",
+        pointBackgroundColor: "#717BBC",
         pointBorderWidth: 1,
         pointHoverRadius: 5,
         pointHoverBackgroundColor: "#2a2c30",
@@ -232,19 +235,19 @@ export default function RankOverview({ se, type }: Props) {
         pointRadius: 0,
         pointHitRadius: 5,
         // always the number of elements in the data array have to be equal to the number of elements in label.
-        data: [0, 14, 21, 9, 35]
+        data: distributions["2 - 3"]
       },
       {
         color: "#000",
         label: "4 - 10",
         fill: false,
         lineTension: 0.3,
-        backgroundColor: "#F97065",
-        borderColor: "#F97065",
+        backgroundColor: "#F97066",
+        borderColor: "#F97066",
         borderCapStyle: "round",
         borderJoinStyle: "round",
         pointBorderColor: "#F97065",
-        pointBackgroundColor: "#fff",
+        pointBackgroundColor: "#F97066",
         pointBorderWidth: 1,
         pointHoverRadius: 5,
         pointHoverBackgroundColor: "#f84c1e",
@@ -252,19 +255,20 @@ export default function RankOverview({ se, type }: Props) {
         pointHoverBorderWidth: 5,
         pointRadius: 0,
         pointHitRadius: 5,
-        data: [20, 39, 10, 11, 16, 2, 40]
+        // data: [20, 39, 10, 11, 16, 2, 40]
+        data: distributions["4 - 10"]
       },
       {
         color: "#000",
-        label: "11 - 50",
+        label: "11 - 20",
         fill: false,
         lineTension: 0.3,
         backgroundColor: "#36BFFA",
         borderColor: "#36BFFA",
         borderCapStyle: "round",
         borderJoinStyle: "round",
-        pointBorderColor: "#008000",
-        pointBackgroundColor: "#fff",
+        pointBorderColor: "#36BFFA",
+        pointBackgroundColor: "#36BFFA",
         pointBorderWidth: 1,
         pointHoverRadius: 5,
         pointHoverBackgroundColor: "#008000",
@@ -272,11 +276,12 @@ export default function RankOverview({ se, type }: Props) {
         pointHoverBorderWidth: 5,
         pointRadius: 0,
         pointHitRadius: 5,
-        data: [10, 49, 15, 31, 26, 21, 50]
+        // data: [10, 49, 15, 31, 26, 21, 50]
+        data: distributions["11 - 20"]
       },
       {
         color: "#000",
-        label: "51 - 100",
+        label: "21 - 30",
         fill: false,
         lineTension: 0.3,
         backgroundColor: "#F670C7",
@@ -284,7 +289,7 @@ export default function RankOverview({ se, type }: Props) {
         borderCapStyle: "round",
         borderJoinStyle: "round",
         pointBorderColor: "#F670C7",
-        pointBackgroundColor: "#fff",
+        pointBackgroundColor: "#F670C7",
         pointBorderWidth: 1,
         pointHoverRadius: 5,
         pointHoverBackgroundColor: "#F670C7",
@@ -292,19 +297,20 @@ export default function RankOverview({ se, type }: Props) {
         pointHoverBorderWidth: 5,
         pointRadius: 0,
         pointHitRadius: 5,
-        data: [10, 49, 15, 31, 26, 21, 50]
+        // data: [10, 49, 15, 31, 26, 21, 50]
+        data: distributions["21 - 30"]
       },
       {
         color: "#000",
-        label: "100+",
+        label: "31 - 40",
         fill: false,
         lineTension: 0.3,
         backgroundColor: "#39D583",
         borderColor: "#39D583",
         borderCapStyle: "round",
         borderJoinStyle: "round",
-        pointBorderColor: "#39D583",
-        pointBackgroundColor: "#fff",
+        pointBorderColor: "#32D583",
+        pointBackgroundColor: "#32D583",
         pointBorderWidth: 1,
         pointHoverRadius: 5,
         pointHoverBackgroundColor: "#39D583",
@@ -312,8 +318,72 @@ export default function RankOverview({ se, type }: Props) {
         pointHoverBorderWidth: 5,
         pointRadius: 0,
         pointHitRadius: 5,
-        data: [10, 49, 15, 31, 26, 21, 50]
-      }
+        // data: [10, 49, 15, 31, 26, 21, 50]
+        data: distributions["31 - 40"]
+      },
+      {
+        color: "#000",
+        label: "41 - 50",
+        fill: false,
+        lineTension: 0.3,
+        backgroundColor: "#39D583",
+        borderColor: "#39D583",
+        borderCapStyle: "round",
+        borderJoinStyle: "round",
+        pointBorderColor: "#ffef00",
+        pointBackgroundColor: "#ffef00",
+        pointBorderWidth: 1,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: "#39D583",
+        pointHoverBorderColor: "#fff",
+        pointHoverBorderWidth: 5,
+        pointRadius: 0,
+        pointHitRadius: 5,
+        // data: [10, 49, 15, 31, 26, 21, 50]
+        data: distributions["41 - 50"]
+      },
+      {
+        color: "#000",
+        label: "51 - 60",
+        fill: false,
+        lineTension: 0.3,
+        backgroundColor: "#39D583",
+        borderColor: "#39D583",
+        borderCapStyle: "round",
+        borderJoinStyle: "round",
+        pointBorderColor: "#eedc82",
+        pointBackgroundColor: "#eedc82",
+        pointBorderWidth: 1,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: "#eedc82",
+        pointHoverBorderColor: "#eedc82",
+        pointHoverBorderWidth: 5,
+        pointRadius: 0,
+        pointHitRadius: 5,
+        // data: [10, 49, 15, 31, 26, 21, 50]
+        data: distributions["51 - 60"]
+      },
+      {
+        color: "#000",
+        label: "61 - 70",
+        fill: false,
+        lineTension: 0.3,
+        backgroundColor: "#39D583",
+        borderColor: "#39D583",
+        borderCapStyle: "round",
+        borderJoinStyle: "round",
+        pointBorderColor: "#00FFFF",
+        pointBackgroundColor: "#00FFFF",
+        pointBorderWidth: 1,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: "#39D583",
+        pointHoverBorderColor: "#fff",
+        pointHoverBorderWidth: 5,
+        pointRadius: 0,
+        pointHitRadius: 5,
+        // data: [10, 49, 15, 31, 26, 21, 50]
+        data: distributions["61 - 70"]
+      },
     ]
   };
 
