@@ -1,3 +1,4 @@
+import AutoModal from "@/app/component/modals/AutoModal";
 import PlainButton from "@/app/component/PlainButton";
 import { useRankTrackingOverview } from "@/app/services/crawlers/rank_tracking";
 import React, { useState } from "react";
@@ -74,6 +75,8 @@ interface Props {
 // ];
 export default function Rankings() {
   const [se, setSe] = useState("google")
+  const [add, setAdd] = useState(false);
+
   const { isError, isPending, isSuccess, data: rankingData } = useRankTrackingOverview("ranking");
   const route = rankingData?.project?.crawlings[0]?.crawlingData[0]?.data;
 
@@ -92,18 +95,22 @@ export default function Rankings() {
     : [];
 
 
-  console.log("RANKING", route?.bing)
+  // console.log("RANKING", route?.bing)
 
   return (
     isPending ? <div className=""> Loading... </div>
       :
       (
+        <>
+        {
+          add && <AutoModal closeModal={()=> setAdd(false)} ModalBody={<h1> Add keyword modal</h1>} />
+        }
         <main className="grid w-full h-full items-start content-start gap-6 my-10 mb-20 overflow-auto">
           <div className="grid h-full w-full border rounded-md ">
             <div className="flex w-full items-center justify-between p-6">
               <p className={` font-medium text-[#101828] text-lg`}> {se == "google" ? google?.length ?? 0 : bing?.length ?? 0} keywords </p>
               <span>
-                <PlainButton title={"Add keyword"} icon={<FaPlus />} />
+                <PlainButton title={"Add keyword"} icon={<FaPlus />} handleClick={()=> setAdd(true)} />
               </span>
             </div>
             <div className="overflow-x-auto w-full">
@@ -264,6 +271,7 @@ export default function Rankings() {
             </section> */}
           </div>
         </main>
+        </>
       )
   );
 }
