@@ -129,114 +129,121 @@ export default function page() {
     }
   }, [country]);
 
-  return stage === 1 ? (
-    <main className="grid w-full h-full items-start content-start gap-6 my-10 mb-20">
-      <TitleShareSettingTop title="Competitor analysis " />
-      <section className={`flex items-center gap-3`}>
-        <ToggleMobile mobile={mobile} setMobile={handleToggleMobile} />
-        <CountryPick />
-        <SearchEnginePick />
-      </section>
-      <section className={``}>
-        <Tab.Group>
-          <Tab.List className="flex gap-4 w-full">
-            {tabs.map((tab) => {
-              return (
-                <div key={tab.title}>
-                  <Tab as={Fragment}>
-                    {({ selected }) => (
-                      <p
-                        className={` cursor-pointer p-2 active:outline-none text-sm font-semibold border-t-0 border-l-0 border-r-0 active:border-r-none ${
-                          selected
-                            ? "text-primary border-b-2 border-primary"
-                            : " text-[#667085] active:border-none"
-                        }`}
-                      >
-                        {tab.title}
-                      </p>
-                    )}
-                  </Tab>
-                </div>
-              );
-            })}
-          </Tab.List>
-          <hr className="w-full" />
-          <div className={` h-full w-full overflow-auto  `}>
-            <Tab.Panels>
-              {tabs.map((tab) => {
-                return (
-                  <div key={tab.title} className="h-full ">
-                    <Tab.Panel>{tab.content}</Tab.Panel>
-                  </div>
-                );
-              })}
-            </Tab.Panels>
-          </div>
-        </Tab.Group>
-      </section>
-    </main>
-  ) : (
-    <section
-      className={`grid col-span-1 lg:col-span-3 gap-6 mt-6 mb-20 
-        `}
-    >
-      <h1 className={`font-semibold text-4xl 2xl:text-5xl`}>
-        Competitor analysis
-      </h1>
-      <p className="text-[#101828] font-medium text-lg 2xl:text-xl">
-        Research your online competitors and improve your SEO
-      </p>
-      <div className="flex flex-col">
-        <p className="text-sm text-[#344054] font-medium my-2">
-          Enter up to three competitor domains and start analyzing
-        </p>
-        <div className="flex flex-col gap-3 w-[80%] lg:w-[727px]">
-          <input
-            type="text"
-            onChange={(e) =>
-              setCompetitorDomains({
-                ...competitorDomains,
-                target: e.target.value,
-              })
-            }
-            className="py-5 p-3 focus:outline-none focus:shadow-sm rounded-md border"
-            placeholder="e.g domain1.com"
-          />
-          <input
-            type="text"
-            onChange={(e) =>
-              setCompetitorDomains({
-                ...competitorDomains,
-                target2: e.target.value,
-              })
-            }
-            className="py-5 p-3 focus:outline-none focus:shadow-sm rounded-md border"
-            placeholder="e.g domain2.com"
-          />
-          <input
-            type="text"
-            onChange={(e) =>
-              setCompetitorDomains({
-                ...competitorDomains,
-                target3: e.target.value,
-              })
-            }
-            className="py-5 p-3 focus:outline-none focus:shadow-sm rounded-md border"
-            placeholder="e.g domain3.com"
-          />
-          <div className="flex items-center gap-8">
-            <CountryPick setCountry={setCountry} />
-            <span>
-              <FilledButton
-                disabled={status === "loading"}
-                loading={status === "loading"}
-                handleClick={handleSubmitAnalyzeCompetitor}
-                title={"Analyze competitors"}
+  return (
+    <div className="w-full flex flex-col py-6">
+      {stage === 1 ? (
+        <main className="grid w-full h-full items-start content-start gap-6 my-10 mb-20">
+          <TitleShareSettingTop title="Competitor analysis " />
+          <section className={`flex items-center gap-3`}>
+            <ToggleMobile mobile={mobile} setMobile={handleToggleMobile} />
+            <CountryPick />
+            <SearchEnginePick />
+          </section>
+          <section className={``}>
+            <Tab.Group>
+              <Tab.List className="flex gap-4 w-full">
+                {tabs.map((tab) => {
+                  return (
+                    <div key={tab.title}>
+                      <Tab as={Fragment}>
+                        {({ selected }) => (
+                          <p
+                            className={` cursor-pointer p-2 active:outline-none text-sm font-semibold border-t-0 border-l-0 border-r-0 active:border-r-none ${
+                              selected
+                                ? "text-primary border-b-2 border-primary"
+                                : " text-[#667085] active:border-none"
+                            }`}
+                          >
+                            {tab.title}
+                          </p>
+                        )}
+                      </Tab>
+                    </div>
+                  );
+                })}
+              </Tab.List>
+              <hr className="w-full" />
+              <div className={` h-full w-full overflow-auto  `}>
+                <Tab.Panels>
+                  {tabs.map((tab) => {
+                    return (
+                      <div key={tab.title} className="h-full ">
+                        <Tab.Panel>{tab.content}</Tab.Panel>
+                      </div>
+                    );
+                  })}
+                </Tab.Panels>
+              </div>
+            </Tab.Group>
+          </section>
+        </main>
+      ) : (
+        <section
+          className={`h-full  grid col-span-1 lg:col-span-3 gap-6 mt-6 mb-20 
+       `}
+        >
+          <h1
+            className={`font-semibold min-[425px]:text-4xl 2xl:text-5xl text-3xl `}
+          >
+            Competitor analysis
+          </h1>
+          <p className="text-[#101828] font-medium text-lg 2xl:text-xl min-[425px]:w-auto min-[356px]:w-[375px] w-[320px]">
+            Research your online competitors and improve your SEO
+          </p>
+          <div className="flex flex-col ">
+            <p className="text-sm text-[#344054] font-medium my-2  min-[425px]:w-auto min-[375px]:w-[375px] w-[310px]">
+              Enter up to three competitor domains and start analyzing
+            </p>
+            <div className="flex flex-col gap-3 sm:w-[80%] lg:w-[727px] w-[92%]">
+              <input
+                type="text"
+                onChange={(e) =>
+                  setCompetitorDomains({
+                    ...competitorDomains,
+                    target: e.target.value,
+                  })
+                }
+                className="py-5 p-3 focus:outline-none focus:shadow-sm rounded-md border  w-full"
+                placeholder="e.g domain1.com"
               />
-            </span>
+              <input
+                type="text"
+                onChange={(e) =>
+                  setCompetitorDomains({
+                    ...competitorDomains,
+                    target2: e.target.value,
+                  })
+                }
+                className="py-5 p-3 focus:outline-none focus:shadow-sm rounded-md border w-full"
+                placeholder="e.g domain2.com"
+              />
+              <input
+                type="text"
+                onChange={(e) =>
+                  setCompetitorDomains({
+                    ...competitorDomains,
+                    target3: e.target.value,
+                  })
+                }
+                className="py-5 p-3 focus:outline-none focus:shadow-sm rounded-md border w-full"
+                placeholder="e.g domain3.com"
+              />
+              <div className="flex flex-col min-[425px]:flex-row sm:items-center items-start gap-4 sm:gap-8 w-full">
+                <CountryPick setCountry={setCountry} className="w-full" />
+                <span className="w-full min-[425px]:w-auto ">
+                  <FilledButton
+                    className="whitespace-nowrap w-full"
+                    disabled={status === "loading"}
+                    loading={status === "loading"}
+                    handleClick={handleSubmitAnalyzeCompetitor}
+                    title={"Analyze competitors"}
+                  />
+                </span>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-    </section>
+        </section>
+      )}
+    </div>
   );
 }
