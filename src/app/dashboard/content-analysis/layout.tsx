@@ -14,7 +14,7 @@ interface Props {
 export default function Layout({ children }: Props) {
 
     const id = useSelector((state: RootState) => state.property.activePropertyObj.id);
-
+    //handle when id is undefined.
 
   const { data, isError, isLoading } = useQuery({
     queryKey: ['empty-state', id],

@@ -6,7 +6,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { IoCloudUploadOutline, IoSettingsOutline } from "react-icons/io5";
 import ToggleMobile from "../components/ToggleMobile";
 import CountryPick from "@/app/dashboard/rank-tracker/components/CountryPick";
-import SearchEnginePick from "@/app/dashboard/rank-tracker/components/SearchEnginePick";
+import SearcgrchEnginePick from "@/app/dashboard/rank-tracker/components/SearchEnginePick";
 import OrganicPick from "./components/OrganicPick";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import RankOverview from "./components/RankOverview";
@@ -18,16 +18,18 @@ import useRankMutation, { RankCrawl, RankTrackerCrawler, useRankTrackingOverview
 import { trimDomain } from "@/app/utils/trimDomain";
 import { CurrentProperty } from "@/app/utils/currentProperty";
 import Button from "../components/ui/Button";
+import SearchEnginePick from "@/app/dashboard/rank-tracker/components/SearchEnginePick";
 // import PageDistributions from './components/PageDistributions'
 
 
 export default function page() {
   // const [mobile, setMobile] = useState(false);
   // const [detail, setDetail] = useState([])
-  const [se, setSe] = useState("google")
+  const [se, setSe] = useState("google");
+  const [type, setType] = useState({name:"Organic", value:"organic_positions"})
 
   const tabs = [
-    { title: "Overview", content: <RankOverview /> },
+    { title: "Overview", content: <RankOverview se={se} type={type} /> },
     { title: "Rankings", content: <Rankings /> },
     // { title: "Page distributions", content: <PageDistributions /> }
   ];
@@ -43,8 +45,9 @@ export default function page() {
   const {mutate: RankMutate, isSuccess:mutateSuccess, isError: mutateError, isPaused: mutatePaused,isPending: mutatePending} = useRankMutation();
 
  const project = CurrentProperty();
+ const handleEngineChange = (engine: React.SetStateAction<string>) => setSe(engine);
  
-
+// console.log("SE", type)
 
   return (
     <main className="grid w-full h-full items-start content-start gap-6">
@@ -114,8 +117,11 @@ export default function page() {
         </div>
         <div className="flex sm:flex-row flex-col  w-full sm:gap-6 gap-2 sm:items-center it">
           {/* <CountryPick className=" w-full flex items-center" /> */}
-          <SearchEnginePick className=" w-full flex items-center" />
-          <OrganicPick className=" w-full flex items-center" />
+          <SearchEnginePick onEngineChange={handleEngineChange} className=" " />
+          <OrganicPick className="" changeType={function ({ name, value }: { name: string; value: string; }): void {
+            setType({name, value});
+            // console.log("TYPE", type)
+          } } />
         </div>
       </section>
       <section className={``}>
