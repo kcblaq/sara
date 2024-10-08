@@ -133,7 +133,7 @@ export function CountryPickAllLocationDefault({
 }: Prop) {
   const [countries, setCountries] = useState<Country[]>([]);
   const [currentCountry, setCurrentCountry] = useState<Country | null>(null);
-  console.log(countries);
+  // console.log(countries);
 
   async function getCountries() {
     const res = await axios.get(
