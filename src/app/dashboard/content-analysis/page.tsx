@@ -15,7 +15,7 @@ import { useQuery } from "@tanstack/react-query";
 import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
 import { RootState } from "@/app/store";
 import { useSelector } from "react-redux";
-import { contentAnalysisProps } from "@/types/contentAnalysis";
+// import { contentAnalysisProps } from "@/types/contentAnalysis";
 import { FormattedDate } from "@/helper";
 import { ConvertToMilliuseconds } from "@/app/utils/ConvertToMilliseconds";
 import Link from "next/link";
@@ -23,13 +23,16 @@ import { CiSearch } from "react-icons/ci";
 import { usePathname, useSearchParams } from "next/navigation";
 import Overview from "./components/Overview";
 import ExploreContent from "./components/ExploreContent";
+import { contentAnalysisOverViewType } from "@/types/contentAnalysis";
 
 export default function ContentAnalysis() {
   const [showDetail, setShowDetail] = useState(false);
   const [currentFilter, setCurrentFilter] = useState("All recommendations");
-  const activeProperty = useSelector(
-    (state: RootState) => state.property.activeProperty
+  const activePropertyId = useSelector(
+    (state: RootState) => state.property.activePropertyObj.id
   );
+
+  console.log(activePropertyId);
 
   const tabsFilter = [
     { name: "All recommendations" },
@@ -54,32 +57,22 @@ export default function ContentAnalysis() {
   const path = usePathname();
   const queryParameter = useSearchParams().get("type");
 
-  // const {data} = useQuery({
-  //   queryKey: ['content-analysis'],
-  //   queryFn: async()=> await ApiCall.get("/crawl/content-analysis/mini-crawler/", {
-  //     params: {
-  //       url: activeProperty
-  //     }
-  //   })7
-  // })
-  const { data } = useQuery({
-    queryKey: ["content-analysis"],
-    queryFn: async () =>
-      await ApiCall.get("/crawl/content-analysis", {
-        params: {
-          url: activeProperty,
-        },
-      }),
+  const { data, isError, isLoading } = useQuery({
+    queryKey: ["content-analysis", activePropertyId],
+    queryFn: async () => {
+      const result = await ApiCall.get(
+        `/user/crawler/content-analysis/by-tab/${activePropertyId}?tab=extractedOverview`
+      );
+      return result.data?.project; // Ensure the data is returned
+    },
   });
-  const detail: contentAnalysisProps = data?.data.data || undefined;
-
-  console.log("DETAIL", detail?.content);
+  // const detail: contentAnalysisProps = data?.data.data || undefined;
 
   return (
     <main className="grid w-full h-full items-start content-start gap-6 mb-20">
       {/* {JSON.stringify(queryParameter)} */}
       <TitleShareSettingTop title="Content analysis" />
-      <LastUpdated date={FormattedDate(detail?.content[0].updatedAt ?? "")} />
+      {/* <LastUpdated date={FormattedDate(detail?.content[0].updatedAt ?? "")} /> */}
 
       <div className="flex gap-4 border-b-2">
         <Link
@@ -112,7 +105,11 @@ export default function ContentAnalysis() {
         </div>
       </section>
       <section className="h-[500px] overflow-y-auto pb-20 mb-20">
-        {queryParameter === null && <Overview />}
+        {queryParameter === null && isLoading ? (
+          "Loading ..."
+        ) : (
+          <Overview OverviewData={data} />
+        )}
         {queryParameter === "explore-content" && <ExploreContent />}
       </section>
 
