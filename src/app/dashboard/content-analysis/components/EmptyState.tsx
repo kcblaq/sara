@@ -7,7 +7,7 @@ import { useFormik } from "formik";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import * as Yup from "yup";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function EmptyState() {
@@ -20,14 +20,14 @@ export default function EmptyState() {
     console.log("Form submitted with values:", formik.values); // Debug line
 
     try {
-      const result =  ApiCall.post(
+      const result = ApiCall.post(
         `/user/crawler/content-analysis/${activePropertyObj?.id}`,
         {
           keywords: [
             {
-              keyword: formik.values?.topic
-            }
-          ]
+              keyword: formik.values?.topic,
+            },
+          ],
         }
       );
 
@@ -43,14 +43,13 @@ export default function EmptyState() {
             minWidth: "250px",
           },
         }
-      )
+      );
 
       const res = await result;
 
       if (res.status == 200) {
         router.push("/dashboard/content-analysis");
       }
-      
     } catch (error) {
       console.error("Error during search:", error);
     }

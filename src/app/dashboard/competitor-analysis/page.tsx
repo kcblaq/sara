@@ -222,7 +222,7 @@ export default function page() {
           <h1
             className={`font-semibold min-[425px]:text-4xl 2xl:text-5xl text-3xl `}
           >
-            Competitor analysis
+            Competitor analysi
           </h1>
           <p className="text-[#101828] font-medium text-lg 2xl:text-xl min-[425px]:w-auto min-[356px]:w-[375px] w-[320px]">
             Research your online competitors and improve your SEO
