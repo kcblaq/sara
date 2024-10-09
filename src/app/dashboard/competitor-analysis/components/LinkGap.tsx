@@ -4,25 +4,46 @@ import SearchBox from "@/app/component/SearchBox";
 import { SelectorDropdownMenu } from "@/app/component/SelectDropdownMenu";
 import { mockedData } from "@/app/component/data/mockedData";
 import { ShortenNumber } from "@/app/utils/ShortenedNumber";
+import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
+import { CurrentProperty } from "@/app/utils/currentProperty";
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { BsArrowDown, BsArrowUp } from "react-icons/bs";
 import { FaRegCircleQuestion } from "react-icons/fa6";
+import {  linkGapData } from "./competitorAnalysis";
 
+
+interface Props {
+  target: string,
+  rank: number,
+  intersections: number
+}
 export default function LinkGap() {
-  const [selected, setSelected] = useState('DTS')
+  const [selected, setSelected] = useState('DTS');
+
+  // const {data} = useQuery({
+  //   queryKey: ["link_gap", property.id ],
+  //   queryFn: async () => {
+  //     return await ApiCall.get(`/user/crawler/competitor-analysis/by-tab/${property.id}?tab=linkGap`)
+  //   }
+  // })
+  const {data: linkGap, isPending, isError} = linkGapData();
+  const linkData= linkGap?.project?.crawlings[0]?.crawlingData[0]?.data?.items
+
+  // console.log("DATA", linkGap.project.crawlings[0].crawlingData[0].data.items)
 
   return (
     <section className={`grid col-span-1 lg:col-span-3 gap-6 mt-6 mb-20
         `}>
-      <div className={` flex items-center gap-4`}>
+      {/* <div className={` flex items-center gap-4`}>
         <SelectorDropdownMenu items={['Volume', 'High', 'Low']} selected={selected} setSelected={() => setSelected('')} />
         <SelectorDropdownMenu items={['Volume', 'High', 'Low']} selected={"Traffic"} setSelected={() => setSelected('')} />
         <SelectorDropdownMenu items={['Volume', 'High', 'Low']} selected={"DTS"} setSelected={() => setSelected('')} />
-      </div>
+      </div> */}
       <div className={`border rounded-lg w-full pt-7`}>
         <div className="flex w-full items-center p-6 justify-between">
           <h3 className="text-[#101828] text-lg text-left font-medium">
-            2344 Reffering domains
+            {linkData?.length} Reffering domains
           </h3>
           <SearchBox value={""} setValue={function (e: any): void {
             throw new Error("Function not implemented.");
@@ -35,50 +56,11 @@ export default function LinkGap() {
                 Reffering domains
               </th>
               <th className="p-4">
-                <span className={`flex gap-1 items-center `}>
-                  <p> DTS</p>
-                  <button className="" title="Here..."> <FaRegCircleQuestion /></button>
-                </span>
-              </th>
-              <th className="p-4">
-                {/* <span className={`flex gap-1 items-center `}> */}
-                  <p> Traffic</p>
-                  {/* <button className="" title="Here..."> <FaRegCircleQuestion /></button> */}
-                {/* </span> */}
-              </th>
-              <th className="p-4">
-                {/* <span className={`flex gap-1 items-center `}> */}
-                  <p className={`flex gap-1 items-center `}> Top referring page to domain1.com <button className="" title="Here..."> <FaRegCircleQuestion /></button></p>
-                  
-                {/* </span> */}
+                  <p> Rank Position</p>
               </th>
               <th className="p-4">
                 <span className={`flex gap-1 items-center `}>
-                  <p> PTS</p>
-                  <button className="" title="Here..."> <FaRegCircleQuestion /></button>
-                </span>
-              </th>
-              <th className="p-4">
-                <span className={`flex gap-1 items-center `}>
-                  <p> Top referring page domain2.com</p>
-                  <button className="" title="Here..."> <FaRegCircleQuestion /></button>
-                </span>
-              </th>
-              <th className="p-4">
-                <span className={`flex gap-1 items-center `}>
-                  <p> PTS</p>
-                  <button className="" title="Here..."> <FaRegCircleQuestion /></button>
-                </span>
-              </th>
-              <th className="p-4">
-                <span className={`flex gap-1 items-center `}>
-                  <p> Top referring page domain3.com</p>
-                  <button className="" title="Here..."> <FaRegCircleQuestion /></button>
-                </span>
-              </th>
-              <th className="p-4">
-                <span className={`flex gap-1 items-center `}>
-                  <p> PTS</p>
+                  <p> Intersections</p>
                   <button className="" title="Here..."> <FaRegCircleQuestion /></button>
                 </span>
               </th>
@@ -88,45 +70,16 @@ export default function LinkGap() {
           </thead>
           <tbody>
             {
-              mockedData.map((item, index) => {
+              linkData?.map((item: Props, index:number) => {
                 return (
-                  <tr className={`${index === mockedData.length - 1 ? '' : 'border-b'} text-left`} key={item.position}>
+                  <tr className={`${index === linkData.length - 1 ? '' : 'border-b'} text-left hover:bg-blue-100`} key={index}>
                     <td className="p-4 text-primary">
-                        <p> {item.url} </p>
+                        <p> {item?.target} </p>
                     </td>
+                    <td className=" p-4">{item?.rank} </td>
                     <td className="p-4">
-                      {item.kd}
+                      {item?.intersections}
                     </td>
-                    <td className=" p-4">{item.traffic} </td>
-
-                    <td className="bg-[#EFF8FF] p-4">
-                      <span className={`  p-1 px-3 flex flex-col`}>
-                        {item.keyword}
-                        <span className="text-primary">{item.url}</span>
-                      </span>
-                    </td>
-                    <td className="bg-[#EFF8FF]">{item.cpc} </td>
-
-
-                    <td className="bg-[#F4F2FA] p-4 ">
-
-                      <span className="flex flex-col">
-                        {item.keyword} 
-                      <span className="text-primary cursor-pointer">{item.url} </span>
-                      </span>
-                      </td>
-                    <td className="bg-[#F4F2FA] p-4">{item.kd} </td>
-
-
-                    <td className="bg-[#F4F3FF] p-4 ">
-
-                      <span className="flex flex-col">
-                        {item.keyword} 
-                      <span className="text-primary cursor-pointer">{item.url} </span>
-                      </span>
-                      </td>
-                    <td className="bg-[#F4F3FF] p-4">{item.kd} </td>
-
                     
                   </tr>
                 )

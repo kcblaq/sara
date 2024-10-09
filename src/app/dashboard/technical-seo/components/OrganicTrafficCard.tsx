@@ -6,7 +6,7 @@ import { useRankTrackingOverview } from "@/app/services/crawlers/rank_tracking";
 
 export default function OrganicTrafficCard() {
 
-  const { isError, isPending, data: OverviewData } = useRankTrackingOverview();
+  const { isError, isPending, data: OverviewData } = useRankTrackingOverview("overview");
   const organicTraffic = OverviewData?.project?.crawlings[0]?.crawlingData[0]?.data?.google?.organic_traffic ?? 0;
   const previousVal = OverviewData?.project?.crawlings[1]?.crawlingData[0]?.data?.google?.organic_traffic ?? 0;
 

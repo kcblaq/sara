@@ -35,7 +35,7 @@ export const configureApiCall = (store: any) => {
       return response;
     },
     (error) => {
-      if (error.response.status === 401) {
+      if (error?.response?.status === 401) {
         handleUnauthorized();
       }
       return Promise.reject(error);

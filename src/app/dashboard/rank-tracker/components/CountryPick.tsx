@@ -4,6 +4,7 @@ import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { IoChevronDownOutline } from "react-icons/io5";
 import { CiGlobe } from "react-icons/ci";
+import countries from "../../../../app/utils/CountriesAndCode.json";
 
 export interface Country {
   flags: {
@@ -39,7 +40,7 @@ export default function CountryPick({
 }: CountryPickProps) {
   const [countries, setCountries] = useState<Country[]>([]);
   const [currentCountry, setCurrentCountry] = useState<Country | null>(null);
-  console.log(currentCountry);
+  // console.log(currentCountry);
 
   async function getCountries() {
     const res = await axios.get(
@@ -133,7 +134,7 @@ export function CountryPickAllLocationDefault({
 }: Prop) {
   const [countries, setCountries] = useState<Country[]>([]);
   const [currentCountry, setCurrentCountry] = useState<Country | null>(null);
-  console.log(countries);
+  // console.log(countries);
 
   async function getCountries() {
     const res = await axios.get(

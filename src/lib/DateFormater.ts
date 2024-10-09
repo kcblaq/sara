@@ -28,11 +28,11 @@ export function calculatePercentage(value: number, total: number): number {
 }
 
 
-export function calculatePercentageDifference(oldValue: number, newValue: number): number {
-    if (oldValue === 0) {
-        return newValue * 100; // If the old value is 0, the difference is 100% of the new value
+export function calculatePercentageDifference(oldValue: number | undefined | null, newValue: number): number {
+    if (oldValue === undefined || oldValue === null || oldValue === 0) {
+      return 0; // If the old value doesn't exist or is 0, there's no percentage difference
     }
-
+  
     const difference = newValue - oldValue;
     return (difference / oldValue) * 100;
-}
+  }

@@ -21,6 +21,15 @@ interface InputAndCountryFlagProps
   labelName?: string;
 }
 
+interface TextAreaProps extends InputHTMLAttributes<HTMLTextAreaElement> {
+  className?: string;
+  wrapperClassName?: string;
+  isShowLabel?: boolean;
+  labelName?: string;
+  rows?: number;
+  cols?: number;
+}
+
 export default function Input({
   className,
   wrapperClassName,
@@ -44,6 +53,36 @@ export default function Input({
         {props.type === "search" && (
           <IoSearchOutline className="absolute left-2 top-3 text-xl text-gray-400 peer-focus:hidden" />
         )}
+      </div>
+    </span>
+  );
+}
+
+
+
+
+export function TextArea({
+  className,
+  wrapperClassName,
+  isShowLabel,
+  labelName,
+  rows = 4,
+  cols = 30,
+  ...props
+}: TextAreaProps) {
+  return (
+    <span className={`flex flex-col ${wrapperClassName}`}>
+      {isShowLabel && <label htmlFor="">{labelName}</label>}
+      <div className="relative">
+        <textarea
+          {...props}
+          rows={rows}
+          cols={cols}
+          className={twMerge(
+            `rounded-md p-3 resize-none active:border active:border-[#D1E9FF] focus:border-[#D1E9FF] outline-none border-2 border-gray-200 peer`,
+            className
+          )}
+        />
       </div>
     </span>
   );

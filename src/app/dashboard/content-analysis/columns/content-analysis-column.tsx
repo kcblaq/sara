@@ -156,6 +156,12 @@ export const ExploreContentTableColumns: ColumnDef<ExploreContentTableItemType>[
         const sentimentArray = Array.isArray(sentimentDValue)
           ? sentimentDValue
           : [sentimentDValue];
+        const total = sentimentArray.reduce(
+          (acc, val) => acc + parseFloat(val),
+          0
+        );
+
+        // console.log(total);
 
         return (
           <div className="flex flex-col space-y-2">
@@ -163,12 +169,12 @@ export const ExploreContentTableColumns: ColumnDef<ExploreContentTableItemType>[
               <ul key={i}>
                 <li
                   style={{
-                    backgroundColor: color[i].bgColor,
-                    color: color[i].textColor,
+                    backgroundColor: color[i]?.bgColor,
+                    color: color[i]?.textColor,
                   }}
                   className={`rounded-full py-1 px-2 w-fit`}
                 >
-                  {item}
+                  {((Number(item) / total) * 100).toFixed(2)}%
                 </li>
               </ul>
             ))}
