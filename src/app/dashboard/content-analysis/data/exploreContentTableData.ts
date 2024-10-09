@@ -6,7 +6,7 @@ export type ExploreContentTableItemType = {
     author: string;
     date_published: Date;
     language: string;
-    socialMediaHandles: {
+    socialMediaHandles?: {
       [key: string]: number;
     };
   };

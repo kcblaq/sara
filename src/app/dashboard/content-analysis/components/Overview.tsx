@@ -13,27 +13,29 @@ interface OverviewProps {
 export default function Overview({ OverviewData }: OverviewProps) {
   // console.log("CONTENT ANALYSIS(oVERVIEW)", OverviewData);
 
-  const firstCrawling = OverviewData.crawlings[0] ?? [];
+  const firstCrawling = OverviewData?.crawlings[0] ?? [];
 
   // Access the crawlingData array from the first crawling
   const crawlingDataArray = firstCrawling.crawlingData ?? [];
 
   // Access the first item in the crawlingData array
   const OverviewDataProperty = crawlingDataArray[0]?.data;
-  // .map(([key, value])=> [{}]);
-  const sentiment_connotations =
-    Object.entries(OverviewDataProperty.sentiment_connotations).flatMap(
-      ([key, value]) => [{ label: key, percentage: value }]
-    ) ?? [];
 
-  const sentiment_types =
-    Object.entries(OverviewDataProperty.connotation_types).flatMap(
-      ([key, value]) => [{ label: key, percentage: value }]
-    ) ?? [];
+  const sentiment_connotations = OverviewDataProperty?.sentiment_connotations
+    ? Object.entries(OverviewDataProperty.sentiment_connotations).flatMap(
+        ([key, value]) => [{ label: key, percentage: value }]
+      )
+    : [{}];
 
-  const top_domains = OverviewDataProperty.top_domains ?? [];
+  const sentiment_types = OverviewDataProperty?.connotation_types
+    ? Object.entries(OverviewDataProperty.connotation_types).flatMap(
+        ([key, value]) => [{ label: key, percentage: value }]
+      )
+    : [{}];
 
-  console.log(sentiment_connotations, top_domains);
+  const top_domains = OverviewDataProperty?.top_domains ?? [];
+
+  // console.log(sentiment_connotations, top_domains);
 
   return (
     <section className="grid grid-cols-3 gap-10 mb-10 overflow-y-auto">
@@ -48,7 +50,7 @@ export default function Overview({ OverviewData }: OverviewProps) {
           </div>
 
           <h1 className="text-4xl font-bold my-8">
-            {OverviewDataProperty.aggregate_rank ?? 0}
+            {OverviewDataProperty?.aggregate_rank ?? 0}
           </h1>
         </div>
 
