@@ -63,10 +63,25 @@ export default function ContentAnalysis() {
       const result = await ApiCall.get(
         `/user/crawler/content-analysis/by-tab/${activePropertyId}?tab=extractedOverview`
       );
-      return result.data?.project; // Ensure the data is returned
+      return result.data?.project;
     },
   });
-  // const detail: contentAnalysisProps = data?.data.data || undefined;
+
+  const {
+    data: exploreTabData,
+    isError: exploreisError,
+    isLoading: exploreIsLoading,
+  } = useQuery({
+    queryKey: ["explore-content", activePropertyId],
+    queryFn: async () => {
+      const result = await ApiCall.get(
+        `/user/crawler/content-analysis/by-tab/${activePropertyId}?tab=extractedExplore`
+      );
+      return result.data?.project;
+    },
+  });
+
+  // console.log(exploreTabData, exploreisError, exploreIsLoading);
 
   return (
     <main className="grid w-full h-full items-start content-start gap-6 mb-20">
@@ -105,12 +120,10 @@ export default function ContentAnalysis() {
         </div>
       </section>
       <section className="h-[500px] overflow-y-auto pb-20 mb-20">
-        {queryParameter === null && isLoading ? (
-          "Loading ..."
-        ) : (
-          <Overview OverviewData={data} />
+        {queryParameter === null && <Overview OverviewData={data} />}
+        {queryParameter === "explore-content" && (
+          <ExploreContent data={exploreTabData} />
         )}
-        {queryParameter === "explore-content" && <ExploreContent />}
       </section>
 
       {/* {!showDetail ? (
