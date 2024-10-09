@@ -92,7 +92,9 @@ export default function ExploreContent({ data }: ExploreContentProps) {
       </div>
 
       <div className="border rounded-md my-8 overflow-x-auto w-full">
-        <h1 className="p-4 text-lg font-semibold">6,150 results</h1>
+        <h1 className="p-4 text-lg font-semibold">
+          {transformedDataForTable?.length ?? 0} results
+        </h1>
         <DataTable
           columns={ExploreContentTableColumns}
           data={transformedDataForTable}
