@@ -18,6 +18,7 @@ export default function LinkBuildingOverview() {
   }
 
   const crawlingData = OverviewData?.project?.crawlings[0]?.crawlingData[0]?.data || {};
+  console.log("DATA",crawlingData)
   return (
     <main className="py-10 grid gap-8 ">
       <section className="grid gap-6 grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 w-full">
