@@ -8,9 +8,19 @@ import BacllinkPages from "./component/backlinkPages/BacllinkPages";
 import ReferingDomains from "./component/ReferingDomains";
 import LinkBuildingOpportunities from "./component/LinkBuildingOpportunities";
 import { Tab } from "@headlessui/react";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
+import { CurrentProperty } from "@/app/utils/currentProperty";
+import Loader from "@/app/component/Loader";
+import toast from "react-hot-toast";
 
 export default function LinkBuilding() {
+  const [status, setStatus] = useState(false);
+  const { id, domain } = CurrentProperty();
+  // const formattedUrl = domain.replace("https://", "").replace("http://", ""); //this is also correct but not  efficient
+  const formattedUrl = new URL(domain).hostname.replace("www.", "");
+  console.log(formattedUrl);
   const tabs = [
     { title: "Backlink overview", content: <LinkBuildingOverview /> },
     { title: "Backlink pages", content: <BacllinkPages /> },
@@ -20,6 +30,31 @@ export default function LinkBuilding() {
       content: <LinkBuildingOpportunities />,
     },
   ];
+
+  interface PayloadType {
+    [key: string]: {
+      [key: string]: string;
+    };
+  }
+  const mutation = useMutation({
+    mutationFn: (payload: PayloadType) => {
+      return ApiCall.post(`/user/crawler/back-link/${id}`, payload);
+    },
+    onSuccess: async () => {
+      toast.success("Link building Updated");
+    },
+  });
+
+  // const handlepost = async () => {
+  //   const result = await ApiCall.post(`/user/crawler/back-link/${id}`, {
+  //     targets: {
+  //       "1": formattedUrl,
+  //     },
+  //   });
+
+  //   console.log(result.data);
+  // };
+
   return (
     <main className="grid w-full h-full items-start content-start gap-6  mb-20">
       <section
@@ -31,10 +66,25 @@ export default function LinkBuilding() {
           Link building{" "}
         </h1>
         <div className="flex w-full md:w-1/2 items-center min-[600px]:justify-end gap-2 md:gap-4">
-          <span className="">
-            <button className="rounded-lg sm:text-base  text-sm p-2 w-[136px] bg-primary text-white font-semibold hover:bg-blue-500">
+          <span className="inline-flex gap-1 items-center ">
+            <button
+              onClick={() =>
+                mutation.mutate({
+                  targets: {
+                    "1": formattedUrl,
+                  },
+                })
+              }
+              className="rounded-lg sm:text-base  text-sm p-2 w-[136px] bg-primary text-white font-semibold hover:bg-blue-500"
+            >
               Update data
             </button>
+
+            {mutation.isPending && (
+              <span className="animate-spin rounded-full h-8 w-h-8 border-t-2 border-b-2 border-white">
+                <Loader />
+              </span>
+            )}
           </span>
           <span className="">
             <PlainButton
