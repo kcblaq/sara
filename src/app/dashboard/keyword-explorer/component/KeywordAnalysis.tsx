@@ -21,6 +21,8 @@ import ProgressiveCircleReusable from "../../components/ProgressiveCircleReusabl
 import Card from "../../Card";
 import PieChart from "../../technical-seo/components/(technicalseo)/PieChart";
 import { AnotherDoughnutChart } from "../../technical-seo/components/(technicalseo)/DoughnutChart";
+import { CurrentProperty } from "@/app/utils/currentProperty";
+import { useKeywordAnalysisData } from "@/app/services/crawlers/keywordExplorer";
 
 export const DetailButton = ({ title }: { title: string }) => (
   <button className="" title={title}>
@@ -30,6 +32,13 @@ export const DetailButton = ({ title }: { title: string }) => (
 );
 export default function KeywordAnalysis() {
   const [detail, setDetail] = useState(true);
+  const currentProperty = CurrentProperty()
+
+  const {keywordAnalysisData, isPending, isSuccess,isError} = useKeywordAnalysisData(currentProperty.id);
+  
+  const data = keywordAnalysisData?.[1]?.project?.crawlings?.[0]?.crawlingData?.[0]?.data?.tasks?.[0]?.result;
+  console.log("DT", data)
+
 
   function Detail() {
     return (
@@ -264,11 +273,11 @@ export default function KeywordAnalysis() {
             <thead className="bg-[#F9FAFB] w-full">
               <tr className=" h-[44px] text-xs text-[#475467]  font-medium">
                 <th>
-                  {" "}
+                  {/* {" "}
                   <span className="flex items-center gap-2 p-2 px-6">
                     {" "}
                     <input type="checkbox" className="" /> Keywords{" "}
-                  </span>
+                  </span> */}
                 </th>
                 <th>
                   {" "}
@@ -312,10 +321,10 @@ export default function KeywordAnalysis() {
               {mockedData.map((data) => {
                 return (
                   <tr className=" border-b">
-                    <td className=" p-2 px-6 ">
+                    <td className="px-6">
                       <span className="flex items-center gap-2 ">
-                        {" "}
-                        <input type="checkbox" className="" /> {data.keyword}{" "}
+                        {/* <input type="checkbox" className="" /> */}
+                         {data.keyword}{" "}
                         <AiOutlineExpandAlt
                           onClick={() => setDetail(true)}
                           className="bg-[#EFF8FF] p-0.5 text-[#1570EF] cursor-pointer rounded text-2xl"

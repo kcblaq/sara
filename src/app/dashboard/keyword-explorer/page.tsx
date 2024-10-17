@@ -16,6 +16,11 @@ import { Country } from "../rank-tracker/components/CountryPick";
 import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
 import toast from "react-hot-toast";
 import { locationCodes } from "./component/locationCodes";
+import { useKeywordmutation } from "@/app/services/crawlers/keywordExplorer";
+import { CurrentProperty } from "@/app/utils/currentProperty";
+import Button from "../components/ui/Button";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import {KeywordServicesFetch} from "../../services/keyword_services/keyword";
 
 const tabs = [
   { title: "Keyword analysis", content: <KeywordAnalysis /> },
@@ -49,43 +54,94 @@ export default function page() {
     }
   }, [selectedCountry]);
 
-  console.log(keywords);
+  console.log("KW", keywords.keywords.split(","));
+  const currentId = CurrentProperty()
+  const onSuccess = () => setStage(1)
 
-  async function SearchKeywords() {
-    setStatus("loading");
-    try {
-      const req = await ApiCall({
-        url: "user/crawler/keyword/2",
-        method: "POST",
-        data: {
-          location_name: keywords.locationName,
-          location_code: keywords.locationCode,
-          keywords: keywords.keywords.split(","),
-        },
-      });
-      console.log(req.data);
-      if (req.status) {
-        toast.success("Keyword Searched", { position: "top-right" });
-        setStatus("success");
-      }
-    } catch (error: any) {
-      setStatus("error");
-      console.log(error);
-      if (error.response) {
-        toast.error(error.response.data.message || "something went wrong", {
-          position: "top-right",
-        });
-      } else if (error.request) {
-        toast.error("something went wrong", { position: "top-right" });
-        console.log(error.request);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        toast.error(error.message, { position: "top-right" });
-        console.log("Error", error.message);
-      }
-    }
+  const payload = {
+    keywords: keywords.keywords.split(","),
+      location_code: 2840,
   }
+
+  // const { mutate, isPending } = useKeywordmutation(
+  //   {
+  //     keywords: keywords.keywords.split(","),
+  //     location_code: 2840,
+  //     location_name: "United States"
+  //   },
+  //   currentId.id,
+  //   onSuccess
+  // );
+
+  const {mutate, isPending} = useMutation({
+    mutationFn: async()=> {
+      const response = await ApiCall.post(`/user/crawler/keyword/${currentId.id}`, {
+        location_name: keywords.locationName,
+        location_code: keywords.locationCode,
+        keywords: keywords.keywords.split(","),
+      })
+      return response.data;
+    },
+    onError: (error) => {
+      error.message;
+      toast.error(`An error occured, ${error.message}`, {position: "top-right"})
+    },
+    onSuccess: () => {
+      toast.success("Keyword search was successfull", { position: "top-right" });
+      setStatus("success");
+      setStage(1)
+    }
+  })
+  
+ const keywordService = new KeywordServicesFetch()
+
+ keywordService.keywordAnalysisData(currentId.id).then((data) => console.log("DT",data));
+//  console.log("DT", data)
+
+  
+  const handleClearAll = () => {
+    setKeywords({ keywords: "", locationCode: "", locationName: "" });
+  };
+
+  // async function SearchKeywords() {
+  //   setStatus("loading");
+  //   try {
+  //     const req = await ApiCall({
+  //       url: "user/crawler/keyword/2",
+  //       method: "POST",
+  //       data: {
+  //         location_name: keywords.locationName,
+  //         location_code: keywords.locationCode,
+  //         keywords: keywords.keywords.split(","),
+  //       },
+  //     });
+  //     console.log(req.data);
+  //     if (req.status) {
+  //       toast.success("Keyword Searched", { position: "top-right" });
+  //       setStatus("success");
+  //     }
+  //   } catch (error: any) {
+  //     setStatus("error");
+  //     console.log(error);
+  //     if (error.response) {
+  //       toast.error(error.response.data.message || "something went wrong", {
+  //         position: "top-right",
+  //       });
+  //     } else if (error.request) {
+  //       toast.error("something went wrong", { position: "top-right" });
+  //       console.log(error.request);
+  //     } else {
+  //       // Something happened in setting up the request that triggered an Error
+  //       toast.error(error.message, { position: "top-right" });
+  //       console.log("Error", error.message);
+  //     }
+  //   }
+  // }
+
+ 
+
   return stage == 0 ? (
+    // Search bar for the keywords
     <main className="grid w-full h-full items-start content-start gap-6 my-10 mb-20 overflow-auto">
       <section className={`flex flex-col gap-4 text-[#101828] `}>
         <h1 className={`font-semibold text-4xl 2xl:text-5xl`}>
@@ -106,11 +162,12 @@ export default function page() {
             }
             rows={5}
             cols={70}
+            value={keywords.keywords}
             placeholder="e.g. dog food, pet care, how to care for your dog..."
             className=" p-2 border rounded-md "
           ></textarea>
           <div className="flex justify-end items-center gap-6">
-            <button className=" border flex items-center gap-2 rounded-md font-semibold p-2 px-3 ">
+            <button className=" border flex items-center gap-2 rounded-md font-semibold p-2 px-3 " onClick={handleClearAll}>
               Clear all
             </button>
             <button className=" bg-[#EFF8FF] border text-[#175CD3] flex items-center gap-2 rounded-md font-semibold p-2 px-3 ">
@@ -122,9 +179,9 @@ export default function page() {
         <div className={`flex items-center gap-6 mt-8`}>
           <CountryPick setCountry={setSelectedCountry} />
           <FilledButton
-            handleClick={SearchKeywords}
-            loading={status === "loading"}
-            disabled={status === "loading"}
+            handleClick={mutate}
+            loading={isPending}
+            disabled={isPending}
             title="Search Keywords"
           />
         </div>
@@ -146,7 +203,7 @@ export default function page() {
         </div>
         <div className={`flex items-center gap-6 mt-8`}>
           <CountryPick />
-          <FilledButton title="Search Keywords" />
+          <FilledButton title="Search Keywords" handleClick={mutate} loading={isPending}  />
         </div>
       </section>
     </main>
@@ -180,13 +237,13 @@ export default function page() {
       <section
         className={`flex min:[500px]:flex-nowrap flex-wrap w-full sm:items-center items-start gap-4 text-[#101828] `}
       >
-        <div className="sm:w-auto w-full">
+        {/* <div className="sm:w-auto w-full">
           <ToggleMobile
             mobile={mobile}
             setMobile={setMobile}
             className="w-fit font-normal"
           />
-        </div>
+        </div> */}
 
         <CountryPick className="sm:w-auto w-full" />
         <SearchEnginePick className="sm:w-auto w-full" />
