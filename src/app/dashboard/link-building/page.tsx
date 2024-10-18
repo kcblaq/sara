@@ -9,6 +9,7 @@ import ReferingDomains from "./component/ReferingDomains";
 import LinkBuildingOpportunities from "./component/LinkBuildingOpportunities";
 import { Tab } from "@headlessui/react";
 import { Fragment } from "react";
+import Button from "../components/ui/Button";
 
 export default function LinkBuilding() {
   const tabs = [
@@ -32,20 +33,18 @@ export default function LinkBuilding() {
         </h1>
         <div className="flex w-full md:w-1/2 items-center min-[600px]:justify-end gap-2 md:gap-4">
           <span className="">
-            <button className="rounded-lg sm:text-base  text-sm p-2 w-[136px] bg-primary text-white font-semibold hover:bg-blue-500">
+            <Button className="rounded-lg sm:text-base  text-sm p-2 w-[136px] bg-primary text-white font-semibold hover:bg-blue-500">
               Update data
-            </button>
+            </Button>
           </span>
           <span className="">
-            <PlainButton
-              moreClass="text-primary bg-[#EFF8FF] sm:text-inherit text-sm"
-              title="Export"
-              icon={<IoCloudUploadOutline />}
-            />
+            <Button className="text-primary bg-[#EFF8FF] sm:text-inherit text-sm">
+            Export
+            </Button>
           </span>
-          <span className="p-3 rounded-md border cursor-pointer ">
+          {/* <span className="p-3 rounded-md border cursor-pointer ">
             <CiSettings />
-          </span>
+          </span> */}
         </div>
       </section>
       <section className="flex min-[500px]:flex-row flex-col  min-[500px]:items-center items-start  min-[500px]:gap-6 gap-3">
