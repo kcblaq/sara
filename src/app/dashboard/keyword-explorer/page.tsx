@@ -20,7 +20,18 @@ import { useKeywordmutation } from "@/app/services/crawlers/keywordExplorer";
 import { CurrentProperty } from "@/app/utils/currentProperty";
 import Button from "../components/ui/Button";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import {KeywordServicesFetch} from "../../services/keyword_services/keyword";
+import { KeywordServicesFetch } from "../../services/keyword_services/keyword";
+import { getAllKeywordAnalysis } from "@/app/services/keyword_services/allKeywordAnalysis";
+import Loader from "@/app/component/Loader";
+
+interface CrawlingData {
+  id: number;
+  userId: number;
+  domain: string;
+  createdAt: string;
+  updatedAt: string;
+  crawlings: any[];
+}
 
 const tabs = [
   { title: "Keyword analysis", content: <KeywordAnalysis /> },
@@ -55,13 +66,13 @@ export default function page() {
   }, [selectedCountry]);
 
   console.log("KW", keywords.keywords.split(","));
-  const currentId = CurrentProperty()
-  const onSuccess = () => setStage(1)
+  const currentId = CurrentProperty();
+  const onSuccess = () => setStage(1);
 
   const payload = {
     keywords: keywords.keywords.split(","),
-      location_code: 2840,
-  }
+    location_code: 2840,
+  };
 
   // const { mutate, isPending } = useKeywordmutation(
   //   {
@@ -73,32 +84,51 @@ export default function page() {
   //   onSuccess
   // );
 
-  const {mutate, isPending} = useMutation({
-    mutationFn: async()=> {
-      const response = await ApiCall.post(`/user/crawler/keyword/${currentId.id}`, {
-        location_name: keywords.locationName,
-        location_code: keywords.locationCode,
-        keywords: keywords.keywords.split(","),
-      })
+  const { mutate, isPending } = useMutation({
+    mutationFn: async () => {
+      const response = await ApiCall.post(
+        `/user/crawler/keyword/${currentId.id}`,
+        {
+          location_name: keywords.locationName,
+          location_code: keywords.locationCode,
+          keywords: keywords.keywords.split(","),
+        }
+      );
       return response.data;
     },
     onError: (error) => {
       error.message;
-      toast.error(`An error occured, ${error.message}`, {position: "top-right"})
+      toast.error(`An error occured, ${error.message}`, {
+        position: "top-right",
+      });
     },
     onSuccess: () => {
-      toast.success("Keyword search was successfull", { position: "top-right" });
+      toast.success("Keyword search was successfull", {
+        position: "top-right",
+      });
       setStatus("success");
-      setStage(1)
+      setStage(1);
+    },
+  });
+
+  const keywordService = new KeywordServicesFetch();
+
+  // check if there is overall keyword analysis data in order to handle stage
+  const { data, isPending: isLoading } = getAllKeywordAnalysis(
+    currentId.id
+  ) as { data: CrawlingData; isPending: boolean };
+  console.log(data);
+  useEffect(() => {
+    if (data?.crawlings?.length === 0) {
+      setStage(0);
     }
-  })
-  
- const keywordService = new KeywordServicesFetch()
+  }, [data]);
 
- keywordService.keywordAnalysisData(currentId.id).then((data) => console.log("DT",data));
-//  console.log("DT", data)
+  keywordService
+    .keywordAnalysisData(currentId.id)
+    .then((data) => console.log());
+  //  console.log("DT", data)
 
-  
   const handleClearAll = () => {
     setKeywords({ keywords: "", locationCode: "", locationName: "" });
   };
@@ -137,9 +167,15 @@ export default function page() {
   //     }
   //   }
   // }
-
- 
-
+  if (isLoading) {
+    return (
+      <div className="h-52 w-full flex flex-col items-center justify-center">
+        <div className="h-20 w-20">
+          <Loader />
+        </div>
+      </div>
+    );
+  }
   return stage == 0 ? (
     // Search bar for the keywords
     <main className="grid w-full h-full items-start content-start gap-6 my-10 mb-20 overflow-auto">
@@ -167,7 +203,10 @@ export default function page() {
             className=" p-2 border rounded-md "
           ></textarea>
           <div className="flex justify-end items-center gap-6">
-            <button className=" border flex items-center gap-2 rounded-md font-semibold p-2 px-3 " onClick={handleClearAll}>
+            <button
+              className=" border flex items-center gap-2 rounded-md font-semibold p-2 px-3 "
+              onClick={handleClearAll}
+            >
               Clear all
             </button>
             <button className=" bg-[#EFF8FF] border text-[#175CD3] flex items-center gap-2 rounded-md font-semibold p-2 px-3 ">
@@ -203,7 +242,11 @@ export default function page() {
         </div>
         <div className={`flex items-center gap-6 mt-8`}>
           <CountryPick />
-          <FilledButton title="Search Keywords" handleClick={mutate} loading={isPending}  />
+          <FilledButton
+            title="Search Keywords"
+            handleClick={mutate}
+            loading={isPending}
+          />
         </div>
       </section>
     </main>
