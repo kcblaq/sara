@@ -65,7 +65,7 @@ export default function page() {
     }
   }, [selectedCountry]);
 
-  console.log("KW", keywords.keywords.split(","));
+  // console.log("KW", keywords.keywords.split(","));
   const currentId = CurrentProperty();
   const onSuccess = () => setStage(1);
 
@@ -117,7 +117,7 @@ export default function page() {
   const { data, isPending: isLoading } = getAllKeywordAnalysis(
     currentId.id
   ) as { data: CrawlingData; isPending: boolean };
-  console.log(data);
+  // console.log(data);
   useEffect(() => {
     if (data?.crawlings?.length === 0) {
       setStage(0);

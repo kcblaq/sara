@@ -8,6 +8,11 @@ import { GoDotFill } from "react-icons/go";
 import { IoCartOutline, IoChevronDownOutline } from "react-icons/io5";
 import { MdArrowUpward } from "react-icons/md";
 import { DetailButton } from "./KeywordAnalysis";
+import { getSmartKeywordFinder } from "@/app/services/keyword_services/smartKeywordFinder";
+import { CurrentProperty } from "@/app/utils/currentProperty";
+import { abbreviateNumber } from "@/app/utils/abbreviateNumber";
+import moment from "moment";
+import Loader from "@/app/component/Loader";
 
 const tabsFilter = [
   { name: "All keywords" },
@@ -75,9 +80,28 @@ export function SelectorDropdown({
 
 export default function SmartKeywordFinder() {
   const [keyword, setKeyword] = useState("");
+  const [keywordLength, setKeywordLength] = useState(0);
   const [keywordCategory, setKeywordCategory] = useState("All keywords");
   const [selected, setSelected] = useState("Volume");
 
+  const { id } = CurrentProperty();
+
+  const {
+    isPending,
+    isError,
+    error,
+    data: smartKeywordFinder,
+  } = getSmartKeywordFinder(id);
+
+  // summary table data
+  const data =
+    smartKeywordFinder?.[0]?.project?.crawlings?.[0]?.crawlingData?.[0]?.data
+      ?.tasks?.[0]?.result;
+  const totalVolume = data?.reduce((acc: number, current: any) => {
+    return Number(acc + current.search_volume);
+  }, 0);
+  console.log(data);
+  console.log(smartKeywordFinder);
   return (
     <main className="py-10 grid gap-8 w-fit">
       <section className="flex min-[500px]:flex-row flex-col min-[500px]:items-center gap-2 justify-between w-full">
@@ -132,10 +156,10 @@ export default function SmartKeywordFinder() {
       <section className="overflow-x-auto rounded-md w-full border shadow-sm p-6 ">
         <div className="flex items-center gap-3 mb-3">
           <p className="text-[#101828] font-medium min-[375px]:text-lg text-sm">
-            1,2000 keywords
+            {data?.length ?? keywordLength} keywords
           </p>
           <p className="text-[#344054] font-medium text-xs px-3 p-2 rounded-2xl bg-[#F2F4F7] ">
-            6.7M total volume{" "}
+            {abbreviateNumber(totalVolume)} total volume{" "}
           </p>
         </div>
         <div className="overflow-x-auto w-full">
@@ -199,7 +223,12 @@ export default function SmartKeywordFinder() {
               </tr>
             </thead>
             <tbody>
-              {mockedData.map((data) => {
+              {isPending && (
+                <tr className="h-20 w-full ">
+                  <Loader />
+                </tr>
+              )}
+              {data?.map((data: any, i: number) => {
                 return (
                   <tr className=" border-b">
                     <td>
@@ -208,10 +237,10 @@ export default function SmartKeywordFinder() {
                     <td className=" p-2">{data.keyword} </td>
 
                     <td className="rounded-full">
-                      <span className={``}>{data.volume} </span>{" "}
+                      <span className={``}>{data.search_volume ?? 0} </span>{" "}
                     </td>
                     <td className="rounded-full">
-                      <span className={``}>{data.gv} </span>{" "}
+                      <span className={``}>{data.gv ?? 0} </span>{" "}
                     </td>
                     <td className="  p-2  rounded-full">
                       <span
@@ -221,33 +250,35 @@ export default function SmartKeywordFinder() {
                             : "bg-[#FFFAEB] text-[#B54708] "
                         }`}
                       >
-                        {" "}
                         <GoDotFill />
-                        {data.kd}{" "}
-                      </span>{" "}
+                        {(data?.competition_index +
+                          data?.search_volume / 1000) /
+                          2}
+                      </span>
                     </td>
                     <td className="rounded-full">
-                      <span className={``}>{data.tf}</span>{" "}
+                      <span className={``}>{data.tf ?? 0}</span>
                     </td>
                     <td className="rounded-full">
-                      <span className={``}>{data.cpc}</span>{" "}
+                      <span className={``}>{data.cpc ?? 0}</span>
                     </td>
                     <td className="rounded-full">
-                      <span className={`flex items-center gap-2 text-sm`}>
+                      {/* <span className={`flex items-center gap-2 text-sm`}>
                         {data.serp.includes("link") && <FaLink />}
                         {data.serp.includes("image") && <CiImageOn />}
                         {data.serp.includes("shop") && <IoCartOutline />}
                         {data.serp.includes("video") && <FaVideo />}
-                      </span>{" "}
+                      </span> */}
                     </td>
                     <td className="rounded-full">
-                      <span className={``}> 2 weeks ago</span>{" "}
+                      <span className={``}>
+                        {moment(smartKeywordFinder?.[0].project).fromNow()}
+                      </span>
                     </td>
                     <td className=" ">
                       <span
                         className={`  border flex p-3 items-center justify-center rounded-lg cursor-pointer text-primary `}
                       >
-                        {" "}
                         <FiRefreshCw />
                       </span>{" "}
                     </td>

@@ -23,8 +23,9 @@ import PieChart from "../../technical-seo/components/(technicalseo)/PieChart";
 import { AnotherDoughnutChart } from "../../technical-seo/components/(technicalseo)/DoughnutChart";
 import { CurrentProperty } from "@/app/utils/currentProperty";
 import { useKeywordAnalysisData } from "@/app/services/crawlers/keywordExplorer";
-import { KeywordAnalysisDataType } from "@/types/keywordAnalysisType";
+
 import moment from "moment";
+import Loader from "@/app/component/Loader";
 
 export const DetailButton = ({ title }: { title: string }) => (
   <button className="" title={title}>
@@ -34,6 +35,7 @@ export const DetailButton = ({ title }: { title: string }) => (
 );
 export default function KeywordAnalysis() {
   const [detail, setDetail] = useState(false);
+  const [keyword, setKeyword] = useState("");
   const currentProperty = CurrentProperty();
 
   const { keywordAnalysisData, isPending, isSuccess, isError } =
@@ -43,7 +45,7 @@ export default function KeywordAnalysis() {
   const data =
     keywordAnalysisData?.[0]?.project?.crawlings?.[0]?.crawlingData?.[0]?.data
       ?.tasks?.[0]?.result;
-  console.log("keyword-analysis", keywordAnalysisData?.[0]);
+  // console.log("keyword-analysis", keywordAnalysisData?.[0]);
 
   function Detail() {
     return (
@@ -59,8 +61,7 @@ export default function KeywordAnalysis() {
             <span className="flex items-center gap-3 md:text-2xl text-lg">
               <p className={` font-semibold text-[#101828] `}>Keyword: </p>
               <p className="font-normal min-[375px]:text-lg text-sm">
-                {" "}
-                The business principles{" "}
+                {keyword}
               </p>
             </span>
           </div>
@@ -332,6 +333,11 @@ export default function KeywordAnalysis() {
               </tr>
             </thead>
             <tbody>
+              {isPending && (
+                <div className="h-20 w-full">
+                  <Loader />
+                </div>
+              )}
               {data?.map((data: any, index: number) => {
                 return (
                   <tr key={index} className=" border-b">
@@ -340,7 +346,10 @@ export default function KeywordAnalysis() {
                         {/* <input type="checkbox" className="" /> */}
                         {data.keyword}{" "}
                         <AiOutlineExpandAlt
-                          onClick={() => setDetail(true)}
+                          onClick={() => {
+                            setDetail(true);
+                            setKeyword(data.keyword);
+                          }}
                           className="bg-[#EFF8FF] p-0.5 text-[#1570EF] cursor-pointer rounded text-2xl"
                         />{" "}
                       </span>

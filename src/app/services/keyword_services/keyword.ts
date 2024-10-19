@@ -18,7 +18,7 @@ export class KeywordServicesFetch {
     try {
       const response = await Promise.all([
         ApiCall.get(`/user/crawler/keyword/by-tab/${id}?tab=0`),
-        ApiCall.get(`/user/crawler/keyword/by-tab/${id}?tab=3`),
+        ApiCall.get(`/user/crawler/keyword/by-tab/${id}?tab=2`),
       ]);
       return response.map((res) => res.data);
     } catch (error) {
@@ -29,7 +29,7 @@ export class KeywordServicesFetch {
   async SmartKeywordFinder(id: number) {
     try {
       const result = await Promise.all([
-        ApiCall.get(`user/crawler/keyword/by-tab/${id}?tab=3`),
+        ApiCall.get(`user/crawler/keyword/by-tab/${id}?tab=0`),
         ApiCall.get(`user/crawler/keyword/by-tab/${id}?tab=2`),
       ]);
       return result.map((res) => res.data);
