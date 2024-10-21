@@ -23,6 +23,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { KeywordServicesFetch } from "../../services/keyword_services/keyword";
 import { getAllKeywordAnalysis } from "@/app/services/keyword_services/allKeywordAnalysis";
 import Loader from "@/app/component/Loader";
+import { shareOrFallback } from "@/app/utils/shareContentOrFallback";
 
 interface CrawlingData {
   id: number;
@@ -65,7 +66,6 @@ export default function page() {
     }
   }, [selectedCountry]);
 
-  // console.log("KW", keywords.keywords.split(","));
   const currentId = CurrentProperty();
   const onSuccess = () => setStage(1);
 
@@ -73,16 +73,6 @@ export default function page() {
     keywords: keywords.keywords.split(","),
     location_code: 2840,
   };
-
-  // const { mutate, isPending } = useKeywordmutation(
-  //   {
-  //     keywords: keywords.keywords.split(","),
-  //     location_code: 2840,
-  //     location_name: "United States"
-  //   },
-  //   currentId.id,
-  //   onSuccess
-  // );
 
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
@@ -167,6 +157,7 @@ export default function page() {
   //     }
   //   }
   // }
+
   if (isLoading) {
     return (
       <div className="h-52 w-full flex flex-col items-center justify-center">
@@ -260,13 +251,20 @@ export default function page() {
           Keyword explorer
         </h1>
         <div className="flex w-full md:w-1/2 sm:items-center sm:justify-end gap-2 md:gap-4">
-          <span className="">
+          <span className="inline-flex gap-2 items-center">
             <button className="rounded-lg text-base p-2 bg-primary text-white font-semibold hover:bg-blue-500">
               Update data
             </button>
           </span>
           <span className="">
             <PlainButton
+              handleClick={() =>
+                shareOrFallback({
+                  url: "http://localhost:3000/dashboard/keyword-explorer",
+                  title: "Check out this cool keyword explorer site!",
+                  text: "Check out your website Keyword Explorer status",
+                })
+              }
               moreClass="text-primary bg-[#EFF8FF]"
               title="Share"
               icon={<IoCloudUploadOutline />}

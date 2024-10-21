@@ -17,6 +17,8 @@ import { LuCopy } from "react-icons/lu";
 import { GrUpdate } from "react-icons/gr";
 import { MdOutlineIndeterminateCheckBox } from "react-icons/md";
 import toast from "react-hot-toast";
+import { KeywordServicesFetch } from "@/app/services/keyword_services/keyword";
+import { useMutation } from "@tanstack/react-query";
 
 const tabsFilter = [
   { name: "All keywords" },
@@ -92,13 +94,17 @@ export default function SmartKeywordFinder() {
   const [isCopy, setIsCopy] = useState(false);
 
   const { id } = CurrentProperty();
+  const KeywordService = new KeywordServicesFetch();
 
   const {
     isPending,
     isError,
-    error,
     data: smartKeywordFinder,
   } = getSmartKeywordFinder(id);
+
+  // const mutation  = useMutation({
+  //   mutationFn: ()=>KeywordService.crawl(id, {})
+  // })
 
   // summary table data
   const data: any[] =
@@ -332,6 +338,10 @@ export default function SmartKeywordFinder() {
                 </tr>
               )}
 
+              {isError && (
+                <tr className="h-20 w-full ">Something went wrong</tr>
+              )}
+
               {keywordData?.length === 0 && (
                 <div className="h-20 w-full text-nowrap">No data</div>
               )}
@@ -389,10 +399,11 @@ export default function SmartKeywordFinder() {
                     </td>
                     <td className=" ">
                       <span
-                        className={`  border flex p-3 items-center justify-center rounded-lg cursor-pointer text-primary `}
+                        onClick={() => ""}
+                        className={`border flex p-3 items-center justify-center rounded-lg cursor-pointer text-primary `}
                       >
                         <FiRefreshCw />
-                      </span>{" "}
+                      </span>
                     </td>
                   </tr>
                 );
