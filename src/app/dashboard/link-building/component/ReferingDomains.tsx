@@ -31,7 +31,7 @@ export default function ReferingDomains({ sendData }: Props) {
 
   const crawlingData = rDomainData?.project?.crawlings[0]?.crawlingData[0]?.data || {};
   const prevData = rDomainData?.project?.crawlings[1]?.crawlingData[0]?.data || {};
-  console.log("CD", crawlingData)
+  // console.log("CD", crawlingData)
   const totalbacklinks = crawlingData?.reduce((sum: any, item: { backlinks: any }) => sum + item.backlinks,0)
   return (
     <section className="grid gap-4 my-10 border shadow-sm rounded-md">

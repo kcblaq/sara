@@ -5,7 +5,7 @@ import LinkBuildingOverview from "./component/overview/LinkBuildingOverview";
 import BacllinkPages from "./component/backlinkPages/BacllinkPages";
 import ReferingDomains from "./component/ReferingDomains";
 import LinkBuildingOpportunities from "./component/LinkBuildingOpportunities";
-import { Tab } from "@headlessui/react";
+import { Tab, TabGroup, TabList, TabPanels } from "@headlessui/react";
 import { Fragment } from "react";
 import Button from "../components/ui/Button";
 import { CurrentProperty } from "@/app/utils/currentProperty";
@@ -83,8 +83,8 @@ export default function LinkBuilding() {
         {/* <CountryPickAllLocationDefault title="All location" /> */}
       </section>
       <section className=" h-full overflow-auto">
-        <Tab.Group>
-          <Tab.List className="flex gap-4 w-full overflow-x-auto whitespace-nowrap">
+        <TabGroup>
+          <TabList className="flex gap-4 w-full overflow-x-auto whitespace-nowrap">
             {tabs.map((tab) => {
               return (
                 <div key={tab.title}>
@@ -103,10 +103,10 @@ export default function LinkBuilding() {
                 </div>
               );
             })}
-          </Tab.List>
+          </TabList>
           <hr className="w-full" />
           <div className={` h-full w-full overflow-auto  `}>
-            <Tab.Panels>
+            <TabPanels>
               {tabs.map((tab) => {
                 return (
                   <div key={tab.title} className="h-full ">
@@ -114,9 +114,9 @@ export default function LinkBuilding() {
                   </div>
                 );
               })}
-            </Tab.Panels>
+            </TabPanels>
           </div>
-        </Tab.Group>
+        </TabGroup>
       </section>
     </main>
   );

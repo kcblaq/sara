@@ -14,7 +14,7 @@ import { trimDomain } from '@/app/utils/trimDomain';
 import ApiCall from '@/app/utils/apicalls/axiosInterceptor';
 
 export default function LinkBuildingOpportunities() {
-  const [stage, setStage] = useState(0);
+  const [stage, setStage] = useState(1);
   const [competitor, setCompetitor] = useState("");
 
   return (
