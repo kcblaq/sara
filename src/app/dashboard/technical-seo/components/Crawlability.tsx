@@ -114,6 +114,7 @@ export default function Crawlability() {
 
   const crawldepthlabels1 = ["1", "2", "3", "4+"];
   const crawldepthlabels = completeArray(crawldepthlabels1);
+  console.log(crawldepthlabels);
   const crawldepthLabelData: any[] = [];
 
   // const indexibilitData1 = crawlabilityData?.indexability?.unindexableReasons;
@@ -294,7 +295,7 @@ export default function Crawlability() {
               "This is the number of steps of pages crossed to reach the crawled pages"
             }
           />
-          <div className=" h-full w-full ">
+          <div className=" h-full w-full">
             <BarChartSingle
               labels={crawldepthlabels}
               data={crawldepthLabelData}

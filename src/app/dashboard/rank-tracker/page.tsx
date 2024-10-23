@@ -14,19 +14,26 @@ import Rankings from "./components/Rankings";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/store";
 import moment from "moment";
-import useRankMutation, { RankCrawl, RankTrackerCrawler, useRankTrackingOverview } from "@/app/services/crawlers/rank_tracking";
+import useRankMutation, {
+  RankCrawl,
+  RankTrackerCrawler,
+  useRankTrackingOverview,
+} from "@/app/services/crawlers/rank_tracking";
 import { trimDomain } from "@/app/utils/trimDomain";
 import { CurrentProperty } from "@/app/utils/currentProperty";
 import Button from "../components/ui/Button";
 import SearchEnginePick from "@/app/dashboard/rank-tracker/components/SearchEnginePick";
+import { handleDownloadAsImage } from "@/app/utils/downloadFileAsImage";
 // import PageDistributions from './components/PageDistributions'
-
 
 export default function page() {
   // const [mobile, setMobile] = useState(false);
   // const [detail, setDetail] = useState([])
   const [se, setSe] = useState("google");
-  const [type, setType] = useState({name:"Organic", value:"organic_positions"})
+  const [type, setType] = useState({
+    name: "Organic",
+    value: "organic_positions",
+  });
 
   const tabs = [
     { title: "Overview", content: <RankOverview se={se} type={type} /> },
@@ -34,27 +41,39 @@ export default function page() {
     // { title: "Page distributions", content: <PageDistributions /> }
   ];
 
-  const { isError, isPending, isSuccess, data: OverviewData } = useRankTrackingOverview("overview");
+  const {
+    isError,
+    isPending,
+    isSuccess,
+    data: OverviewData,
+  } = useRankTrackingOverview("overview");
 
   // const lastUpdated = (OverviewData?.project?.crawlings[0]?.crawlingData[0]?.updatedAt)
-  const lastUpdated = moment(OverviewData?.project?.crawlings[0]?.crawlingData[0]?.updatedAt).format("Do MMM YY")
+  const lastUpdated = moment(
+    OverviewData?.project?.crawlings[0]?.crawlingData[0]?.updatedAt
+  ).format("Do MMM YY");
   // console.log("LU", lastUpdated)
 
+  const {
+    mutate: RankMutate,
+    isSuccess: mutateSuccess,
+    isError: mutateError,
+    isPaused: mutatePaused,
+    isPending: mutatePending,
+  } = useRankMutation();
 
+  const project = CurrentProperty();
+  const handleEngineChange = (engine: React.SetStateAction<string>) =>
+    setSe(engine);
 
-  const {mutate: RankMutate, isSuccess:mutateSuccess, isError: mutateError, isPaused: mutatePaused,isPending: mutatePending} = useRankMutation();
-
- const project = CurrentProperty();
- const handleEngineChange = (engine: React.SetStateAction<string>) => setSe(engine);
- 
-// console.log("SE", type)
+  // console.log("SE", type)
 
   return (
     <main className="grid w-full h-full items-start content-start gap-6">
       <section
         className={`flex sm:flex-row flex-col sm:items-center w-full gap-2 justify-between`}
       >
-        <div className=" whitespace-nowrap">
+        <div className=" whitespace-nowrap ">
           <h3 className="text-[#101828] text-2xl font-semibold">
             Rank tracker
           </h3>
@@ -74,19 +93,26 @@ export default function page() {
               }
             }
             /> */}
-            <Button className="" loading={mutatePending} onClick={()=>{
-              RankMutate({
-                target: trimDomain(project.domain), 
-                id: project.id, 
-                location_code: 2840
-              })
-            } }>
-            Re-track rankings
+            <Button
+              className=""
+              loading={mutatePending}
+              onClick={() => {
+                RankMutate({
+                  target: trimDomain(project.domain),
+                  id: project.id,
+                  location_code: 2840,
+                });
+              }}
+            >
+              Re-track rankings
             </Button>
           </div>
           <div>
             {" "}
             <Button
+              onClick={() =>
+                handleDownloadAsImage("Rank_tanker", "Rank-tracking")
+              }
               className={`w-full bg-[#EFF8FF] text-primary gap-2  items-center flex justify-center border  rounded-lg sm:text-base text-sm p-2 font-semibold hover:bg-gray-100 `}
             >
               <IoCloudUploadOutline /> Export
@@ -107,7 +133,7 @@ export default function page() {
         <div className="flex min-[375px]:flex-row flex-col min-[375px]:items-center min-[375px]:gap-4 gap">
           <p className="min-[425px]:text-inherit gap-2 flex items-center text-sm whitespace-nowrap">
             <strong> Last Update:</strong>
-            { lastUpdated}
+            {lastUpdated}
           </p>
           {/* <ToggleMobile
             mobile={mobile}
@@ -118,13 +144,22 @@ export default function page() {
         <div className="flex sm:flex-row flex-col  w-full sm:gap-6 gap-2 sm:items-center it">
           {/* <CountryPick className=" w-full flex items-center" /> */}
           <SearchEnginePick onEngineChange={handleEngineChange} className=" " />
-          <OrganicPick className="" changeType={function ({ name, value }: { name: string; value: string; }): void {
-            setType({name, value});
-            // console.log("TYPE", type)
-          } } />
+          <OrganicPick
+            className=""
+            changeType={function ({
+              name,
+              value,
+            }: {
+              name: string;
+              value: string;
+            }): void {
+              setType({ name, value });
+              // console.log("TYPE", type)
+            }}
+          />
         </div>
       </section>
-      <section className={``}>
+      <section id="Rank_tanker" className={``}>
         <TabGroup>
           <TabList className="flex gap-4 w-full">
             {tabs.map((tab) => {
@@ -133,10 +168,11 @@ export default function page() {
                   <Tab as={Fragment}>
                     {({ selected }) => (
                       <p
-                        className={` cursor-pointer p-2 active:outline-none text-sm font-semibold border-t-0 border-l-0 border-r-0 active:border-r-none ${selected
+                        className={` cursor-pointer p-2 active:outline-none text-sm font-semibold border-t-0 border-l-0 border-r-0 active:border-r-none ${
+                          selected
                             ? "text-primary border-b-2 border-primary"
                             : " text-[#667085] active:border-none"
-                          }`}
+                        }`}
                       >
                         {tab.title}
                       </p>
@@ -163,5 +199,3 @@ export default function page() {
     </main>
   );
 }
-
-

@@ -16,6 +16,7 @@ import { StackedBarChart } from "./components/graphs/StackedBarChart";
 import { RootState } from "../store";
 import KeywordTable from "./components/tables/KeywordTable";
 import AutoModal from "../component/modals/AutoModal";
+import { handleDownloadAsImage } from "../utils/downloadFileAsImage";
 // import CheckUserType from "./components/CheckUserType";
 
 export default function Dashboard() {
@@ -98,7 +99,13 @@ export default function Dashboard() {
                 className="min-[375px]:text-base text-sm"
                 title="Export"
                 icon={exportIcon}
-                handleClick={() => setShow(true)}
+                // handleClick={() => setShow(true)}
+                handleClick={() =>
+                  handleDownloadAsImage(
+                    "dashboardOverview",
+                    "dashboardOverview"
+                  )
+                }
               />
             </span>
             <span>
@@ -112,30 +119,30 @@ export default function Dashboard() {
             </span>
           </div>
         </div>
+        <div id="dashboardOverview">
+          {loaded && (
+            <section
+              className={`w-full grid items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pt-8 gap-4 justify-between`}
+            >
+              <OrganicTrafficCard />
+              <OrganicKeywords />
+              <AverageTimeOnsite />
+            </section>
+          )}
 
-        {loaded && (
-          <section
-            className={` w-full grid items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pt-8 gap-4 justify-between`}
-          >
-            <OrganicTrafficCard />
-            <OrganicKeywords />
-            <AverageTimeOnsite />
+          <section className="w-full">
+            <TraficOverview />
           </section>
-        )}
-
-        <section className="w-full">
-          <TraficOverview />
-        </section>
-        <div className="w-full grid shadow-md border font-bold text-xl items-start h-[426px] mb-10 rounded-md p-2 md:p-6  ">
-          <div className="">
-            <div className="flex w-full h-full items-start justify-between">
-              <div className={`text-[#101828] flex items-center gap-4`}>
-                Backlink status
-                <button title="The links associated with your website either leading out or directing into your website">
-                  <RxQuestionMarkCircled className="text-gray-600" />
-                </button>
-              </div>
-              {/* <select className={`border rounded-md p-2 text-[#344054] text-sm font-normal`}>
+          <div className="w-full grid shadow-md border font-bold text-xl items-start h-[426px] mb-10 rounded-md p-2 md:p-6  ">
+            <div className="">
+              <div className="flex w-full h-full items-start justify-between">
+                <div className={`text-[#101828] flex items-center gap-4`}>
+                  Backlink status
+                  <button title="The links associated with your website either leading out or directing into your website">
+                    <RxQuestionMarkCircled className="text-gray-600" />
+                  </button>
+                </div>
+                {/* <select className={`border rounded-md p-2 text-[#344054] text-sm font-normal`}>
               <option className={``}>
                 Last 12 months
               </option>
@@ -146,36 +153,37 @@ export default function Dashboard() {
                 Last 3 months
               </option>
             </select> */}
+              </div>
+              <hr className="w-full mt-4" />
             </div>
-            <hr className="w-full mt-4" />
+            <div className=" h-full w-full max-w-[600px]">
+              {/* <BacklinkGraph /> */}
+              <StackedBarChart />
+            </div>
           </div>
-          <div className=" h-full w-full max-w-[600px]">
-            {/* <BacklinkGraph /> */}
-            <StackedBarChart />
-          </div>
-        </div>
-        <section className="border sm:w-1/2 w-auto h-full rounded-md p-2 md:p-6">
-          <div className="grid">
-            <div className="flex font-bold w-full h-full items-start justify-between">
-              <span
-                className={`text-[#101828] text-xl flex items-center gap-4`}
-              >
-                Keyword ranking summary
-                <button
-                  className=""
-                  title="Here is the summary of each of your keyword ranking"
+          <section className="border sm:w-1/2 w-auto h-full rounded-md p-2 md:p-6">
+            <div className="grid">
+              <div className="flex font-bold w-full h-full items-start justify-between">
+                <span
+                  className={`text-[#101828] text-xl flex items-center gap-4`}
                 >
-                  {" "}
-                  <RxQuestionMarkCircled />
-                </button>
-              </span>
+                  Keyword ranking summary
+                  <button
+                    className=""
+                    title="Here is the summary of each of your keyword ranking"
+                  >
+                    {" "}
+                    <RxQuestionMarkCircled />
+                  </button>
+                </span>
+              </div>
             </div>
-          </div>
 
-          <div className="h-fit w-full">
-            <KeywordTable />
-          </div>
-        </section>
+            <div className="h-fit w-full">
+              <KeywordTable />
+            </div>
+          </section>
+        </div>
       </div>
     </>
   );

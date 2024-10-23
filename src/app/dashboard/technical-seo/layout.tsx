@@ -23,6 +23,7 @@ import {
 import { removeTrailingSlash } from "@/app/utils/RemoveSlash";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { useTechnicalSeoFetchData } from "@/app/services/technicalSeo/TechnicalSeoFetch";
+import { shareOrFallback } from "@/app/utils/shareContentOrFallback";
 
 export default function TechnicalSeoLayout() {
   const [mobile, setMobile] = useState(true);
@@ -140,6 +141,13 @@ export default function TechnicalSeoLayout() {
             <PlainButton
               moreClass="text-primary bg-[#EFF8FF] sm:text-base text-sm"
               title="Share"
+              handleClick={() =>
+                shareOrFallback({
+                  title: "Technical SEO",
+                  url: "http://localhost:3000/dashboard/technical-seo",
+                  text: "Technical SEO",
+                })
+              }
               icon={<CiShare2 />}
             />
           </span>
@@ -176,7 +184,7 @@ export default function TechnicalSeoLayout() {
         </div>
       </div>
 
-      <Tab.Group className="">
+      <Tab.Group>
         <Tab.List className="flex gap-4 w-full overflow-x-auto whitespace-nowrap">
           {tabs.map((tab) => {
             return (

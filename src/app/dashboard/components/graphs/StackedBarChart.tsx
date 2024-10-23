@@ -74,11 +74,11 @@ export function completeArray(arr: string[]) {
 
   if (currentLength < maxLength) {
     const emptyElementsToAdd = maxLength - currentLength;
+    console.log("emptyElementsToAdd", emptyElementsToAdd);
     for (let i = 0; i < emptyElementsToAdd; i++) {
       arr.push("");
     }
   }
-
   return arr;
 }
 
