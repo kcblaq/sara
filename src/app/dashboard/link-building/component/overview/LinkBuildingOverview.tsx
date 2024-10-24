@@ -10,7 +10,6 @@ import { calculatePercentageDifference } from "@/lib/DateFormater";
 import { LineChart } from "@/app/dashboard/technical-seo/components/LineChart";
 import moment from "moment";
 
-<<<<<<< HEAD
 interface ParentProp {
   sendData: (lastUpdated: string) => void;
 }
@@ -18,16 +17,6 @@ interface ParentProp {
 export default function LinkBuildingOverview({sendData}: ParentProp) {
 
   const { isError, isPending, isSuccess, data: OverviewData } = useLinkBuildingOverview("overview", sendData);
-=======
-export default function LinkBuildingOverview() {
-  const {
-    isError,
-    isPending,
-    data: OverviewData,
-  } = useLinkBuildingOverview("overview");
-  console.log(OverviewData);
-
->>>>>>> 42cb380a5e17c1e973a3923696c7b4c4334f9b53
   if (isPending) {
     return <div>Loading...</div>;
   }
@@ -39,7 +28,6 @@ export default function LinkBuildingOverview() {
     sendData(OverviewData?.project?.crawlings[0]?.crawlingData[0]?.updatedAt);
   }
 
-<<<<<<< HEAD
   const crawlingData = OverviewData?.project?.crawlings[0]?.crawlingData[0]?.data || {};
   const prevData = OverviewData?.project?.crawlings[1]?.crawlingData[0]?.data || {};
   const dts = calculatePercentageDifference(prevData?.domain_trust_score, crawlingData?.domain_trust_score)
@@ -92,11 +80,6 @@ const typeData = crawlingData?.backlink_type
     return value > 0 ? "text-green-200" : value < 0 ? "text-red-400" : "text-gray-200";
   };
 
-=======
-  const crawlingData =
-    OverviewData?.project?.crawlings[0]?.crawlingData[0]?.data || {};
-  console.log("DATA", crawlingData);
->>>>>>> 42cb380a5e17c1e973a3923696c7b4c4334f9b53
   return (
     <main className="py-10 grid gap-8 ">
       <section className="grid gap-6 grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 w-full">
@@ -126,13 +109,7 @@ const typeData = crawlingData?.backlink_type
         />
       </section>
       <section className="grid sm:gap-6 sm:space-y-0 space-y-6 grid-cols-1 md:grid-cols-3">
-<<<<<<< HEAD
         <DofollowvsNofollow dofollowvsNofollow={crawlingData?.do_follow_vs_no_follow}  />
-=======
-        <DofollowvsNofollow
-          dofollowvsNofollow={crawlingData?.do_follow_vs_no_follow}
-        />
->>>>>>> 42cb380a5e17c1e973a3923696c7b4c4334f9b53
         <div className="col-span-2 ">
           <ReferingDomainandBacklinkOverTime 
           crawlDays={crawlingDays()} 
