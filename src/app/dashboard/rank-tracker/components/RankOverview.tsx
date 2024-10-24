@@ -406,7 +406,7 @@ const distributions =
               style={
                 prevspecificroute?.featured_snippet === 0 || prevspecificroute?.featured_snippet == undefined ? "text-gray-500"
                   : prevspecificroute?.featured_snippet ?? 0 === specificroute?.featured_snippet ? "text-gray-500"
-                    : specificroute?.featured_snippet > prevspecificroute?.featured_snippet ?? 0 ? "text-green-500" : "text-red-500"
+                    : specificroute?.featured_snippet > prevspecificroute?.featured_snippet || 0 ? "text-green-500" : "text-red-500"
               }
               // percent={se === "google" ? gfs_percentage : bfs_percentage}
               percent={calculatePercentageDifference(prevspecificroute?.featured_snippet ?? 0, specificroute?.featured_snippet ?? 0)}
@@ -419,7 +419,7 @@ const distributions =
               style={
                 prevspecificroute?.new_ranking_elements === 0 || prevspecificroute?.new_ranking_elements == undefined ? "text-gray-500"
                   : prevspecificroute?.new_ranking_elements ?? 0 === specificroute?.new_ranking_elements ? "text-gray-500"
-                    : specificroute?.new_ranking_elements > prevspecificroute?.new_ranking_elements ?? 0 ? "text-green-500"
+                    : specificroute?.new_ranking_elements > prevspecificroute?.new_ranking_elements || 0 ? "text-green-500"
                       : "text-red-500"
               }
               percent={calculatePercentageDifference(prevspecificroute?.new_ranking_elements, prevspecificroute?.new_ranking_elements)}

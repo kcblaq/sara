@@ -90,6 +90,8 @@ export default function TechnicalSeoLayout() {
       //     },
       //   }),
       // ]);
+
+      
       const response = await ApiCall.post(
         `/user/crawler/technical-seo/${activePropertyObj.id}`
       );

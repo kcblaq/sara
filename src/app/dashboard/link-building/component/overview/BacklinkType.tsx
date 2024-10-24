@@ -3,17 +3,24 @@ import React from "react";
 import { GoDotFill } from "react-icons/go";
 import { ReusableDoughnutGraph } from "./ReusableDoughnutGraph";
 
-export default function BacklinkType() {
+interface Props {
+  dates: string[],
+  dataType: { [key: string]: number }
+}
+
+export default function BacklinkType({ dates, dataType }: Props) {
+  const labels = Object.keys(dataType);
+
   return (
     <section className="flex flex-col gap-4 border shadow-sm rounded-md p-4 py-6">
       <TitleWithoutUnderline title={"Backlink type"} info={"Backlink type"} />
-      <div className="p-4 flex xl:flex-row lg:flex-col min-[425px]:flex-row flex-col gap-2 ">
+      <div className="p-4 flex flex-col gap-3">
         <ReusableDoughnutGraph
           data={{
-            labels: ["Jan", "Feb"],
+            labels: labels,
             datasets: [
               {
-                data: [10, 20, 30, 10],
+                data: Object.values(dataType),
                 backgroundColor: ["#1849A9", "#53B1FD", "#FECDCA", "#A6F4C5"],
                 borderColor: [
                   "rgba(255, 99, 132, 1)",
@@ -25,37 +32,20 @@ export default function BacklinkType() {
             ],
           }}
         />
-        <div className="flex flex-col justify-end">
-          <p className=" text-xs flex items-center text-[#475467] whitespace-nowrap">
-            {" "}
-            <span className="text-[#1849A9]">
-              <GoDotFill />{" "}
-            </span>
-            {` Text - (32.8k) `}{" "}
-          </p>
-          <p className=" text-xs flex items-center text-[#475467] whitespace-nowrap">
-            {" "}
-            <span className="text-[#53B1FD]">
-              <GoDotFill />{" "}
-            </span>{" "}
-            {`Image - (23.9k) `}{" "}
-          </p>
-          <p className=" text-xs flex items-center text-[#475467] whitespace-nowrap">
-            {" "}
-            <span className="text-[#FECDCA]">
-              <GoDotFill />{" "}
-            </span>{" "}
-            {`Form - (23.9k) `}{" "}
-          </p>
-          <p className=" text-xs flex items-center text-[#475467] whitespace-nowrap">
-            {" "}
-            <span className="text-[#A6F4C5]">
-              <GoDotFill />{" "}
-            </span>{" "}
-            {`Frame - (23.9k) `}{" "}
-          </p>
+        <div className="w-full flex justify-end">
+          <div className="flex flex-col justify-end">
+            {Object.entries(dataType).map(([key, value], index) => (
+              <p key={index} className="text-xs flex items-center text-[#475467] whitespace-nowrap">
+                <span className={`${index === 0 ? "text-[#1849A9]" : index === 1 ? "text-[#53B1FD]"
+                  : index === 2 ? "text-[#FECDCA]" : index === 3 ? "text-[#A6F4C5]" : ""
+                }`}>
+                  <GoDotFill />{" "}
+                </span>{" "}
+                {` ${key} - (${value.toLocaleString()}) `}
+              </p>
+            ))}
+          </div>
         </div>
-        <div className=" col-span-2"></div>
       </div>
     </section>
   );

@@ -17,7 +17,7 @@ export function DofollowvsNofollow({ dofollowvsNofollow }: any) {
             labels: [],
             datasets: [
               {
-                data: [10, 20],
+                data: [dofollowvsNofollow?.dofollow,dofollowvsNofollow?.nofollow],
                 backgroundColor: ["#12B76A", "#D1FADF"],
                 borderColor: [
                   "rgba(255, 99, 132, 1)",

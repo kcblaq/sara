@@ -89,11 +89,11 @@ export default function Card({
               </span>
               <span className="text-gray-600 font-medium">vs last update</span>
             </p>
-            <p className="p-2 float-end">
+            <span className="p-2 float-end">
               {/* <Line data={chartData} options={options} /> */}
               {/* <BarChart data1={0} data2={20} data3={60} /> */}
               {chart}
-            </p>
+            </span>
           </div>
         </div>
       </div>
