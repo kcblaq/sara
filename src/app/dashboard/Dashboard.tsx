@@ -121,7 +121,7 @@ export default function Dashboard() {
           </div>
           <div className=" h-full w-full max-w-[600px]">
             {/* <BacklinkGraph /> */}
-            <StackedBarChart />
+            <StackedBarChart label={[]} lostData={[]} newData={[]} />
           </div>
         </div>
         {/* <section className='border w-2/3 rounded-md p-2 md:p-6 '>

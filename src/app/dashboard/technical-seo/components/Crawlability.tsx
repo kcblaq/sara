@@ -7,7 +7,7 @@ import BarChartSingle from "./(technicalseo)/BarChartSingle";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/store";
-import { completeArray } from "../../components/graphs/StackedBarChart";
+// import { completeArray } from "../../components/graphs/StackedBarChart";
 import { CrawledPagesComplete } from "../../components/SeoprogressCircle";
 import moment from "moment";
 import Loader from "@/app/component/Loader";
@@ -113,7 +113,7 @@ export default function Crawlability() {
     ) || [];
 
   const crawldepthlabels1 = ["1", "2", "3", "4+"];
-  const crawldepthlabels = completeArray(crawldepthlabels1);
+  const crawldepthlabels = crawldepthlabels1;
   console.log(crawldepthlabels);
   const crawldepthLabelData: any[] = [];
 
