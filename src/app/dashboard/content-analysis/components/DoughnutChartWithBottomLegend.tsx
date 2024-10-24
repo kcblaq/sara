@@ -19,14 +19,21 @@ interface DoughnutChartWithBottomLegendProps {
 export default function DoughnutChartWithBottomLegend({
   items,
 }: DoughnutChartWithBottomLegendProps) {
+  const total = items.reduce((sum, item) => sum + item.percentage, 0);
   const dataStructure: ChartData<"doughnut"> = {
     labels: items.map(
-      (sentiment) => `${sentiment.label} - ${sentiment.percent}%`
+      (sentiment) =>
+        `${sentiment.label} - (${((sentiment.percentage / total) * 100).toFixed(
+          2
+        )}%)`
     ),
     datasets: [
       {
         label: "Sentiments",
-        data: items.map((sentiment) => sentiment.percent),
+        data: items.map(
+          (sentiment) =>
+            Math.round((sentiment.percentage / total) * 100 * 100) / 100 // Rounds to 2 decimal places
+        ),
         backgroundColor: [
           "#194185",
           "#FECDCA",

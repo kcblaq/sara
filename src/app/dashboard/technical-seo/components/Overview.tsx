@@ -26,6 +26,7 @@ import ReusableHTTPStatusCode from "./(technicalseo)/ReusableHTTPStatusCode";
 import { useTechnicalSeoFetchData } from "@/app/services/technicalSeo/TechnicalSeoFetch";
 import { ReusableCrawlStatus } from "./(technicalseo)/ReusableCrawlStatus";
 import Loader from "@/app/component/Loader";
+import { exportToExcel } from "@/app/utils/exportToExcel";
 // import { TechnicalSeoType } from "@/types/TechnicalSeoType";
 // import { useEffect } from "react";
 // import { removeTrailingSlash } from "@/app/utils/RemoveSlash";
@@ -114,11 +115,19 @@ export const ButtonWithTitle = ({ info }: { info: string }) => {
     </div>
   );
 };
+interface User {
+  id: number;
+  name: string;
+  age: number;
+  email: string;
+}
 
 function Overview() {
-  // const technicalSeoData: any = useSelector(
-  //   (state: RootState) => state.technicalSeo
-  // );
+  const tableData: User[] = [
+    { id: 1, name: "John Doe", age: 28, email: "john@example.com" },
+    { id: 2, name: "Jane Smith", age: 22, email: "jane@example.com" },
+    { id: 3, name: "Alice Johnson", age: 34, email: "alice@example.com" },
+  ];
 
   const { data, isLoading } = useTechnicalSeoFetchData();
   console.log("react query overview", data);
@@ -501,9 +510,9 @@ function Overview() {
                       className="min-[500px]:text-sm text-xs"
                       icon={<FiDownloadCloud />}
                       title="Export issues"
-                      handleClick={function (): void {
-                        throw new Error("Function not implemented.");
-                      }}
+                      handleClick={() =>
+                        exportToExcel(tableData, "top-issues", "top-issues")
+                      }
                     />
                   </div>
                 </div>

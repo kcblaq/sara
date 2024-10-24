@@ -18,6 +18,7 @@ const getToken = (store: any) => {
 
 // Function to set authorization header based on token
 export const configureApiCall = (store: any) => {
+
   ApiCall.interceptors.request.use(
     (config) => {
       const token = getToken(store);
@@ -35,7 +36,7 @@ export const configureApiCall = (store: any) => {
       return response;
     },
     (error) => {
-      if (error.response.status === 401) {
+      if (error?.response?.status === 401) {
         handleUnauthorized();
       }
       return Promise.reject(error);

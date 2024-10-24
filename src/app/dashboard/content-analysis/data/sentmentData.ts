@@ -1,8 +1,8 @@
 export const sentimentDataset: any[] = [
-  { label: "Happiness", percent: 35.2 },
-  { label: "Anger", percent: 21.2 },
-  { label: "Sadness", percent: 12.1 },
-  { label: "Love", percent: 9.3 },
-  { label: "Fun", percent: 3.4 },
-  { label: "Share", percent: 1.8 },
+  { label: "Happiness", percentage: 35.2 },
+  { label: "Anger", percentage: 21.2 },
+  { label: "Sadness", percentage: 12.1 },
+  { label: "Love", percentage: 9.3 },
+  { label: "Fun", percentage: 3.4 },
+  { label: "Share", percentage: 1.8 },
 ];

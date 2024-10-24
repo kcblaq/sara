@@ -21,6 +21,11 @@ import ProgressiveCircleReusable from "../../components/ProgressiveCircleReusabl
 import Card from "../../Card";
 import PieChart from "../../technical-seo/components/(technicalseo)/PieChart";
 import { AnotherDoughnutChart } from "../../technical-seo/components/(technicalseo)/DoughnutChart";
+import { CurrentProperty } from "@/app/utils/currentProperty";
+import { useKeywordAnalysisData } from "@/app/services/crawlers/keywordExplorer";
+
+import moment from "moment";
+import Loader from "@/app/component/Loader";
 
 export const DetailButton = ({ title }: { title: string }) => (
   <button className="" title={title}>
@@ -29,7 +34,18 @@ export const DetailButton = ({ title }: { title: string }) => (
   </button>
 );
 export default function KeywordAnalysis() {
-  const [detail, setDetail] = useState(true);
+  const [detail, setDetail] = useState(false);
+  const [keyword, setKeyword] = useState("");
+  const currentProperty = CurrentProperty();
+
+  const { keywordAnalysisData, isPending, isSuccess, isError } =
+    useKeywordAnalysisData(currentProperty.id);
+
+  // summary table data
+  const data =
+    keywordAnalysisData?.[0]?.project?.crawlings?.[0]?.crawlingData?.[0]?.data
+      ?.tasks?.[0]?.result;
+  // console.log("keyword-analysis", keywordAnalysisData?.[0]);
 
   function Detail() {
     return (
@@ -45,8 +61,7 @@ export default function KeywordAnalysis() {
             <span className="flex items-center gap-3 md:text-2xl text-lg">
               <p className={` font-semibold text-[#101828] `}>Keyword: </p>
               <p className="font-normal min-[375px]:text-lg text-sm">
-                {" "}
-                The business principles{" "}
+                {keyword}
               </p>
             </span>
           </div>
@@ -254,7 +269,7 @@ export default function KeywordAnalysis() {
         <div className="rounded-md shadow-sm border h-full w-full">
           <div className="flex w-full items-center justify-between p-6 h-[75px]">
             <p className={` font-medium text-[#101828] text-lg`}>
-              106 keywords{" "}
+              {data?.length} keywords{" "}
             </p>
             <span>
               <PlainButton title={"Add keyword"} icon={<FaPlus />} />
@@ -264,11 +279,12 @@ export default function KeywordAnalysis() {
             <thead className="bg-[#F9FAFB] w-full">
               <tr className=" h-[44px] text-xs text-[#475467]  font-medium">
                 <th>
-                  {" "}
+                  {/* {" "}
                   <span className="flex items-center gap-2 p-2 px-6">
                     {" "}
                     <input type="checkbox" className="" /> Keywords{" "}
-                  </span>
+                  </span> */}
+                  Keywords
                 </th>
                 <th>
                   {" "}
@@ -291,12 +307,20 @@ export default function KeywordAnalysis() {
                     CPC <DetailButton title={""} />{" "}
                   </span>{" "}
                 </th>
-                <th>
+                {/* <th>
                   {" "}
                   <span className="flex items-center gap-1 p-2 px-6">
                     {" "}
                     SERP features <DetailButton title={""} />{" "}
                   </span>{" "}
+                </th> */}
+
+                <th>
+                  <span className="flex items-center gap-1 p-2 px-6">LTB</span>
+                </th>
+
+                <th>
+                  <span className="flex items-center gap-1 p-2 px-6">HTB</span>
                 </th>
                 <th>
                   {" "}
@@ -309,48 +333,66 @@ export default function KeywordAnalysis() {
               </tr>
             </thead>
             <tbody>
-              {mockedData.map((data) => {
+              {isPending && (
+                <div className="h-20 w-full">
+                  <Loader />
+                </div>
+              )}
+              {data?.map((data: any, index: number) => {
                 return (
-                  <tr className=" border-b">
-                    <td className=" p-2 px-6 ">
+                  <tr key={index} className=" border-b">
+                    <td className="px-6">
                       <span className="flex items-center gap-2 ">
-                        {" "}
-                        <input type="checkbox" className="" /> {data.keyword}{" "}
+                        {/* <input type="checkbox" className="" /> */}
+                        {data.keyword}{" "}
                         <AiOutlineExpandAlt
-                          onClick={() => setDetail(true)}
+                          onClick={() => {
+                            setDetail(true);
+                            setKeyword(data.keyword);
+                          }}
                           className="bg-[#EFF8FF] p-0.5 text-[#1570EF] cursor-pointer rounded text-2xl"
                         />{" "}
                       </span>
                     </td>
                     <td className="  p-2 px-6 rounded-full">
-                      <span className={``}>{data.volume} </span>{" "}
+                      <span className={``}>{data.search_volume ?? 0} </span>{" "}
                     </td>
                     <td className="  p-2  rounded-full">
                       <span
                         className={`p-1 w-2/3 rounded-3xl text-center flex items-center justify-center ${
-                          data.kd > 39
+                          data.competition_index > 39
                             ? "bg-[#F6FEF9] text-[#12B76A]"
                             : "bg-[#FFFAEB] text-[#B54708] "
                         }`}
                       >
                         {" "}
                         <GoDotFill />
-                        {data.kd}{" "}
+                        {data.competition_index ?? 0}{" "}
                       </span>{" "}
                     </td>
                     <td className="  p-2 px-6 rounded-full">
-                      <span className={``}>${data.traffic}</span>{" "}
+                      <span className={``}>${data.cpc ?? 0}</span>{" "}
                     </td>
-                    <td className="  p-2 px-6 rounded-full">
-                      <span className={`flex items-center gap-2 text-sm`}>
+                    {/* <td className="  p-2 px-6 rounded-full"> */}
+                    {/* <span className={`flex items-center gap-2 text-sm`}>
                         {data.serp.includes("link") && <FaLink />}
                         {data.serp.includes("image") && <CiImageOn />}
                         {data.serp.includes("shop") && <IoCartOutline />}
                         {data.serp.includes("video") && <FaVideo />}
-                      </span>{" "}
+                      </span>{" "} */}
+                    {/* </td> */}
+
+                    <td className="  p-2 px-6 rounded-full">
+                      {data.high_top_of_page_bid ?? 0}
+                    </td>
+
+                    <td className="  p-2 px-6 rounded-full">
+                      {data.low_top_of_page_bid ?? 0}
                     </td>
                     <td className="  p-2 px-6 rounded-full">
-                      <span className={``}> 2 weeks ago</span>{" "}
+                      <span className={``}>
+                        {moment(keywordAnalysisData?.[0].project).fromNow()}
+                      </span>
                     </td>
                     <td className="  p-2 px-6  ">
                       <span

@@ -4,7 +4,7 @@ import { GoDotFill } from "react-icons/go";
 import { TitleWithoutUnderline } from "../../../technical-seo/components/Overview";
 import { ReusableDoughnutGraph } from "./ReusableDoughnutGraph";
 
-export function DofollowvsNofollow() {
+export function DofollowvsNofollow({ dofollowvsNofollow }: any) {
   return (
     <section className="grid gap-4 border shadow-sm rounded-md p-4 py-6">
       <TitleWithoutUnderline
@@ -17,7 +17,7 @@ export function DofollowvsNofollow() {
             labels: [],
             datasets: [
               {
-                data: [10, 20],
+                data: [dofollowvsNofollow?.dofollow,dofollowvsNofollow?.nofollow],
                 backgroundColor: ["#12B76A", "#D1FADF"],
                 borderColor: [
                   "rgba(255, 99, 132, 1)",
@@ -35,14 +35,14 @@ export function DofollowvsNofollow() {
             <span className="text-green-600">
               <GoDotFill />{" "}
             </span>{" "}
-            {`Dofollow (23.9k) `}{" "}
+            {`Dofollow (${dofollowvsNofollow?.dofollow}) `}{" "}
           </p>
           <p className=" text-xs flex items-center text-[#475467]">
             {" "}
             <span className="text-green-400">
               <GoDotFill />{" "}
             </span>
-            {` Nonfollow (32.8k) `}{" "}
+            {` Nonfollow (${dofollowvsNofollow?.nofollow}) `}{" "}
           </p>
         </div>
       </div>

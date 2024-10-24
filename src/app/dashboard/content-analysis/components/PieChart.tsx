@@ -9,12 +9,21 @@ interface PieChartProps {
   dataSet: any[];
 }
 export default function PieChart({ dataSet }: PieChartProps) {
+  const total = dataSet.reduce((sum, item) => sum + item.percentage, 0);
   const data: ChartData<"pie"> = {
-    labels: dataSet.map((item) => `${item.label} (${item.percentage}%)`),
+    labels: dataSet.map(
+      (sentiment) =>
+        `${sentiment.label} - (${((sentiment.percentage / total) * 100).toFixed(
+          2
+        )}%)`
+    ),
     datasets: [
       {
         label: "Positive",
-        data: dataSet.map((item) => item.percentage),
+        data: dataSet.map(
+          (sentiment) =>
+            Math.round((sentiment.percentage / total) * 100 * 100) / 100 // Rounds to 2 decimal places
+        ),
         backgroundColor: [
           "rgb(255, 99, 132)",
           "rgb(54, 162, 235)",

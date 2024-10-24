@@ -1,25 +1,28 @@
-"use client"
-import React from 'react';
-import EmptyState from './components/EmptyState';
-import ApiCall from '@/app/utils/apicalls/axiosInterceptor';
-import { useQuery } from '@tanstack/react-query';
-import { CurrentProperty } from '@/app/utils/currentProperty';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/app/store';
+"use client";
+import React from "react";
+import EmptyState from "./components/EmptyState";
+import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
+import { useQuery } from "@tanstack/react-query";
+import { CurrentProperty } from "@/app/utils/currentProperty";
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/store";
 
 interface Props {
   children: React.ReactNode;
 }
 
 export default function Layout({ children }: Props) {
-
-    const id = useSelector((state: RootState) => state.property.activePropertyObj.id);
-
+  const id = useSelector(
+    (state: RootState) => state.property.activePropertyObj.id
+  );
+  //handle when id is undefined.
 
   const { data, isError, isLoading } = useQuery({
-    queryKey: ['empty-state', id],
+    queryKey: ["empty-state", id],
     queryFn: async () => {
-      const result = await ApiCall.get(`/user/crawler/content-analysis/by-tab/${id}?tab=extractedOverview`);
+      const result = await ApiCall.get(
+        `/user/crawler/content-analysis/by-tab/${id}?tab=extractedOverview`
+      );
       return result.data; // Ensure the data is returned
     },
   });
@@ -32,9 +35,17 @@ export default function Layout({ children }: Props) {
     return <div>Error loading data</div>;
   }
 
+  if (id === undefined) {
+    return <div>No project found or selected</div>;
+  }
+
   return (
     <>
-      {data && data.project.crawlings.length === 0 ? <EmptyState /> : <div>{children}</div>}
+      {data && data.project.crawlings.length === 0 ? (
+        <EmptyState />
+      ) : (
+        <div>{children}</div>
+      )}
     </>
   );
 }

@@ -15,6 +15,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/app/store";
 import MobileLogoIcon from "../../../components/svgComponents/CompanyMobileLogo";
 import toast from "react-hot-toast";
+import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
+import { setActiveProperty, setActivePropertyObj } from "@/redux/features/propertySlice";
 
 export const LoginComponent = () => {
   const [isPassword, setIsPassword] = useState("password");
@@ -67,10 +69,22 @@ export const LoginComponent = () => {
 
       const res = await loginPromise; // Wait for the login request to complete
 
+      const setProperty = async ()=> {
+       const allprojects = await ApiCall("/user/project")
+      //  return allprojects.data.projects[0].domain
+       return allprojects.data.projects[0]
+      }
+      const activeProperty = async ()=> {
+       const allprojects = await ApiCall("/user/project")
+       return allprojects.data.projects[0].domain
+      }
       if (res.status == 200) {
         // console.log("RES::",res.data.token)
         dispatch(setUser(res.data.user));
         dispatch(setToken(res.data.token));
+        dispatch(setActivePropertyObj(setProperty()))
+        dispatch(setActiveProperty(activeProperty()))
+
 
         router.push("/dashboard");
       }

@@ -16,6 +16,23 @@ import { Country } from "../rank-tracker/components/CountryPick";
 import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
 import toast from "react-hot-toast";
 import { locationCodes } from "./component/locationCodes";
+import { useKeywordmutation } from "@/app/services/crawlers/keywordExplorer";
+import { CurrentProperty } from "@/app/utils/currentProperty";
+import Button from "../components/ui/Button";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { KeywordServicesFetch } from "../../services/keyword_services/keyword";
+import { getAllKeywordAnalysis } from "@/app/services/keyword_services/allKeywordAnalysis";
+import Loader from "@/app/component/Loader";
+import { shareOrFallback } from "@/app/utils/shareContentOrFallback";
+
+interface CrawlingData {
+  id: number;
+  userId: number;
+  domain: string;
+  createdAt: string;
+  updatedAt: string;
+  crawlings: any[];
+}
 
 const tabs = [
   { title: "Keyword analysis", content: <KeywordAnalysis /> },
@@ -49,43 +66,109 @@ export default function page() {
     }
   }, [selectedCountry]);
 
-  console.log(keywords);
+  const currentId = CurrentProperty();
+  const onSuccess = () => setStage(1);
 
-  async function SearchKeywords() {
-    setStatus("loading");
-    try {
-      const req = await ApiCall({
-        url: "user/crawler/keyword/2",
-        method: "POST",
-        data: {
+  const payload = {
+    keywords: keywords.keywords.split(","),
+    location_code: 2840,
+  };
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: async () => {
+      const response = await ApiCall.post(
+        `/user/crawler/keyword/${currentId.id}`,
+        {
           location_name: keywords.locationName,
           location_code: keywords.locationCode,
           keywords: keywords.keywords.split(","),
-        },
+        }
+      );
+      return response.data;
+    },
+    onError: (error) => {
+      error.message;
+      toast.error(`An error occured, ${error.message}`, {
+        position: "top-right",
       });
-      console.log(req.data);
-      if (req.status) {
-        toast.success("Keyword Searched", { position: "top-right" });
-        setStatus("success");
-      }
-    } catch (error: any) {
-      setStatus("error");
-      console.log(error);
-      if (error.response) {
-        toast.error(error.response.data.message || "something went wrong", {
-          position: "top-right",
-        });
-      } else if (error.request) {
-        toast.error("something went wrong", { position: "top-right" });
-        console.log(error.request);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        toast.error(error.message, { position: "top-right" });
-        console.log("Error", error.message);
-      }
+    },
+    onSuccess: () => {
+      toast.success("Keyword search was successfull", {
+        position: "top-right",
+      });
+      setStatus("success");
+      setStage(1);
+    },
+  });
+
+  const keywordService = new KeywordServicesFetch();
+
+  // check if there is overall keyword analysis data in order to handle stage
+  const { data, isPending: isLoading } = getAllKeywordAnalysis(
+    currentId.id
+  ) as { data: CrawlingData; isPending: boolean };
+  // console.log(data);
+  useEffect(() => {
+    if (data?.crawlings?.length === 0) {
+      setStage(0);
     }
+  }, [data]);
+
+  keywordService
+    .keywordAnalysisData(currentId.id)
+    .then((data) => console.log());
+  //  console.log("DT", data)
+
+  const handleClearAll = () => {
+    setKeywords({ keywords: "", locationCode: "", locationName: "" });
+  };
+
+  // async function SearchKeywords() {
+  //   setStatus("loading");
+  //   try {
+  //     const req = await ApiCall({
+  //       url: "user/crawler/keyword/2",
+  //       method: "POST",
+  //       data: {
+  //         location_name: keywords.locationName,
+  //         location_code: keywords.locationCode,
+  //         keywords: keywords.keywords.split(","),
+  //       },
+  //     });
+  //     console.log(req.data);
+  //     if (req.status) {
+  //       toast.success("Keyword Searched", { position: "top-right" });
+  //       setStatus("success");
+  //     }
+  //   } catch (error: any) {
+  //     setStatus("error");
+  //     console.log(error);
+  //     if (error.response) {
+  //       toast.error(error.response.data.message || "something went wrong", {
+  //         position: "top-right",
+  //       });
+  //     } else if (error.request) {
+  //       toast.error("something went wrong", { position: "top-right" });
+  //       console.log(error.request);
+  //     } else {
+  //       // Something happened in setting up the request that triggered an Error
+  //       toast.error(error.message, { position: "top-right" });
+  //       console.log("Error", error.message);
+  //     }
+  //   }
+  // }
+
+  if (isLoading) {
+    return (
+      <div className="h-52 w-full flex flex-col items-center justify-center">
+        <div className="h-20 w-20">
+          <Loader />
+        </div>
+      </div>
+    );
   }
   return stage == 0 ? (
+    // Search bar for the keywords
     <main className="grid w-full h-full items-start content-start gap-6 my-10 mb-20 overflow-auto">
       <section className={`flex flex-col gap-4 text-[#101828] `}>
         <h1 className={`font-semibold text-4xl 2xl:text-5xl`}>
@@ -106,11 +189,15 @@ export default function page() {
             }
             rows={5}
             cols={70}
+            value={keywords.keywords}
             placeholder="e.g. dog food, pet care, how to care for your dog..."
             className=" p-2 border rounded-md "
           ></textarea>
           <div className="flex justify-end items-center gap-6">
-            <button className=" border flex items-center gap-2 rounded-md font-semibold p-2 px-3 ">
+            <button
+              className=" border flex items-center gap-2 rounded-md font-semibold p-2 px-3 "
+              onClick={handleClearAll}
+            >
               Clear all
             </button>
             <button className=" bg-[#EFF8FF] border text-[#175CD3] flex items-center gap-2 rounded-md font-semibold p-2 px-3 ">
@@ -122,9 +209,9 @@ export default function page() {
         <div className={`flex items-center gap-6 mt-8`}>
           <CountryPick setCountry={setSelectedCountry} />
           <FilledButton
-            handleClick={SearchKeywords}
-            loading={status === "loading"}
-            disabled={status === "loading"}
+            handleClick={mutate}
+            loading={isPending}
+            disabled={isPending}
             title="Search Keywords"
           />
         </div>
@@ -146,7 +233,11 @@ export default function page() {
         </div>
         <div className={`flex items-center gap-6 mt-8`}>
           <CountryPick />
-          <FilledButton title="Search Keywords" />
+          <FilledButton
+            title="Search Keywords"
+            handleClick={mutate}
+            loading={isPending}
+          />
         </div>
       </section>
     </main>
@@ -160,13 +251,20 @@ export default function page() {
           Keyword explorer
         </h1>
         <div className="flex w-full md:w-1/2 sm:items-center sm:justify-end gap-2 md:gap-4">
-          <span className="">
+          <span className="inline-flex gap-2 items-center">
             <button className="rounded-lg text-base p-2 bg-primary text-white font-semibold hover:bg-blue-500">
               Update data
             </button>
           </span>
           <span className="">
             <PlainButton
+              handleClick={() =>
+                shareOrFallback({
+                  url: "http://localhost:3000/dashboard/keyword-explorer",
+                  title: "Check out this cool keyword explorer site!",
+                  text: "Check out your website Keyword Explorer status",
+                })
+              }
               moreClass="text-primary bg-[#EFF8FF]"
               title="Share"
               icon={<IoCloudUploadOutline />}
@@ -180,13 +278,13 @@ export default function page() {
       <section
         className={`flex min:[500px]:flex-nowrap flex-wrap w-full sm:items-center items-start gap-4 text-[#101828] `}
       >
-        <div className="sm:w-auto w-full">
+        {/* <div className="sm:w-auto w-full">
           <ToggleMobile
             mobile={mobile}
             setMobile={setMobile}
             className="w-fit font-normal"
           />
-        </div>
+        </div> */}
 
         <CountryPick className="sm:w-auto w-full" />
         <SearchEnginePick className="sm:w-auto w-full" />
