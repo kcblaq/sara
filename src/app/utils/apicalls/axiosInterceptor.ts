@@ -18,6 +18,7 @@ const getToken = (store: any) => {
 
 // Function to set authorization header based on token
 export const configureApiCall = (store: any) => {
+
   ApiCall.interceptors.request.use(
     (config) => {
       const token = getToken(store);
