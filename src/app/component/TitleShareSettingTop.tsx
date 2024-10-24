@@ -1,6 +1,7 @@
 import { CiSettings } from "react-icons/ci";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import PlainButton from "./PlainButton";
+import { shareOrFallback } from "../utils/shareContentOrFallback";
 
 interface Props {
   title: string;
@@ -24,6 +25,13 @@ export default function TitleShareSettingTop({ title }: Props) {
             moreClass="text-primary bg-[#EFF8FF]"
             title="Share"
             icon={<IoCloudUploadOutline />}
+            handleClick={() =>
+              shareOrFallback({
+                url: "http://localhost:3000/dashboard/content-analysis",
+                title: "Content Analysis",
+                text: "content analysis",
+              })
+            }
           />
         </span>
         <span className="p-3 rounded-md border cursor-pointer ">

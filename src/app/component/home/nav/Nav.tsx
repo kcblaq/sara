@@ -135,8 +135,8 @@ export default function Nav() {
             leaveTo="transform scale-95 opacity-0"
           >
             <MenuItems
-              // transition
-              anchor="top"
+              // anchor="top start"
+              anchor={{ to: "top" }}
               className="w-[790px] translate-x-10 origin-top-right grid grid-cols-2 gap-5 bg-white p-8 shadow-md rounded-md font-normal border border-white/5  text-sm/6  transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
             >
               {feature.map((item) => {
@@ -184,7 +184,8 @@ export default function Nav() {
             leaveTo="transform scale-95 opacity-0"
           >
             <MenuItems
-              anchor="top"
+              // anchor="top"
+              anchor={{ to: "top" }}
               className="bg-white font-normal flex flex-col gap-2 w-[320px] p-6 shadow-md rounded-md"
             >
               {resource.map((item) => {
@@ -310,7 +311,8 @@ export default function Nav() {
                     <div className="p-2 mt-4 m-2 h-full transition-all duration-300 ease-linear border rounded-lg shadow-md w-full flex flex-col overflow-auto">
                       {feature.map((item) => {
                         return (
-                          <div key={item.link}
+                          <div
+                            key={item.link}
                             className="flex h-full text-base p-2 items-start w-full gap-3"
                             onClick={() => router.push(`${item.link}`)}
                           >
@@ -401,7 +403,8 @@ export default function Nav() {
                   <div className="p-2 mt-4 m-2 h-full  border rounded-lg shadow-md w-full flex flex-col">
                     {resource.map((item) => {
                       return (
-                        <div key={item.link}
+                        <div
+                          key={item.link}
                           className="flex h-full text-base p-2 items-start w-full gap-3"
                           onClick={() => router.push(`${item.link}`)}
                         >

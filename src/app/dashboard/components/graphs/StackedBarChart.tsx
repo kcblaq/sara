@@ -68,15 +68,14 @@ export const options = {
   barThickness: 30, // Set the width of each bar
 };
 
-
 export interface NewvsLostProps {
-  label: string[],
-  lostData: number[],
-  newData: number[]
+  label: string[];
+  lostData: number[];
+  newData: number[];
 }
 
-export function StackedBarChart({label, lostData, newData}: NewvsLostProps) {
-  const labels = [2,3,4]
+export function StackedBarChart({ label, lostData, newData }: NewvsLostProps) {
+  const labels = [2, 3, 4];
 
   const data = {
     labels: label,

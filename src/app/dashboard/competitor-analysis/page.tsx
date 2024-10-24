@@ -6,7 +6,7 @@ import SearchEnginePick from "../rank-tracker/components/SearchEnginePick";
 import { Fragment, useEffect, useState } from "react";
 import KeywordGap, { KeywordGapType } from "./components/KeywordGap";
 import LinkGap from "./components/LinkGap";
-import { Tab,TabPanels,TabGroup, TabList, TabPanel } from "@headlessui/react";
+import { Tab, TabPanels, TabGroup, TabList, TabPanel } from "@headlessui/react";
 import FilledButton from "@/app/component/FilledButton";
 import toast from "react-hot-toast";
 import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
@@ -16,7 +16,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/app/store";
 import { removeTrailingSlash } from "@/app/utils/RemoveSlash";
 import { trimDomain } from "@/app/utils/trimDomain";
-import {useQuery} from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { keywordGapData } from "./components/competitorAnalysis";
 
 interface competitorDomains {
@@ -48,9 +48,8 @@ export default function page() {
   const activeProperty = useSelector(
     (state: RootState) => state.property.activePropertyObj
   );
-  
-  const {data} = keywordGapData();
 
+  const { data } = keywordGapData();
 
   // const handleToggleMobile = () => {
   //   setMobile(!mobile);
@@ -58,30 +57,29 @@ export default function page() {
 
   // const {data: linkGap} = competitorAnalysisData("linkGap");
   // console.log("LINK", linkGap)
-  
-  const currentRoute: KeywordGapType[] = data?.project?.crawlings[0]?.crawlingData[0]?.data?.items
-  const prevRoute: KeywordGapType[] = data?.project?.crawlings[1]?.crawlingData[0]?.data?.items
-  
 
+  const currentRoute: KeywordGapType[] =
+    data?.project?.crawlings[0]?.crawlingData[0]?.data?.items;
+  const prevRoute: KeywordGapType[] =
+    data?.project?.crawlings[1]?.crawlingData[0]?.data?.items;
 
   let stage = 1;
 
   const tabs = [
-    { title: "Keyword gap", content: <KeywordGap data={currentRoute ?? []} prev={prevRoute ?? []} /> },
+    {
+      title: "Keyword gap",
+      content: <KeywordGap data={currentRoute ?? []} prev={prevRoute ?? []} />,
+    },
     { title: "Link gap", content: <LinkGap /> },
   ];
 
   // console.log("DOM", trimDomain(activeProperty.domain))
   // const property = CurrentProperty()
 
-
-
-
-
   const handleSubmitAnalyzeCompetitor = async () => {
     const { target1, target2, location_code, language_code } =
       competitorDomains;
-      // console.log("PAY", current)
+    // console.log("PAY", current)
     try {
       // if (
       //   target.trim() === "" ||
@@ -111,32 +109,28 @@ export default function page() {
         `/user/crawler/competitor-analysis/${activeProperty?.id}`,
         [
           {
-            target: trimDomain( activeProperty && activeProperty?.domain),
+            target: trimDomain(activeProperty && activeProperty?.domain),
             target1: removeTrailingSlash(target1),
             target2: removeTrailingSlash(target2),
             location_code: 2840,
             language_code: "en",
           },
         ]
-      )
-      
-      
+      );
 
       const result = await response.data;
       // stage = 1;
       setStatus("success");
       toast.success("Crawl Completed!");
       setTimeout(() => {
-       stage = 1;
+        stage = 1;
       }, 4000);
-      
     } catch (error: AxiosError | any) {
       toast.error(error.response.data.message);
       console.log(error);
       setStatus("error");
     }
   };
-
 
   useEffect(() => {
     // setCurrent({
@@ -200,7 +194,7 @@ export default function page() {
                 })}
               </TabList>
               <hr className="w-full" />
-              <div className={` h-full w-full overflow-auto  `}>
+              <div className={` h-full w-full overflow-auto`}>
                 <TabPanels>
                   {tabs.map((tab) => {
                     return (
