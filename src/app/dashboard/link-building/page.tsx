@@ -13,38 +13,40 @@ import { useMutation } from "@tanstack/react-query";
 import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
 import { trimDomain } from "@/app/utils/trimDomain";
 import toast from "react-hot-toast";
-import moment from "moment"
+import moment from "moment";
+import { handleDownloadAsImage } from "@/app/utils/downloadFileAsImage";
 
 export default function LinkBuilding() {
-  const [data, setData] = useState('');
+  const [data, setData] = useState("");
   const tabs = [
     {
       title: "Linking building opportunities",
       content: <LinkBuildingOpportunities />,
     },
-    { title: "Backlink overview", content: <LinkBuildingOverview sendData={setData} /> },
+    {
+      title: "Backlink overview",
+      content: <LinkBuildingOverview sendData={setData} />,
+    },
     { title: "Backlink pages", content: <BacllinkPages sendData={setData} /> },
-    { title: "Reffering domains", content: <ReferingDomains  sendData={setData}/> },
+    {
+      title: "Reffering domains",
+      content: <ReferingDomains sendData={setData} />,
+    },
   ];
-  const property = CurrentProperty()
+  const property = CurrentProperty();
 
   const { isSuccess, isPending, isError, mutate } = useMutation({
-    mutationFn: async () => await ApiCall.post(`user/crawler/back-link/${property.id}`, {
-      targets: { "1": trimDomain(property.domain) }
-    }),
+    mutationFn: async () =>
+      await ApiCall.post(`user/crawler/back-link/${property.id}`, {
+        targets: { "1": trimDomain(property.domain) },
+      }),
     onSuccess: () => {
       toast.success("Successfully crawled", { position: "top-right" });
-
     },
     onError: () => {
       toast.error("Error crawling link building", { position: "top-right" });
-
     },
-
-  })
-
-
-
+  });
 
   return (
     <main className="grid w-full h-full items-start content-start gap-6  mb-20">
@@ -58,7 +60,8 @@ export default function LinkBuilding() {
         </h1>
         <div className="flex w-full md:w-1/2 items-center min-[600px]:justify-end gap-2 md:gap-4">
           <span className="">
-            <Button className="rounded-lg sm:text-base  text-sm p-2 w-[136px] bg-primary text-white font-semibold hover:bg-blue-500"
+            <Button
+              className="rounded-lg sm:text-base  text-sm p-2 w-[136px] bg-primary text-white font-semibold hover:bg-blue-500"
               onClick={() => mutate()}
               loading={isPending}
             >
@@ -66,7 +69,12 @@ export default function LinkBuilding() {
             </Button>
           </span>
           <span className="">
-            <Button className="text-primary bg-[#EFF8FF] sm:text-inherit text-sm">
+            <Button
+              onClick={() =>
+                handleDownloadAsImage("Link-building", "Link-building page")
+              }
+              className="text-primary bg-[#EFF8FF] sm:text-inherit text-sm"
+            >
               Export
             </Button>
           </span>
@@ -78,11 +86,11 @@ export default function LinkBuilding() {
       <section className="flex min-[500px]:flex-row flex-col  min-[500px]:items-center items-start  min-[500px]:gap-6 gap-3">
         <span className="flex items-center gap-3 text-lg">
           <p className={` font-medium text-[#101828] `}>Last updated: </p>
-          <p className="font-normal"> { moment(data).format("Do MMM, YY")} </p>
+          <p className="font-normal"> {moment(data).format("Do MMM, YY")} </p>
         </span>
         {/* <CountryPickAllLocationDefault title="All location" /> */}
       </section>
-      <section className=" h-full overflow-auto">
+      <section id="Link-building" className=" h-full overflow-auto">
         <TabGroup>
           <TabList className="flex gap-4 w-full overflow-x-auto whitespace-nowrap">
             {tabs.map((tab) => {
@@ -91,10 +99,11 @@ export default function LinkBuilding() {
                   <Tab as={Fragment}>
                     {({ selected }) => (
                       <p
-                        className={` cursor-pointer p-2 active:outline-none text-sm font-semibold border-t-0 border-l-0 border-r-0 active:border-r-none ${selected
+                        className={` cursor-pointer p-2 active:outline-none text-sm font-semibold border-t-0 border-l-0 border-r-0 active:border-r-none ${
+                          selected
                             ? "text-primary border-b-2 border-primary"
                             : " text-[#667085] active:border-none"
-                          }`}
+                        }`}
                       >
                         {tab.title}
                       </p>

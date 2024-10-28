@@ -26,7 +26,7 @@ import ReusableHTTPStatusCode from "./(technicalseo)/ReusableHTTPStatusCode";
 import { useTechnicalSeoFetchData } from "@/app/services/technicalSeo/TechnicalSeoFetch";
 import { ReusableCrawlStatus } from "./(technicalseo)/ReusableCrawlStatus";
 import Loader from "@/app/component/Loader";
-import { exportToExcel } from "@/app/utils/exportToExcel";
+import { CSVLink, CSVDownload } from "react-csv";
 // import { TechnicalSeoType } from "@/types/TechnicalSeoType";
 // import { useEffect } from "react";
 // import { removeTrailingSlash } from "@/app/utils/RemoveSlash";
@@ -165,7 +165,7 @@ function Overview() {
     ) ?? [];
 
   // Safely access the first element in overviewResult
-  const issues = overviewResult.length > 0 ? overviewResult[0]?.Issues : null;
+  const issues = overviewResult.length > 0 ? overviewResult[0]?.Issues : []; //null
   const site_health =
     overviewResult.length > 0 ? overviewResult[0]?.siteHealth : null;
   const LcpAnalysis =
@@ -506,14 +506,13 @@ function Overview() {
                     />
                   </div>
                   <div className="flex ">
-                    <FilledButton
-                      className="min-[500px]:text-sm text-xs"
-                      icon={<FiDownloadCloud />}
-                      title="Export issues"
-                      handleClick={() =>
-                        exportToExcel(tableData, "top-issues", "top-issues")
-                      }
-                    />
+                    <CSVLink data={issues} filename={"techniseo issues"}>
+                      <FilledButton
+                        className="min-[500px]:text-sm text-xs"
+                        icon={<FiDownloadCloud />}
+                        title="Export issues"
+                      />
+                    </CSVLink>
                   </div>
                 </div>
               </div>
