@@ -116,6 +116,7 @@ export default function Layout({ children }: Props) {
   ];
 
   const pathname = usePathname();
+  const router = useRouter();
 
   const isActive = (link: string) => {
     // const currentPath = pathname.split('/')[1];
@@ -124,8 +125,6 @@ export default function Layout({ children }: Props) {
     }
     return pathname.startsWith(link);
   };
-
-  const router = useRouter();
 
   const modalState = useSelector(
     (state: RootState) => state.currentModal.currentModal
@@ -171,8 +170,6 @@ export default function Layout({ children }: Props) {
 
   const getProjects = async () => {
     try {
-      // dispatch(setActiveProperty([]))
-      // const res = await ApiCall.get("/crawl/property");
       const res = await ApiCall.get("/user/project");
       if (res.status === 401) {
         router.push("/login");
@@ -186,12 +183,14 @@ export default function Layout({ children }: Props) {
       }
       if (res.status === 200) {
         dispatch(setAllProperty(res.data.projects));
+        console.log("RES", res.data.projects);
         activeProperty.length < 1 &&
           dispatch(
-            // setActiveProperty(removeTrailingSlash(res.data[0]?.website_url))
             setActiveProperty(removeTrailingSlash(res.data[0]?.projects.domain))
           );
-        // console.log("RES",res.data);
+
+        activePropertyObj.domain.length < 1 &&
+          dispatch(setActivePropertyObj(res.data[0]?.projects));
         return res.data;
       }
     } catch (err: any) {
@@ -203,14 +202,6 @@ export default function Layout({ children }: Props) {
     }
   };
 
-  // console.log({"ACTIVE":activeProperty, "ACTIVEOBJ": activePropertyObj.project.id})
-
-  // useQuery({
-  //   queryKey: ["dashboard"],
-  //   queryFn: getProjects,
-
-  // })
-  // hello
   const fetchDashboardData = async () => {
     const response = await ApiCall.get(`user/project/${activePropertyObj?.id}`);
 
@@ -223,30 +214,6 @@ export default function Layout({ children }: Props) {
     fetchProjects();
     activeProperty.length ? fetchDashboardData() : "";
   }, [activeProperty]);
-
-  // const { data } = useQuery({
-  //   queryKey: ["dashboard"],
-  //   queryFn: fetchDashboardData,
-  // })
-
-  // console.log("DATA", data)
-
-  // console.log("ACTIVE", activeProperty)
-  // console.log("PROP", property)
-
-  // const enab = activeProperty ? activeProperty.length > 2 : false
-  //  const { data, isLoading } =  useQuery({
-  //     queryKey: ['dashboardData', activeProperty],
-  //     queryFn: () => {
-  //       return ApiCall.get('/crawl/overall', {
-  //         params: {
-  //           url: removeTrailingSlash(activeProperty),
-  //           limit: 100
-  //         }
-  //       })
-  //     },
-  //     enabled: enab
-  //   })
 
   const handleRoutes = (e: { preventDefault: () => void }, link: string) => {
     // if (link !== "/dashboard" && user.account_type !== "paid") {

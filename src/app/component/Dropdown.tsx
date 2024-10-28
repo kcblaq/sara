@@ -1,5 +1,11 @@
 "use client";
-import { Menu, MenuItem, MenuItems, Transition, MenuButton } from "@headlessui/react";
+import {
+  Menu,
+  MenuItem,
+  MenuItems,
+  Transition,
+  MenuButton,
+} from "@headlessui/react";
 import { Fragment, useEffect, useState } from "react";
 import { IoChevronDownOutline } from "react-icons/io5";
 import { RootState } from "../store";
@@ -7,6 +13,7 @@ import { useSelector } from "react-redux";
 import { PropertyType } from "@/types/PropertyType";
 import { useDispatch } from "react-redux";
 import {
+  activePropertyType,
   setActiveProperty,
   setActivePropertyObj,
 } from "@/redux/features/propertySlice";
@@ -18,7 +25,6 @@ export default function DropdownMenu() {
     (state: RootState) => state.property.allProperty
   );
 
-
   const activeProperty = useSelector(
     (state: RootState) => state.property.activeProperty
   );
@@ -28,16 +34,14 @@ export default function DropdownMenu() {
   const dispatch = useDispatch();
   const [isClient, setIsClient] = useState(false);
 
-  
   // console.log("activeProperty",activeProperty)
 
-  const {data, isError, isPending, isSuccess} = useQuery({
-    queryKey: ['all_property' ],
-    queryFn: async()=> {
-      return ApiCall.get(`/user/project`)
-    }
-  })
-
+  const { data, isError, isPending, isSuccess } = useQuery({
+    queryKey: ["all_property"],
+    queryFn: async () => {
+      return ApiCall.get(`/user/project`);
+    },
+  });
 
   // console.log("DATA:",data?.data.projects)
 
@@ -59,7 +63,7 @@ export default function DropdownMenu() {
           {(data?.data?.projects?.length ?? []) > 0 ? (
             activePropertyObj.domain
           ) : (
-            <p className="text-gray-600"> { `Domain name`} </p> 
+            <p className="text-gray-600"> {`Domain name`} </p>
           )}
 
           <IoChevronDownOutline
@@ -80,7 +84,7 @@ export default function DropdownMenu() {
           <MenuItems className="absolute z-50 right-0 mt-2 w-full origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
             <span className="px-1 py-1 ">
               {/* {JSON.stringify(property)} */}
-              {property.map((prop: PropertyType) => {
+              {property.map((prop: activePropertyType) => {
                 return (
                   <MenuItem key={prop.domain ?? ""}>
                     {({ active }) => (

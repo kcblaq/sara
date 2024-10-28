@@ -11,47 +11,50 @@ import {
 } from "@/redux/features/propertySlice";
 import { useMutation } from "@tanstack/react-query";
 
-import useRankMutation, { RankTrackerCrawler } from "@/app/services/crawlers/rank_tracking";
+import useRankMutation, {
+  RankTrackerCrawler,
+} from "@/app/services/crawlers/rank_tracking";
 import { CurrentProperty } from "@/app/utils/currentProperty";
 import { trimDomain } from "@/app/utils/trimDomain";
-
 
 export default function AddProject() {
   const [err, setErr] = useState({ status: false, msg: "" });
   const [inputUrl, setInputUrl] = useState("");
   const dispatch = useDispatch();
   const property = CurrentProperty();
-  ;
-
-
-  const {mutate: RankMutate, isError, isPaused,isPending} = useRankMutation()
+  const {
+    mutate: RankMutate,
+    isError,
+    isPaused,
+    isPending,
+  } = useRankMutation();
 
   // console.log("PROPERTY",property)
   const mutate = useMutation({
     mutationFn: async (domain: string) => {
-      const response = await ApiCall.post('/user/project/', { domain });
+      const response = await ApiCall.post("/user/project/", { domain });
       return response.data;
     },
     onError: (error) => error.message,
-    onSuccess: async(data) => {
+    onSuccess: async (data) => {
       dispatch(setActiveProperty(inputUrl));
-      await dispatch(setActivePropertyObj(data.project));
+      dispatch(setActivePropertyObj(data.project));
       dispatch(setModal(""));
       // console.log("current:", data.project)
-      RankMutate({target: trimDomain(data.project.domain), id: data.project.id, location_code: 2840});
-      
-
-    }
-  })
-  // console.log("DATA")
-
-
+      RankMutate({
+        target: trimDomain(data.project.domain),
+        id: data.project.id,
+        location_code: 2840,
+      });
+    },
+  });
 
   const handleSubmit = () => {
-    const pattern = /^(https?|ftp):\/\/(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+(:[0-9]{1,5})?(\/.*)?$|^(www\.)[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+(:[0-9]{1,5})?(\/.*)?$/
+    const pattern =
+      /^(https?|ftp):\/\/(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+(:[0-9]{1,5})?(\/.*)?$|^(www\.)[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+(:[0-9]{1,5})?(\/.*)?$/;
 
     if (!pattern.test(inputUrl)) {
-      setErr({ status: true, msg: 'Enter a valid url' });
+      setErr({ status: true, msg: "Enter a valid url" });
       return;
     }
     mutate.mutate(inputUrl);
@@ -98,4 +101,3 @@ export default function AddProject() {
     </section>
   );
 }
-
