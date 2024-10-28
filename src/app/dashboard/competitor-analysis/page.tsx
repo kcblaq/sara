@@ -143,7 +143,7 @@ export default function page() {
         language_code: "GB",
         location_code: 2826,
 
-        // this code is correct.
+        // this code is correct, don't remove.
         // ...countries.reduce(
         //   (acc, location) => {
         //     if (location.location_name === country.name.common) {
@@ -216,7 +216,7 @@ export default function page() {
           <h1
             className={`font-semibold min-[425px]:text-4xl 2xl:text-5xl text-3xl `}
           >
-            Competitor analysi
+            Competitor analysis
           </h1>
           <p className="text-[#101828] font-medium text-lg 2xl:text-xl min-[425px]:w-auto min-[356px]:w-[375px] w-[320px]">
             Research your online competitors and improve your SEO

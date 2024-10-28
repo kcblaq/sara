@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-type activePropertyType = {
+export type activePropertyType = {
   project: any;
   id: number;
   userId: number;
@@ -10,7 +10,8 @@ type activePropertyType = {
 };
 
 const initialState: {
-  allProperty: any[];
+  // allProperty: any[];
+  allProperty: activePropertyType[];
   activeProperty: string;
   activePropertyObj: activePropertyType;
 } = {
