@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, Suspense, useEffect, useState } from "react";
+import { Fragment, Suspense, useEffect, useRef, useState } from "react";
 import { Tab } from "@headlessui/react";
 import PlainButton from "@/app/component/PlainButton";
 import { CiSettings, CiShare2 } from "react-icons/ci";
@@ -24,10 +24,11 @@ import { removeTrailingSlash } from "@/app/utils/RemoveSlash";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { useTechnicalSeoFetchData } from "@/app/services/technicalSeo/TechnicalSeoFetch";
 import { shareOrFallback } from "@/app/utils/shareContentOrFallback";
+import { handleDownloadAsImage } from "@/app/utils/downloadFileAsImage";
 
 export default function TechnicalSeoLayout() {
-  const [mobile, setMobile] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
   // const techSeo = useSelector((state: RootState) => state.technicalSeo.metrics);
   const lastUpdated = useSelector(
@@ -64,7 +65,10 @@ export default function TechnicalSeoLayout() {
   // }, [activeProperty,])
 
   const tabs = [
-    { title: "Overview", content: <Overview /> },
+    {
+      title: "Overview",
+      content: <Overview onViewAllIssues={() => setSelectedTabIndex(3)} />,
+    },
     { title: "Crawlability and indexability", content: <Crawlability /> },
     { title: "Site performance", content: <SitePerformance /> },
     { title: "Issues", content: <Issues /> },
@@ -91,7 +95,6 @@ export default function TechnicalSeoLayout() {
       //   }),
       // ]);
 
-      
       const response = await ApiCall.post(
         `/user/crawler/technical-seo/${activePropertyObj.id}`
       );
@@ -127,7 +130,6 @@ export default function TechnicalSeoLayout() {
         <div className="w-fit">
           <h2 className=" font-semibold text-[#101828] sm:text-3xl text-2xl">
             Technical SEO
-            {/* {JSON.stringify(activePropertyObj.id)} */}
           </h2>
         </div>
         <div className="flex w-fit md:w-1/2 items-center justify-end gap-2 md:gap-4">
@@ -142,93 +144,69 @@ export default function TechnicalSeoLayout() {
           <span className="">
             <PlainButton
               moreClass="text-primary bg-[#EFF8FF] sm:text-base text-sm"
-              title="Share"
+              title="Export"
               handleClick={() =>
-                shareOrFallback({
-                  title: "Technical SEO",
-                  url: "http://localhost:3000/dashboard/technical-seo",
-                  text: "Technical SEO",
-                })
+                handleDownloadAsImage("technical-seoId", "Technical SEO")
               }
               icon={<CiShare2 />}
             />
           </span>
-          <span className="p-2 rounded-md border cursor-pointer ">
-            <CiSettings />
-          </span>
         </div>
       </div>
       <div className="flex items-center gap-4 my-2">
-        {/* <div className="flex items-center min-[375px]:text-sm text-xs gap-2 bg-[#D0D5DD] rounded-md p-1">
-          <span
-            className={`cursor-pointer p-2 text-white ${
-              mobile ? "text-white" : "bg-[#1570EF] rounded-lg"
-            }`}
-            onClick={() => setMobile(false)}
-          >
-            {" "}
-            Desktop
-          </span>
-          <span
-            className={` cursor-pointer p-2 text-white font-semibold ${
-              !mobile ? "text-white" : "bg-[#1570EF] rounded-lg"
-            }`}
-            onClick={() => setMobile(true)}
-          >
-            {" "}
-            Mobile
-          </span>
-        </div> */}
         <div className="flex items-center gap-2 sm:text-base min-[375px]:text-sm text-xs">
           <p className=" font-semibold"> Last Update:</p>
-          {/* {JSON.stringify(activePropertyObj)} */}
           <p className=""> {moment(lastUpdated).format("Do MMM YY")} </p>
         </div>
       </div>
+      <div className="w-full" id="technical-seoId">
+        <Tab.Group
+          selectedIndex={selectedTabIndex}
+          onChange={setSelectedTabIndex}
+        >
+          <Tab.List className="flex gap-4 w-full overflow-x-auto whitespace-nowrap">
+            {tabs.map((tab) => {
+              return (
+                <div key={tab.title}>
+                  <Tab as={Fragment}>
+                    {({ selected }) => (
+                      /* Use the `selected` state to conditionally style the selected tab. */
 
-      <Tab.Group>
-        <Tab.List className="flex gap-4 w-full overflow-x-auto whitespace-nowrap">
-          {tabs.map((tab) => {
-            return (
-              <div key={tab.title}>
-                <Tab as={Fragment}>
-                  {({ selected }) => (
-                    /* Use the `selected` state to conditionally style the selected tab. */
+                      <p
+                        className={` cursor-pointer p-2 active:outline-none text-sm font-semibold border-t-0 border-l-0 border-r-0 active:border-r-none ${
+                          selected
+                            ? "text-primary border-b-2 border-primary"
+                            : " text-[#667085] active:border-none"
+                        }`}
+                      >
+                        {tab.title}
+                      </p>
+                    )}
+                  </Tab>
+                </div>
+              );
+            })}
+          </Tab.List>
 
-                    <p
-                      className={` cursor-pointer p-2 active:outline-none text-sm font-semibold border-t-0 border-l-0 border-r-0 active:border-r-none ${
-                        selected
-                          ? "text-primary border-b-2 border-primary"
-                          : " text-[#667085] active:border-none"
-                      }`}
-                    >
-                      {tab.title}
-                    </p>
-                  )}
-                </Tab>
-              </div>
-            );
-          })}
-        </Tab.List>
+          {/* <p> Here goes the rest</p> */}
 
-        {/* <p> Here goes the rest</p> */}
-
-        <div className={` h-full w-full overflow-auto`}>
-          {isLoading ? (
-            <div className=""> Loading... </div>
-          ) : (
-            <Tab.Panels>
-              {tabs.map((tab) => {
-                return (
-                  <div key={tab.title} className="h-full overflow-auto">
-                    <Tab.Panel>{tab.content}</Tab.Panel>
-                  </div>
-                );
-              })}
-            </Tab.Panels>
-          )}
-        </div>
-      </Tab.Group>
+          <div className={`h-full w-full overflow-auto`}>
+            {isLoading ? (
+              <div className=""> Loading... </div>
+            ) : (
+              <Tab.Panels>
+                {tabs.map((tab) => {
+                  return (
+                    <div key={tab.title} className="h-full overflow-auto">
+                      <Tab.Panel>{tab.content}</Tab.Panel>
+                    </div>
+                  );
+                })}
+              </Tab.Panels>
+            )}
+          </div>
+        </Tab.Group>
+      </div>
     </section>
   );
 }
