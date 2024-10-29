@@ -34,9 +34,9 @@ export default function TitleShareSettingTop({ title }: Props) {
             }
           />
         </span>
-        <span className="p-3 rounded-md border cursor-pointer ">
+        {/* <span className="p-3 rounded-md border cursor-pointer ">
           <CiSettings />
-        </span>
+        </span> */}
       </div>
     </section>
   );

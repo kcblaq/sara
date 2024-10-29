@@ -27,6 +27,7 @@ import { useTechnicalSeoFetchData } from "@/app/services/technicalSeo/TechnicalS
 import { ReusableCrawlStatus } from "./(technicalseo)/ReusableCrawlStatus";
 import Loader from "@/app/component/Loader";
 import { CSVLink, CSVDownload } from "react-csv";
+import { forwardRef } from "react";
 // import { TechnicalSeoType } from "@/types/TechnicalSeoType";
 // import { useEffect } from "react";
 // import { removeTrailingSlash } from "@/app/utils/RemoveSlash";
@@ -122,7 +123,11 @@ interface User {
   email: string;
 }
 
-function Overview() {
+// export default forwardRef<HTMLDivElement>(Overview);
+interface OverviewProps {
+  onViewAllIssues: () => void;
+}
+export default function Overview({ onViewAllIssues }: OverviewProps) {
   const tableData: User[] = [
     { id: 1, name: "John Doe", age: 28, email: "john@example.com" },
     { id: 2, name: "Jane Smith", age: 22, email: "jane@example.com" },
@@ -503,6 +508,7 @@ function Overview() {
                     <PlainButton
                       className="min-[500px]:text-sm text-xs"
                       title="View all issues"
+                      handleClick={() => onViewAllIssues()}
                     />
                   </div>
                   <div className="flex ">
@@ -589,5 +595,3 @@ function Overview() {
     </>
   );
 }
-
-export default Overview;

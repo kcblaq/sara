@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { forwardRef, useState } from "react";
 import Image from "next/image";
 import { CiSearch } from "react-icons/ci";
 
