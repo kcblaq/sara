@@ -161,9 +161,9 @@ export default function page() {
   }, [country, activeProperty]);
 
   return (
-    <div className="w-full flex flex-col py-6">
+    <div className="w-full flex flex-col ">
       {stage === 1 ? (
-        <main className="grid w-full h-full items-start content-start gap-6 my-10 mb-20">
+        <main className="grid w-full h-full items-start content-start gap-6 ">
           <TitleShareSettingTop title="Competitor analysis " />
           <section className={`flex items-center gap-3`}>
             {/* <ToggleMobile mobile={mobile} setMobile={handleToggleMobile} /> */}
