@@ -1,8 +1,10 @@
+import {useState , useEffect}  from "react";
 import { Line } from "react-chartjs-2"
 import { TitleWithoutUnderline } from "../../technical-seo/components/Overview"
 import { ChartData, ChartOptions } from "chart.js";
 import { useRankTrackingOverview } from "@/app/services/crawlers/rank_tracking";
 import moment from "moment";
+import Loader from "@/app/component/Loader";
 
 const options = {
     plugins: {
@@ -64,10 +66,13 @@ interface Props {
   
   export const PositionDistribution: React.FC<Props> = ({se, type}) => {
 
+    const [isClient, setIsClient] = useState(false);
 
+    // const { isError, isPending, data: OverviewData } = useRankTrackingOverview("overview");
     const { isError, isPending, data: OverviewData } = useRankTrackingOverview("overview");
       const dist_labels = OverviewData?.project?.crawlings.map((label: any) => moment(label.createdAt.replace(/^0+/, '')).format("MMM DD"));
 
+    
       
       const crawlings = OverviewData?.project?.crawlings;
       
@@ -86,6 +91,14 @@ interface Props {
          "91 - 100": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_91_100),
        }
 
+
+       useEffect(() => {
+        setIsClient(true);
+      }, []);
+    
+      if (!isClient) {
+        return null;
+      }
     const data = {
       // changing labels to changes values on X-axis.
       labels: dist_labels,
@@ -93,7 +106,7 @@ interface Props {
       // add a new #color for backgroundColor, borderColor, pointBorderColor, pointHoverBackgroundColor properties for every new entry
       datasets: [
         {
-          color: "#fff",
+          color: "#000",
           label: "2 - 3",
           fill: false,
           lineTension: 0.3,
@@ -101,11 +114,12 @@ interface Props {
           borderColor: "##717BBC",
           borderCapStyle: "round",
           borderJoinStyle: "round",
-          pointBorderColor: "##717BBC",
+          pointBorderColor: "#717BBC",
           pointBackgroundColor: "#717BBC",
-          pointBorderWidth: 1,
+          pointBorderWidth: 0.2,
+          borderWidth: 2,
           pointHoverRadius: 5,
-          pointHoverBackgroundColor: "#2a2c30",
+          pointHoverBackgroundColor: "#717BBC",
           pointHoverBorderColor: "#fff",
           pointHoverBorderWidth: 5,
           pointRadius: 0,
@@ -129,6 +143,7 @@ interface Props {
           pointHoverBackgroundColor: "#f84c1e",
           pointHoverBorderColor: "#fff",
           pointHoverBorderWidth: 5,
+          borderWidth: 2,
           pointRadius: 0,
           pointHitRadius: 5,
           // data: [20, 39, 10, 11, 16, 2, 40]
@@ -150,6 +165,7 @@ interface Props {
           pointHoverBackgroundColor: "#008000",
           pointHoverBorderColor: "#fff",
           pointHoverBorderWidth: 5,
+          borderWidth: 2,
           pointRadius: 0,
           pointHitRadius: 5,
           // data: [10, 49, 15, 31, 26, 21, 50]
@@ -171,6 +187,7 @@ interface Props {
           pointHoverBackgroundColor: "#F670C7",
           pointHoverBorderColor: "#fff",
           pointHoverBorderWidth: 5,
+          borderWidth: 2,
           pointRadius: 0,
           pointHitRadius: 5,
           // data: [10, 49, 15, 31, 26, 21, 50]
@@ -192,6 +209,7 @@ interface Props {
           pointHoverBackgroundColor: "#39D583",
           pointHoverBorderColor: "#fff",
           pointHoverBorderWidth: 5,
+          borderWidth: 2,
           pointRadius: 0,
           pointHitRadius: 5,
           // data: [10, 49, 15, 31, 26, 21, 50]
@@ -202,77 +220,75 @@ interface Props {
           label: "41 - 50",
           fill: false,
           lineTension: 0.3,
-          backgroundColor: "#39D583",
-          borderColor: "#39D583",
+          backgroundColor: "#ffef00",
+          borderColor: "#ffef00",
           borderCapStyle: "round",
           borderJoinStyle: "round",
           pointBorderColor: "#ffef00",
           pointBackgroundColor: "#ffef00",
           pointBorderWidth: 1,
           pointHoverRadius: 5,
-          pointHoverBackgroundColor: "#39D583",
+          pointHoverBackgroundColor: "#ffef00",
           pointHoverBorderColor: "#fff",
           pointHoverBorderWidth: 5,
+          borderWidth: 2,
           pointRadius: 0,
           pointHitRadius: 5,
           // data: [10, 49, 15, 31, 26, 21, 50]
           data: distributions["41 - 50"]
         },
-        {
-          color: "#000",
-          label: "51 - 60",
-          fill: false,
-          lineTension: 0.3,
-          backgroundColor: "#39D583",
-          borderColor: "#39D583",
-          borderCapStyle: "round",
-          borderJoinStyle: "round",
-          pointBorderColor: "#eedc82",
-          pointBackgroundColor: "#eedc82",
-          pointBorderWidth: 1,
-          pointHoverRadius: 5,
-          pointHoverBackgroundColor: "#eedc82",
-          pointHoverBorderColor: "#eedc82",
-          pointHoverBorderWidth: 5,
-          pointRadius: 0,
-          pointHitRadius: 5,
-          // data: [10, 49, 15, 31, 26, 21, 50]
-          data: distributions["51 - 60"]
-        },
-        {
-          color: "#000",
-          label: "61 - 70",
-          fill: false,
-          lineTension: 0.3,
-          backgroundColor: "#39D583",
-          borderColor: "#39D583",
-          borderCapStyle: "round",
-          borderJoinStyle: "round",
-          pointBorderColor: "#00FFFF",
-          pointBackgroundColor: "#00FFFF",
-          pointBorderWidth: 1,
-          pointHoverRadius: 5,
-          pointHoverBackgroundColor: "#39D583",
-          pointHoverBorderColor: "#fff",
-          pointHoverBorderWidth: 5,
-          pointRadius: 0,
-          pointHitRadius: 5,
-          // data: [10, 49, 15, 31, 26, 21, 50]
-          data: distributions["61 - 70"]
-        },
+        // {
+        //   color: "#000",
+        //   label: "51 - 60",
+        //   fill: false,
+        //   lineTension: 0.3,
+        //   backgroundColor: "#39D583",
+        //   borderColor: "#39D583",
+        //   borderCapStyle: "round",
+        //   borderJoinStyle: "round",
+        //   pointBorderColor: "#eedc82",
+        //   pointBackgroundColor: "#eedc82",
+        //   pointBorderWidth: 1,
+        //   pointHoverRadius: 5,
+        //   pointHoverBackgroundColor: "#eedc82",
+        //   pointHoverBorderColor: "#eedc82",
+        //   pointHoverBorderWidth: 5,
+        //   pointRadius: 0,
+        //   pointHitRadius: 5,
+        //   // data: [10, 49, 15, 31, 26, 21, 50]
+        //   data: distributions["51 - 60"]
+        // },
+        // {
+        //   color: "#000",
+        //   label: "61 - 70",
+        //   fill: false,
+        //   lineTension: 0.3,
+        //   backgroundColor: "#39D583",
+        //   borderColor: "#39D583",
+        //   borderCapStyle: "round",
+        //   borderJoinStyle: "round",
+        //   pointBorderColor: "#00FFFF",
+        //   pointBackgroundColor: "#00FFFF",
+        //   pointBorderWidth: 1,
+        //   pointHoverRadius: 5,
+        //   pointHoverBackgroundColor: "#39D583",
+        //   pointHoverBorderColor: "#fff",
+        //   pointHoverBorderWidth: 5,
+        //   pointRadius: 0,
+        //   pointHitRadius: 5,
+        //   // data: [10, 49, 15, 31, 26, 21, 50]
+        //   data: distributions["61 - 70"]
+        // },
     ]
 };
 
 
-  
-   
-
     return (
         <div className="">
-            <TitleWithoutUnderline
+            {/* <TitleWithoutUnderline
                 title={"Position distributions "}
                 info={"Position distributions"}
-              />
+              /> */}
               <Line data={data as ChartData<"line", number[], string>} options={options as ChartOptions<"line">} />
         </div>
     )

@@ -5,6 +5,7 @@ import { FaCircle } from "react-icons/fa";
 
 import "./style.css";
 import { SiteHealthScore, SiteHealthScoreDto } from "../../dashboard/SiteHealthScore";
+import { PositionDistribution } from "../../rank-tracker/components/PositionDistribution";
 
 export default function TraficOverview() {
   return (
@@ -111,7 +112,7 @@ export const TOverview: React.FC<TOverviewDto> = ({
       <div className="">
         <div className="flex w-full h-full items-start justify-between">
           <h1 className={`text-[#101828] flex items-center gap-4`}>
-            Traffic overview
+            Position Distribution(Organic)
             <button title="Here is the summary of your website visitors">
               <RxQuestionMarkCircled className="text-gray-600" />
             </button>
@@ -119,9 +120,12 @@ export const TOverview: React.FC<TOverviewDto> = ({
         </div>
         <hr className="w-full mt-4" />
       </div>
-      <div className=" h-full w-full max-w-[600px]">
-        <TrafficOverviewGraph />
-      </div>
+      {/* <div className=" h-full w-full "> */}
+       <PositionDistribution se={"google"} type={{
+            name: "Organic",
+            value: "organic_positions"
+          }} />
+      {/* </div> */}
     </div>
   </section>
   )

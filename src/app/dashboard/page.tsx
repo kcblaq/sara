@@ -22,6 +22,8 @@ import { CurrentProperty } from "../utils/currentProperty";
 import Loader from "../component/Loader";
 import { TimeToInteractive } from "./dashboard/TimeToInteractive";
 import { LCP } from "./dashboard/LCP";
+import RankOverview from "./rank-tracker/components/RankOverview";
+import moment from "moment";
 // import CheckUserType from "./components/CheckUserType";
 
 export default function Dashboard() {
@@ -81,7 +83,7 @@ export default function Dashboard() {
 
   const data:DashboardDto = response.data
 
-  console.log("DATA", data)
+  // console.log("DATA", data)
 if(response.isPending){
   return (
     <div className="h-20 w-full flex items-center justify-center">
@@ -102,6 +104,10 @@ const siteHealthScore = {
   score: data.techSeo.current.siteHealth,
   previous: data.techSeo.differences.siteHealthDifference
 }
+const dataLabel = data.newvslost.map((item) => moment(item.updatedAt).format("Do MMM,YY"));
+const newRd = data.newvslost.map((newB) => newB.newReferringMainDomains);
+const lostRd = data.newvslost.map((newB) => newB.lostReferringMainDomains);
+console.log("DT", data )
   return (
     <>
       {/* {show && (
@@ -156,9 +162,10 @@ const siteHealthScore = {
               {/* <OrganicKeywords />
               <AverageTimeOnsite /> */}
               <TimeToInteractive amount={data?.techSeo?.current?.timeToInteractive ?? 0} 
-              previous={data?.techSeo?.differences?.timeToInteractiveDifference ?? 0} chartData={[34,10]} />
+              previous={data?.techSeo?.differences?.timeToInteractiveDifference ?? 0} chartData={data.techSeo.current.timeToInteractiveHistory} />
               <LCP amount={data?.techSeo?.current?.largestContentfulPaint} 
-              previous={data?.techSeo?.differences?.largestContentfulPaintDifference} chartData={[34,36,31]} />
+              previous={data?.techSeo?.differences?.largestContentfulPaintDifference} 
+              chartData={data.techSeo.current.largestContentfulPaintHistory} />
             </section>
           {/* )} */}
 
@@ -190,7 +197,7 @@ const siteHealthScore = {
             </div>
             <div className=" h-full w-full max-w-[600px]">
               {/* <BacklinkGraph /> */}
-              <StackedBarChart label={[]} lostData={[]} newData={[]} />
+              <StackedBarChart label={dataLabel} lostData={lostRd} newData={newRd} />
             </div>
           </div>
           <section className="border sm:w-1/2 w-auto h-full rounded-md p-2 md:p-6">

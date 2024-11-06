@@ -93,6 +93,9 @@ interface RankTrackingEngine {
     timeToInteractive: number;
     cumulativeLayoutShift: number;
     largestContentfulPaint: number;
+    cumulativeLayoutShiftHistory: any[],
+    largestContentfulPaintHistory: any[],
+    timeToInteractiveHistory: any[]
   }
   
   interface TechSeoDifferences {
