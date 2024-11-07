@@ -172,7 +172,6 @@ export default function Dashboard() {
                     className=""
                     title="Here is the summary of each of your keyword ranking"
                   >
-                    {" "}
                     <RxQuestionMarkCircled />
                   </button>
                 </span>

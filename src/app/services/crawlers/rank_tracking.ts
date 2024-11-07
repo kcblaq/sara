@@ -3,6 +3,7 @@ import ApiCall from "../../utils/apicalls/axiosInterceptor";
 import { CurrentProperty } from "@/app/utils/currentProperty";
 import { RootState } from "@/app/store";
 import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
 
 interface RankProps {
     location_code: number,
@@ -102,7 +103,10 @@ export const useRankMutation = () => {
       },
       onSuccess: (data) => {
         useRankTrackingOverview("overview")
-        useRankTrackingOverview("ranking")
+        useRankTrackingOverview("ranking"),
+        toast.success("Rank tracking successfully recrawled", {
+          position: "top-right",
+        });
       },
     });
   };
