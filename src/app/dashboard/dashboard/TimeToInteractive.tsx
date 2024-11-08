@@ -3,6 +3,20 @@ import Card from "../Card"
 import { arrowStyle, getClass } from "@/helper"
 import { LineChart } from "../technical-seo/components/LineChart"
 
+
+export function formatSignificantNumber(num: number) {
+    if (num === 0) return "0.00";
+    
+    const scale = Math.pow(10, -Math.floor(Math.log10(Math.abs(num))));
+    const scaledNumber = num * scale;
+    
+    const formattedNumber = scaledNumber.toFixed(2);
+    
+    return formattedNumber;
+  }
+  
+
+
 interface TTIProps {
     amount: number,
     previous: number,
@@ -13,6 +27,9 @@ export const TimeToInteractive: React.FC<TTIProps> = ({
     chartData,
     previous,
 }) => {
+    
+    // console.log("PER", amount, previous)
+
     return (
         <div>
             <Card title={"Time to interactive"}

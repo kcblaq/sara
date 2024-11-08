@@ -284,12 +284,12 @@ interface Props {
 
 
     return (
-        <div className="">
+        <>
             {/* <TitleWithoutUnderline
                 title={"Position distributions "}
                 info={"Position distributions"}
               /> */}
               <Line data={data as ChartData<"line", number[], string>} options={options as ChartOptions<"line">} />
-        </div>
+        </>
     )
 }

@@ -107,7 +107,7 @@ const siteHealthScore = {
 const dataLabel = data.newvslost.map((item) => moment(item.updatedAt).format("Do MMM,YY"));
 const newRd = data.newvslost.map((newB) => newB.newReferringMainDomains);
 const lostRd = data.newvslost.map((newB) => newB.lostReferringMainDomains);
-console.log("DT", data )
+// console.log("DT", data.techSeo )
   return (
     <>
       {/* {show && (
@@ -162,7 +162,8 @@ console.log("DT", data )
               {/* <OrganicKeywords />
               <AverageTimeOnsite /> */}
               <TimeToInteractive amount={data?.techSeo?.current?.timeToInteractive ?? 0} 
-              previous={data?.techSeo?.differences?.timeToInteractiveDifference ?? 0} chartData={data.techSeo.current.timeToInteractiveHistory} />
+              previous={data?.techSeo?.differences?.timeToInteractiveDifference ?? 0} 
+              chartData={data.techSeo.current.timeToInteractiveHistory} />
               <LCP amount={data?.techSeo?.current?.largestContentfulPaint} 
               previous={data?.techSeo?.differences?.largestContentfulPaintDifference} 
               chartData={data.techSeo.current.largestContentfulPaintHistory} />
@@ -200,7 +201,7 @@ console.log("DT", data )
               <StackedBarChart label={dataLabel} lostData={lostRd} newData={newRd} />
             </div>
           </div>
-          <section className="border sm:w-1/2 w-auto h-full rounded-md p-2 md:p-6">
+          {/* <section className="border sm:w-1/2 w-auto h-full rounded-md p-2 md:p-6">
             <div className="grid">
               <div className="flex font-bold w-full h-full items-start justify-between">
                 <span
@@ -221,7 +222,7 @@ console.log("DT", data )
             <div className="h-fit w-full">
               <KeywordTable />
             </div>
-          </section>
+          </section> */}
         </div>
       </div>
     </>
