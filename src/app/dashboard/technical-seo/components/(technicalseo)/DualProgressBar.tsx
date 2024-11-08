@@ -103,15 +103,15 @@ export const ProgressBarChart = ({ dataArray }: ProgressBarChartProps) => {
   const total = dataArray?.reduce((acc, val) => acc + val, 0);
 
   const labels = dataArray.map((value) => {
-    if (value <= 0.5) return "0-0.5 sec";
-    else if (value <= 1) return "0.5-1 sec";
-    else if (value <= 3) return "1-3 secs";
-    else return "3+ secs";
+    if (value <= 15) return "0-15 sec";
+    else if (value <= 30) return "15-30 sec";
+    else if (value <= 45) return "30-45 secs";
+    else return "45+ secs";
   });
   const colors = dataArray.map((value) => {
-    if (value <= 0.5) return "#28a745";
-    else if (value <= 1) return "#007bff";
-    else if (value <= 3) return "#cce5ff";
+    if (value <= 15) return "#28a745";
+    else if (value <= 30) return "#007bff";
+    else if (value <= 45) return "#cce5ff";
     else return "#f1c40f";
   });
 
@@ -128,7 +128,7 @@ export const ProgressBarChart = ({ dataArray }: ProgressBarChartProps) => {
           topRight: 10,
           bottomRight: 10,
         },
-        barPercentage: 1.0,
+        barPercentage: 0.8,
         categoryPercentage: 1.0,
       },
     ],
