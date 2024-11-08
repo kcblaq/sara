@@ -19,6 +19,7 @@ import { trimDomain } from "@/app/utils/trimDomain";
 import { useQuery } from "@tanstack/react-query";
 import { keywordGapData } from "./components/competitorAnalysis";
 import { SelectCountryInput } from "../../component/commons/Input"
+import { CurrentProperty } from "@/app/utils/currentProperty";
 
 interface competitorDomains {
   target: string;
@@ -75,12 +76,16 @@ export default function page() {
   ];
 
   // console.log("DOM", trimDomain(activeProperty.domain))
-  // const property = CurrentProperty()
+  const property = CurrentProperty()
 
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = event.target.value;
     setCountry(countries[Number(selectedValue)])
   };
+
+  const crawlData = [{
+
+  }]
 
   const handleSubmitAnalyzeCompetitor = async () => {
     const { target1, target2, location_code, language_code } =
@@ -137,6 +142,12 @@ export default function page() {
       setStatus("error");
     }
   };
+
+
+
+  function CrawlCompetitors(){
+
+  }
 
 
   useEffect(() => {
