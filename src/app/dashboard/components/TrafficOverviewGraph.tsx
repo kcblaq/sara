@@ -118,9 +118,9 @@ export function TrafficOverviewGraph() {
   return (
     <div className="flex flex-col h-full w-full ">
       <Line options={options} data={data} />
-      <button className="bg-blue-50 text-sm text-blue-700 py-2 px-4 rounded-md self-end  mt-10  hover:outline outline-offset-2 outline-slate-300">
+      {/* <button className="bg-blue-50 text-sm text-blue-700 py-2 px-4 rounded-md self-end  mt-10  hover:outline outline-offset-2 outline-slate-300">
         View Report
-      </button>
+      </button> */}
     </div>
   );
 }

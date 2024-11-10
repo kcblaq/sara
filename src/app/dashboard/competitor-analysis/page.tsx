@@ -18,6 +18,8 @@ import { removeTrailingSlash } from "@/app/utils/RemoveSlash";
 import { trimDomain } from "@/app/utils/trimDomain";
 import { useQuery } from "@tanstack/react-query";
 import { keywordGapData } from "./components/competitorAnalysis";
+import { SelectCountryInput } from "../../component/commons/Input"
+import { CurrentProperty } from "@/app/utils/currentProperty";
 
 interface competitorDomains {
   target: string;
@@ -44,7 +46,7 @@ export default function page() {
   //   id: "",
   //   domain: ""
   // })
-  const [country, setCountry] = useState<Country | null>(null);
+  const [country, setCountry] = useState<any | null>(null);
   const activeProperty = useSelector(
     (state: RootState) => state.property.activePropertyObj
   );
@@ -74,7 +76,16 @@ export default function page() {
   ];
 
   // console.log("DOM", trimDomain(activeProperty.domain))
-  // const property = CurrentProperty()
+  const property = CurrentProperty()
+
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedValue = event.target.value;
+    setCountry(countries[Number(selectedValue)])
+  };
+
+  const crawlData = [{
+
+  }]
 
   const handleSubmitAnalyzeCompetitor = async () => {
     const { target1, target2, location_code, language_code } =
@@ -132,6 +143,13 @@ export default function page() {
     }
   };
 
+
+
+  function CrawlCompetitors(){
+
+  }
+
+
   useEffect(() => {
     // setCurrent({
     //   id: property?.id?.toString(),
@@ -167,7 +185,8 @@ export default function page() {
           <TitleShareSettingTop title="Competitor analysis " />
           <section className={`flex items-center gap-3`}>
             {/* <ToggleMobile mobile={mobile} setMobile={handleToggleMobile} /> */}
-            <CountryPick />
+            {/* <CountryPick /> */}
+            <SelectCountryInput onChange={handleSelectChange} />
             <SearchEnginePick />
           </section>
           <section className={``}>
@@ -179,11 +198,10 @@ export default function page() {
                       <Tab as={Fragment}>
                         {({ selected }) => (
                           <p
-                            className={` cursor-pointer p-2 active:outline-none text-sm font-semibold border-t-0 border-l-0 border-r-0 active:border-r-none ${
-                              selected
+                            className={` cursor-pointer p-2 active:outline-none text-sm font-semibold border-t-0 border-l-0 border-r-0 active:border-r-none ${selected
                                 ? "text-primary border-b-2 border-primary"
                                 : " text-[#667085] active:border-none"
-                            }`}
+                              }`}
                           >
                             {tab.title}
                           </p>

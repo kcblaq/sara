@@ -41,11 +41,11 @@ const distributions =
      "21 - 30": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_21_30),
      "31 - 40": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_31_40),
      "41 - 50": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_41_50),
-     "51 - 60": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_51_60),
-     "61 - 70": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_61_70),
-     "71 - 80": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_71_80),
-     "81 - 90": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_81_90),
-     "91 - 100": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_91_100),
+    //  "51 - 60": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_51_60),
+    //  "61 - 70": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_61_70),
+    //  "71 - 80": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_71_80),
+    //  "81 - 90": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_81_90),
+    //  "91 - 100": crawlings?.map((item: any) => item?.crawlingData[0].data?.[se]?.[type.value]?.pos_91_100),
    }
 
 
@@ -342,51 +342,52 @@ const distributions =
         // data: [10, 49, 15, 31, 26, 21, 50]
         data: distributions["41 - 50"]
       },
-      {
-        color: "#000",
-        label: "51 - 60",
-        fill: false,
-        lineTension: 0.3,
-        backgroundColor: "#39D583",
-        borderColor: "#39D583",
-        borderCapStyle: "round",
-        borderJoinStyle: "round",
-        pointBorderColor: "#eedc82",
-        pointBackgroundColor: "#eedc82",
-        pointBorderWidth: 1,
-        pointHoverRadius: 5,
-        pointHoverBackgroundColor: "#eedc82",
-        pointHoverBorderColor: "#eedc82",
-        pointHoverBorderWidth: 5,
-        pointRadius: 0,
-        pointHitRadius: 5,
-        // data: [10, 49, 15, 31, 26, 21, 50]
-        data: distributions["51 - 60"]
-      },
-      {
-        color: "#000",
-        label: "61 - 70",
-        fill: false,
-        lineTension: 0.3,
-        backgroundColor: "#39D583",
-        borderColor: "#39D583",
-        borderCapStyle: "round",
-        borderJoinStyle: "round",
-        pointBorderColor: "#00FFFF",
-        pointBackgroundColor: "#00FFFF",
-        pointBorderWidth: 1,
-        pointHoverRadius: 5,
-        pointHoverBackgroundColor: "#39D583",
-        pointHoverBorderColor: "#fff",
-        pointHoverBorderWidth: 5,
-        pointRadius: 0,
-        pointHitRadius: 5,
-        // data: [10, 49, 15, 31, 26, 21, 50]
-        data: distributions["61 - 70"]
-      },
+      // {
+      //   color: "#000",
+      //   label: "51 - 60",
+      //   fill: false,
+      //   lineTension: 0.3,
+      //   backgroundColor: "#39D583",
+      //   borderColor: "#39D583",
+      //   borderCapStyle: "round",
+      //   borderJoinStyle: "round",
+      //   pointBorderColor: "#eedc82",
+      //   pointBackgroundColor: "#eedc82",
+      //   pointBorderWidth: 1,
+      //   pointHoverRadius: 5,
+      //   pointHoverBackgroundColor: "#eedc82",
+      //   pointHoverBorderColor: "#eedc82",
+      //   pointHoverBorderWidth: 5,
+      //   pointRadius: 0,
+      //   pointHitRadius: 5,
+      //   // data: [10, 49, 15, 31, 26, 21, 50]
+      //   data: distributions["51 - 60"]
+      // },
+      // {
+      //   color: "#000",
+      //   label: "61 - 70",
+      //   fill: false,
+      //   lineTension: 0.3,
+      //   backgroundColor: "#39D583",
+      //   borderColor: "#39D583",
+      //   borderCapStyle: "round",
+      //   borderJoinStyle: "round",
+      //   pointBorderColor: "#00FFFF",
+      //   pointBackgroundColor: "#00FFFF",
+      //   pointBorderWidth: 1,
+      //   pointHoverRadius: 5,
+      //   pointHoverBackgroundColor: "#39D583",
+      //   pointHoverBorderColor: "#fff",
+      //   pointHoverBorderWidth: 5,
+      //   pointRadius: 0,
+      //   pointHitRadius: 5,
+      //   // data: [10, 49, 15, 31, 26, 21, 50]
+      //   data: distributions["61 - 70"]
+      // },
     ]
   };
 
+  console.log("CHECK", data)
   
 
 
