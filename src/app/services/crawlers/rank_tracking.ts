@@ -10,14 +10,14 @@ interface RankProps {
 }
 
 
-export const useRankTrackingOverview =  (tab:string) => {
-    const id = CurrentProperty()
+export const useRankTrackingOverview =  (tab:string, id: number) => {
+    // const id = CurrentProperty()
     // const id = useSelector((state: RootState) => state.property.activePropertyObj);
 
     const { isError, isSuccess, isPending, data } = useQuery({
-        queryKey: ["ranktracker_overview", id.id],
+        queryKey: ["ranktracker_overview", id],
         queryFn:  async() => {
-            const result = await ApiCall.get(`/user/crawler/rank-tracking/by-tab/${id.id}?tab=${tab}`);
+            const result = await ApiCall.get(`/user/crawler/rank-tracking/by-tab/${id}?tab=${tab}`);
             return result.data
         }
     })
@@ -58,8 +58,8 @@ export const RankTrackerCrawler =  (target: string, location_code:number, id:num
         },
         onError: (error) => error.message,
         onSuccess: () => {
-            useRankTrackingOverview("overview");
-            useRankTrackingOverview("ranking");
+            useRankTrackingOverview("overview", id);
+            useRankTrackingOverview("ranking", id);
           
         }
     })
@@ -91,9 +91,9 @@ export const RankCrawl = async (target:string, id:number, location_code = 2840) 
 
 
 
-export const useRankMutation = () => {
+export const useRankMutation = (id: number) => {
     return useMutation({
-      mutationFn: async ({ target, id, location_code }: { target: string, id: number, location_code?: number }) => {
+      mutationFn: async ({ target, location_code }: { target: string, location_code?: number }) => {
         return await RankCrawl(target, id, location_code);
       },
       onError: (error) => {
@@ -101,8 +101,8 @@ export const useRankMutation = () => {
         return(`Mutation failed:, ${error}`);
       },
       onSuccess: (data) => {
-        useRankTrackingOverview("overview")
-        useRankTrackingOverview("ranking")
+        useRankTrackingOverview("overview", id)
+        useRankTrackingOverview("ranking", id)
       },
     });
   };

@@ -5,6 +5,7 @@ import { ChartData, ChartOptions } from "chart.js";
 import { useRankTrackingOverview } from "@/app/services/crawlers/rank_tracking";
 import moment from "moment";
 import Loader from "@/app/component/Loader";
+import { CurrentProperty } from "@/app/utils/currentProperty";
 
 const options = {
     plugins: {
@@ -67,9 +68,10 @@ interface Props {
   export const PositionDistribution: React.FC<Props> = ({se, type}) => {
 
     const [isClient, setIsClient] = useState(false);
+    const project = CurrentProperty();
 
     // const { isError, isPending, data: OverviewData } = useRankTrackingOverview("overview");
-    const { isError, isPending, data: OverviewData } = useRankTrackingOverview("overview");
+    const { isError, isPending, data: OverviewData } = useRankTrackingOverview("overview", project.id );
       const dist_labels = OverviewData?.project?.crawlings.map((label: any) => moment(label.createdAt.replace(/^0+/, '')).format("MMM DD"));
 
     

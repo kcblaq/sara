@@ -8,11 +8,11 @@ import { trimDomain } from '@/app/utils/trimDomain';
 export async function rankTracker() {
   const property = CurrentProperty();
 
-  const { mutate: RankMutate, isError: RankError, isPending: RankPending } = useRankMutation()
+  const { mutate: RankMutate, isError: RankError, isPending: RankPending } = useRankMutation(property.id)
   try {
     const response = await Promise.all(
       [
-        RankMutate({ target: trimDomain(property.domain), id: property.id, location_code: 2840 }),
+        RankMutate({ target: trimDomain(property.domain), location_code: 2840 }),
 
       ]
     )
