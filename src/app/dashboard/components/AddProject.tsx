@@ -27,7 +27,7 @@ export default function AddProject() {
     isError,
     isPaused,
     isPending,
-  } = useRankMutation();
+  } = useRankMutation(property.id);
 
   // console.log("PROPERTY",property)
   const mutate = useMutation({
@@ -43,7 +43,6 @@ export default function AddProject() {
       // console.log("current:", data.project)
       RankMutate({
         target: trimDomain(data.project.domain),
-        id: data.project.id,
         location_code: 2840,
       });
     },

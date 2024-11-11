@@ -13,6 +13,7 @@ import { Line } from "react-chartjs-2";
 import { ChartData, ChartOptions } from "chart.js";
 import moment from "moment";
 import { ShortenNumber } from "@/app/utils/ShortenedNumber";
+import { CurrentProperty } from "@/app/utils/currentProperty";
 
 
 interface Props {
@@ -23,9 +24,9 @@ export default function RankOverview({ se, type }: Props) {
 
 
   const [isClient, setIsClient] = useState(false);
+const property = CurrentProperty();
 
-
-  const { isError, isPending, data: OverviewData } = useRankTrackingOverview("overview");
+  const { isError, isPending, data: OverviewData } = useRankTrackingOverview("overview", property.id);
 
   const specificroute = OverviewData?.project?.crawlings[0]?.crawlingData[0]?.data?.[se]
   const prevspecificroute = OverviewData?.project?.crawlings[1]?.crawlingData[0]?.data?.[se]
