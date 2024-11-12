@@ -11,6 +11,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   wrapperClassName?: string;
   isShowLabel?: boolean;
   labelName?: string;
+  onChange?: any
 }
 
 interface InputAndCountryFlagProps
@@ -133,6 +134,7 @@ export function SelectCountryInput({
   wrapperClassName,
   isShowLabel,
   labelName,
+  onChange,
   ...props
 }: InputProps) {
   
@@ -141,6 +143,7 @@ export function SelectCountryInput({
       {isShowLabel && <label htmlFor="">{labelName}</label>}
       <div className="relative">
         <Select
+        onChange={onChange}
           className={twMerge(
             `rounded-md h-11 w-full px-3 active:border active:border-[#D1E9FF] focus:border-[#D1E9FF]  outline-none border-2 border-gray-200 ${
               props.type === "search" && "placeholder:pl-4"
@@ -149,7 +152,7 @@ export function SelectCountryInput({
           )}>
             {
               countries.map((country,i)=> {
-             return   <option key={i}> {country.location_name} </option>
+             return   <option key={i} value={i}> {country.location_name} </option>
               })
             }
           </Select>

@@ -40,13 +40,14 @@ export default function page() {
     { title: "Rankings", content: <Rankings /> },
     // { title: "Page distributions", content: <PageDistributions /> }
   ];
+  const id = CurrentProperty()
 
   const {
     isError,
     isPending,
     isSuccess,
     data: OverviewData,
-  } = useRankTrackingOverview("overview");
+  } = useRankTrackingOverview("overview", id.id);
 
   // const lastUpdated = (OverviewData?.project?.crawlings[0]?.crawlingData[0]?.updatedAt)
   const lastUpdated = moment(
@@ -60,9 +61,9 @@ export default function page() {
     isError: mutateError,
     isPaused: mutatePaused,
     isPending: mutatePending,
-  } = useRankMutation();
+  } = useRankMutation(id.id);
 
-  const project = CurrentProperty();
+  // const project = CurrentProperty();
   const handleEngineChange = (engine: React.SetStateAction<string>) =>
     setSe(engine);
 
@@ -98,8 +99,7 @@ export default function page() {
               loading={mutatePending}
               onClick={() => {
                 RankMutate({
-                  target: trimDomain(project.domain),
-                  id: project.id,
+                  target: trimDomain(id.domain),
                   location_code: 2840,
                 });
               }}

@@ -8,7 +8,7 @@ interface Props {
   updateData?: () => void;
   settings?: () => void;
 }
-export default function TitleShareSettingTop({ title }: Props) {
+export default function TitleShareSettingTop({ title, updateData }: Props) {
   return (
     <section
       className={`flex justify-between w-full items-center gap-4 text-[#101828] `}
@@ -16,7 +16,10 @@ export default function TitleShareSettingTop({ title }: Props) {
       <h1 className={`font-semibold text-4xl 2xl:text-5xl `}>{title} </h1>
       <div className="flex w-fit  items-center justify-end gap-2 md:gap-4 ">
         <span className="">
-          <button className="rounded-lg text-base p-2 bg-primary text-white font-semibold hover:bg-blue-500">
+          <button
+            onClick={updateData}
+            className="rounded-lg text-base p-2 bg-primary text-white font-semibold hover:bg-blue-500"
+          >
             Update data
           </button>
         </span>

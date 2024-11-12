@@ -18,6 +18,9 @@ import { removeTrailingSlash } from "@/app/utils/RemoveSlash";
 import { trimDomain } from "@/app/utils/trimDomain";
 import { useQuery } from "@tanstack/react-query";
 import { keywordGapData } from "./components/competitorAnalysis";
+import { SelectCountryInput } from "../../component/commons/Input";
+import { CurrentProperty } from "@/app/utils/currentProperty";
+import { LocationData } from "@/app/component/data/countriesDataType";
 
 interface competitorDomains {
   target: string;
@@ -28,6 +31,7 @@ interface competitorDomains {
 }
 export default function page() {
   const [mobile, setMobile] = useState(true);
+  const [stage, setStage] = useState(1);
   const [status, setStatus] = useState<
     "loading" | "success" | "error" | "idle"
   >("idle");
@@ -40,11 +44,8 @@ export default function page() {
       language_code: "",
     }
   );
-  // const [current, setCurrent] = useState({
-  //   id: "",
-  //   domain: ""
-  // })
-  const [country, setCountry] = useState<Country | null>(null);
+
+  const [country, setCountry] = useState<LocationData | null>(null);
   const activeProperty = useSelector(
     (state: RootState) => state.property.activePropertyObj
   );
@@ -62,8 +63,9 @@ export default function page() {
     data?.project?.crawlings[0]?.crawlingData[0]?.data?.items;
   const prevRoute: KeywordGapType[] =
     data?.project?.crawlings[1]?.crawlingData[0]?.data?.items;
+  console.log(currentRoute, prevRoute);
 
-  let stage = 1;
+  // let stage = 1;
 
   const tabs = [
     {
@@ -74,7 +76,14 @@ export default function page() {
   ];
 
   // console.log("DOM", trimDomain(activeProperty.domain))
-  // const property = CurrentProperty()
+  const property = CurrentProperty();
+
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedValue = event.target.value;
+    setCountry(countries[Number(selectedValue)]);
+  };
+
+  const crawlData = [{}];
 
   const handleSubmitAnalyzeCompetitor = async () => {
     const { target1, target2, location_code, language_code } =
@@ -123,7 +132,8 @@ export default function page() {
       setStatus("success");
       toast.success("Crawl Completed!");
       setTimeout(() => {
-        stage = 1;
+        // stage = 1;
+        setStage(1);
       }, 4000);
     } catch (error: AxiosError | any) {
       toast.error(error.response.data.message);
@@ -132,16 +142,14 @@ export default function page() {
     }
   };
 
+  function CrawlCompetitors() {}
+
   useEffect(() => {
-    // setCurrent({
-    //   id: property?.id?.toString(),
-    //   domain: property?.domain
-    // })
     if (country) {
       setCompetitorDomains((prevDomains) => ({
         ...prevDomains,
-        language_code: "GB",
-        location_code: 2826,
+        language_code: country.available_languages[0].language_code,
+        location_code: country.location_code,
 
         // this code is correct, don't remove.
         // ...countries.reduce(
@@ -164,10 +172,14 @@ export default function page() {
     <div className="w-full flex flex-col ">
       {stage === 1 ? (
         <main className="grid w-full h-full items-start content-start gap-6 ">
-          <TitleShareSettingTop title="Competitor analysis " />
+          <TitleShareSettingTop
+            title="Competitor analysis"
+            updateData={() => setStage(0)}
+          />
           <section className={`flex items-center gap-3`}>
             {/* <ToggleMobile mobile={mobile} setMobile={handleToggleMobile} /> */}
-            <CountryPick />
+            {/* <CountryPick /> */}
+            <SelectCountryInput onChange={handleSelectChange} />
             <SearchEnginePick />
           </section>
           <section className={``}>
@@ -260,7 +272,8 @@ export default function page() {
                 placeholder="e.g domain3.com"
               /> */}
               <div className="flex flex-col min-[425px]:flex-row sm:items-center items-start gap-4 sm:gap-8 w-full">
-                <CountryPick setCountry={setCountry} className="w-full" />
+                {/* <CountryPick setCountry={setCountry} className="w-full" /> */}
+                <SelectCountryInput onChange={handleSelectChange} />
                 <span className="w-full min-[425px]:w-auto ">
                   <FilledButton
                     className="whitespace-nowrap w-full"
