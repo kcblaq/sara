@@ -14,6 +14,7 @@ import Rankings from "./components/Rankings";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/store";
 import moment from "moment";
+import axios from "axios"
 import useRankMutation, {
   RankCrawl,
   RankTrackerCrawler,
@@ -24,6 +25,7 @@ import { CurrentProperty } from "@/app/utils/currentProperty";
 import Button from "../components/ui/Button";
 import SearchEnginePick from "@/app/dashboard/rank-tracker/components/SearchEnginePick";
 import { handleDownloadAsImage } from "@/app/utils/downloadFileAsImage";
+import {countries } from "../../component/data/countries"
 // import PageDistributions from './components/PageDistributions'
 
 export default function page() {
@@ -40,6 +42,14 @@ export default function page() {
     { title: "Rankings", content: <Rankings /> },
     // { title: "Page distributions", content: <PageDistributions /> }
   ];
+
+  const countrieswithflags = async (countries:any) => { 
+    const res = await axios.get("https://restcountries.com/v3.1/all?fields=name,flags"); 
+    return countries.map((country:any) => { if (!country.flags) { const matched = res.data.find((item:any) => item.name.common === country.location_name); if (matched) { return { ...country, flags: matched.flags, }; } } return country; }); };
+
+    console.log("LEN", countries.length)
+
+  console.log("COUNTRIES",countrieswithflags(countries) )
   const id = CurrentProperty()
 
   const {

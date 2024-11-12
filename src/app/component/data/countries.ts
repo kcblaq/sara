@@ -7,6 +7,11 @@ export const countries: LocationData[] = [
     location_code_parent: null,
     country_iso_code: "DZ",
     location_type: "Country",
+    flags: {
+            "png": "https://flagcdn.com/w320/dz.png",
+            "svg": "https://flagcdn.com/dz.svg",
+            "alt": "The flag of Algeria features two equal vertical bands of green and white. A five-pointed red star within a fly-side facing red crescent is centered over the two-color boundary."
+        },
     available_languages: [
       {
         available_sources: ["google"],
@@ -30,6 +35,11 @@ export const countries: LocationData[] = [
     location_code_parent: null,
     country_iso_code: "AO",
     location_type: "Country",
+    "flags": {
+            "png": "https://flagcdn.com/w320/ao.png",
+            "svg": "https://flagcdn.com/ao.svg",
+            "alt": "The flag of Angola features two equal horizontal bands of red and black, with a yellow emblem at its centre. This emblem consists of a five-pointed star within the hoist-side facing half of a cogwheel that is crossed on its lower end by a machete."
+        },
     available_languages: [
       {
         available_sources: ["google"],
@@ -46,6 +56,11 @@ export const countries: LocationData[] = [
     location_code_parent: null,
     country_iso_code: "AZ",
     location_type: "Country",
+    "flags": {
+            "png": "https://flagcdn.com/w320/az.png",
+            "svg": "https://flagcdn.com/az.svg",
+            "alt": "The flag of Azerbaijan features three equal horizontal bands of blue, red and green, with a white fly-side facing crescent and eight-pointed star centered in the red band."
+        },
     available_languages: [
       {
         available_sources: ["google"],
@@ -62,6 +77,11 @@ export const countries: LocationData[] = [
     location_code_parent: null,
     country_iso_code: "AR",
     location_type: "Country",
+    "flags": {
+            "png": "https://flagcdn.com/w320/ar.png",
+            "svg": "https://flagcdn.com/ar.svg",
+            "alt": "The flag of Argentina features three equal horizontal bands of light blue, white and light blue. A brown-edged golden sun is centered in the white band."
+        },
     available_languages: [
       {
         available_sources: ["google"],
@@ -78,6 +98,11 @@ export const countries: LocationData[] = [
     location_code_parent: null,
     country_iso_code: "AU",
     location_type: "Country",
+    "flags": {
+            "png": "https://flagcdn.com/w320/au.png",
+            "svg": "https://flagcdn.com/au.svg",
+            "alt": "The flag of Australia has a dark blue field. It features the flag of the United Kingdom — the Union Jack — in the canton, beneath which is a large white seven-pointed star. A representation of the Southern Cross constellation, made up of one small five-pointed and four larger seven-pointed white stars, is situated on the fly side of the field."
+        },
     available_languages: [
       {
         available_sources: ["google"],
@@ -94,6 +119,11 @@ export const countries: LocationData[] = [
     location_code_parent: null,
     country_iso_code: "AT",
     location_type: "Country",
+    "flags": {
+            "png": "https://flagcdn.com/w320/at.png",
+            "svg": "https://flagcdn.com/at.svg",
+            "alt": "The flag of Austria is composed of three equal horizontal bands of red, white and red."
+        },
     available_languages: [
       {
         available_sources: ["google"],
@@ -110,6 +140,11 @@ export const countries: LocationData[] = [
     location_code_parent: null,
     country_iso_code: "BH",
     location_type: "Country",
+    "flags": {
+            "png": "https://flagcdn.com/w320/bh.png",
+            "svg": "https://flagcdn.com/bh.svg",
+            "alt": "The flag of Bahrain has a red field. On the hoist side, it features a white vertical band that spans about one-third the width of the field and is separated from the rest of the field by five adjoining fly-side pointing white isosceles triangles that serve as a serrated line."
+        },
     available_languages: [
       {
         available_sources: ["google"],
@@ -126,6 +161,11 @@ export const countries: LocationData[] = [
     location_code_parent: null,
     country_iso_code: "BD",
     location_type: "Country",
+    "flags": {
+            "png": "https://flagcdn.com/w320/bd.png",
+            "svg": "https://flagcdn.com/bd.svg",
+            "alt": "The flag of Bangladesh has a dark green field bearing a large red circle that is offset slightly towards the hoist side of center."
+        },
     available_languages: [
       {
         available_sources: ["google"],
@@ -142,6 +182,11 @@ export const countries: LocationData[] = [
     location_code_parent: null,
     country_iso_code: "AM",
     location_type: "Country",
+    "flags": {
+            "png": "https://flagcdn.com/w320/am.png",
+            "svg": "https://flagcdn.com/am.svg",
+            "alt": "The flag of Armenia is composed of three equal horizontal bands of red, blue and orange."
+        },
     available_languages: [
       {
         available_sources: ["google"],
@@ -158,6 +203,11 @@ export const countries: LocationData[] = [
     location_code_parent: null,
     country_iso_code: "BE",
     location_type: "Country",
+    "flags": {
+            "png": "https://flagcdn.com/w320/be.png",
+            "svg": "https://flagcdn.com/be.svg",
+            "alt": "The flag of Belgium is composed of three equal vertical bands of black, yellow and red."
+        },
     available_languages: [
       {
         available_sources: ["google"],
@@ -188,6 +238,11 @@ export const countries: LocationData[] = [
     location_code_parent: null,
     country_iso_code: "BO",
     location_type: "Country",
+    "flags": {
+            "png": "https://flagcdn.com/w320/bo.png",
+            "svg": "https://flagcdn.com/bo.svg",
+            "alt": "The flag of Bolivia is composed of three equal horizontal bands of red, yellow and green, with the national coat of arms centered in the yellow band."
+        },
     available_languages: [
       {
         available_sources: ["google"],
@@ -204,6 +259,11 @@ export const countries: LocationData[] = [
     location_code_parent: null,
     country_iso_code: "BA",
     location_type: "Country",
+    "flags": {
+            "png": "https://flagcdn.com/w320/ba.png",
+            "svg": "https://flagcdn.com/ba.svg",
+            "alt": "The flag of Bosnia and Herzegovina has a blue field, at the center of which is a large yellow hoist-side facing right-angled triangle that is based on the top edge and spans the height of the field. Adjacent to the hypotenuse of this triangle are nine adjoining five-pointed white stars with the top and bottom stars cut in half by the edges of the field."
+        },
     available_languages: [
       {
         available_sources: ["google"],
@@ -220,6 +280,11 @@ export const countries: LocationData[] = [
     location_code_parent: null,
     country_iso_code: "BR",
     location_type: "Country",
+    "flags": {
+            "png": "https://flagcdn.com/w320/br.png",
+            "svg": "https://flagcdn.com/br.svg",
+            "alt": "The flag of Brazil has a green field with a large yellow rhombus in the center. Within the rhombus is a dark blue globe with twenty-seven small five-pointed white stars depicting a starry sky and a thin white convex horizontal band inscribed with the national motto 'Ordem e Progresso' across its center."
+        },
     available_languages: [
       {
         available_sources: ["google"],
@@ -236,6 +301,11 @@ export const countries: LocationData[] = [
     location_code_parent: null,
     country_iso_code: "BG",
     location_type: "Country",
+    "flags": {
+            "png": "https://flagcdn.com/w320/bg.png",
+            "svg": "https://flagcdn.com/bg.svg",
+            "alt": "The flag of Bulgaria is composed of three equal horizontal bands of white, green and red."
+        },
     available_languages: [
       {
         available_sources: ["google"],
@@ -252,6 +322,11 @@ export const countries: LocationData[] = [
     location_code_parent: null,
     country_iso_code: "MM",
     location_type: "Country",
+    "flags": {
+            "png": "https://flagcdn.com/w320/mm.png",
+            "svg": "https://flagcdn.com/mm.svg",
+            "alt": "The flag of Myanmar is composed of three equal horizontal bands of yellow, green and red, with a large five-pointed white star superimposed at the center of the field."
+        },
     available_languages: [
       {
         available_sources: ["google"],
@@ -268,6 +343,11 @@ export const countries: LocationData[] = [
     location_code_parent: null,
     country_iso_code: "KH",
     location_type: "Country",
+    "flags": {
+            "png": "https://flagcdn.com/w320/kh.png",
+            "svg": "https://flagcdn.com/kh.svg",
+            "alt": "The flag of Cambodia features three horizontal bands of blue, red and blue, with a white depiction of the temple complex, Angkor Wat centered in the red band."
+        },
     available_languages: [
       {
         available_sources: ["google"],
@@ -284,6 +364,11 @@ export const countries: LocationData[] = [
     location_code_parent: null,
     country_iso_code: "CM",
     location_type: "Country",
+    "flags": {
+            "png": "https://flagcdn.com/w320/cm.png",
+            "svg": "https://flagcdn.com/cm.svg",
+            "alt": "The flag of Cameroon is composed of three equal vertical bands of green, red and yellow, with a yellow five-pointed star in the center."
+        },
     available_languages: [
       {
         available_sources: ["google"],
@@ -300,6 +385,11 @@ export const countries: LocationData[] = [
     location_code_parent: null,
     country_iso_code: "CA",
     location_type: "Country",
+    "flags": {
+            "png": "https://flagcdn.com/w320/ca.png",
+            "svg": "https://flagcdn.com/ca.svg",
+            "alt": "The flag of Canada is composed of a red vertical band on the hoist and fly sides and a central white square that is twice the width of the vertical bands. A large eleven-pointed red maple leaf is centered in the white square."
+        },
     available_languages: [
       {
         available_sources: ["google"],
@@ -323,6 +413,11 @@ export const countries: LocationData[] = [
     location_code_parent: null,
     country_iso_code: "LK",
     location_type: "Country",
+    "flags": {
+            "png": "https://flagcdn.com/w320/lk.png",
+            "svg": "https://flagcdn.com/lk.svg",
+            "alt": "The flag of Sri Lanka features two large adjacent but separate rectangular areas, centered on a golden-yellow field. The smaller hoist-side rectangle is divided into two equal vertical bands of teal and orange, and the larger fly-side rectangle is maroon with a centered golden-yellow lion holding a Kastane sword in its right fore-paw and four golden-yellow Bo leaves, one in each corner."
+        },
     available_languages: [
       {
         available_sources: ["google"],
@@ -355,6 +450,11 @@ export const countries: LocationData[] = [
     location_code_parent: null,
     country_iso_code: "TW",
     location_type: "Region",
+    "flags": {
+            "png": "https://flagcdn.com/w320/tw.png",
+            "svg": "https://flagcdn.com/tw.svg",
+            "alt": ""
+        },
     available_languages: [
       {
         available_sources: ["google"],
@@ -371,6 +471,11 @@ export const countries: LocationData[] = [
     location_code_parent: null,
     country_iso_code: "CO",
     location_type: "Country",
+    "flags": {
+            "png": "https://flagcdn.com/w320/co.png",
+            "svg": "https://flagcdn.com/co.svg",
+            "alt": "The flag of Colombia is composed of three horizontal bands of yellow, blue and red, with the yellow band twice the height of the other two bands."
+        },
     available_languages: [
       {
         available_sources: ["google"],
@@ -387,6 +492,11 @@ export const countries: LocationData[] = [
     location_code_parent: null,
     country_iso_code: "CR",
     location_type: "Country",
+    "flags": {
+            "png": "https://flagcdn.com/w320/cr.png",
+            "svg": "https://flagcdn.com/cr.svg",
+            "alt": "The flag of Costa Rica is composed of five horizontal bands of blue, white, red, white and blue. The central red band is twice the height of the other four bands."
+        },
     available_languages: [
       {
         available_sources: ["google"],
@@ -403,6 +513,11 @@ export const countries: LocationData[] = [
     location_code_parent: null,
     country_iso_code: "HR",
     location_type: "Country",
+    "flags": {
+            "png": "https://flagcdn.com/w320/hr.png",
+            "svg": "https://flagcdn.com/hr.svg",
+            "alt": "The flag of Croatia is composed of three equal horizontal bands of red, white and blue, with coat of arms of Croatia superimposed in the center."
+        },
     available_languages: [
       {
         available_sources: ["google"],
@@ -419,6 +534,11 @@ export const countries: LocationData[] = [
     location_code_parent: null,
     country_iso_code: "CY",
     location_type: "Country",
+    "flags": {
+            "png": "https://flagcdn.com/w320/cy.png",
+            "svg": "https://flagcdn.com/cy.svg",
+            "alt": "The flag of Cyprus has a white field, at the center of which is a copper-colored silhouette of the Island of Cyprus above two green olive branches crossed at the stem."
+        },
     available_languages: [
       {
         available_sources: ["google"],
@@ -442,6 +562,11 @@ export const countries: LocationData[] = [
     location_code_parent: null,
     country_iso_code: "CZ",
     location_type: "Country",
+    "flags": {
+            "png": "https://flagcdn.com/w320/cz.png",
+            "svg": "https://flagcdn.com/cz.svg",
+            "alt": "The flag of Czechia is composed of two equal horizontal bands of white and red, with a blue isosceles triangle superimposed on the hoist side of the field. The triangle has its base on the hoist end and spans about two-fifth the width of the field."
+        },
     available_languages: [
       {
         available_sources: ["google"],
@@ -458,6 +583,11 @@ export const countries: LocationData[] = [
     location_code_parent: null,
     country_iso_code: "DK",
     location_type: "Country",
+    "flags": {
+            "png": "https://flagcdn.com/w320/dk.png",
+            "svg": "https://flagcdn.com/dk.svg",
+            "alt": "The flag of Denmark has a red field with a large white cross that extend to the edges of the field. The vertical part of this cross is offset towards the hoist side."
+        },
     available_languages: [
       {
         available_sources: ["google"],
@@ -474,6 +604,11 @@ export const countries: LocationData[] = [
     location_code_parent: null,
     country_iso_code: "EC",
     location_type: "Country",
+    "flags": {
+      "png": "https://flagcdn.com/w320/ec.png",
+      "svg": "https://flagcdn.com/ec.svg",
+      "alt": "The flag of Ecuador is composed of the horizontal bands of yellow, blue and red, with the yellow band twice the height of the other two bands. The Ecuadorian coat of arms is superimposed in the center of the field."
+  },
     available_languages: [
       {
         available_sources: ["google"],
@@ -506,6 +641,11 @@ export const countries: LocationData[] = [
     location_code_parent: null,
     country_iso_code: "EE",
     location_type: "Country",
+    "flags": {
+      "png": "https://flagcdn.com/w320/ee.png",
+      "svg": "https://flagcdn.com/ee.svg",
+      "alt": "The flag of Estonia is composed of three equal horizontal bands of blue, black and white."
+  },
     available_languages: [
       {
         available_sources: ["google"],
@@ -538,6 +678,11 @@ export const countries: LocationData[] = [
     location_code_parent: null,
     country_iso_code: "FR",
     location_type: "Country",
+    "flags": {
+            "png": "https://flagcdn.com/w320/fi.png",
+            "svg": "https://flagcdn.com/fi.svg",
+            "alt": "The flag of Finland has a white field with a large blue cross that extend to the edges of the field. The vertical part of this cross is offset towards the hoist side."
+        },
     available_languages: [
       {
         available_sources: ["google"],
@@ -554,6 +699,11 @@ export const countries: LocationData[] = [
     location_code_parent: null,
     country_iso_code: "DE",
     location_type: "Country",
+    "flags": {
+            "png": "https://flagcdn.com/w320/de.png",
+            "svg": "https://flagcdn.com/de.svg",
+            "alt": "The flag of Germany is composed of three equal horizontal bands of black, red and gold."
+        },
     available_languages: [
       {
         available_sources: ["google"],
@@ -570,6 +720,11 @@ export const countries: LocationData[] = [
     location_code_parent: null,
     country_iso_code: "GH",
     location_type: "Country",
+    "flags": {
+            "png": "https://flagcdn.com/w320/gh.png",
+            "svg": "https://flagcdn.com/gh.svg",
+            "alt": "The flag of Ghana is composed of three equal horizontal bands of red, gold and green, with a five-pointed black star centered in the gold band."
+        },
     available_languages: [
       {
         available_sources: ["google"],
@@ -586,6 +741,11 @@ export const countries: LocationData[] = [
     location_code_parent: null,
     country_iso_code: "GR",
     location_type: "Country",
+    "flags": {
+            "png": "https://flagcdn.com/w320/gr.png",
+            "svg": "https://flagcdn.com/gr.svg",
+            "alt": "The flag of Greece is composed of nine equal horizontal bands of blue alternating with white. A blue square bearing a white cross is superimposed in the canton."
+        },
     available_languages: [
       {
         available_sources: ["google"],

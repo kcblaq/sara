@@ -5,6 +5,7 @@ export type LocationData = {
   country_iso_code: string;
   location_type: string;
   available_languages: AvailableLanguage[];
+  flags?: any
 };
 
 export type AvailableLanguage = {
