@@ -24,6 +24,9 @@ import { KeywordServicesFetch } from "../../services/keyword_services/keyword";
 import { getAllKeywordAnalysis } from "@/app/services/keyword_services/allKeywordAnalysis";
 import Loader from "@/app/component/Loader";
 import { shareOrFallback } from "@/app/utils/shareContentOrFallback";
+import { SelectCountryInput } from "@/app/component/commons/Input";
+import { countries } from "@/app/component/data/countries";
+import { LocationData } from "@/app/component/data/countriesDataType";
 
 interface CrawlingData {
   id: number;
@@ -43,13 +46,13 @@ const tabs = [
 export default function page() {
   const [mobile, setMobile] = useState(false);
   const [stage, setStage] = useState(1);
-  const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
+  const [selectedCountry, setSelectedCountry] = useState<LocationData | null>(
+    null
+  );
   const [keywords, setKeywords] = useState({
     keywords: "",
-    locationCode:
-      selectedCountry?.name.common &&
-      locationCodes[selectedCountry?.name.common],
-    locationName: selectedCountry?.name.common,
+    locationCode: selectedCountry?.location_code,
+    locationName: selectedCountry?.location_name,
   });
   const [status, setStatus] = useState<
     "idle" | "error" | "success" | "loading"
@@ -60,8 +63,8 @@ export default function page() {
     if (selectedCountry) {
       setKeywords((prev) => ({
         ...prev,
-        locationName: selectedCountry.name.common,
-        locationCode: locationCodes[selectedCountry.name.common],
+        locationName: selectedCountry.location_name,
+        locationCode: selectedCountry.location_code,
       }));
     }
   }, [selectedCountry]);
@@ -74,6 +77,13 @@ export default function page() {
     location_code: 2840,
   };
 
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    // console.log(event.target);
+    const selectedValue = event.target.value;
+    setSelectedCountry(countries[Number(selectedValue)]);
+  };
+
+  console.log(keywords);
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
       const response = await ApiCall.post(
@@ -120,7 +130,7 @@ export default function page() {
   //  console.log("DT", data)
 
   const handleClearAll = () => {
-    setKeywords({ keywords: "", locationCode: "", locationName: "" });
+    setKeywords({ keywords: "", locationCode: undefined, locationName: "" });
   };
 
   // async function SearchKeywords() {
@@ -207,7 +217,8 @@ export default function page() {
           </div>
         </div>
         <div className={`flex items-center gap-6 mt-8`}>
-          <CountryPick setCountry={setSelectedCountry} />
+          {/* <CountryPick setCountry={setSelectedCountry} /> */}
+          <SelectCountryInput onChange={handleSelectChange} />
           <FilledButton
             handleClick={mutate}
             loading={isPending}
@@ -232,7 +243,8 @@ export default function page() {
           ></textarea>
         </div>
         <div className={`flex items-center gap-6 mt-8`}>
-          <CountryPick />
+          {/* <CountryPick /> */}
+          <SelectCountryInput onChange={handleSelectChange} />
           <FilledButton
             title="Search Keywords"
             handleClick={mutate}
@@ -252,7 +264,10 @@ export default function page() {
         </h1>
         <div className="flex w-full md:w-1/2 sm:items-center sm:justify-end gap-2 md:gap-4">
           <span className="inline-flex gap-2 items-center">
-            <button className="rounded-lg text-base p-2 bg-primary text-white font-semibold hover:bg-blue-500">
+            <button
+              onClick={() => setStage(0)}
+              className="rounded-lg text-base p-2 bg-primary text-white font-semibold hover:bg-blue-500"
+            >
               Update data
             </button>
           </span>
@@ -286,7 +301,8 @@ export default function page() {
           />
         </div> */}
 
-        <CountryPick className="sm:w-auto w-full" />
+        {/* <CountryPick className="sm:w-auto w-full" /> */}
+        <SelectCountryInput onChange={handleSelectChange} />
         <SearchEnginePick className="sm:w-auto w-full" />
       </section>
       <section className={``}>
