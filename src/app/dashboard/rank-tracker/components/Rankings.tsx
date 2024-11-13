@@ -17,6 +17,7 @@ import { MdOutlineArrowForward } from "react-icons/md";
 import { RiExpandUpDownFill } from "react-icons/ri";
 import AddKeywordModal from "./AddKeywordModal";
 import { CurrentProperty } from "@/app/utils/currentProperty";
+import Loader from "@/app/component/Loader";
 
 interface Props {
   se: string;
@@ -109,7 +110,9 @@ export default function Rankings() {
   // console.log("RANKING", route?.bing)
 
   return isPending ? (
-    <div className=""> Loading... </div>
+    <div className="h-20 w-full flex justify-center items-center">
+      <Loader />
+    </div>
   ) : (
     <>
       {add && (
