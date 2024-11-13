@@ -24,6 +24,7 @@ import { CurrentProperty } from "@/app/utils/currentProperty";
 import Button from "../components/ui/Button";
 import SearchEnginePick from "@/app/dashboard/rank-tracker/components/SearchEnginePick";
 import { handleDownloadAsImage } from "@/app/utils/downloadFileAsImage";
+import toast from "react-hot-toast";
 // import PageDistributions from './components/PageDistributions'
 
 export default function page() {
@@ -40,7 +41,7 @@ export default function page() {
     { title: "Rankings", content: <Rankings /> },
     // { title: "Page distributions", content: <PageDistributions /> }
   ];
-  const id = CurrentProperty()
+  const id = CurrentProperty();
 
   const {
     isError,
@@ -98,10 +99,20 @@ export default function page() {
               className=""
               loading={mutatePending}
               onClick={() => {
-                RankMutate({
-                  target: trimDomain(id.domain),
-                  location_code: 2840,
-                });
+                RankMutate(
+                  {
+                    target: trimDomain(id.domain),
+                    location_code: 2840,
+                  },
+                  {
+                    onSuccess: () => {
+                      toast.success("Rankings re-tracked successfully");
+                    },
+                    onError: () => {
+                      toast.error("Rankings re-tracked fails");
+                    },
+                  }
+                );
               }}
             >
               Re-track rankings
