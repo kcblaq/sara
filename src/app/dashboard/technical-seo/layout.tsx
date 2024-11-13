@@ -21,10 +21,12 @@ import {
   fetchPerformanceSuccess,
 } from "@/redux/features/performanceMetric slice";
 import { removeTrailingSlash } from "@/app/utils/RemoveSlash";
-import { useQueries, useQuery } from "@tanstack/react-query";
+import { useMutation, useQueries, useQuery } from "@tanstack/react-query";
 import { useTechnicalSeoFetchData } from "@/app/services/technicalSeo/TechnicalSeoFetch";
 import { shareOrFallback } from "@/app/utils/shareContentOrFallback";
 import { handleDownloadAsImage } from "@/app/utils/downloadFileAsImage";
+import Loader from "@/app/component/Loader";
+import toast from "react-hot-toast";
 
 export default function TechnicalSeoLayout() {
   const [loading, setLoading] = useState(false);
@@ -78,34 +80,22 @@ export default function TechnicalSeoLayout() {
   ];
   const CrawlTechnicalSeo = async () => {
     try {
-      setLoading(true);
-
-      // await Promise.all([
-      //   ApiCall.get("/crawl/webcrawler", {
-      //     params: {
-      //       url: removeTrailingSlash(activeProperty),
-      //       type: "passive",
-      //     },
-      //   }),
-      //   ApiCall.get("/crawl/technical/mini-crawler", {
-      //     params: {
-      //       url: removeTrailingSlash(activeProperty),
-      //       timeout: 5,
-      //     },
-      //   }),
-      // ]);
-
       const response = await ApiCall.post(
         `/user/crawler/technical-seo/${activePropertyObj.id}`
       );
-      setLoading(false);
-      // console.log(response.data);
     } catch (error) {
       console.log(error);
+      throw new Error("Crawl Technical SEO Failed");
     } finally {
-      setLoading(false);
+      // setLoading(false);
     }
   };
+
+  const mutate = useMutation({
+    mutationFn: async () => CrawlTechnicalSeo(),
+    onSuccess: () => toast.success("Recrawl Technical SEO Successfully"),
+    onError: () => toast.error("Recrawl Technical SEO Failed"),
+  });
   // const fetchTechseoData = async () => {
   //   const result = await ApiCall.get(
   //     `/user/crawler/technical-seo/${activePropertyObj?.id}`
@@ -136,9 +126,9 @@ export default function TechnicalSeoLayout() {
           <span className="">
             <button
               className="rounded-lg sm:text-base text-sm p-2 bg-primary text-white font-semibold hover:bg-blue-500"
-              onClick={() => CrawlTechnicalSeo()}
+              onClick={() => mutate.mutate()}
             >
-              {loading ? "Crawling..." : " Re-run audit"}
+              {mutate.isPending ? "Crawling..." : " Re-run audit"}
             </button>
           </span>
           <span className="">
@@ -192,7 +182,10 @@ export default function TechnicalSeoLayout() {
 
           <div className={`h-full w-full overflow-auto`}>
             {isLoading ? (
-              <div className=""> Loading... </div>
+              // <div className=""> Loading... </div>
+              <div className="h-32 w-full flex justify-center items-center">
+                <Loader />
+              </div>
             ) : (
               <Tab.Panels>
                 {tabs.map((tab) => {
