@@ -24,7 +24,9 @@ import { TimeToInteractive } from "./dashboard/TimeToInteractive";
 import { LCP } from "./dashboard/LCP";
 import RankOverview from "./rank-tracker/components/RankOverview";
 import moment from "moment";
-// import CheckUserType from "./components/CheckUserType";
+import Button from "./components/ui/Button";
+import { BiExport } from "react-icons/bi";
+import { useTechnicalSeoFetchData } from "../services/technicalSeo/TechnicalSeoFetch";
 
 export default function Dashboard() {
   const exportIcon = (
@@ -55,59 +57,39 @@ export default function Dashboard() {
   const property = CurrentProperty()
 
   const response = UseOverviewData(property.id)
+  const { data: techSeoData, isLoading: techseoLoading } = useTechnicalSeoFetchData();
+  console.log("TECH", techSeoData)
 
-  const [loaded, setLoaded] = useState(false);
-  const [show, setShow] = useState(false);
   const User = useSelector((state: RootState) => state.user.user);
 
-  // useEffect(() => {
-  //   setLoaded(true);
-  // }, [loaded]);
+  const data: DashboardDto = response.data
 
-  // const [isClient, setIsClient] = useState(false);
+  if (response.isPending) {
+    return (
+      <div className="h-20 w-full flex items-center justify-center">
+        <Loader />
+      </div>
+    )
+  }
 
-  // useEffect(() => {
-  //   setIsClient(true);
-  // }, []);
+  if (response.isError) {
+    return (
+      <div className="h-20 w-full flex items-center justify-center">
+        <p>An error occurred while fetching the data.</p>
+      </div>
+    )
+  }
 
-  // if (!isClient) {
-  //   return null;
-  // }
+  const siteHealthScore = {
+    score: data.techSeo.current.siteHealth,
+    previous: data.techSeo.differences.siteHealthDifference
+  }
+  const dataLabel = Array.isArray(data?.newvslost) ? data?.newvslost.map((item) => moment(item.updatedAt).format("Do MMM,YY")) : [];
+  const newRd = Array.isArray(data?.newvslost) ? data.newvslost.map((newB) => newB.newReferringMainDomains) : [];
+  const lostRd = Array.isArray(data?.newvslost) ? data.newvslost.map((newB) => newB.lostReferringMainDomains) : [];
+  // console.log("DT", data.techSeo )
 
-  // const data = [
-  //   { id: 1, keyword: 'The beginning of the new eorld order', rank: '3', change: 'Change' },
-  //   { id: 2, keyword: 'Managing business for the future', rank: '4', change: 'Change' },
-  //   { id: 3, keyword: 'Thumping your sales by doing the basics', rank: '3', change: 'Change' },
-  //   { id: 4, keyword: 'Did the wallmart just shut down or about to shut down?', rank: '3', change: 'Change' },
-  // ]
-
-  const data:DashboardDto = response.data
-
-  // console.log("DATA", data)
-if(response.isPending){
-  return (
-    <div className="h-20 w-full flex items-center justify-center">
-      <Loader />
-     </div>
-  )
-}
-
-if(response.isError){
-  return (
-    <div className="h-20 w-full flex items-center justify-center">
-      <p>An error occurred while fetching the data.</p>
-    </div>
-  )
-}
-
-const siteHealthScore = {
-  score: data.techSeo.current.siteHealth,
-  previous: data.techSeo.differences.siteHealthDifference
-}
-const dataLabel = Array.isArray(data?.newvslost) ?  data?.newvslost.map((item) => moment(item.updatedAt).format("Do MMM,YY")) : [];
-const newRd =  Array.isArray(data?.newvslost) ? data.newvslost.map((newB) => newB.newReferringMainDomains) : [];
-const lostRd = Array.isArray(data?.newvslost) ? data.newvslost.map((newB) => newB.lostReferringMainDomains) : [];
-// console.log("DT", data.techSeo )
+  const router = useRouter()
   return (
     <>
       {/* {show && (
@@ -129,46 +111,49 @@ const lostRd = Array.isArray(data?.newvslost) ? data.newvslost.map((newB) => new
           </div>
           <div className="flex  items-center gap-2">
             <span>
-              <PlainButton
-                className="min-[375px]:text-base text-sm"
-                title="Export"
-                icon={exportIcon}
-                // handleClick={() => setShow(true)}
-                handleClick={() =>
+              <Button variant="secondary" className="flex items-center gap-2"
+                onClick={() => {
                   handleDownloadAsImage(
                     "dashboardOverview",
                     "dashboardOverview"
                   )
-                }
-              />
-            </span>
+                }}
+              >
+                <BiExport />
+                <span> Export</span>
+
+              </Button>            </span>
             <span>
-              <button
+              <Button
                 className="bg-primary  text-white min-[375px]:text-base text-sm hover:bg-primary outline-2 hover:outline-2 hover:outline-offset-2 p-2 rounded-md"
-                // title="View recommendations"
-                // handleClick={() => router.push("/dashboard/optimization-plans")}
+                onClick={()=> router.push("/dashboard/optimization-plans")}
               >
                 View recommendations
-              </button>
+              </Button>
             </span>
           </div>
         </div>
         <div id="dashboardOverview">
           {/* {loaded && ( */}
-            <section
-              className={`w-full grid items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pt-8 gap-4 justify-between`}
-            >
-              <OrganicTrafficCard />
-              {/* <OrganicKeywords />
-              <AverageTimeOnsite /> */}
-              <TimeToInteractive amount={data?.techSeo?.current?.timeToInteractive ?? 0} 
-              previous={data?.techSeo?.differences?.timeToInteractiveDifference ?? 0} 
+          {/* <section
+            className={`w-full grid items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pt-8 gap-4 justify-between`}
+          >
+            <OrganicTrafficCard />
+            <TimeToInteractive amount={data?.techSeo?.current?.timeToInteractive ?? 0}
+              previous={data?.techSeo?.differences?.timeToInteractiveDifference ?? 0}
               chartData={data.techSeo.current.timeToInteractiveHistory} />
-              <LCP amount={data?.techSeo?.current?.largestContentfulPaint} 
-              previous={data?.techSeo?.differences?.largestContentfulPaintDifference} 
+            <LCP amount={data?.techSeo?.current?.largestContentfulPaint}
+              previous={data?.techSeo?.differences?.largestContentfulPaintDifference}
               chartData={data.techSeo.current.largestContentfulPaintHistory} />
-            </section>
+          </section> */}
           {/* )} */}
+
+          <section
+            className={`w-full grid items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pt-8 gap-4 justify-between`}
+          >
+            
+
+          </section>
 
           <section className="w-full">
             <TOverview siteHealthScore={siteHealthScore} />
@@ -201,27 +186,6 @@ const lostRd = Array.isArray(data?.newvslost) ? data.newvslost.map((newB) => new
               <StackedBarChart label={dataLabel} lostData={lostRd} newData={newRd} />
             </div>
           </div>
-          {/* <section className="border sm:w-1/2 w-auto h-full rounded-md p-2 md:p-6">
-            <div className="grid">
-              <div className="flex font-bold w-full h-full items-start justify-between">
-                <span
-                  className={`text-[#101828] text-xl flex items-center gap-4`}
-                >
-                  Keyword ranking summary
-                  <button
-                    className=""
-                    title="Here is the summary of each of your keyword ranking"
-                  >
-                    <RxQuestionMarkCircled />
-                  </button>
-                </span>
-              </div>
-            </div>
-
-            <div className="h-fit w-full">
-              <KeywordTable />
-            </div>
-          </section> */}
         </div>
       </div>
     </>

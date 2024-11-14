@@ -129,13 +129,13 @@ export default function Rankings() {
               {se == "google" ? google?.length ?? 0 : bing?.length ?? 0}{" "}
               keywords{" "}
             </p>
-            <span>
+            {/* <span>
               <PlainButton
                 title={"Add keyword"}
                 icon={<FaPlus />}
                 handleClick={() => setAdd(true)}
               />
-            </span>
+            </span> */}
           </div>
           <div className="overflow-x-auto w-full">
             <table className="py-4 overflow-x-auto  w-full ">

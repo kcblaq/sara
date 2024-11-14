@@ -128,20 +128,12 @@ interface OverviewProps {
   onViewAllIssues: () => void;
 }
 export default function Overview({ onViewAllIssues }: OverviewProps) {
-  const tableData: User[] = [
-    { id: 1, name: "John Doe", age: 28, email: "john@example.com" },
-    { id: 2, name: "Jane Smith", age: 22, email: "jane@example.com" },
-    { id: 3, name: "Alice Johnson", age: 34, email: "alice@example.com" },
-  ];
 
   const { data, isLoading } = useTechnicalSeoFetchData();
   console.log("react query overview", data);
   const activeProperty = useSelector(
     (state: RootState) => state.property.activeProperty
   );
-  // const statusCodeData = technicalSeoData?.metrics?.httpStatusCode
-  //   ? technicalSeoData.metrics.httpStatusCode[0]
-  //   : null;
 
   const overviewResult: OverviewDataType[] =
     data?.crawlings?.flatMap((crawling: any) =>
