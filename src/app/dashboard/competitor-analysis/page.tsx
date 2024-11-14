@@ -65,7 +65,7 @@ export default function page() {
   const prevRoute: KeywordGapType[] =
     data?.project?.crawlings[1]?.crawlingData[0]?.data?.items;
 
-  let stage = 1;
+  let stage = 0;
 
   const tabs = [
     {
