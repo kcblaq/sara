@@ -7,6 +7,9 @@ import { BsArrowDown, BsArrowUp } from "react-icons/bs";
 import { FaRegCircleQuestion } from "react-icons/fa6";
 import { RiExpandUpDownFill } from "react-icons/ri";
 import { TbPointFilled } from "react-icons/tb";
+import Button from "../../components/ui/Button";
+import { MdAdd } from "react-icons/md";
+
 
 export interface KeywordGapType {
   rank: number;
@@ -21,9 +24,11 @@ export interface KeywordGapType {
 export default function KeywordGap({
   data,
   prev,
+  setStage
 }: {
   data: KeywordGapType[];
   prev: KeywordGapType[];
+  setStage: ()=> void
 }) {
   const [selected, setSelected] = useState("Volume");
 
@@ -44,12 +49,18 @@ export default function KeywordGap({
           <h3 className="text-[#101828] text-lg text-left font-medium">
             {data.length} Keywords
           </h3>
-          <SearchBox
+         <div className="flex items-center gap-3">
+         <SearchBox
             value={""}
             setValue={function (e: any): void {
               throw new Error("Function not implemented.");
             }}
           />
+          <Button className="flex items-center gap-2" onClick={setStage}>
+            <MdAdd />
+            <span className="ml-2">Add competitor</span>
+          </Button>
+         </div>
         </div>
         <table className="w-full">
           <thead className="w-full bg-[#EAECF0]">
@@ -79,7 +90,6 @@ export default function KeywordGap({
                 <span className={`flex gap-1 items-center `}>
                   <p> Competition</p>
                   <button className="" title="Here...">
-                    {" "}
                     <FaRegCircleQuestion />
                   </button>
                 </span>

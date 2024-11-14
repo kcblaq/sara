@@ -104,9 +104,9 @@ const siteHealthScore = {
   score: data.techSeo.current.siteHealth,
   previous: data.techSeo.differences.siteHealthDifference
 }
-const dataLabel = data.newvslost.map((item) => moment(item.updatedAt).format("Do MMM,YY"));
-const newRd = data.newvslost.map((newB) => newB.newReferringMainDomains);
-const lostRd = data.newvslost.map((newB) => newB.lostReferringMainDomains);
+const dataLabel = Array.isArray(data?.newvslost) ?  data?.newvslost.map((item) => moment(item.updatedAt).format("Do MMM,YY")) : [];
+const newRd =  Array.isArray(data?.newvslost) ? data.newvslost.map((newB) => newB.newReferringMainDomains) : [];
+const lostRd = Array.isArray(data?.newvslost) ? data.newvslost.map((newB) => newB.lostReferringMainDomains) : [];
 // console.log("DT", data.techSeo )
   return (
     <>

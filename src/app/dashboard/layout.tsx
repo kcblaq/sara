@@ -183,7 +183,7 @@ export default function Layout({ children }: Props) {
       }
       if (res.status === 200) {
         dispatch(setAllProperty(res.data.projects));
-        console.log("RES", res.data.projects);
+        // console.log("RES", res.data.projects);
         activeProperty.length < 1 &&
           dispatch(
             setActiveProperty(removeTrailingSlash(res.data[0]?.projects.domain))
