@@ -53,11 +53,8 @@ export default function Dashboard() {
   //   { id: 3, keyword: 'Thumping your sales by doing the basics', rank: '3', change: 'Change' },
   //   { id: 4, keyword: 'Did the wallmart just shut down or about to shut down?', rank: '3', change: 'Change' },
   // ]
-  const router = useRouter();
-
-  function closeModal() {
-    setShow(false);
-  }
+ 
+  
   return (
     <>
       {/* {show && <AutoModal closeModal={() => setShow(false)} ModalBody={<CheckUserType close={closeModal} />} />} */}
@@ -65,7 +62,7 @@ export default function Dashboard() {
         <div className="flex w-full flex-col md:flex-row justify-between items-start flex-grow">
           <div className="flex flex-col">
             <h1 className="text-2xl text-[#101828] font-semibold">
-              Welcome back, {User.fullName}{" "}
+              Welcome back, {User.name}
             </h1>
             <p>Track, manage and boost your site’s SEO.</p>
           </div>

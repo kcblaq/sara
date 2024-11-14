@@ -81,3 +81,102 @@ export const QuadProgressBar: React.FC<QuadProgressBarProps> = ({
     </section>
   );
 };
+
+interface ProgressBarChartProps {
+  dataArray: number[];
+}
+import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend,
+  ChartOptions,
+  LegendItem,
+} from "chart.js";
+
+ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
+
+export const ProgressBarChart = ({ dataArray }: ProgressBarChartProps) => {
+  const total = dataArray?.reduce((acc, val) => acc + val, 0);
+
+  const labels = dataArray.map((value) => {
+    if (value <= 15) return "0-15 sec";
+    else if (value <= 30) return "15-30 sec";
+    else if (value <= 45) return "30-45 secs";
+    else return "45+ secs";
+  });
+  const colors = dataArray.map((value) => {
+    if (value <= 15) return "#28a745";
+    else if (value <= 30) return "#007bff";
+    else if (value <= 45) return "#cce5ff";
+    else return "#f1c40f";
+  });
+
+  const data = {
+    labels: labels,
+    datasets: [
+      {
+        label: "Response Time",
+        data: dataArray,
+        backgroundColor: colors,
+        borderRadius: {
+          topLeft: 10,
+          bottomLeft: 10,
+          topRight: 10,
+          bottomRight: 10,
+        },
+        barPercentage: 0.8,
+        categoryPercentage: 1.0,
+      },
+    ],
+  };
+
+  // Configuration options for horizontal stacked bar
+  const options: ChartOptions<"bar"> = {
+    indexAxis: "y" as const,
+    responsive: true,
+
+    scales: {
+      x: {
+        stacked: true,
+        display: false,
+      },
+      y: {
+        stacked: true,
+        display: false,
+      },
+    },
+    plugins: {
+      legend: {
+        display: true,
+        position: "bottom" as const,
+
+        labels: {
+          usePointStyle: true,
+          pointStyle: "circle",
+          generateLabels: (chart: ChartJS<"bar">): LegendItem[] => {
+            return (
+              chart.data.labels?.map((label, index) => ({
+                text: `${label} (${dataArray[index]})`,
+                fillStyle: colors[index % colors.length],
+                strokeStyle: colors[index % colors.length],
+              })) || []
+            );
+          },
+        },
+      },
+      tooltip: {
+        enabled: true,
+      },
+    },
+  };
+
+  return (
+    <div className="w-full overflow-auto">
+      <Bar data={data} options={options} />
+    </div>
+  );
+};

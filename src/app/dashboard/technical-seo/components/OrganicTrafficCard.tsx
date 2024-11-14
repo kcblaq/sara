@@ -3,10 +3,12 @@ import { calculatePercentageDifference } from "@/lib/DateFormater";
 import { ShortenNumber } from "@/app/utils/ShortenedNumber";
 import { LineChart } from "./LineChart";
 import { useRankTrackingOverview } from "@/app/services/crawlers/rank_tracking";
+import { CurrentProperty } from "@/app/utils/currentProperty";
 
 export default function OrganicTrafficCard() {
+  const property = CurrentProperty();
 
-  const { isError, isPending, data: OverviewData } = useRankTrackingOverview("overview");
+  const { isError, isPending, data: OverviewData } = useRankTrackingOverview("overview", property.id);
   const organicTraffic = OverviewData?.project?.crawlings[0]?.crawlingData[0]?.data?.google?.organic_traffic ?? 0;
   const previousVal = OverviewData?.project?.crawlings[1]?.crawlingData[0]?.data?.google?.organic_traffic ?? 0;
 

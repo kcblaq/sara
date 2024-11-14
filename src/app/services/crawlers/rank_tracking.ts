@@ -6,26 +6,25 @@ import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 
 interface RankProps {
-    location_code: number,
-    target: string
+  location_code: number;
+  target: string;
 }
 
+export const useRankTrackingOverview = (tab: string, id: number) => {
+  // const id = CurrentProperty()
+  // const id = useSelector((state: RootState) => state.property.activePropertyObj);
 
-export const useRankTrackingOverview =  (tab:string) => {
-    const id = CurrentProperty()
-    // const id = useSelector((state: RootState) => state.property.activePropertyObj);
-
-    const { isError, isSuccess, isPending, data } = useQuery({
-        queryKey: ["ranktracker_overview", id.id],
-        queryFn:  async() => {
-            const result = await ApiCall.get(`/user/crawler/rank-tracking/by-tab/${id.id}?tab=${tab}`);
-            return result.data
-        }
-    })
-    return { isError, isSuccess, isPending, data}
-}
-
-
+  const { isError, isSuccess, isPending, data } = useQuery({
+    queryKey: ["ranktracker_overview", id],
+    queryFn: async () => {
+      const result = await ApiCall.get(
+        `/user/crawler/rank-tracking/by-tab/${id}?tab=${tab}`
+      );
+      return result.data;
+    },
+  });
+  return { isError, isSuccess, isPending, data };
+};
 
 // export const useRankTrackingRankingTab = () => {
 //     // const id = CurrentProperty();
@@ -37,78 +36,85 @@ export const useRankTrackingOverview =  (tab:string) => {
 //         const response = await ApiCall.get(`/user/crawler/rank-tracking/by-tab/${id}?tab=ranking`)
 //         return response.data;
 //     },
-   
+
 //  });
 
 //  return {isError, isSuccess, isPending, data }
 // }
 
-
-
-export const RankTrackerCrawler =  (target: string, location_code:number, id:number) => {
-
-
-    const rankCrawler = useMutation({
-        mutationFn: async () => {
-            const response = await ApiCall.post(`/user/crawler/rank-tracking/${id}`, [{
-                target,
-                location_code: location_code ?? 2840
-            }])
-
-            return response.data;
+export const RankTrackerCrawler = (
+  target: string,
+  location_code: number,
+  id: number
+) => {
+  const rankCrawler = useMutation({
+    mutationFn: async () => {
+      const response = await ApiCall.post(`/user/crawler/rank-tracking/${id}`, [
+        {
+          target,
+          location_code: location_code ?? 2840,
         },
-        onError: (error) => error.message,
-        onSuccess: () => {
-            useRankTrackingOverview("overview");
-            useRankTrackingOverview("ranking");
-          
-        }
-    })
-    return rankCrawler;
+      ]);
 
-}
-
-
-
-export const RankCrawl = async (target:string, id:number, location_code = 2840) => {
-    try {
-        const response = await ApiCall.post(`/user/crawler/rank-tracking/${id}`, [{
-            target,
-            location_code
-        }], {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-
-        return response.data;
-    } catch (error) {
-        console.error('Error:', error);
-        throw error;
-    }
+      return response.data;
+    },
+    onError: (error) => error.message,
+    onSuccess: () => {
+      useRankTrackingOverview("overview", id);
+      useRankTrackingOverview("ranking", id);
+    },
+  });
+  return rankCrawler;
 };
 
+export const RankCrawl = async (
+  target: string,
+  id: number,
+  location_code = 2840
+) => {
+  try {
+    const response = await ApiCall.post(
+      `/user/crawler/rank-tracking/${id}`,
+      [
+        {
+          target,
+          location_code,
+        },
+      ],
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
+    return response.data;
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+};
 
+export const useRankMutation = (id: number) => {
+  return useMutation({
+    mutationFn: async ({
+      target,
+      location_code,
+    }: {
+      target: string;
+      location_code?: number;
+    }) => {
+      return await RankCrawl(target, id, location_code);
+    },
+    onError: (error) => {
+      console.error("Mutation failed:", error);
+      return `Mutation failed:, ${error}`;
+    },
+    onSuccess: (data) => {
+      useRankTrackingOverview("overview", id);
+      useRankTrackingOverview("ranking", id);
+    },
+  });
+};
 
-
-export const useRankMutation = () => {
-    return useMutation({
-      mutationFn: async ({ target, id, location_code }: { target: string, id: number, location_code?: number }) => {
-        return await RankCrawl(target, id, location_code);
-      },
-      onError: (error) => {
-        console.error('Mutation failed:', error);
-        return(`Mutation failed:, ${error}`);
-      },
-      onSuccess: (data) => {
-        useRankTrackingOverview("overview")
-        useRankTrackingOverview("ranking"),
-        toast.success("Rank tracking successfully recrawled", {
-          position: "top-right",
-        });
-      },
-    });
-  };
-  
-  export default useRankMutation;
+export default useRankMutation;

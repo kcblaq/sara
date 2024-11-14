@@ -16,6 +16,8 @@ import { IoCartOutline } from "react-icons/io5";
 import { MdOutlineArrowForward } from "react-icons/md";
 import { RiExpandUpDownFill } from "react-icons/ri";
 import AddKeywordModal from "./AddKeywordModal";
+import { CurrentProperty } from "@/app/utils/currentProperty";
+import Loader from "@/app/component/Loader";
 
 interface Props {
   se: string;
@@ -77,12 +79,14 @@ export default function Rankings() {
   const [se, setSe] = useState("google");
   const [add, setAdd] = useState(false);
 
+  const property = CurrentProperty();
+
   const {
     isError,
     isPending,
     isSuccess,
     data: rankingData,
-  } = useRankTrackingOverview("ranking");
+  } = useRankTrackingOverview("ranking", property.id);
   const route = rankingData?.project?.crawlings[0]?.crawlingData[0]?.data;
 
   const previousRouteBing =
@@ -106,7 +110,9 @@ export default function Rankings() {
   // console.log("RANKING", route?.bing)
 
   return isPending ? (
-    <div className=""> Loading... </div>
+    <div className="h-20 w-full flex justify-center items-center">
+      <Loader />
+    </div>
   ) : (
     <>
       {add && (

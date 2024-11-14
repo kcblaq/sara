@@ -13,11 +13,31 @@ import { BiLoader } from "react-icons/bi";
 import MobileLogoIcon from "../../../components/svgComponents/CompanyMobileLogo";
 import toast from "react-hot-toast";
 import { AxiosInstance } from "@/lib/axios";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import {countrieswithflag } from "../../component/data/countrieswithflag";
+import { ChevronsUpDown } from "lucide-react";
 
 export const SignupComponent = () => {
   const [isPassword, setIsPassword] = useState("password");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState({ status: false, msg: "" });
+  const [open, setOpen] = useState(false);
+  const [country, setCountry] = useState({
+    name: "Select a location",
+    code: 0,
+    language: ""
+  });
+  
+
   const router = useRouter();
 
   const Register = async () => {
@@ -27,6 +47,9 @@ export const SignupComponent = () => {
         name: formik.values.name,
         email: formik.values.email,
         password: formik.values.password,
+        location_name: country.name,
+        location_code: country.code,
+        location_language: country.language,
       })
         .then((res) => {
           if (res.status == 201) {
@@ -64,6 +87,7 @@ export const SignupComponent = () => {
       name: "",
       email: "",
       password: "",
+      location: "",
     },
     validationSchema: Yup.object().shape({
       name: Yup.string()
@@ -79,6 +103,8 @@ export const SignupComponent = () => {
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
           "Password must contain a combination of capital and small letters, a digit, and a special character"
         ),
+      location: Yup.string()
+        .required("Location is required")
     }),
     onSubmit: Register,
   });
@@ -94,6 +120,19 @@ export const SignupComponent = () => {
       setError({ status: false, msg: "" });
     }
   }, 3000);
+
+  function handleCountrySelect(selectedCountry: any) {
+    const detail = countrieswithflag.find((country) => country.location_name === selectedCountry);
+    if (detail) {
+      setCountry({
+        name: detail.location_name,
+        code: detail.location_code,
+        language: detail.available_languages[0]?.language_name || "", 
+      });
+      formik.setFieldValue("location", detail.location_name);
+    }
+  }
+
   return (
     <main className="xl:max-w-[800px] lg:max-w-[600px] p-4 w-full h-full flex flex-col gap-10 lg:justify-between ">
       <Link href={`/`}>
@@ -131,6 +170,25 @@ export const SignupComponent = () => {
           />
           {formik.touched.name && formik.errors.name && (
             <small className="text-red-500">{formik.errors.name}</small>
+          )}
+          <label className="font-bold text-sm lg:text-base">Location*</label>
+            <Select onValueChange={handleCountrySelect}>
+              <SelectTrigger className="p-2">
+              <SelectValue placeholder="Select a location" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel> Countries</SelectLabel>
+                  {
+                    countrieswithflag.map((country, i)=> (
+                      <SelectItem key={i} value={country.location_name}> {country.location_name} </SelectItem>
+                    ))
+                  }
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+            {formik.touched.location && formik.errors.location && (
+            <small className="text-red-500">{formik.errors.location}</small>
           )}
           <label className="font-bold text-sm lg:text-base">Email*</label>
           <input
@@ -196,7 +254,7 @@ export const SignupComponent = () => {
               </span>
             )}
           </button>
-          <button
+          {/* <button
             className=" w-full p-2 flex items-center mt-2 justify-center gap-2 font-bold border text-black rounded-md"
             type="submit"
           >
@@ -208,7 +266,7 @@ export const SignupComponent = () => {
                 <BiLoader className="w-full  animate-spin text-white" />{" "}
               </span>
             )}
-          </button>
+          </button> */}
           {/* <FilledButton title="Create Account" loading={loading} /> */}
 
           {/* <span className=" cursor-pointer w-full p-2 font-bold rounded-md border flex items-center justify-center gap-2"><FcGoogle /> Signup with google </span> */}

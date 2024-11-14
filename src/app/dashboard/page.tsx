@@ -1,7 +1,7 @@
 "use client";
 
 import FilledButton from "../component/FilledButton";
-import TraficOverview from "./components/graphs/TraficOverview";
+import TraficOverview, { TOverview } from "./components/graphs/TraficOverview";
 import { RxQuestionMarkCircled } from "react-icons/rx";
 // import { BacklinkGraph } from './components/graphs/BacklinkGraph';
 // import KeywordTable from './components/tables/KeywordTable';
@@ -17,6 +17,13 @@ import { RootState } from "../store";
 import KeywordTable from "./components/tables/KeywordTable";
 import AutoModal from "../component/modals/AutoModal";
 import { handleDownloadAsImage } from "../utils/downloadFileAsImage";
+import { UseOverviewData } from "./components/fetches/overviewdata";
+import { CurrentProperty } from "../utils/currentProperty";
+import Loader from "../component/Loader";
+import { TimeToInteractive } from "./dashboard/TimeToInteractive";
+import { LCP } from "./dashboard/LCP";
+import RankOverview from "./rank-tracker/components/RankOverview";
+import moment from "moment";
 // import CheckUserType from "./components/CheckUserType";
 
 export default function Dashboard() {
@@ -45,23 +52,27 @@ export default function Dashboard() {
     </svg>
   );
 
+  const property = CurrentProperty()
+
+  const response = UseOverviewData(property.id)
+
   const [loaded, setLoaded] = useState(false);
   const [show, setShow] = useState(false);
   const User = useSelector((state: RootState) => state.user.user);
 
-  useEffect(() => {
-    setLoaded(true);
-  }, [loaded]);
+  // useEffect(() => {
+  //   setLoaded(true);
+  // }, [loaded]);
 
-  const [isClient, setIsClient] = useState(false);
+  // const [isClient, setIsClient] = useState(false);
 
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+  // useEffect(() => {
+  //   setIsClient(true);
+  // }, []);
 
-  if (!isClient) {
-    return null;
-  }
+  // if (!isClient) {
+  //   return null;
+  // }
 
   // const data = [
   //   { id: 1, keyword: 'The beginning of the new eorld order', rank: '3', change: 'Change' },
@@ -70,11 +81,33 @@ export default function Dashboard() {
   //   { id: 4, keyword: 'Did the wallmart just shut down or about to shut down?', rank: '3', change: 'Change' },
   // ]
 
-  const router = useRouter();
+  const data:DashboardDto = response.data
 
-  function closeModal() {
-    setShow(false);
-  }
+  // console.log("DATA", data)
+if(response.isPending){
+  return (
+    <div className="h-20 w-full flex items-center justify-center">
+      <Loader />
+     </div>
+  )
+}
+
+if(response.isError){
+  return (
+    <div className="h-20 w-full flex items-center justify-center">
+      <p>An error occurred while fetching the data.</p>
+    </div>
+  )
+}
+
+const siteHealthScore = {
+  score: data.techSeo.current.siteHealth,
+  previous: data.techSeo.differences.siteHealthDifference
+}
+const dataLabel = Array.isArray(data?.newvslost) ?  data?.newvslost.map((item) => moment(item.updatedAt).format("Do MMM,YY")) : [];
+const newRd =  Array.isArray(data?.newvslost) ? data.newvslost.map((newB) => newB.newReferringMainDomains) : [];
+const lostRd = Array.isArray(data?.newvslost) ? data.newvslost.map((newB) => newB.lostReferringMainDomains) : [];
+// console.log("DT", data.techSeo )
   return (
     <>
       {/* {show && (
@@ -87,7 +120,8 @@ export default function Dashboard() {
         <div className="flex w-full flex-col sm:flex-row gap-4 justify-between items-start flex-grow">
           <div className="flex flex-col">
             <h1 className="sm:text-3xl text-2xl text-[#101828] font-bold">
-              Welcome back, {User.fullName}{" "}
+              Welcome back, {User.name.split(" ")[0]}
+              {/* Welcome back, {User.name} */}
             </h1>
             <p className="sm:text-base text-sm text-gray-600">
               Track, manage and boost your site’s SEO.
@@ -120,18 +154,24 @@ export default function Dashboard() {
           </div>
         </div>
         <div id="dashboardOverview">
-          {loaded && (
+          {/* {loaded && ( */}
             <section
               className={`w-full grid items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pt-8 gap-4 justify-between`}
             >
               <OrganicTrafficCard />
-              <OrganicKeywords />
-              <AverageTimeOnsite />
+              {/* <OrganicKeywords />
+              <AverageTimeOnsite /> */}
+              <TimeToInteractive amount={data?.techSeo?.current?.timeToInteractive ?? 0} 
+              previous={data?.techSeo?.differences?.timeToInteractiveDifference ?? 0} 
+              chartData={data.techSeo.current.timeToInteractiveHistory} />
+              <LCP amount={data?.techSeo?.current?.largestContentfulPaint} 
+              previous={data?.techSeo?.differences?.largestContentfulPaintDifference} 
+              chartData={data.techSeo.current.largestContentfulPaintHistory} />
             </section>
-          )}
+          {/* )} */}
 
           <section className="w-full">
-            <TraficOverview />
+            <TOverview siteHealthScore={siteHealthScore} />
           </section>
           <div className="w-full grid shadow-md border font-bold text-xl items-start h-[426px] mb-10 rounded-md p-2 md:p-6  ">
             <div className="">
@@ -158,10 +198,10 @@ export default function Dashboard() {
             </div>
             <div className=" h-full w-full max-w-[600px]">
               {/* <BacklinkGraph /> */}
-              <StackedBarChart label={[]} lostData={[]} newData={[]} />
+              <StackedBarChart label={dataLabel} lostData={lostRd} newData={newRd} />
             </div>
           </div>
-          <section className="border sm:w-1/2 w-auto h-full rounded-md p-2 md:p-6">
+          {/* <section className="border sm:w-1/2 w-auto h-full rounded-md p-2 md:p-6">
             <div className="grid">
               <div className="flex font-bold w-full h-full items-start justify-between">
                 <span
@@ -181,7 +221,7 @@ export default function Dashboard() {
             <div className="h-fit w-full">
               <KeywordTable />
             </div>
-          </section>
+          </section> */}
         </div>
       </div>
     </>

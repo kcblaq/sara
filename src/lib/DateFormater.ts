@@ -30,7 +30,7 @@ export function calculatePercentage(value: number, total: number): number {
 
 export function calculatePercentageDifference(oldValue: number | undefined | null, newValue: number): number {
     if (oldValue === undefined || oldValue === null || oldValue === 0) {
-      return 0; // If the old value doesn't exist or is 0, there's no percentage difference
+      return 0; 
     }
   
     const difference = newValue - oldValue;

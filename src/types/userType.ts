@@ -5,6 +5,7 @@ interface User {
     account_type: string;
     createdAt: string;
     updatedAt: string;
+    name: string;
 }
 
 export interface UserType {

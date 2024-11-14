@@ -8,7 +8,8 @@ const initialState : UserType = {
         fullName: "",
         account_type: "",
         createdAt: "",
-        updatedAt: ""
+        updatedAt: "",
+        name: "",
     },
     message: '',
     token: ''
