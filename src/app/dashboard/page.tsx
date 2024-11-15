@@ -52,9 +52,9 @@ export default function Dashboard() {
     </svg>
   );
 
-  const property = CurrentProperty()
+  const property = CurrentProperty();
 
-  const response = UseOverviewData(property.id)
+  const response = UseOverviewData(property.id);
 
   const [loaded, setLoaded] = useState(false);
   const [show, setShow] = useState(false);
@@ -81,33 +81,39 @@ export default function Dashboard() {
   //   { id: 4, keyword: 'Did the wallmart just shut down or about to shut down?', rank: '3', change: 'Change' },
   // ]
 
-  const data:DashboardDto = response.data
+  const data: DashboardDto = response.data;
 
-  // console.log("DATA", data)
-if(response.isPending){
-  return (
-    <div className="h-20 w-full flex items-center justify-center">
-      <Loader />
-     </div>
-  )
-}
+  console.log("DATA", data);
+  if (response.isPending) {
+    return (
+      <div className="h-20 w-full flex items-center justify-center">
+        <Loader />
+      </div>
+    );
+  }
 
-if(response.isError){
-  return (
-    <div className="h-20 w-full flex items-center justify-center">
-      <p>An error occurred while fetching the data.</p>
-    </div>
-  )
-}
+  if (response.isError) {
+    return (
+      <div className="h-20 w-full flex items-center justify-center">
+        <p>An error occurred while fetching the data.</p>
+      </div>
+    );
+  }
 
-const siteHealthScore = {
-  score: data.techSeo.current.siteHealth,
-  previous: data.techSeo.differences.siteHealthDifference
-}
-const dataLabel = data.newvslost.map((item) => moment(item.updatedAt).format("Do MMM,YY"));
-const newRd = data.newvslost.map((newB) => newB.newReferringMainDomains);
-const lostRd = data.newvslost.map((newB) => newB.lostReferringMainDomains);
-// console.log("DT", data.techSeo )
+  const siteHealthScore = {
+    score: data.techSeo.current.siteHealth,
+    previous: data.techSeo.differences.siteHealthDifference,
+  };
+  const dataLabel = Array.isArray(data?.newvslost)
+    ? data?.newvslost.map((item) => moment(item.updatedAt).format("Do MMM,YY"))
+    : [];
+  const newRd = Array.isArray(data?.newvslost)
+    ? data.newvslost.map((newB) => newB.newReferringMainDomains)
+    : [];
+  const lostRd = Array.isArray(data?.newvslost)
+    ? data.newvslost.map((newB) => newB.lostReferringMainDomains)
+    : [];
+  // console.log("DT", data.techSeo )
   return (
     <>
       {/* {show && (
@@ -155,19 +161,27 @@ const lostRd = data.newvslost.map((newB) => newB.lostReferringMainDomains);
         </div>
         <div id="dashboardOverview">
           {/* {loaded && ( */}
-            <section
-              className={`w-full grid items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pt-8 gap-4 justify-between`}
-            >
-              <OrganicTrafficCard />
-              {/* <OrganicKeywords />
+          <section
+            className={`w-full grid items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pt-8 gap-4 justify-between`}
+          >
+            <OrganicTrafficCard />
+            {/* <OrganicKeywords />
               <AverageTimeOnsite /> */}
-              <TimeToInteractive amount={data?.techSeo?.current?.timeToInteractive ?? 0} 
-              previous={data?.techSeo?.differences?.timeToInteractiveDifference ?? 0} 
-              chartData={data.techSeo.current.timeToInteractiveHistory} />
-              <LCP amount={data?.techSeo?.current?.largestContentfulPaint} 
-              previous={data?.techSeo?.differences?.largestContentfulPaintDifference} 
-              chartData={data.techSeo.current.largestContentfulPaintHistory} />
-            </section>
+            <TimeToInteractive
+              amount={data?.techSeo?.current?.timeToInteractive ?? 0}
+              previous={
+                data?.techSeo?.differences?.timeToInteractiveDifference ?? 0
+              }
+              chartData={data.techSeo.current.timeToInteractiveHistory}
+            />
+            <LCP
+              amount={data?.techSeo?.current?.largestContentfulPaint}
+              previous={
+                data?.techSeo?.differences?.largestContentfulPaintDifference
+              }
+              chartData={data.techSeo.current.largestContentfulPaintHistory}
+            />
+          </section>
           {/* )} */}
 
           <section className="w-full">
@@ -198,7 +212,11 @@ const lostRd = data.newvslost.map((newB) => newB.lostReferringMainDomains);
             </div>
             <div className=" h-full w-full max-w-[600px]">
               {/* <BacklinkGraph /> */}
-              <StackedBarChart label={dataLabel} lostData={lostRd} newData={newRd} />
+              <StackedBarChart
+                label={dataLabel}
+                lostData={lostRd}
+                newData={newRd}
+              />
             </div>
           </div>
           {/* <section className="border sm:w-1/2 w-auto h-full rounded-md p-2 md:p-6">
