@@ -55,9 +55,9 @@ export default function Dashboard() {
     </svg>
   );
 
-  const property = CurrentProperty()
+  const property = CurrentProperty();
 
-  const response = UseOverviewData(property.id)
+  const response = UseOverviewData(property.id);
 
 
   const User = useSelector((state: RootState) => state.user.user);
@@ -89,8 +89,51 @@ export default function Dashboard() {
   const lostRd = Array.isArray(data?.newvslost) ? data.newvslost.map((newB) => newB.lostReferringMainDomains) : [];
   // console.log("DT", data.techSeo )
 
+<<<<<<< HEAD
   const router = useRouter()
   console.log("TTI", data?.techSeo?.differences.timeToInteractiveDifference)
+=======
+  // const data = [
+  //   { id: 1, keyword: 'The beginning of the new eorld order', rank: '3', change: 'Change' },
+  //   { id: 2, keyword: 'Managing business for the future', rank: '4', change: 'Change' },
+  //   { id: 3, keyword: 'Thumping your sales by doing the basics', rank: '3', change: 'Change' },
+  //   { id: 4, keyword: 'Did the wallmart just shut down or about to shut down?', rank: '3', change: 'Change' },
+  // ]
+
+  const data: DashboardDto = response.data;
+
+  console.log("DATA", data);
+  if (response.isPending) {
+    return (
+      <div className="h-20 w-full flex items-center justify-center">
+        <Loader />
+      </div>
+    );
+  }
+
+  if (response.isError) {
+    return (
+      <div className="h-20 w-full flex items-center justify-center">
+        <p>An error occurred while fetching the data.</p>
+      </div>
+    );
+  }
+
+  const siteHealthScore = {
+    score: data.techSeo.current.siteHealth,
+    previous: data.techSeo.differences.siteHealthDifference,
+  };
+  const dataLabel = Array.isArray(data?.newvslost)
+    ? data?.newvslost.map((item) => moment(item.updatedAt).format("Do MMM,YY"))
+    : [];
+  const newRd = Array.isArray(data?.newvslost)
+    ? data.newvslost.map((newB) => newB.newReferringMainDomains)
+    : [];
+  const lostRd = Array.isArray(data?.newvslost)
+    ? data.newvslost.map((newB) => newB.lostReferringMainDomains)
+    : [];
+  // console.log("DT", data.techSeo )
+>>>>>>> 60c79b84e115e2fbc6cb7ec4335b9fc6ccccc05b
   return (
     <>
       {/* {show && (
@@ -183,7 +226,11 @@ export default function Dashboard() {
             </div>
             <div className=" h-full w-full max-w-[600px]">
               {/* <BacklinkGraph /> */}
-              <StackedBarChart label={dataLabel} lostData={lostRd} newData={newRd} />
+              <StackedBarChart
+                label={dataLabel}
+                lostData={lostRd}
+                newData={newRd}
+              />
             </div>
           </div>
         </div>

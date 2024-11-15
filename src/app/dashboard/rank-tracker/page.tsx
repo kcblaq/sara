@@ -25,11 +25,14 @@ import Button from "../components/ui/Button";
 import SearchEnginePick from "@/app/dashboard/rank-tracker/components/SearchEnginePick";
 import { handleDownloadAsImage } from "@/app/utils/downloadFileAsImage";
 import toast from "react-hot-toast";
+import ProgressBarPercent from "@/app/component/ProgressBarPercent";
 // import PageDistributions from './components/PageDistributions'
 
 export default function page() {
   // const [mobile, setMobile] = useState(false);
   // const [detail, setDetail] = useState([])
+  const [progress, setProgress] = useState(0);
+  console.log(progress);
   const [se, setSe] = useState("google");
   const [type, setType] = useState({
     name: "Organic",
@@ -62,7 +65,7 @@ export default function page() {
     isError: mutateError,
     isPaused: mutatePaused,
     isPending: mutatePending,
-  } = useRankMutation(id.id);
+  } = useRankMutation(id.id, setProgress);
 
   // const project = CurrentProperty();
   const handleEngineChange = (engine: React.SetStateAction<string>) =>
@@ -95,28 +98,33 @@ export default function page() {
               }
             }
             /> */}
-            <Button
-              className=""
-              loading={mutatePending}
-              onClick={() => {
-                RankMutate(
-                  {
-                    target: trimDomain(id.domain),
-                    location_code: 2840,
-                  },
-                  {
-                    onSuccess: () => {
-                      toast.success("Rankings re-tracked successfully");
+
+            {mutatePending ? (
+              <ProgressBarPercent progress={progress} />
+            ) : (
+              <Button
+                className=""
+                loading={mutatePending}
+                onClick={() => {
+                  RankMutate(
+                    {
+                      target: trimDomain(id.domain),
+                      location_code: 2840,
                     },
-                    onError: () => {
-                      toast.error("Rankings re-tracked fails");
-                    },
-                  }
-                );
-              }}
-            >
-              Re-track rankings
-            </Button>
+                    {
+                      onSuccess: () => {
+                        toast.success("Rankings re-tracked successfully");
+                      },
+                      onError: () => {
+                        toast.error("Rankings re-tracked fails");
+                      },
+                    }
+                  );
+                }}
+              >
+                Re-track rankings
+              </Button>
+            )}
           </div>
           <div>
             {" "}

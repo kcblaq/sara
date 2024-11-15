@@ -27,10 +27,12 @@ import { shareOrFallback } from "@/app/utils/shareContentOrFallback";
 import { handleDownloadAsImage } from "@/app/utils/downloadFileAsImage";
 import Loader from "@/app/component/Loader";
 import toast from "react-hot-toast";
+import ProgressBarPercent from "@/app/component/ProgressBarPercent";
 
 export default function TechnicalSeoLayout() {
   const [loading, setLoading] = useState(false);
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+  const [progress, setProgress] = useState(0);
 
   // const techSeo = useSelector((state: RootState) => state.technicalSeo.metrics);
   const lastUpdated = useSelector(
@@ -73,7 +75,7 @@ export default function TechnicalSeoLayout() {
     },
     { title: "Crawlability and indexability", content: <Crawlability /> },
     { title: "Site performance", content: <SitePerformance /> },
-    // { title: "Issues", content: <Issues /> },
+    { title: "Issues", content: <Issues /> },
     // { title: "Internal linking", content: <InternalLinking /> },
     // { title: "Crawl comparisons", content: <CrawlComparison /> },
     // { title: "Audit history", content: <AuditHistory /> },
@@ -81,10 +83,25 @@ export default function TechnicalSeoLayout() {
   const CrawlTechnicalSeo = async () => {
     try {
       const response = await ApiCall.post(
-        `/user/crawler/technical-seo/${activePropertyObj.id}`
+        `/user/crawler/technical-seo/${activePropertyObj.id}`,
+        {},
+
+        {
+          onUploadProgress: (progressEvent) => {
+            if (progressEvent.total) {
+              const percentCompleted = Math.round(
+                (progressEvent.loaded / progressEvent.total) * 100
+              );
+              // console.log(progressEvent);
+              setProgress(percentCompleted);
+            }
+          },
+          headers: { "Content-Type": "multipart/form-data" },
+        }
       );
     } catch (error) {
       console.log(error);
+
       throw new Error("Crawl Technical SEO Failed");
     } finally {
       // setLoading(false);
@@ -93,8 +110,14 @@ export default function TechnicalSeoLayout() {
 
   const mutate = useMutation({
     mutationFn: async () => CrawlTechnicalSeo(),
-    onSuccess: () => toast.success("Recrawl Technical SEO Successfully"),
-    onError: () => toast.error("Recrawl Technical SEO Failed"),
+    onSuccess: () => {
+      toast.success("Recrawl Technical SEO Successfully");
+      setProgress(0);
+    },
+    onError: () => {
+      toast.error("Recrawl Technical SEO Failed");
+      setProgress(0);
+    },
   });
   // const fetchTechseoData = async () => {
   //   const result = await ApiCall.get(
@@ -123,14 +146,19 @@ export default function TechnicalSeoLayout() {
           </h2>
         </div>
         <div className="flex w-fit md:w-1/2 items-center justify-end gap-2 md:gap-4">
-          <span className="">
-            <button
-              className="rounded-lg sm:text-base text-sm p-2 bg-primary text-white font-semibold hover:bg-blue-500"
-              onClick={() => mutate.mutate()}
-            >
-              {mutate.isPending ? "Crawling..." : " Re-run audit"}
-            </button>
-          </span>
+          {mutate.isPending ? (
+            <ProgressBarPercent progress={progress} />
+          ) : (
+            <span className="">
+              <button
+                className="rounded-lg sm:text-base text-sm p-2 bg-primary text-white font-semibold hover:bg-blue-500"
+                onClick={() => mutate.mutate()}
+              >
+                {mutate.isPending ? "Crawling..." : " Re-run audit"}
+              </button>
+            </span>
+          )}
+
           <span className="">
             <PlainButton
               moreClass="text-primary bg-[#EFF8FF] sm:text-base text-sm"
