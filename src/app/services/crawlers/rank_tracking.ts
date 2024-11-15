@@ -4,6 +4,7 @@ import { CurrentProperty } from "@/app/utils/currentProperty";
 import { RootState } from "@/app/store";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import { SetStateAction } from "react";
 
 interface RankProps {
   location_code: number;
@@ -70,7 +71,8 @@ export const RankTrackerCrawler = (
 export const RankCrawl = async (
   target: string,
   id: number,
-  location_code = 2840
+  location_code = 2840,
+  setProgress?: React.Dispatch<SetStateAction<number>>
 ) => {
   try {
     const response = await ApiCall.post(
@@ -82,6 +84,15 @@ export const RankCrawl = async (
         },
       ],
       {
+        onUploadProgress: (progressEvent) => {
+          if (progressEvent.total) {
+            const percentCompleted = Math.round(
+              (progressEvent.loaded / progressEvent.total) * 100
+            );
+            // console.log(progressEvent);
+            setProgress && setProgress(percentCompleted);
+          }
+        },
         headers: {
           "Content-Type": "application/json",
         },
@@ -95,7 +106,10 @@ export const RankCrawl = async (
   }
 };
 
-export const useRankMutation = (id: number) => {
+export const useRankMutation = (
+  id: number,
+  setProgress?: React.Dispatch<SetStateAction<number>>
+) => {
   return useMutation({
     mutationFn: async ({
       target,
@@ -104,15 +118,17 @@ export const useRankMutation = (id: number) => {
       target: string;
       location_code?: number;
     }) => {
-      return await RankCrawl(target, id, location_code);
+      return await RankCrawl(target, id, location_code, setProgress);
     },
     onError: (error) => {
+      setProgress && setProgress(0);
       console.error("Mutation failed:", error);
       return `Mutation failed:, ${error}`;
     },
     onSuccess: (data) => {
       useRankTrackingOverview("overview", id);
       useRankTrackingOverview("ranking", id);
+      setProgress && setProgress(0);
     },
   });
 };
