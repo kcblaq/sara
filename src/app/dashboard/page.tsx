@@ -104,18 +104,16 @@ export default function Dashboard() {
     score: data.techSeo.current.siteHealth,
     previous: data.techSeo.differences.siteHealthDifference,
   };
-
-  const dataLabel = Array.isArray(data.newvslost)
-    ? data.newvslost.map((item) => moment(item.updatedAt).format("Do MMM,YY"))
+  const dataLabel = Array.isArray(data?.newvslost)
+    ? data?.newvslost.map((item) => moment(item.updatedAt).format("Do MMM,YY"))
     : [];
-
-  const newRd = Array.isArray(data.newvslost)
+  const newRd = Array.isArray(data?.newvslost)
     ? data.newvslost.map((newB) => newB.newReferringMainDomains)
     : [];
-  const lostRd = Array.isArray(data.newvslost)
+  const lostRd = Array.isArray(data?.newvslost)
     ? data.newvslost.map((newB) => newB.lostReferringMainDomains)
     : [];
-
+  // console.log("DT", data.techSeo )
   return (
     <>
       {/* {show && (

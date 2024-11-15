@@ -94,7 +94,7 @@ const OtpInput: React.FC = () => {
       await AxiosInstance.post("auth/verification/verify", payload, config)
         .then((res) => {
           if (res.status == 200) {
-            console.log("RES::", res.data.token);
+            // console.log("RES::", res.data.token);
             dispatch(setUser(res.data.user));
             dispatch(setToken(res.data.token));
             router.push("/signup/email-verify/verify-success");
