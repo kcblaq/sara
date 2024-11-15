@@ -27,6 +27,7 @@ import moment from "moment";
 import Button from "./components/ui/Button";
 import { BiExport } from "react-icons/bi";
 import { useTechnicalSeoFetchData } from "../services/technicalSeo/TechnicalSeoFetch";
+import { chartConfig, chartData, CustomPieChart } from "../component/charts/piechart";
 
 export default function Dashboard() {
   const exportIcon = (
@@ -57,8 +58,7 @@ export default function Dashboard() {
   const property = CurrentProperty()
 
   const response = UseOverviewData(property.id)
-  const { data: techSeoData, isLoading: techseoLoading } = useTechnicalSeoFetchData();
-  console.log("TECH", techSeoData)
+
 
   const User = useSelector((state: RootState) => state.user.user);
 
@@ -66,7 +66,7 @@ export default function Dashboard() {
 
   if (response.isPending) {
     return (
-      <div className="h-20 w-full flex items-center justify-center">
+      <div className="h-14 w-full flex items-center justify-center">
         <Loader />
       </div>
     )
@@ -90,6 +90,7 @@ export default function Dashboard() {
   // console.log("DT", data.techSeo )
 
   const router = useRouter()
+  console.log("TTI", data?.techSeo?.differences.timeToInteractiveDifference)
   return (
     <>
       {/* {show && (
@@ -126,7 +127,7 @@ export default function Dashboard() {
             <span>
               <Button
                 className="bg-primary  text-white min-[375px]:text-base text-sm hover:bg-primary outline-2 hover:outline-2 hover:outline-offset-2 p-2 rounded-md"
-                onClick={()=> router.push("/dashboard/optimization-plans")}
+                onClick={() => router.push("/dashboard/optimization-plans")}
               >
                 View recommendations
               </Button>
@@ -135,25 +136,24 @@ export default function Dashboard() {
         </div>
         <div id="dashboardOverview">
           {/* {loaded && ( */}
-          {/* <section
+          <section
             className={`w-full grid items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pt-8 gap-4 justify-between`}
           >
             <OrganicTrafficCard />
             <TimeToInteractive amount={data?.techSeo?.current?.timeToInteractive ?? 0}
-              previous={data?.techSeo?.differences?.timeToInteractiveDifference ?? 0}
-              chartData={data.techSeo.current.timeToInteractiveHistory} />
-            <LCP amount={data?.techSeo?.current?.largestContentfulPaint}
-              previous={data?.techSeo?.differences?.largestContentfulPaintDifference}
-              chartData={data.techSeo.current.largestContentfulPaintHistory} />
-          </section> */}
-          {/* )} */}
+              difference={data?.techSeo?.differences?.timeToInteractiveDifference ?? 0}
+              chartData={data.techSeo.current.timeToInteractiveHistory}
+              previous={data?.techSeo.current.timeToInteractive - data?.techSeo?.differences?.timeToInteractiveDifference}
+            />
 
-          <section
-            className={`w-full grid items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pt-8 gap-4 justify-between`}
-          >
-            
-
+            <LCP
+              amount={data?.techSeo?.current?.largestContentfulPaint}
+              previous={data?.techSeo?.current?.largestContentfulPaint - data?.techSeo?.differences?.largestContentfulPaintDifference}
+              chartData={data?.techSeo?.current?.largestContentfulPaintHistory} 
+              difference={data?.techSeo?.differences?.largestContentfulPaintDifference}
+              />
           </section>
+          {/* )} */}
 
           <section className="w-full">
             <TOverview siteHealthScore={siteHealthScore} />
