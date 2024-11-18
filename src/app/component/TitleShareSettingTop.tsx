@@ -2,6 +2,8 @@ import { CiSettings } from "react-icons/ci";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import PlainButton from "./PlainButton";
 import { shareOrFallback } from "../utils/shareContentOrFallback";
+import { useDispatch } from "react-redux";
+import { setUpdateDataState } from "../../redux/features/updateDataStateSlice";
 
 interface Props {
   title: string;
@@ -9,6 +11,7 @@ interface Props {
   settings?: () => void;
 }
 export default function TitleShareSettingTop({ title, updateData }: Props) {
+  const dispatch = useDispatch();
   return (
     <section
       className={`flex justify-between w-full items-center gap-4 text-[#101828] `}
@@ -17,7 +20,11 @@ export default function TitleShareSettingTop({ title, updateData }: Props) {
       <div className="flex w-fit  items-center justify-end gap-2 md:gap-4 ">
         <span className="">
           <button
-            onClick={updateData}
+            onClick={() =>
+              dispatch(
+                setUpdateDataState({ page: "content-analysis", state: "empty" })
+              )
+            }
             className="rounded-lg text-base p-2 bg-primary text-white font-semibold hover:bg-blue-500"
           >
             Update data
@@ -30,7 +37,7 @@ export default function TitleShareSettingTop({ title, updateData }: Props) {
             icon={<IoCloudUploadOutline />}
             handleClick={() =>
               shareOrFallback({
-                url: "http://localhost:3000/dashboard/content-analysis",
+                url: "content-analysis",
                 title: "Content Analysis",
                 text: "content analysis",
               })

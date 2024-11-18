@@ -19,13 +19,15 @@ export function formatSignificantNumber(num: number) {
 
 interface TTIProps {
     amount: number,
-    previous: number,
+    difference: number,
     chartData: any[],
+    previous: number,
 }
 export const TimeToInteractive: React.FC<TTIProps> = ({
     amount,
     chartData,
-    previous,
+    difference,
+    previous
 }) => {
     
     // console.log("PER", amount, previous)
@@ -34,10 +36,10 @@ export const TimeToInteractive: React.FC<TTIProps> = ({
         <div>
             <Card title={"Time to interactive"}
                 amount={amount}
-                style={getClass(amount - previous)}
+                style={getClass(difference)}
                 percent={calculatePercentageDifference(previous, amount)}
                 chart={<LineChart pageData={chartData} />}
-                arrowPosition={arrowStyle(amount - previous)}
+                arrowPosition={arrowStyle(difference)}
             />
         </div>
     )
