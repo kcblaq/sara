@@ -19,7 +19,6 @@ import { shareOrFallback } from "@/app/utils/shareContentOrFallback";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { IoIosArrowRoundBack } from "react-icons/io";
 
-
 interface competitorDomains {
   target: string;
   target1: string;
@@ -29,8 +28,10 @@ interface competitorDomains {
 }
 export default function page() {
   const { data } = keywordGapData();
-  const [stage, setStage] = useState(data?.project?.crawlings?.length === 0 ? 0 : 1);
-  const [errorMessage, setErrorMessage] = useState("")
+  const [stage, setStage] = useState(
+    data?.project?.crawlings?.length === 0 ? 0 : 1
+  );
+  const [errorMessage, setErrorMessage] = useState("");
   const [competitorDomains, setCompetitorDomains] = useState<competitorDomains>(
     {
       target: "",
@@ -41,28 +42,31 @@ export default function page() {
     }
   );
 
-
   const currentRoute: KeywordGapType[] =
     data?.project?.crawlings[0]?.crawlingData[0]?.data?.items;
   const prevRoute: KeywordGapType[] =
     data?.project?.crawlings[1]?.crawlingData[0]?.data?.items;
 
   function addNew() {
-    setStage(0)
+    setStage(0);
   }
   const tabs = [
     {
       title: "Keyword gap",
-      content: <KeywordGap setStage={addNew} data={currentRoute ?? []} prev={prevRoute ?? []} />,
+      content: (
+        <KeywordGap
+          setStage={addNew}
+          data={currentRoute ?? []}
+          prev={prevRoute ?? []}
+        />
+      ),
     },
     { title: "Link gap", content: <LinkGap /> },
   ];
 
   const property = CurrentProperty();
 
-
-  const { target1, target2, location_code, language_code } =
-    competitorDomains;
+  const { target1, target2, location_code, language_code } = competitorDomains;
 
   const payload = [
     {
@@ -72,39 +76,40 @@ export default function page() {
       location_code: location_code,
       language_code: language_code,
     },
-  ]
+  ];
 
   const mutate = useMutation({
     mutationKey: ["crawlCompetitors"],
     mutationFn: async () => {
       if (location_code === null) {
-
         // toast.error("Please select a country");
-        setErrorMessage("Please select a country")
-        throw new Error("Please select a country")
+        setErrorMessage("Please select a country");
+        throw new Error("Please select a country");
       }
       if (language_code === "") {
-
         // toast.error("Please select a country");
-        setErrorMessage("Please select a country")
-        throw new Error("Please select a country")
+        setErrorMessage("Please select a country");
+        throw new Error("Please select a country");
       }
       if (target1 === "") {
-        setErrorMessage("Please select a competitor")
-        throw new Error(errorMessage)
+        setErrorMessage("Please select a competitor");
+        throw new Error(errorMessage);
       }
       if (target2 === "") {
-        setErrorMessage("Please select second competitor")
-        throw new Error(errorMessage)
+        setErrorMessage("Please select second competitor");
+        throw new Error(errorMessage);
       }
 
       if (!property.id) {
         toast.error("project(url) must be selected");
-        throw new Error("Select a property")
+        throw new Error("Select a property");
       }
       try {
-        const response = ApiCall.post(`/user/crawler/competitor-analysis/${property?.id}`, payload)
-        return response
+        const response = ApiCall.post(
+          `/user/crawler/competitor-analysis/${property?.id}`,
+          payload
+        );
+        return response;
       } catch (error: any) {
         toast.error(error);
         console.log(error);
@@ -112,27 +117,28 @@ export default function page() {
     },
     onSuccess: () => {
       toast.success("Crawl Completed!");
-      setStage(1)
+      setStage(1);
     },
     onError: (error: any) => {
       console.error("Error during mutation:", error);
       toast.error(errorMessage);
     },
-  })
+  });
 
   function handleCrawl() {
-    mutate.mutate()
+    mutate.mutate();
   }
 
-
   const handleCountrySelect = (selectedCountry: string) => {
-    const detail = countrieswithflag.find(country => country.location_name === selectedCountry);
+    const detail = countrieswithflag.find(
+      (country) => country.location_name === selectedCountry
+    );
     if (detail) {
       setCompetitorDomains({
         ...competitorDomains,
         location_code: detail.location_code,
         language_code: detail.available_languages[0].language_code,
-      })
+      });
     }
   };
 
@@ -141,13 +147,14 @@ export default function page() {
     <div className="w-full flex flex-col ">
       {stage === 1 ? (
         <main className="grid w-full h-full items-start content-start gap-6 ">
-
           <section
             className={`flex justify-between w-full items-center gap-4 text-[#101828] `}
           >
             <div className="flex">
-
-              <h1 className={`font-semibold text-4xl 2xl:text-5xl `}> Competitor Analysis</h1>
+              <h1 className={`font-semibold text-4xl 2xl:text-5xl `}>
+                {" "}
+                Competitor Analysis
+              </h1>
             </div>
             <div className="flex w-fit  items-center justify-end gap-2 md:gap-4 ">
               <span className="">
@@ -171,13 +178,16 @@ export default function page() {
               })
             }
           /> */}
-                <Button className="flex items-center gap-2" onClick={() => {
-                  shareOrFallback({
-                    url: "http://localhost:3000/dashboard/content-analysis",
-                    title: "Content Analysis",
-                    text: "content analysis",
-                  })
-                }}>
+                <Button
+                  className="flex items-center gap-2"
+                  onClick={() => {
+                    shareOrFallback({
+                      url: "content-analysis",
+                      title: "Content Analysis",
+                      text: "content analysis",
+                    });
+                  }}
+                >
                   <IoCloudUploadOutline /> <span> Share </span>
                 </Button>
               </span>
@@ -203,10 +213,11 @@ export default function page() {
                       <Tab as={Fragment}>
                         {({ selected }) => (
                           <p
-                            className={` cursor-pointer p-2 active:outline-none text-sm font-semibold border-t-0 border-l-0 border-r-0 active:border-r-none ${selected
-                              ? "text-primary border-b-2 border-primary"
-                              : " text-[#667085] active:border-none"
-                              }`}
+                            className={` cursor-pointer p-2 active:outline-none text-sm font-semibold border-t-0 border-l-0 border-r-0 active:border-r-none ${
+                              selected
+                                ? "text-primary border-b-2 border-primary"
+                                : " text-[#667085] active:border-none"
+                            }`}
                           >
                             {tab.title}
                           </p>
@@ -237,13 +248,18 @@ export default function page() {
        `}
         >
           <div className="flex gap-3">
-            {
-              data?.project?.crawlings?.length > 0 && 
-            <Button className="flex items-center gap-2" onClick={()=> setStage(1)}>
-              <IoIosArrowRoundBack /> <span> Back</span>
-            </Button>
-            }
-            <h1 className={`font-semibold text-4xl 2xl:text-5xl `}> Competitor Analysis</h1>
+            {data?.project?.crawlings?.length > 0 && (
+              <Button
+                className="flex items-center gap-2"
+                onClick={() => setStage(1)}
+              >
+                <IoIosArrowRoundBack /> <span> Back</span>
+              </Button>
+            )}
+            <h1 className={`font-semibold text-4xl 2xl:text-5xl `}>
+              {" "}
+              Competitor Analysis
+            </h1>
           </div>
           {/* <h1
             className={`font-semibold min-[425px]:text-4xl 2xl:text-5xl text-3xl `}
@@ -281,10 +297,14 @@ export default function page() {
                 placeholder="e.g domain2.com"
               />
               <div className="flex flex-col min-[425px]:flex-row sm:items-center items-start gap-4 sm:gap-8 w-full">
-
-                <CountrySelect data={countrieswithflag} handleCountrySelect={handleCountrySelect} />
+                <CountrySelect
+                  data={countrieswithflag}
+                  handleCountrySelect={handleCountrySelect}
+                />
                 <span className="w-full min-[425px]:w-auto ">
-                  <Button variant="primary" onClick={handleCrawl}
+                  <Button
+                    variant="primary"
+                    onClick={handleCrawl}
                     loading={mutate.isPending}
                     disabled={mutate.isPending}
                     className="whitespace-nowrap w-full"
