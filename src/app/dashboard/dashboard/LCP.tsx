@@ -5,22 +5,24 @@ import { LineChart } from "../technical-seo/components/LineChart"
 
 interface LCPProps {
     amount: number,
-    previous: number,
+    difference: number,
     chartData: any[],
+    previous: number,
 }
 export const LCP: React.FC<LCPProps> = ({
     amount,
     chartData,
-    previous,
+    difference,
+    previous
 }) => {
     return (
         <div>
             <Card title={"LCP"}
                 amount={amount}
-                style={getClass(amount - previous)}
+                style={getClass(difference)}
                 percent={calculatePercentageDifference(previous, amount)}
                 chart={<LineChart pageData={chartData} />}
-                arrowPosition={arrowStyle(amount - previous)}
+                arrowPosition={arrowStyle(difference)}
             />
         </div>
     )
