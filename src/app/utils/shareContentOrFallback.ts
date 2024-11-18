@@ -1,19 +1,21 @@
+import toast from "react-hot-toast";
+
 export function shareContent(url: string, title: string, text: string) {
   if (navigator.share) {
     navigator
       .share({
         title,
         text,
-        url: url,
+        url,
       })
       .then(() => {
         console.log("Successfully shared!");
       })
       .catch((error) => {
-        console.error("Something went wrong sharing the content", error);
+        toast.error("Something went wrong sharing the content", error);
       });
   } else {
-    console.log("Web Share API is not supported on this browser.");
+    toast.error("Web Share API is not supported on this browser.");
   }
 }
 
@@ -22,10 +24,12 @@ export function fallbackShare(url: string) {
   navigator.clipboard
     .writeText(shareUrl)
     .then(() => {
-      alert("Link copied to clipboard!");
+      toast.success(
+        "Link copied to clipboard because your browser doesn't support share!"
+      );
     })
     .catch((err) => {
-      console.error("Failed to copy: ", err);
+      toast.error("Failed to copy: ", err);
     });
 }
 

@@ -275,7 +275,7 @@ export default function page() {
             <PlainButton
               handleClick={() =>
                 shareOrFallback({
-                  url: "http://localhost:3000/dashboard/keyword-explorer",
+                  url: "keyword-explorer",
                   title: "Check out this cool keyword explorer site!",
                   text: "Check out your website Keyword Explorer status",
                 })
