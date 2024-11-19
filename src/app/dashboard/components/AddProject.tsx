@@ -16,18 +16,24 @@ import useRankMutation, {
 } from "@/app/services/crawlers/rank_tracking";
 import { CurrentProperty } from "@/app/utils/currentProperty";
 import { trimDomain } from "@/app/utils/trimDomain";
+import { usePathname } from "next/navigation";
+import { useTechnicalSeoMutation } from "@/app/services/technicalSeo/TechnicalSeoFetch";
 
 export default function AddProject() {
   const [err, setErr] = useState({ status: false, msg: "" });
   const [inputUrl, setInputUrl] = useState("");
   const dispatch = useDispatch();
   const property = CurrentProperty();
+  const pathname = usePathname();
+  console.log(pathname);
   const {
     mutate: RankMutate,
     isError,
     isPaused,
     isPending,
   } = useRankMutation(property.id);
+
+  const technicalSeoMutation = useTechnicalSeoMutation();
 
   // console.log("PROPERTY",property)
   const mutate = useMutation({
@@ -37,14 +43,19 @@ export default function AddProject() {
     },
     onError: (error) => error.message,
     onSuccess: async (data) => {
+      console.log("data", data);
+      pathname === "/dashboard/technical-seo"
+        ? await technicalSeoMutation.mutateAsync(data.project.id)
+        : pathname === "/dashboard/rank-tracker"
+        ? RankMutate({
+            target: trimDomain(data.project.domain),
+            location_code: 2840,
+          })
+        : "";
       dispatch(setActiveProperty(inputUrl));
       dispatch(setActivePropertyObj(data.project));
       dispatch(setModal(""));
       // console.log("current:", data.project)
-      RankMutate({
-        target: trimDomain(data.project.domain),
-        location_code: 2840,
-      });
     },
   });
 
@@ -71,7 +82,6 @@ export default function AddProject() {
       />
       <h3 className=" font-semibold text-lg text-[#101828]"> Add project</h3>
       <p className=" text-sm font-normal text-[#475467]">
-        {" "}
         Please enter your project domain name.
       </p>
 
