@@ -182,7 +182,7 @@ export default function page() {
                   className="flex items-center gap-2"
                   onClick={() => {
                     shareOrFallback({
-                      url: "content-analysis",
+                      url: "competition-analysis",
                       title: "Content Analysis",
                       text: "content analysis",
                     });
