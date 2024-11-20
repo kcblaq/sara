@@ -12,10 +12,16 @@ interface Props {
 }
 
 export default function Layout({ children }: Props) {
-  const id = useSelector(
-    (state: RootState) => state.property.activePropertyObj.id
-  );
+  const getState = useSelector((state: RootState) => state);
   //handle when id is undefined.
+
+  const id = getState.property.activePropertyObj.id;
+
+  console.log(getState.updateDataState);
+
+  const updateDataStatus =
+    getState.updateDataState.page == "content-analysis" &&
+    getState.updateDataState.state === "empty";
 
   const { data, isError, isLoading } = useQuery({
     queryKey: ["empty-state", id],
@@ -41,7 +47,7 @@ export default function Layout({ children }: Props) {
 
   return (
     <>
-      {data && data.project.crawlings.length === 0 ? (
+      {(data && data.project.crawlings.length === 0) || updateDataStatus ? (
         <EmptyState />
       ) : (
         <div>{children}</div>
