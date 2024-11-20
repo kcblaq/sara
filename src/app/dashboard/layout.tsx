@@ -402,7 +402,6 @@ export default function Layout({ children }: Props) {
             )} */}
             <div className=" w-full h-full overflow-auto p-2 md:p-8">
             { property?.length < 1  ? <DashboardOverviewPlaceholder /> : children}
-              {/* {children} */}
             </div>
           </section>
         </main>
