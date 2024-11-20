@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 
 const fetchTechseoData = async (id: number) => {
   const result = await ApiCall.get(`/user/crawler/technical-seo/${id}`);
-  console.log("tech seo", result.data);
+  // console.log("tech seo", result.data);
 
   return result.data.project;
 };

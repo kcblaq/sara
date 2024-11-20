@@ -50,7 +50,7 @@ export default function Crawlability() {
       crawling.crawlingData.filter(isCrawlabilityData)
     ) ?? [];
 
-  console.log("crawl", crawlbilityAndIndexibiltyResult[0]);
+  // console.log("crawl", crawlbilityAndIndexibiltyResult[0]);
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -114,7 +114,7 @@ export default function Crawlability() {
 
   const crawldepthlabels1 = ["1", "2", "3", "4+"];
   const crawldepthlabels = crawldepthlabels1;
-  console.log(crawldepthlabels);
+  // console.log(crawldepthlabels);
   const crawldepthLabelData: any[] = [];
 
   // const indexibilitData1 = crawlabilityData?.indexability?.unindexableReasons;

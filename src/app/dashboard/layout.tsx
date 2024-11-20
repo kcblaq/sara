@@ -160,6 +160,8 @@ export default function Layout({ children }: Props) {
     },
   });
 
+  console.log("DD", property)
+
   // useEffect(() => {
   //   if (!token) {
   //     router.push("/login");
@@ -399,7 +401,8 @@ export default function Layout({ children }: Props) {
               </div>
             )} */}
             <div className=" w-full h-full overflow-auto p-2 md:p-8">
-              {children}
+            { property?.length < 1  ? <DashboardOverviewPlaceholder /> : children}
+              {/* {children} */}
             </div>
           </section>
         </main>

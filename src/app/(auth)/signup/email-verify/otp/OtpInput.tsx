@@ -113,7 +113,7 @@ const OtpInput: React.FC = () => {
   return (
     <div className="flex space-x-2 flex-col gap-4 min-[425px]:w-full w-[90%]">
       <div className="flex space-x-3 justify-center my-4">
-        {Array.from({ length: 4 }, (_, index) => (
+        {Array.from({ length: 6 }, (_, index) => (
           <input
             key={index}
             ref={inputRefs[index]}
