@@ -130,7 +130,7 @@ interface OverviewProps {
 export default function Overview({ onViewAllIssues }: OverviewProps) {
 
   const { data, isLoading } = useTechnicalSeoFetchData();
-  console.log("react query overview", data);
+  // console.log("react query overview", data);
   const activeProperty = useSelector(
     (state: RootState) => state.property.activeProperty
   );
@@ -179,7 +179,7 @@ export default function Overview({ onViewAllIssues }: OverviewProps) {
       ? overviewResult[0]?.coreWebVital?.first_input_delay
       : null;
 
-  console.log(overviewResult[0]);
+  // console.log(overviewResult[0]);
   const LcpLabel = [
     String(LcpAnalysis?.poor),
 
