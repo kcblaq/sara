@@ -1,7 +1,8 @@
+"use client"
 import React from 'react';
 import {PayPalButtons } from '@paypal/react-paypal-js';
-import axios from 'axios';
 import ApiCall from '../utils/apicalls/axiosInterceptor';
+import  {redirect, useRouter} from "next/navigation";
 
 interface Props {
     description: string;
@@ -23,11 +24,11 @@ price,
 currency
 
 }: Props) => {
-  
+  const router = useRouter();
   const createOrder = async () => {
-    console.log("SUBMITTING", {
-      pricingId, amount, description
-    })
+    // console.log("SUBMITTING", {
+    //   pricingId, amount, description
+    // })
     try {
       const response = await ApiCall.post(`${process.env.NEXT_PUBLIC_BASE_URL}/payment/paypal/create`, {
         pricingId,
@@ -35,7 +36,7 @@ currency
         amount: amount,
         currency: 'USD',
       });
-      console.log("ResponSe", response.data)
+      // console.log("ResponSe", response.data)
       if (response.data.id) {
         return response.data.id;
       } else {
@@ -49,15 +50,22 @@ currency
 
   const onApprove = async (data:any, actions:any) => {
     try {
-      const response = await axios.post(`${process.env.NEXT_BASE_URL}/payment/paypal/confirm`, {
+      const response = await ApiCall.post(`/payment/paypal/confirm`, {
         orderID: data.orderID,
         pricingId,
       });
       const captureResponse = await actions.order.capture();
-      console.log(captureResponse)
-      console.log(response.data);
+      // console.log("MSG", captureResponse)
+      if(captureResponse.status === "COMPLETED"){
+        // redirect('/subscription-success');
+        router.push("/subscription-success")
+        alert("Successfully paid")
+        return;
+      }
+      
     } catch (error) {
       console.error(error);
+      throw error;
     }
   };
 
